@@ -1,0 +1,19 @@
+services:
+  hgb-mcp:
+    build: .
+    image: hgb-mcp:latest
+    container_name: hgb-mcp
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount a directory containing hgb.db (and optionally the XML for rebuilding)
+      - /data/hgb:/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/sse')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
