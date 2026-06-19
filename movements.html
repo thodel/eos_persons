@@ -71,15 +71,11 @@
     }
 
     /* Drop zone */
-    #dropzone {
-      margin: 12px 14px; padding: 14px 10px; border: 2px dashed var(--border);
-      border-radius: 6px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s;
-      font-size: .78rem; color: var(--muted); flex-shrink: 0;
+    #data-status {
+      margin: 10px 14px 4px; padding: 8px 12px; background: #f5ede0;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-size: .78rem; color: var(--accent); flex-shrink: 0;
     }
-    #dropzone.drag-over { border-color: var(--accent); background: #f5ede0; }
-    #dropzone.loaded { border-color: var(--accent2); background: #f5ede0; color: var(--accent); cursor: default; }
-    #dropzone strong { display: block; margin-bottom: 2px; font-size: .82rem; }
-    #file-input { display: none; }
 
     /* Panel containers */
     #panel-search, #panel-heatmap {
@@ -209,12 +205,7 @@
 <div id="layout">
   <div id="sidebar">
 
-    <!-- CSV drop zone -->
-    <div id="dropzone" onclick="document.getElementById('file-input').click()">
-      <strong>CSV laden</strong>
-      Datei hier ablegen oder klicken
-      <input type="file" id="file-input" accept=".csv" />
-    </div>
+    <div id="data-status">Daten werden geladen…</div>
 
     <!-- ── PANEL: Personensuche ──────────────────────────────────────────── -->
     <div id="panel-search">
@@ -405,9 +396,7 @@ function loadCsv(text) {
   initSliders();
   renderActive();
 
-  const dz = document.getElementById('dropzone');
-  dz.classList.add('loaded');
-  dz.innerHTML = `<strong>${rows.length} Ereignisse geladen</strong>${personIds.length} Personen`;
+  document.getElementById('data-status').textContent = `${rows.length} Ereignisse · ${personIds.length} Personen`;
 }
 
 function buildPersonMap() {
@@ -786,28 +775,13 @@ function toggleAnim(prefix, btn, slider, onTick) {
 window.sAnimTimer = null;
 window.hAnimTimer = null;
 
-// ══════════════════════════════════════════════════════════════════════════════
-// File handling
-// ══════════════════════════════════════════════════════════════════════════════
-document.getElementById('file-input').addEventListener('change', e => {
-  const f = e.target.files[0];
-  if (f) { const r = new FileReader(); r.onload = ev => loadCsv(ev.target.result); r.readAsText(f); }
-});
-const dz = document.getElementById('dropzone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
-dz.addEventListener('drop', e => {
-  e.preventDefault(); dz.classList.remove('drag-over');
-  const f = e.dataTransfer.files[0];
-  if (f) { const r = new FileReader(); r.onload = ev => loadCsv(ev.target.result); r.readAsText(f); }
-});
-
-// Auto-load test CSV when served locally
+// Load CSV from repo
 (async () => {
   try {
     const res = await fetch('movements_test.csv');
-    if (res.ok) loadCsv(await res.text());
-  } catch { /* not on a server */ }
+    if (res.ok) { loadCsv(await res.text()); return; }
+  } catch { /* ignore */ }
+  document.getElementById('data-status').textContent = 'Fehler: CSV nicht gefunden.';
 })();
 </script>
 </body>
