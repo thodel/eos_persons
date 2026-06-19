@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HGB Person Index — Live SPARQL</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #faf9f7;
+      --surface:    #ffffff;
+      --border:     #e2ddd6;
+      --accent:     #6b4f2a;
+      --accent2:    #9e7a48;
+      --text:       #2d2520;
+      --muted:      #8a7968;
+      --tag-bg:     #f0ebe3;
+      --tag-border: #d4c9b8;
+      --shadow:     0 1px 4px rgba(0,0,0,.08);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── Site header ─────────────────────────────────────── */
+    #site-header {
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 24px;
+      flex-wrap: wrap;
+    }
+    #logos { display: flex; align-items: center; gap: 12px; }
+    #logos img { height: 32px; filter: brightness(0) invert(1); }
+    #site-title {
+      flex: 1;
+      font-size: 1rem;
+      font-weight: normal;
+      letter-spacing: .04em;
+      opacity: .9;
+    }
+    #page-nav { display: flex; gap: 4px; }
+    .page-tab {
+      color: rgba(255,255,255,.75);
+      text-decoration: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: .82rem;
+      transition: background .15s, color .15s;
+    }
+    .page-tab:hover, .page-tab.active {
+      background: rgba(255,255,255,.15);
+      color: #fff;
+    }
+
+    /* ── Search bar ──────────────────────────────────────── */
+    .search-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: var(--shadow);
+    }
+    .search-bar input[type=text] {
+      flex: 1 1 280px;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .95rem;
+      font-family: inherit;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .search-bar input[type=text]:focus { border-color: var(--accent2); }
+    .search-bar input[type=text]::placeholder { color: var(--muted); }
+
+    .filters {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+    .filters label { font-size: .82rem; color: var(--muted); }
+    .filters input[type=number] {
+      width: 68px; padding: 6px 8px;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-size: .82rem; font-family: inherit;
+      background: var(--bg); color: var(--text);
+    }
+    .filters select {
+      padding: 6px 10px;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-size: .82rem; font-family: inherit;
+      background: var(--bg); color: var(--text);
+    }
+
+    /* ── Status + results ────────────────────────────────── */
+    #status {
+      padding: 10px 32px;
+      font-size: .82rem;
+      color: var(--muted);
+      min-height: 34px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .spinner {
+      display: none;
+      width: 14px; height: 14px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent2);
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+    .spinner.active { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #results {
+      padding: 20px 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── Cards ───────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .card:hover { border-color: var(--accent2); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+    .card-name { font-size: 1rem; font-weight: bold; color: var(--accent); margin-bottom: 4px; }
+    .card-name mark { background: #f5e9c8; color: var(--accent); border-radius: 2px; padding: 0 1px; }
+    .card-meta { font-size: .78rem; color: var(--muted); margin-bottom: 6px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 7px; border-radius: 12px;
+      font-size: .72rem;
+      background: var(--tag-bg); border: 1px solid var(--tag-border); color: var(--text);
+    }
+    .tag .lbl { color: var(--muted); margin-right: 1px; }
+    .tag.role-owner  { background: #eef4f0; border-color: #c4dac8; }
+    .tag.role-buyer  { background: #eef0f8; border-color: #c4c8e0; }
+    .tag.role-seller { background: #f8f4ee; border-color: #e0d4c0; }
+    .tag.role-payer  { background: #f0eef8; border-color: #c8c4e0; }
+    .tag.role-other  { background: var(--tag-bg); }
+
+    .msg {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 60px 32px;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .hint { font-size: .88rem; }
+
+    /* ── Detail panel ────────────────────────────────────── */
+    #panel-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 100;
+      justify-content: flex-end;
+    }
+    #panel-overlay.open { display: flex; }
+
+    #panel {
+      background: var(--surface);
+      width: min(600px, 100vw);
+      height: 100vh;
+      overflow-y: auto;
+      box-shadow: -4px 0 24px rgba(0,0,0,.18);
+      display: flex;
+      flex-direction: column;
+    }
+
+    #panel-header {
+      background: var(--accent);
+      color: #fff;
+      padding: 20px 24px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    #panel-header h2 { font-size: 1.25rem; font-weight: normal; }
+    #panel-header .meta { font-size: .8rem; opacity: .75; margin-top: 2px; }
+    #panel-close {
+      position: absolute; top: 14px; right: 16px;
+      background: none; border: none;
+      color: rgba(255,255,255,.8); font-size: 1.4rem;
+      cursor: pointer; line-height: 1;
+    }
+    #panel-close:hover { color: #fff; }
+
+    #panel-body { padding: 20px 24px; flex: 1; }
+
+    .panel-section { margin-bottom: 22px; }
+    .panel-section h3 {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* mention rows */
+    .mention-row {
+      display: grid;
+      grid-template-columns: 48px 1fr 1fr;
+      gap: 4px 10px;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .83rem;
+    }
+    .mention-row:last-child { border-bottom: none; }
+    .mention-year { color: var(--accent2); font-weight: bold; font-size: .82rem; }
+    .mention-role { color: var(--muted); }
+    .mention-event { color: var(--text); }
+
+    /* similar names */
+    .similar-name {
+      display: inline-block;
+      margin: 3px 4px 3px 0;
+      padding: 3px 10px;
+      border: 1px solid var(--tag-border);
+      border-radius: 14px;
+      background: var(--tag-bg);
+      font-size: .8rem;
+      cursor: pointer;
+      transition: border-color .12s;
+    }
+    .similar-name:hover { border-color: var(--accent2); }
+
+    #panel-spinner {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header">
+  <div id="logos">
+    <img src="https://www.unibe.ch/assets/media/image/logo-uni-bern.svg" alt="Universität Bern" onerror="this.style.display='none'">
+    <img src="https://www.unibas.ch/dam/jcr:93abfa0e-58d6-45ed-930a-de414ca40b13/uni-basel-logo.2018-03-26-12-26-39.svg" alt="Universität Basel" onerror="this.style.display='none'">
+  </div>
+  <span id="site-title">Historisches Grundbuch Basel</span>
+  <nav id="page-nav">
+    <a class="page-tab" href="index.html">Personenindex</a>
+    <a class="page-tab active" href="persons_sparql.html">Personen (SPARQL)</a>
+    <a class="page-tab" href="map.html">Karte</a>
+    <a class="page-tab" href="viz.html">Berufe</a>
+    <a class="page-tab" href="movements.html">Personenbewegungen</a>
+  </nav>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="q" placeholder="Search by name (min. 3 characters)…" autocomplete="off" autofocus />
+  <div class="filters">
+    <label>Year</label>
+    <input type="number" id="year-from" placeholder="from" min="1400" max="1700" />
+    <input type="number" id="year-to"   placeholder="to"   min="1400" max="1700" />
+    <label>Role</label>
+    <select id="role-filter">
+      <option value="">— all —</option>
+      <option value="owner">owner</option>
+      <option value="buyer">buyer</option>
+      <option value="seller">seller</option>
+      <option value="payer">payer</option>
+      <option value="employer">employer</option>
+      <option value="employee">employee</option>
+      <option value="beneficiary">beneficiary</option>
+      <option value="heir">heir</option>
+      <option value="decedent">decedent</option>
+      <option value="claimant">claimant</option>
+      <option value="debitor">debitor</option>
+      <option value="resident">resident</option>
+    </select>
+  </div>
+</div>
+
+<div id="status"><span class="spinner" id="spinner"></span><span id="status-text">Enter a name to search the graph…</span></div>
+<div id="results"><div class="msg hint">Type at least 3 characters to search person mentions in the Historisches Grundbuch Basel.</div></div>
+
+<!-- Detail panel -->
+<div id="panel-overlay">
+  <div id="panel">
+    <div id="panel-header">
+      <button id="panel-close" title="Close">×</button>
+      <h2 id="panel-name">–</h2>
+      <div class="meta" id="panel-meta"></div>
+    </div>
+    <div id="panel-body">
+      <div id="panel-spinner">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const ENDPOINT  = 'https://sparql-gdb.lod4hss.org/eos';
+  const INDEX_URL = 'persons_sparql_index.json';
+
+  // Person roles considered as person references
+  const PERSON_ROLES = [
+    'owner','buyer','seller','payer','employer','employee',
+    'beneficiary','heir','decedent','claimant','debitor','resident',
+    'bequeather','consenting','proclaimer','party1','party2',
+    'pledger','pledgee','redeemer','grantor','creditor','bidder',
+    'member','actor','family-a','family-b','lessee'
+  ];
+
+  const qEl        = document.getElementById('q');
+  const yearFrom   = document.getElementById('year-from');
+  const yearTo     = document.getElementById('year-to');
+  const roleFilter = document.getElementById('role-filter');
+  const statusText = document.getElementById('status-text');
+  const spinner    = document.getElementById('spinner');
+  const resultsEl  = document.getElementById('results');
+  const overlay    = document.getElementById('panel-overlay');
+  const panelName  = document.getElementById('panel-name');
+  const panelMeta  = document.getElementById('panel-meta');
+  const panelBody  = document.getElementById('panel-body');
+
+  let currentSearch = '';
+  let abortCtrl = null;
+  let cachedIndex = null;   // populated if persons_sparql_index.json is present
+
+  // ── Load pre-built index (optional) ──────────────────────
+  fetch(INDEX_URL)
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data && data.length) {
+        cachedIndex = data;
+        statusText.textContent = `Cached index loaded (${data.length.toLocaleString()} names) — type to search`;
+      }
+    })
+    .catch(() => {}); // silently skip if file absent
+
+  // ── SPARQL query ──────────────────────────────────────────
+  async function sparql(query) {
+    if (abortCtrl) abortCtrl.abort();
+    abortCtrl = new AbortController();
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/sparql-query',
+                 'Accept': 'application/sparql-results+json' },
+      body: query,
+      signal: abortCtrl.signal
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  // ── Index search ──────────────────────────────────────────
+  async function doSearch() {
+    const q    = qEl.value.trim();
+    const from = yearFrom.value ? parseInt(yearFrom.value) : null;
+    const to   = yearTo.value   ? parseInt(yearTo.value)   : null;
+    const role = roleFilter.value;
+
+    if (q.length < 3) {
+      resultsEl.innerHTML = '<div class="msg hint">Type at least 3 characters to search person mentions.</div>';
+      statusText.textContent = cachedIndex
+        ? `Cached index loaded (${cachedIndex.length.toLocaleString()} names) — type to search`
+        : 'Enter a name to search the graph…';
+      return;
+    }
+
+    currentSearch = q;
+
+    // ── Fast path: filter cached index ───────────────────
+    if (cachedIndex) {
+      const ql = q.toLowerCase();
+      const from = yearFrom.value ? parseInt(yearFrom.value) : null;
+      const to   = yearTo.value   ? parseInt(yearTo.value)   : null;
+      const role = roleFilter.value;
+
+      let hits = cachedIndex.filter(r => {
+        if (!r.n.toLowerCase().includes(ql)) return false;
+        if (from && r.y[1] !== null && r.y[1] < from) return false;
+        if (to   && r.y[0] !== null && r.y[0] > to)   return false;
+        if (role && !(r.roles || []).includes(role))   return false;
+        return true;
+      });
+      hits.sort((a, b) => {
+        const ap = a.n.toLowerCase().startsWith(ql);
+        const bp = b.n.toLowerCase().startsWith(ql);
+        if (ap && !bp) return -1;
+        if (!ap && bp) return 1;
+        return b.c - a.c;
+      });
+      // Convert to the same shape renderIndex expects
+      const bindings = hits.slice(0, 80).map(r => ({
+        nameText: { value: r.n },
+        cnt:      { value: String(r.c) },
+        yFrom:    { value: r.y[0] !== null ? String(r.y[0]) : '' },
+        yTo:      { value: r.y[1] !== null ? String(r.y[1]) : '' },
+        roles:    { value: (r.roles || []).join('|') },
+      }));
+      renderIndex(bindings, q);
+      return;
+    }
+
+    // ── Slow path: live SPARQL ────────────────────────────
+    spinner.classList.add('active');
+    statusText.textContent = `Searching for "${q}"…`;
+    resultsEl.innerHTML = '<div class="msg">Querying graph…</div>';
+
+    const roles = role ? `"${role}"` : PERSON_ROLES.map(r => `"${r}"`).join(',');
+    const yearFilter = buildYearFilter('?year', from, to);
+
+    const query = `
+PREFIX eos: <https://eos.lod4hss.org/ontology#>
+PREFIX sim: <https://sdhss.org/ontology/sources-information-metadata/>
+SELECT ?nameText
+       (COUNT(DISTINCT ?er) AS ?cnt)
+       (MIN(?year) AS ?yFrom)
+       (MAX(?year) AS ?yTo)
+       (GROUP_CONCAT(DISTINCT ?role; separator="|") AS ?roles)
+WHERE {
+  ?er a eos:eventRole .
+  ?er eos:hasRole ?role .
+  ?er eos:hasRoleText ?nameText .
+  ?er eos:isPartOfEvent ?event .
+  ?event eos:isPartOfEventGroup ?evg .
+  ?evg eos:hasYear ?year .
+  FILTER(CONTAINS(LCASE(STR(?nameText)), LCASE("${escSparql(q)}")))
+  FILTER(?role IN (${roles}))
+  ${yearFilter}
+}
+GROUP BY ?nameText
+ORDER BY DESC(?cnt)
+LIMIT 80`.trim();
+
+    try {
+      const data = await sparql(query);
+      spinner.classList.remove('active');
+      renderIndex(data.results.bindings, q);
+    } catch (e) {
+      spinner.classList.remove('active');
+      if (e.name === 'AbortError') return;
+      statusText.textContent = `Error: ${e.message}`;
+      resultsEl.innerHTML = `<div class="msg">Query failed: ${escHtml(e.message)}</div>`;
+    }
+  }
+
+  function buildYearFilter(varName, from, to) {
+    if (from && to)  return `FILTER(xsd:integer(${varName}) >= ${from} && xsd:integer(${varName}) <= ${to})`;
+    if (from)        return `FILTER(xsd:integer(${varName}) >= ${from})`;
+    if (to)          return `FILTER(xsd:integer(${varName}) <= ${to})`;
+    return '';
+  }
+
+  function renderIndex(bindings, q) {
+    if (!bindings.length) {
+      statusText.textContent = 'No results.';
+      resultsEl.innerHTML = '<div class="msg">No persons found matching that name.</div>';
+      return;
+    }
+
+    statusText.textContent = `${bindings.length} name string${bindings.length !== 1 ? 's' : ''} found`;
+    const html = bindings.map(b => cardHtml(b, q)).join('');
+    resultsEl.innerHTML = html;
+
+    resultsEl.querySelectorAll('.card').forEach(el => {
+      el.addEventListener('click', () => openDetail(el.dataset.name));
+    });
+  }
+
+  function cardHtml(b, q) {
+    const name  = b.nameText.value;
+    const cnt   = parseInt(b.cnt.value);
+    const yFrom = b.yFrom ? b.yFrom.value : '?';
+    const yTo   = b.yTo   ? b.yTo.value   : '?';
+    const years = yFrom === yTo ? yFrom : `${yFrom}–${yTo}`;
+    const roles = (b.roles ? b.roles.value.split('|') : []).filter(Boolean);
+
+    const tags = roles.slice(0, 4).map(r =>
+      `<span class="tag role-${r.replace(/[^a-z]/g,'')}">${escHtml(r)}</span>`
+    ).join('');
+
+    return `<div class="card" data-name="${escAttr(name)}">
+      <div class="card-name">${highlight(name, q)}</div>
+      <div class="card-meta">${cnt} mention${cnt !== 1 ? 's' : ''} · ${years}</div>
+      ${tags ? `<div class="card-tags">${tags}</div>` : ''}
+    </div>`;
+  }
+
+  // ── Detail panel ──────────────────────────────────────────
+  async function openDetail(name) {
+    panelName.textContent = name;
+    panelMeta.textContent = 'Loading…';
+    panelBody.innerHTML = '<div id="panel-spinner">Querying graph…</div>';
+    overlay.classList.add('open');
+
+    try {
+      const [mentions, similar] = await Promise.all([
+        fetchMentions(name),
+        fetchSimilar(name)
+      ]);
+      renderDetail(name, mentions, similar);
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      panelBody.innerHTML = `<p style="color:var(--muted)">Error: ${escHtml(e.message)}</p>`;
+    }
+  }
+
+  async function fetchMentions(name) {
+    const query = `
+PREFIX eos: <https://eos.lod4hss.org/ontology#>
+PREFIX sim: <https://sdhss.org/ontology/sources-information-metadata/>
+SELECT ?role ?year ?eventClass ?triggerText ?evg WHERE {
+  ?er a eos:eventRole .
+  ?er eos:hasRole ?role .
+  ?er eos:hasRoleText "${escSparql(name)}" .
+  ?er eos:isPartOfEvent ?event .
+  ?event eos:isPartOfEventGroup ?evg .
+  ?evg eos:hasYear ?year .
+  OPTIONAL { ?evg eos:hasEventGroupClassLabel ?eventClass }
+  OPTIONAL { ?evg eos:hasEventGroupTriggerText ?triggerText }
+}
+ORDER BY ?year ?role
+LIMIT 200`.trim();
+    const d = await sparql(query);
+    return d.results.bindings;
+  }
+
+  async function fetchSimilar(name) {
+    // Find names that co-appear in the same event groups as this name
+    const query = `
+PREFIX eos: <https://eos.lod4hss.org/ontology#>
+SELECT ?otherName (COUNT(DISTINCT ?evg) AS ?cnt)
+WHERE {
+  ?er a eos:eventRole .
+  ?er eos:hasRoleText "${escSparql(name)}" .
+  ?er eos:isPartOfEvent ?event .
+  ?event eos:isPartOfEventGroup ?evg .
+  ?er2 a eos:eventRole .
+  ?er2 eos:isPartOfEvent ?event2 .
+  ?event2 eos:isPartOfEventGroup ?evg .
+  ?er2 eos:hasRoleText ?otherName .
+  FILTER(?otherName != "${escSparql(name)}")
+  FILTER(STRLEN(?otherName) > 2)
+}
+GROUP BY ?otherName
+ORDER BY DESC(?cnt)
+LIMIT 20`.trim();
+    try {
+      const d = await sparql(query);
+      return d.results.bindings;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function renderDetail(name, mentions, similar) {
+    const cnt = mentions.length;
+    const years = mentions.map(b => b.year.value).map(Number);
+    const yFrom = Math.min(...years);
+    const yTo   = Math.max(...years);
+    panelMeta.textContent = `${cnt} mention${cnt !== 1 ? 's' : ''} · ${yFrom === yTo ? yFrom : `${yFrom}–${yTo}`}`;
+
+    const sections = [];
+
+    // Group mentions by year
+    const mentionRows = mentions.map(b => {
+      const role   = b.role.value;
+      const year   = b.year.value;
+      const evCls  = b.eventClass ? b.eventClass.value : '';
+      const trig   = b.triggerText ? b.triggerText.value : '';
+      const evgFrag = b.evg.value.split('/').pop();
+      // Extract document UUID from evg IRI: evg_UUID_date_evgrN
+      const uuidMatch = evgFrag.match(/^evg_([0-9a-f-]{36})/);
+      const uuid = uuidMatch ? uuidMatch[1] : null;
+
+      return `<div class="mention-row">
+        <span class="mention-year">${escHtml(year)}</span>
+        <span class="mention-role">${escHtml(role)}</span>
+        <span class="mention-event">${escHtml(evCls || trig || '—')}</span>
+      </div>`;
+    }).join('');
+
+    sections.push(`<div class="panel-section">
+      <h3>Mentions <span style="font-weight:normal;text-transform:none;letter-spacing:0">(${cnt})</span></h3>
+      <div style="font-size:.72rem;color:var(--muted);display:grid;grid-template-columns:48px 1fr 1fr;gap:4px 10px;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:2px">
+        <span>Year</span><span>Role</span><span>Event type</span>
+      </div>
+      ${mentionRows}
+    </div>`);
+
+    // Role summary
+    const roleCounts = {};
+    for (const b of mentions) {
+      const r = b.role.value;
+      roleCounts[r] = (roleCounts[r] || 0) + 1;
+    }
+    const roleTags = Object.entries(roleCounts)
+      .sort((a,b) => b[1]-a[1])
+      .map(([r, c]) => `<span class="tag role-${r.replace(/[^a-z]/g,'')}">${escHtml(r)} <span style="opacity:.7">×${c}</span></span>`)
+      .join(' ');
+    sections.push(`<div class="panel-section">
+      <h3>Roles</h3>
+      ${roleTags}
+    </div>`);
+
+    // Similar / co-appearing names
+    if (similar.length) {
+      const simHtml = similar.map(b => {
+        const n   = b.otherName.value;
+        const cnt = b.cnt.value;
+        return `<span class="similar-name" data-name="${escAttr(n)}" title="${cnt} shared event group${cnt>1?'s':''}">${escHtml(n)}</span>`;
+      }).join('');
+      sections.push(`<div class="panel-section">
+        <h3>Co-appearing names</h3>
+        <p style="font-size:.75rem;color:var(--muted);margin-bottom:8px">Names that appear in the same event groups as "${escHtml(name)}"</p>
+        ${simHtml}
+      </div>`);
+    }
+
+    panelBody.innerHTML = sections.join('');
+
+    // Allow clicking similar names to open them
+    panelBody.querySelectorAll('.similar-name').forEach(el => {
+      el.addEventListener('click', () => {
+        qEl.value = el.dataset.name;
+        overlay.classList.remove('open');
+        doSearch();
+        openDetail(el.dataset.name);
+      });
+    });
+  }
+
+  // ── Close panel ───────────────────────────────────────────
+  document.getElementById('panel-close').addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+  // ── Events ────────────────────────────────────────────────
+  let debounce;
+  function schedule() {
+    clearTimeout(debounce);
+    debounce = setTimeout(doSearch, 380);
+  }
+
+  qEl.addEventListener('input', schedule);
+  yearFrom.addEventListener('input', schedule);
+  yearTo.addEventListener('input', schedule);
+  roleFilter.addEventListener('change', doSearch);
+
+  // ── Helpers ───────────────────────────────────────────────
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function escAttr(s) {
+    return escHtml(s).replace(/"/g,'&quot;');
+  }
+  function escSparql(s) {
+    return String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+  }
+  function highlight(text, q) {
+    if (!q) return escHtml(text);
+    const i = text.toLowerCase().indexOf(q.toLowerCase());
+    if (i < 0) return escHtml(text);
+    return escHtml(text.slice(0, i))
+      + '<mark>' + escHtml(text.slice(i, i + q.length)) + '</mark>'
+      + escHtml(text.slice(i + q.length));
+  }
+})();
+</script>
+</body>
+</html>
