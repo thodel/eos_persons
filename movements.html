@@ -416,8 +416,6 @@ function buildYearIndex() {
     yearIndex[r.year].push([r.coord[0], r.coord[1], ROLE_WEIGHT[r.role] || 1.0]);
   }
   const years = allRows.map(r => r.year);
-  dataMinYear = Math.min(...years);
-  dataMaxYear = Math.max(...years);
 }
 
 function getHeatPoints(from, to) {
