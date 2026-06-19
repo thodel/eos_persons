@@ -209,6 +209,10 @@ tempCodeRunnerFile.py
 # PyPI configuration file
 .pypirc
 
+# Large data files (not tracked in git)
+*.xml
+persons.csv
+
 # Marimo
 marimo/_static/
 marimo/_lsp/

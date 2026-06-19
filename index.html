@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HGB Person Index</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #faf9f7;
+      --surface:  #ffffff;
+      --border:   #e2ddd6;
+      --accent:   #6b4f2a;
+      --accent2:  #9e7a48;
+      --text:     #2d2520;
+      --muted:    #8a7968;
+      --tag-bg:   #f0ebe3;
+      --tag-border: #d4c9b8;
+      --shadow:   0 1px 4px rgba(0,0,0,.08);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 28px 32px 24px;
+    }
+    header h1 { font-size: 1.6rem; font-weight: normal; letter-spacing: .03em; }
+    header p  { margin-top: 4px; opacity: .78; font-size: .88rem; font-style: italic; }
+
+    .search-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: var(--shadow);
+    }
+    .search-bar input[type=text] {
+      flex: 1 1 280px;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .95rem;
+      font-family: inherit;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .search-bar input[type=text]:focus { border-color: var(--accent2); }
+    .search-bar input[type=text]::placeholder { color: var(--muted); }
+
+    .filters {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+    .filters label { font-size: .82rem; color: var(--muted); }
+    .filters input[type=number] {
+      width: 68px; padding: 6px 8px;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-size: .82rem; font-family: inherit;
+      background: var(--bg); color: var(--text);
+    }
+    .filters select {
+      padding: 6px 10px;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-size: .82rem; font-family: inherit;
+      background: var(--bg); color: var(--text);
+      max-width: 180px;
+    }
+
+    #status {
+      padding: 10px 32px;
+      font-size: .82rem;
+      color: var(--muted);
+      min-height: 34px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #results {
+      padding: 20px 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .card:hover { border-color: var(--accent2); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+
+    .card-name {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .card-name mark {
+      background: #f5e9c8;
+      color: var(--accent);
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+    .card-meta {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 6px;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: .74rem;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      color: var(--text);
+    }
+    .tag .tag-label { color: var(--muted); margin-right: 2px; }
+    .tag.deceased { background: #f8f0f0; border-color: #e8c8c8; color: #7a3a3a; }
+    .tag.occ      { background: #eef4f0; border-color: #c4dac8; }
+    .tag.title    { background: #f0eef8; border-color: #c8c4e0; }
+    .tag.fam      { background: #f8f4ee; border-color: #e0d4c0; }
+    .tag.org      { background: #eef0f8; border-color: #c4c8e0; }
+    .tag.loc      { background: #f4f8ee; border-color: #ccdcc0; }
+
+    /* Detail modal */
+    #modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 100;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px;
+      overflow-y: auto;
+    }
+    #modal-overlay.open { display: flex; }
+    #modal {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 32px;
+      max-width: 640px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,.2);
+    }
+    #modal h2 { font-size: 1.4rem; color: var(--accent); margin-bottom: 4px; }
+    #modal .modal-meta { font-size: .82rem; color: var(--muted); margin-bottom: 20px; }
+    #modal-close {
+      position: absolute; top: 16px; right: 18px;
+      background: none; border: none; font-size: 1.4rem;
+      cursor: pointer; color: var(--muted); line-height: 1;
+    }
+    #modal-close:hover { color: var(--text); }
+
+    .modal-section { margin-bottom: 16px; }
+    .modal-section h3 {
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+    }
+    .dossier-list {
+      display: flex; flex-wrap: wrap; gap: 5px;
+    }
+    .dossier-tag {
+      font-size: .75rem;
+      font-family: 'Courier New', monospace;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      border-radius: 3px;
+      padding: 2px 7px;
+      color: var(--accent);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 80px 32px;
+      color: var(--muted);
+      font-style: italic;
+      font-size: 1rem;
+      grid-column: 1/-1;
+    }
+    .no-results {
+      text-align: center;
+      padding: 60px 32px;
+      color: var(--muted);
+      font-style: italic;
+      grid-column: 1/-1;
+    }
+
+    .show-more-wrap {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 10px;
+    }
+    .show-more-wrap button {
+      padding: 8px 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: .88rem;
+    }
+    .show-more-wrap button:hover { background: var(--accent2); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>HGB Person Index</h1>
+  <p>Haushalts- und Grundbücher Basel — person mentions 1400–1700</p>
+</header>
+
+<div class="search-bar">
+  <input type="text" id="q" placeholder="Search by name…" autocomplete="off" autofocus />
+  <div class="filters">
+    <label>Year</label>
+    <input type="number" id="year-from" placeholder="from" min="1400" max="1700" />
+    <input type="number" id="year-to"   placeholder="to"   min="1400" max="1700" />
+    <label>Occupation</label>
+    <select id="occ-filter"><option value="">— all —</option></select>
+  </div>
+</div>
+
+<div id="status">Loading data…</div>
+<div id="results"><div class="loading">Loading person index…</div></div>
+
+<div id="modal-overlay">
+  <div id="modal">
+    <button id="modal-close" title="Close">×</button>
+    <h2 id="modal-name"></h2>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  let data = [];
+  let filtered = [];
+  let page = 0;
+  const PAGE = 50;
+
+  const qEl         = document.getElementById('q');
+  const yearFrom    = document.getElementById('year-from');
+  const yearTo      = document.getElementById('year-to');
+  const occFilter   = document.getElementById('occ-filter');
+  const statusEl    = document.getElementById('status');
+  const resultsEl   = document.getElementById('results');
+  const overlay     = document.getElementById('modal-overlay');
+  const modalName   = document.getElementById('modal-name');
+  const modalMeta   = document.getElementById('modal-meta');
+  const modalBody   = document.getElementById('modal-body');
+
+  // ── Load data ──────────────────────────────────────────────
+  fetch('persons_index.json')
+    .then(r => r.json())
+    .then(json => {
+      data = json;
+      buildOccFilter();
+      render();
+    })
+    .catch(() => {
+      statusEl.textContent = 'Error loading data.';
+      resultsEl.innerHTML = '<div class="no-results">Could not load persons_index.json.</div>';
+    });
+
+  function buildOccFilter() {
+    const counts = {};
+    for (const r of data) {
+      if (r.occ) for (const o of r.occ) counts[o] = (counts[o] || 0) + 1;
+    }
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    for (const [occ, cnt] of sorted) {
+      const opt = document.createElement('option');
+      opt.value = occ;
+      opt.textContent = `${occ} (${cnt})`;
+      occFilter.appendChild(opt);
+    }
+  }
+
+  // ── Filtering ──────────────────────────────────────────────
+  function applyFilters() {
+    const q    = qEl.value.trim().toLowerCase();
+    const from = yearFrom.value ? parseInt(yearFrom.value) : 0;
+    const to   = yearTo.value   ? parseInt(yearTo.value)   : 9999;
+    const occ  = occFilter.value;
+
+    filtered = data.filter(r => {
+      if (q && !r.n.toLowerCase().includes(q)) return false;
+      if (r.y[1] < from || r.y[0] > to) return false;
+      if (occ && !(r.occ && r.occ.includes(occ))) return false;
+      return true;
+    });
+
+    // Sort: exact prefix matches first, then by mention count
+    if (q) {
+      filtered.sort((a, b) => {
+        const ap = a.n.toLowerCase().startsWith(q);
+        const bp = b.n.toLowerCase().startsWith(q);
+        if (ap && !bp) return -1;
+        if (!ap && bp) return 1;
+        return b.c - a.c;
+      });
+    } else {
+      filtered.sort((a, b) => b.c - a.c);
+    }
+
+    page = 0;
+    renderResults();
+  }
+
+  function highlight(text, q) {
+    if (!q) return escHtml(text);
+    const i = text.toLowerCase().indexOf(q.toLowerCase());
+    if (i < 0) return escHtml(text);
+    return escHtml(text.slice(0, i)) +
+           '<mark>' + escHtml(text.slice(i, i + q.length)) + '</mark>' +
+           escHtml(text.slice(i + q.length));
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ── Rendering ─────────────────────────────────────────────
+  function renderResults() {
+    const q = qEl.value.trim().toLowerCase();
+    statusEl.textContent =
+      filtered.length === 0 ? 'No results.' :
+      filtered.length === data.length
+        ? `${data.length.toLocaleString()} persons total — type to search`
+        : `${filtered.length.toLocaleString()} result${filtered.length !== 1 ? 's' : ''}`;
+
+    const slice = filtered.slice(0, (page + 1) * PAGE);
+    const html = [];
+
+    if (slice.length === 0) {
+      html.push('<div class="no-results">No persons found.</div>');
+    } else {
+      for (const r of slice) {
+        html.push(cardHtml(r, q));
+      }
+      if (filtered.length > slice.length) {
+        html.push(`<div class="show-more-wrap">
+          <button id="show-more">Show more (${filtered.length - slice.length} remaining)</button>
+        </div>`);
+      }
+    }
+
+    resultsEl.innerHTML = html.join('');
+
+    document.querySelectorAll('.card').forEach(el => {
+      el.addEventListener('click', () => openModal(data.find(r => r.n === el.dataset.name)));
+    });
+    const showMore = document.getElementById('show-more');
+    if (showMore) showMore.addEventListener('click', () => { page++; renderResults(); });
+  }
+
+  function cardHtml(r, q) {
+    const yearStr = r.y[0] === r.y[1] ? r.y[0] : `${r.y[0]}–${r.y[1]}`;
+    let tags = '';
+
+    if (r.dead) tags += `<span class="tag deceased">† deceased ×${r.dead}</span>`;
+    if (r.occ)  tags += r.occ.slice(0,3).map(o =>
+      `<span class="tag occ"><span class="tag-label">occ</span>${escHtml(o)}</span>`).join('');
+    if (r.tit)  tags += r.tit.slice(0,2).map(t =>
+      `<span class="tag title"><span class="tag-label">title</span>${escHtml(t)}</span>`).join('');
+    if (r.fam)  tags += r.fam.slice(0,2).map(f =>
+      `<span class="tag fam"><span class="tag-label">kin</span>${escHtml(f)}</span>`).join('');
+    if (r.org)  tags += r.org.slice(0,1).map(o =>
+      `<span class="tag org"><span class="tag-label">org</span>${escHtml(o)}</span>`).join('');
+    if (r.loc)  tags += r.loc.slice(0,1).map(l =>
+      `<span class="tag loc"><span class="tag-label">loc</span>${escHtml(l)}</span>`).join('');
+
+    return `<div class="card" data-name="${escHtml(r.n).replace(/"/g,'&quot;')}">
+      <div class="card-name">${highlight(r.n, q)}</div>
+      <div class="card-meta">${r.c} mention${r.c !== 1 ? 's' : ''} · ${yearStr}</div>
+      ${tags ? `<div class="card-tags">${tags}</div>` : ''}
+    </div>`;
+  }
+
+  // ── Modal ─────────────────────────────────────────────────
+  function openModal(r) {
+    if (!r) return;
+    const yearStr = r.y[0] === r.y[1] ? r.y[0] : `${r.y[0]}–${r.y[1]}`;
+    modalName.textContent = r.n;
+    modalMeta.textContent = `${r.c} mention${r.c !== 1 ? 's' : ''} · ${yearStr}`;
+
+    const sections = [];
+
+    if (r.occ || r.occ_t) {
+      const items = r.occ || [];
+      const raw   = r.occ_t || [];
+      const combined = [...new Set([...items, ...raw])];
+      sections.push(section('Occupations', combined.map(o => tag('occ', o)).join('')));
+    }
+    if (r.tit)  sections.push(section('Titles',            r.tit.map(t => tag('title', t)).join('')));
+    if (r.fam)  sections.push(section('Family relations',  r.fam.map(f => tag('fam', f)).join('')));
+    if (r.org)  sections.push(section('Org. affiliations', r.org.map(o => tag('org', o)).join('')));
+    if (r.loc)  sections.push(section('Locations',         r.loc.map(l => tag('loc', l)).join('')));
+    if (r.dead) sections.push(section('Deceased', `<span class="tag deceased">marked deceased in ${r.dead} mention${r.dead !== 1 ? 's' : ''}</span>`));
+
+    if (r.dos && r.dos.length) {
+      const dosHtml = r.dos.map(d => `<span class="dossier-tag">${escHtml(d)}</span>`).join('');
+      sections.push(section(`Dossiers (${r.dos.length})`, `<div class="dossier-list">${dosHtml}</div>`));
+    }
+
+    modalBody.innerHTML = sections.join('');
+    overlay.classList.add('open');
+  }
+
+  function section(title, content) {
+    return `<div class="modal-section"><h3>${title}</h3>${content}</div>`;
+  }
+  function tag(cls, text) {
+    return `<span class="tag ${cls}">${escHtml(text)}</span> `;
+  }
+
+  document.getElementById('modal-close').addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+  // ── Events ────────────────────────────────────────────────
+  let debounce;
+  function scheduleRender() {
+    clearTimeout(debounce);
+    debounce = setTimeout(applyFilters, 180);
+  }
+
+  qEl.addEventListener('input', scheduleRender);
+  yearFrom.addEventListener('input', scheduleRender);
+  yearTo.addEventListener('input', scheduleRender);
+  occFilter.addEventListener('change', applyFilters);
+
+  function render() { applyFilters(); }
+})();
+</script>
+</body>
+</html>
