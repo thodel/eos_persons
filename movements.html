@@ -377,16 +377,24 @@ function lv95ToWgs84(E, N) {
 function loadCsv(text) {
   const result = Papa.parse(text, { header: true, skipEmptyLines: true });
   const cols = result.meta.fields || [];
-  const [c0, c1, c2, c3, c4] = cols;
+
+  // Support named columns (canonical) or positional fallback.
+  // Skip a leading unnamed pandas index column if present.
+  const named = cols.includes('person_id');
+  const getId   = named ? r => r['person_id']   : r => r[cols[0]];
+  const getName = named ? r => r['name']         : r => r[cols[1]];
+  const getCoord= named ? r => r['coordinates']  : r => r[cols[2]];
+  const getYear = named ? r => r['year']         : r => r[cols[3]];
+  const getRole = named ? r => r['event_role']   : r => r[cols[4]];
 
   const rows = [];
   for (const r of result.data) {
-    const coord = parseCoord(r[c2]);
+    const coord = parseCoord(getCoord(r));
     if (!coord) continue;
-    const year = parseInt(r[c3]);
+    const year = parseInt(getYear(r));
     if (isNaN(year)) continue;
-    const role = String(r[c4] || 'present').trim().toLowerCase();
-    rows.push({ id: String(r[c0]).trim(), name: String(r[c1]).trim(), coord, year, role });
+    const role = String(getRole(r) || 'present').trim().toLowerCase();
+    rows.push({ id: String(getId(r)).trim(), name: String(getName(r)).trim(), coord, year, role });
   }
   if (!rows.length) { alert('Keine gültigen Zeilen gefunden.'); return; }
 
