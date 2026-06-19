@@ -3,31 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personenbewegungen — Basel 1400–1700</title>
+  <title>Personenbewegungen — HGB Basel</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
   <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --bg: #faf9f7; --surface: #fff; --border: #e2ddd6;
       --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+      --header-h: 56px; --tabs-h: 38px;
     }
-    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 14px; color: var(--text); }
+    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 14px; color: var(--text); background: var(--bg); }
 
-    header {
-      background: var(--accent); color: #fff; padding: 14px 20px;
-      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    /* ── Site header ─────────────────────────────────────────────────────────── */
+    #site-header {
+      height: var(--header-h); background: var(--accent); color: #fff;
+      display: flex; align-items: center; padding: 0 20px; gap: 16px;
+      position: relative; z-index: 1100;
+    }
+    #logos { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    #logos img {
+      height: 32px; width: auto; filter: brightness(0) invert(1);
+      object-fit: contain; opacity: .92;
+    }
+    #logos img.logo-bern { height: 28px; }
+    #site-title {
+      font-size: .95rem; letter-spacing: .03em; opacity: .75;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    #page-nav { display: flex; gap: 0; margin-left: auto; }
+    .page-tab {
+      padding: 0 16px; height: var(--header-h); display: flex; align-items: center;
+      text-decoration: none; font-size: .8rem; color: rgba(255,255,255,.65);
+      border-bottom: 3px solid transparent; transition: color .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    .page-tab:hover { color: #fff; }
+    .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
+
+    /* ── Mode tabs (within page) ─────────────────────────────────────────────── */
+    #mode-tabs {
+      height: var(--tabs-h); background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; align-items: stretch; padding: 0 16px; gap: 0;
       position: relative; z-index: 1000;
     }
-    header h1 { font-size: 1.1rem; font-weight: normal; }
-    header nav { display: flex; gap: 16px; margin-left: auto; }
-    header a { color: rgba(255,255,255,.7); font-size: .82rem; text-decoration: none; }
-    header a:hover { color: #fff; }
+    .mode-tab {
+      padding: 0 18px; font-size: .82rem; font-family: inherit; border: none;
+      background: none; cursor: pointer; color: var(--muted); border-bottom: 3px solid transparent;
+      transition: color .15s, border-color .15s; white-space: nowrap;
+    }
+    .mode-tab:hover { color: var(--text); }
+    .mode-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-    #layout { display: flex; height: calc(100vh - 50px); }
+    /* ── Layout ──────────────────────────────────────────────────────────────── */
+    #layout {
+      display: flex;
+      height: calc(100vh - var(--header-h) - var(--tabs-h));
+    }
 
-    /* ── Sidebar ── */
+    /* ── Sidebar ─────────────────────────────────────────────────────────────── */
     #sidebar {
       width: 300px; flex-shrink: 0; background: var(--bg);
       border-right: 1px solid var(--border); display: flex; flex-direction: column;
@@ -36,168 +72,254 @@
 
     /* Drop zone */
     #dropzone {
-      margin: 14px 16px; padding: 18px 12px; border: 2px dashed var(--border);
+      margin: 12px 14px; padding: 14px 10px; border: 2px dashed var(--border);
       border-radius: 6px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s;
-      font-size: .8rem; color: var(--muted);
+      font-size: .78rem; color: var(--muted); flex-shrink: 0;
     }
     #dropzone.drag-over { border-color: var(--accent); background: #f5ede0; }
-    #dropzone.loaded { border-color: var(--accent2); background: #f5ede0; color: var(--accent); }
-    #dropzone strong { display: block; margin-bottom: 4px; font-size: .85rem; }
+    #dropzone.loaded { border-color: var(--accent2); background: #f5ede0; color: var(--accent); cursor: default; }
+    #dropzone strong { display: block; margin-bottom: 2px; font-size: .82rem; }
     #file-input { display: none; }
 
-    /* Controls */
-    #controls { padding: 0 16px 14px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
-    #controls label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 3px; }
-    #controls select, #controls input[type=text] {
+    /* Panel containers */
+    #panel-search, #panel-heatmap {
+      display: flex; flex-direction: column; gap: 10px;
+      padding: 0 14px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+
+    label.ctrl-label {
+      font-size: .7rem; color: var(--muted); text-transform: uppercase;
+      letter-spacing: .06em; display: block; margin-bottom: 2px;
+    }
+    select, input[type=text] {
       width: 100%; padding: 5px 8px; border: 1px solid var(--border);
       border-radius: 4px; background: #fff; font-size: .82rem; font-family: inherit;
     }
-    #controls select:disabled { opacity: .5; }
 
-    .slider-wrap { position: relative; }
-    #time-slider { width: 100%; accent-color: var(--accent); }
-    .range-row { display: flex; justify-content: space-between; font-size: .75rem; color: var(--muted); margin-top: 2px; }
-    #window-label { font-size: .82rem; color: var(--text); font-weight: bold; margin-top: 2px; }
-
-    /* Animate controls */
-    #anim-row { display: flex; gap: 8px; align-items: center; }
-    #btn-play {
-      flex: 1; padding: 6px; border: 1px solid var(--accent); border-radius: 4px;
-      background: var(--accent); color: #fff; cursor: pointer; font-size: .8rem; font-family: inherit;
+    /* ── Person search ───────────────────────────────────────────────────────── */
+    #search-wrap { position: relative; }
+    #person-search { padding-right: 28px; }
+    #search-results {
+      display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 500;
+      background: #fff; border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 4px 4px; max-height: 180px; overflow-y: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,.1);
     }
-    #btn-play:hover { background: var(--accent2); }
-    #speed-select { width: 90px; }
-
-    /* Stats */
-    #stats { padding: 10px 16px; font-size: .78rem; color: var(--muted); border-bottom: 1px solid var(--border); min-height: 36px; }
-
-    /* Detail panel */
-    #detail { flex: 1; overflow-y: auto; padding: 16px; }
-    #detail .placeholder { color: var(--muted); font-style: italic; font-size: .85rem; }
-    #detail h2 { font-size: .95rem; font-weight: normal; color: var(--accent); margin-bottom: 8px; }
-    .event-row { padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .8rem; }
-    .event-row:last-child { border-bottom: none; }
-    .event-year { font-weight: bold; color: var(--accent2); display: inline-block; width: 40px; }
-    .event-role { color: var(--muted); font-size: .75rem; margin-top: 1px; }
-    .event-coord { font-size: .72rem; color: var(--border); margin-top: 1px; font-family: monospace; }
-
-    /* Map */
-    #map { flex: 1; }
-
-    /* Legend */
-    #legend {
-      position: absolute; bottom: 24px; right: 12px; z-index: 900;
-      background: rgba(255,255,255,.93); border: 1px solid var(--border);
-      border-radius: 6px; padding: 10px 14px; font-size: .75rem; max-width: 200px;
+    #search-results.open { display: block; }
+    .result-item {
+      padding: 6px 10px; cursor: pointer; font-size: .82rem;
+      border-bottom: 1px solid var(--border);
     }
-    #legend h4 { color: var(--accent); font-weight: normal; margin-bottom: 7px; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
-    .legend-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(0,0,0,.2); }
-    #legend-items { max-height: 160px; overflow-y: auto; }
-    #legend-roles { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
-    .role-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: .75rem; color: var(--muted); }
+    .result-item:last-child { border-bottom: none; }
+    .result-item:hover { background: #f5ede0; }
+    .result-item.disabled { opacity: .4; cursor: default; }
+    .result-id { font-size: .7rem; color: var(--muted); }
 
-    /* Mode toggle */
-    #mode-row { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
-    .mode-btn {
+    /* Chips */
+    #chips { display: flex; flex-wrap: wrap; gap: 5px; min-height: 0; }
+    .chip {
+      display: flex; align-items: center; gap: 5px; padding: 3px 8px;
+      border-radius: 12px; font-size: .75rem; color: #fff; cursor: default;
+    }
+    .chip-remove {
+      cursor: pointer; opacity: .7; font-size: .8rem; line-height: 1;
+      background: none; border: none; color: inherit; padding: 0;
+    }
+    .chip-remove:hover { opacity: 1; }
+    #chip-hint { font-size: .72rem; color: var(--muted); font-style: italic; }
+
+    /* ── Heatmap controls ────────────────────────────────────────────────────── */
+    #view-toggle { display: flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .view-btn {
       flex: 1; padding: 5px 4px; font-size: .75rem; font-family: inherit;
       border: none; background: #fff; cursor: pointer; color: var(--muted); transition: background .15s;
+      text-align: center;
     }
-    .mode-btn.active { background: var(--accent); color: #fff; }
+    .view-btn.active { background: var(--accent); color: #fff; }
+
+    .slider-row { display: flex; flex-direction: column; gap: 2px; }
+    input[type=range] { width: 100%; accent-color: var(--accent); }
+    .range-labels { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); }
+    #window-label, #heat-window-label { font-size: .82rem; font-weight: bold; color: var(--text); }
+
+    /* Animate row */
+    .anim-row { display: flex; gap: 6px; align-items: center; }
+    .btn-play {
+      flex: 1; padding: 6px; border: 1px solid var(--accent); border-radius: 4px;
+      background: var(--accent); color: #fff; cursor: pointer; font-size: .78rem; font-family: inherit;
+    }
+    .btn-play:hover { background: var(--accent2); border-color: var(--accent2); }
+    .speed-sel { width: 90px; }
+
+    /* ── Stats + Detail ──────────────────────────────────────────────────────── */
+    #stats { padding: 8px 14px; font-size: .76rem; color: var(--muted); border-bottom: 1px solid var(--border); flex-shrink: 0; min-height: 30px; }
+    #detail { flex: 1; overflow-y: auto; padding: 14px; }
+    #detail .placeholder { color: var(--muted); font-style: italic; font-size: .84rem; }
+    #detail h2 { font-size: .92rem; font-weight: normal; color: var(--accent); margin-bottom: 8px; }
+    .event-row { padding: 5px 0; border-bottom: 1px solid var(--border); font-size: .79rem; }
+    .event-row:last-child { border-bottom: none; }
+    .event-year { font-weight: bold; color: var(--accent2); display: inline-block; width: 38px; }
+    .event-coord { font-size: .7rem; color: #bbb; font-family: monospace; margin-top: 1px; }
+
+    /* ── Map ─────────────────────────────────────────────────────────────────── */
+    #map { flex: 1; }
+
+    /* ── Legend ──────────────────────────────────────────────────────────────── */
+    #legend {
+      position: absolute; bottom: 20px; right: 10px; z-index: 900;
+      background: rgba(255,255,255,.93); border: 1px solid var(--border);
+      border-radius: 6px; padding: 10px 13px; font-size: .74rem; max-width: 190px;
+    }
+    #legend h4 { color: var(--accent); font-weight: normal; margin-bottom: 6px; font-size: .76rem; text-transform: uppercase; letter-spacing: .05em; }
+    .leg-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; overflow: hidden; }
+    .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(0,0,0,.15); }
+    #legend-persons { max-height: 140px; overflow-y: auto; }
+    #legend-roles { margin-top: 8px; padding-top: 7px; border-top: 1px solid var(--border); }
+
+    /* Leaflet override */
+    .leaflet-container { font-family: 'Georgia', serif; }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Personenbewegungen — Basel</h1>
-  <nav>
-    <a href="index.html">← Person Index</a>
-    <a href="map.html">Karte</a>
-    <a href="viz.html">Berufe</a>
+<!-- ── Site header ──────────────────────────────────────────────────────────── -->
+<div id="site-header">
+  <div id="logos">
+    <img class="logo-bern" src="https://www.unibe.ch/assets/media/image/logo-uni-bern.svg" alt="Universität Bern"
+         onerror="this.style.display='none'">
+    <img src="https://www.unibas.ch/dam/jcr:93abfa0e-58d6-45ed-930a-de414ca40b13/uni-basel-logo.2018-03-26-12-26-39.svg"
+         alt="Universität Basel" onerror="this.style.display='none'">
+  </div>
+  <span id="site-title">Historisches Grundbuch Basel</span>
+  <nav id="page-nav">
+    <a class="page-tab" href="index.html">Personenindex</a>
+    <a class="page-tab" href="map.html">Karte</a>
+    <a class="page-tab" href="viz.html">Berufe</a>
+    <a class="page-tab active" href="movements.html">Personenbewegungen</a>
   </nav>
-</header>
+</div>
 
+<!-- ── Mode tabs ────────────────────────────────────────────────────────────── -->
+<div id="mode-tabs">
+  <button class="mode-tab active" data-tab="search">Personensuche</button>
+  <button class="mode-tab" data-tab="heatmap">Heatmap — alle Personen</button>
+</div>
+
+<!-- ── Main layout ──────────────────────────────────────────────────────────── -->
 <div id="layout">
   <div id="sidebar">
 
-    <!-- Drop / file load -->
+    <!-- CSV drop zone -->
     <div id="dropzone" onclick="document.getElementById('file-input').click()">
       <strong>CSV laden</strong>
       Datei hier ablegen oder klicken
       <input type="file" id="file-input" accept=".csv" />
     </div>
 
-    <div id="controls">
-
-      <!-- Mode -->
+    <!-- ── PANEL: Personensuche ──────────────────────────────────────────── -->
+    <div id="panel-search">
       <div>
-        <label>Ansicht</label>
-        <div id="mode-row">
-          <button class="mode-btn active" data-mode="all">Alle Personen</button>
-          <button class="mode-btn" data-mode="person">Eine Person</button>
+        <label class="ctrl-label">Person suchen (max. 10)</label>
+        <div id="search-wrap">
+          <input type="text" id="person-search" placeholder="Name oder ID…" autocomplete="off" />
+          <div id="search-results"></div>
         </div>
       </div>
+      <div id="chips"></div>
+      <div id="chip-hint">Noch keine Personen gewählt.</div>
 
-      <!-- Person filter (person mode) -->
-      <div id="person-filter-wrap" style="display:none">
-        <label>Person</label>
-        <select id="person-select"><option value="">— bitte wählen —</option></select>
-      </div>
-
-      <!-- Time window -->
-      <div>
-        <label>Zeitfenster (30 Jahre)</label>
-        <input type="range" id="time-slider" min="1400" max="1670" value="1400" step="1" />
-        <div class="range-row">
-          <span id="year-from">1400</span>
-          <span id="window-label">1400 – 1430</span>
-          <span id="year-to">1700</span>
+      <div class="slider-row">
+        <label class="ctrl-label">Zeitfenster (30 Jahre)</label>
+        <input type="range" id="s-time-slider" min="1400" max="1670" value="1400" step="1" />
+        <div class="range-labels">
+          <span id="s-year-from">1400</span>
+          <span id="s-window-label">1400 – 1430</span>
+          <span id="s-year-to">1700</span>
         </div>
       </div>
-
-      <!-- Animate -->
-      <div id="anim-row">
-        <button id="btn-play">▶ Abspielen</button>
-        <select id="speed-select" title="Geschwindigkeit">
+      <div class="anim-row">
+        <button class="btn-play" id="s-btn-play">▶ Abspielen</button>
+        <select class="speed-sel" id="s-speed">
           <option value="800">Langsam</option>
           <option value="400" selected>Normal</option>
           <option value="150">Schnell</option>
         </select>
       </div>
+    </div>
 
+    <!-- ── PANEL: Heatmap ────────────────────────────────────────────────── -->
+    <div id="panel-heatmap" style="display:none">
+      <div>
+        <label class="ctrl-label">Ansicht</label>
+        <div id="view-toggle">
+          <button class="view-btn active" data-view="window">Gleitendes Fenster</button>
+          <button class="view-btn" data-view="cumulative">Kumulativ</button>
+        </div>
+      </div>
+      <div class="slider-row">
+        <label class="ctrl-label" id="h-slider-label">Zeitfenster (30 Jahre)</label>
+        <input type="range" id="h-time-slider" min="1400" max="1670" value="1400" step="1" />
+        <div class="range-labels">
+          <span id="h-year-from">1400</span>
+          <span id="h-window-label">1400 – 1430</span>
+          <span id="h-year-to">1700</span>
+        </div>
+      </div>
+      <div class="anim-row">
+        <button class="btn-play" id="h-btn-play">▶ Abspielen</button>
+        <select class="speed-sel" id="h-speed">
+          <option value="800">Langsam</option>
+          <option value="400" selected>Normal</option>
+          <option value="150">Schnell</option>
+        </select>
+      </div>
+      <div>
+        <label class="ctrl-label">Radius <span id="radius-val">18</span> px</label>
+        <input type="range" id="heat-radius" min="5" max="50" value="18" step="1" />
+      </div>
+      <div>
+        <label class="ctrl-label">Unschärfe <span id="blur-val">15</span> px</label>
+        <input type="range" id="heat-blur" min="2" max="30" value="15" step="1" />
+      </div>
     </div>
 
     <div id="stats">Noch keine Daten geladen.</div>
-    <div id="detail"><p class="placeholder">CSV laden und eine Person oder einen Zeitraum auswählen.</p></div>
+    <div id="detail"><p class="placeholder">CSV laden, dann Person wählen oder Heatmap erkunden.</p></div>
   </div>
 
+  <!-- Map -->
   <div style="position:relative;flex:1;display:flex;flex-direction:column">
     <div id="map" style="flex:1"></div>
     <div id="legend">
       <h4>Personen</h4>
-      <div id="legend-items"><em style="color:var(--muted);font-size:.75rem">—</em></div>
-      <div id="legend-roles">
-        <div class="role-row"><svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,1 13,13 1,13" fill="#555" stroke="#fff" stroke-width="1"/></svg> Anfang (start)</div>
-        <div class="role-row"><svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#555" stroke="#fff" stroke-width="1"/></svg> Präsenz (present)</div>
-        <div class="role-row"><svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,13 13,1 1,1" fill="#555" stroke="#fff" stroke-width="1"/></svg> Ende (end)</div>
+      <div id="legend-persons"><em style="color:var(--muted)">—</em></div>
+      <div id="legend-roles" style="display:none">
+        <div class="leg-row"><svg width="13" height="13" viewBox="0 0 13 13"><polygon points="6.5,1 12,12 1,12" fill="#555" stroke="#fff" stroke-width="1"/></svg> Anfang</div>
+        <div class="leg-row"><svg width="13" height="13" viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5.5" fill="#555" stroke="#fff" stroke-width="1"/></svg> Präsenz</div>
+        <div class="leg-row"><svg width="13" height="13" viewBox="0 0 13 13"><polygon points="6.5,12 12,1 1,1" fill="#555" stroke="#fff" stroke-width="1"/></svg> Ende</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// ── Palette ────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// Constants & palette
+// ══════════════════════════════════════════════════════════════════════════════
 const PALETTE = [
   '#c0392b','#2980b9','#27ae60','#8e44ad','#e67e22',
   '#16a085','#d35400','#2c3e50','#f39c12','#1abc9c',
-  '#e74c3c','#3498db','#2ecc71','#9b59b6','#e67e22',
 ];
-const DIM_COLOR = '#c8c0b4';
+const DIM    = '#c0bab0';
+const WINDOW = 30;
+const ROLE_LABEL = { start: 'Anfang', present: 'Präsenz', end: 'Ende' };
+const ROLE_WEIGHT = { start: 1.2, present: 1.0, end: 1.2 };
 
-// ── Map setup ──────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// Map
+// ══════════════════════════════════════════════════════════════════════════════
 const map = L.map('map').setView([47.5565, 7.5880], 16);
 
-// Historical WMS base layer — Situationsplan Basel 1862
 L.tileLayer.wms('https://wms.geo.bs.ch/', {
   layers: 'HP_Situationsplan_Basel_1862',
   format: 'image/png',
@@ -207,65 +329,63 @@ L.tileLayer.wms('https://wms.geo.bs.ch/', {
   opacity: 0.85,
 }).addTo(map);
 
-// Fallback subtle tile for context
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap, © CARTO',
-  maxZoom: 20,
-  opacity: 0.3,
-  zIndex: 0,
+  attribution: '© OpenStreetMap, © CARTO', maxZoom: 20, opacity: 0.3, zIndex: 0,
 }).addTo(map);
 
-// ── State ──────────────────────────────────────────────────────────────────────
-let allRows = [];           // parsed CSV rows
-let personMap = {};         // id → { name, color, rows[] }
-let personIds = [];         // ordered list of unique IDs
-let mode = 'all';           // 'all' | 'person'
-let selectedId = null;
-let windowStart = 1400;
-const WINDOW = 30;
-let animTimer = null;
+const dotLayer  = L.layerGroup().addTo(map);
+const lineLayer = L.layerGroup().addTo(map);
+let   heatLayer = null;
 
-// Layer groups
-const dotLayer   = L.layerGroup().addTo(map);
-const lineLayer  = L.layerGroup().addTo(map);
+// ══════════════════════════════════════════════════════════════════════════════
+// State
+// ══════════════════════════════════════════════════════════════════════════════
+let allRows      = [];
+let personMap    = {};   // id → { name, color, colorIdx, rows[] }
+let personIds    = [];
+let yearIndex    = {};   // year → [{lat,lng,weight}]
+let dataMinYear  = 1400;
+let dataMaxYear  = 1700;
 
-// ── CSV parsing ────────────────────────────────────────────────────────────────
+// Personensuche state
+let selectedIds  = [];   // ordered list, max 10
+let sWindowStart = 1400;
+let sAnimTimer   = null;
+
+// Heatmap state
+let hViewMode    = 'window'; // 'window' | 'cumulative'
+let hWindowStart = 1400;
+let hAnimTimer   = null;
+
+// Active tab
+let activeTab = 'search';
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CSV parsing
+// ══════════════════════════════════════════════════════════════════════════════
 function parseCoord(raw) {
   if (!raw) return null;
   const s = raw.trim().replace(/[()[\]]/g, '');
   const parts = s.split(/[,;\s]+/).map(Number).filter(n => !isNaN(n));
   if (parts.length < 2) return null;
   let [a, b] = parts;
-  // LV95 detection (E > 2_000_000)
-  if (a > 2_000_000) { [a, b] = lv95ToWgs84(a, b); }
-  else if (b > 2_000_000) { [b, a] = lv95ToWgs84(b, a); }
-  // sanity: Basel lat ~47.5, lon ~7.6
+  if (a > 2_000_000)       { [a, b] = lv95ToWgs84(a, b); }
+  else if (b > 2_000_000)  { [b, a] = lv95ToWgs84(b, a); }
   if (a < 45 || a > 50 || b < 5 || b > 11) return null;
   return [a, b];
 }
 
 function lv95ToWgs84(E, N) {
-  // Approximate conversion from LV95 to WGS84 (Swisstopo formula)
   const y = (E - 2_600_000) / 1_000_000;
   const x = (N - 1_200_000) / 1_000_000;
-  const lon = 2.6779094
-    + 4.728982 * y
-    + 0.791484 * y * x
-    + 0.1306   * y * x * x
-    - 0.0436   * y * y * y;
-  const lat = 16.9023892
-    + 3.238272 * x
-    - 0.270978 * y * y
-    - 0.002528 * x * x
-    - 0.0447   * y * y * x
-    - 0.0140   * x * x * x;
-  return [lat * 100 / 36, lon * 100 / 36];
+  const lon = 2.6779094 + 4.728982*y + 0.791484*y*x + 0.1306*y*x*x - 0.0436*y*y*y;
+  const lat = 16.9023892 + 3.238272*x - 0.270978*y*y - 0.002528*x*x - 0.0447*y*y*x - 0.0140*x*x*x;
+  return [lat * 100/36, lon * 100/36];
 }
 
 function loadCsv(text) {
-  const result = Papa.parse(text, { header: true, skipEmptyLines: true, trimHeaders: true });
+  const result = Papa.parse(text, { header: true, skipEmptyLines: true });
   const cols = result.meta.fields || [];
-  // Map columns by position if headers don't match
   const [c0, c1, c2, c3, c4] = cols;
 
   const rows = [];
@@ -274,351 +394,405 @@ function loadCsv(text) {
     if (!coord) continue;
     const year = parseInt(r[c3]);
     if (isNaN(year)) continue;
-    rows.push({
-      id:   String(r[c0]).trim(),
-      name: String(r[c1]).trim(),
-      coord,
-      year,
-      role: String(r[c4] || '').trim(),
-    });
+    const role = String(r[c4] || 'present').trim().toLowerCase();
+    rows.push({ id: String(r[c0]).trim(), name: String(r[c1]).trim(), coord, year, role });
   }
+  if (!rows.length) { alert('Keine gültigen Zeilen gefunden.'); return; }
 
-  if (rows.length === 0) { alert('Keine gültigen Zeilen gefunden.'); return; }
   allRows = rows;
   buildPersonMap();
-  initControls();
-  render();
+  buildYearIndex();
+  initSliders();
+  renderActive();
 
-  document.getElementById('dropzone').classList.add('loaded');
-  document.getElementById('dropzone').innerHTML =
-    `<strong>${rows.length} Ereignisse geladen</strong>${personIds.length} Personen`;
+  const dz = document.getElementById('dropzone');
+  dz.classList.add('loaded');
+  dz.innerHTML = `<strong>${rows.length} Ereignisse geladen</strong>${personIds.length} Personen`;
 }
 
 function buildPersonMap() {
-  personMap = {};
-  personIds = [];
+  personMap = {}; personIds = [];
   for (const r of allRows) {
-    if (!personMap[r.id]) {
-      personMap[r.id] = { name: r.name, color: null, rows: [] };
-      personIds.push(r.id);
-    }
+    if (!personMap[r.id]) { personMap[r.id] = { name: r.name, color: null, colorIdx: null, rows: [] }; personIds.push(r.id); }
     personMap[r.id].rows.push(r);
   }
-  // Sort each person's rows by year
-  for (const id of personIds) {
-    personMap[id].rows.sort((a, b) => a.year - b.year);
-  }
-  // Assign colors
-  personIds.forEach((id, i) => {
-    personMap[id].color = PALETTE[i % PALETTE.length];
-  });
+  for (const id of personIds) personMap[id].rows.sort((a,b) => a.year - b.year);
+  personIds.forEach((id, i) => { personMap[id].colorIdx = i; personMap[id].color = PALETTE[i % PALETTE.length]; });
 }
 
-// ── Controls setup ─────────────────────────────────────────────────────────────
-function initControls() {
+function buildYearIndex() {
+  yearIndex = {};
+  for (const r of allRows) {
+    if (!yearIndex[r.year]) yearIndex[r.year] = [];
+    yearIndex[r.year].push([r.coord[0], r.coord[1], ROLE_WEIGHT[r.role] || 1.0]);
+  }
   const years = allRows.map(r => r.year);
-  const minY = Math.min(...years);
-  const maxY = Math.max(...years);
-  windowStart = minY;
+  dataMinYear = Math.min(...years);
+  dataMaxYear = Math.max(...years);
+}
 
-  const slider = document.getElementById('time-slider');
-  slider.min = minY;
-  slider.max = Math.max(minY, maxY - WINDOW);
-  slider.value = minY;
-  document.getElementById('year-from').textContent = minY;
-  document.getElementById('year-to').textContent = maxY;
-  updateWindowLabel();
-
-  // Person dropdown
-  const sel = document.getElementById('person-select');
-  sel.innerHTML = '<option value="">— bitte wählen —</option>';
-  for (const id of personIds) {
-    const opt = document.createElement('option');
-    opt.value = id;
-    opt.textContent = `${personMap[id].name} (${id})`;
-    sel.appendChild(opt);
+function getHeatPoints(from, to) {
+  const pts = [];
+  for (let y = from; y <= to; y++) {
+    if (yearIndex[y]) pts.push(...yearIndex[y]);
   }
-
-  buildLegend();
+  return pts;
 }
 
-function updateWindowLabel() {
-  const from = windowStart;
-  const to   = windowStart + WINDOW;
-  document.getElementById('window-label').textContent = `${from} – ${to}`;
+// ══════════════════════════════════════════════════════════════════════════════
+// Slider initialisation
+// ══════════════════════════════════════════════════════════════════════════════
+function initSliders() {
+  const min = dataMinYear, max = dataMaxYear;
+  sWindowStart = min; hWindowStart = min;
+
+  for (const [sid, fid, tid, wid] of [
+    ['s-time-slider','s-year-from','s-year-to','s-window-label'],
+    ['h-time-slider','h-year-from','h-year-to','h-window-label'],
+  ]) {
+    const sl = document.getElementById(sid);
+    sl.min = min; sl.max = Math.max(min, max - WINDOW); sl.value = min;
+    document.getElementById(fid).textContent = min;
+    document.getElementById(tid).textContent = max;
+  }
+  updateSWindowLabel(); updateHWindowLabel();
 }
 
-function buildLegend() {
-  const el = document.getElementById('legend-items');
-  el.innerHTML = '';
-  for (const id of personIds) {
-    const p = personMap[id];
-    const row = document.createElement('div');
-    row.className = 'legend-row';
-    row.style.cursor = 'pointer';
-    row.title = id;
-    row.innerHTML = `<span class="legend-dot" style="background:${p.color}"></span>
-                     <span style="overflow:hidden;text-overflow:ellipsis">${p.name}</span>`;
-    row.addEventListener('click', () => {
-      setMode('person');
-      document.getElementById('person-select').value = id;
-      selectedId = id;
-      render();
-    });
-    el.appendChild(row);
+function updateSWindowLabel() {
+  document.getElementById('s-window-label').textContent = `${sWindowStart} – ${sWindowStart + WINDOW}`;
+}
+function updateHWindowLabel() {
+  if (hViewMode === 'window') {
+    document.getElementById('h-window-label').textContent = `${hWindowStart} – ${hWindowStart + WINDOW}`;
+  } else {
+    document.getElementById('h-window-label').textContent = `bis ${hWindowStart + WINDOW}`;
   }
 }
 
-// ── Mode switching ─────────────────────────────────────────────────────────────
-function setMode(m) {
-  mode = m;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === m));
-  document.getElementById('person-filter-wrap').style.display = m === 'person' ? 'block' : 'none';
-  if (m === 'all') selectedId = null;
-}
-
-document.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
-  setMode(b.dataset.mode);
-  render();
+// ══════════════════════════════════════════════════════════════════════════════
+// Tab switching
+// ══════════════════════════════════════════════════════════════════════════════
+document.querySelectorAll('.mode-tab').forEach(btn => btn.addEventListener('click', () => {
+  activeTab = btn.dataset.tab;
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.toggle('active', b === btn));
+  document.getElementById('panel-search').style.display  = activeTab === 'search'  ? 'flex' : 'none';
+  document.getElementById('panel-heatmap').style.display = activeTab === 'heatmap' ? 'flex' : 'none';
+  document.getElementById('legend-roles').style.display  = activeTab === 'search'  ? 'block' : 'none';
+  renderActive();
 }));
 
-// ── Time slider ────────────────────────────────────────────────────────────────
-document.getElementById('time-slider').addEventListener('input', e => {
-  windowStart = parseInt(e.target.value);
-  updateWindowLabel();
-  render();
+function renderActive() {
+  if (activeTab === 'search') renderSearch();
+  else renderHeatmap();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ── MODE 1: Personensuche ────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── Search input ──────────────────────────────────────────────────────────────
+const searchInput   = document.getElementById('person-search');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q || !personIds.length) { searchResults.classList.remove('open'); return; }
+  const matches = personIds.filter(id =>
+    personMap[id].name.toLowerCase().includes(q) || id.toLowerCase().includes(q)
+  ).slice(0, 12);
+  if (!matches.length) { searchResults.classList.remove('open'); return; }
+
+  searchResults.innerHTML = matches.map(id => {
+    const p = personMap[id];
+    const added = selectedIds.includes(id);
+    return `<div class="result-item${added ? ' disabled' : ''}" data-id="${id}">
+      ${p.name} <span class="result-id">${id}</span>
+      ${added ? '<em style="float:right;font-size:.7rem">hinzugefügt</em>' : ''}
+    </div>`;
+  }).join('');
+  searchResults.classList.add('open');
 });
 
-// ── Person select ──────────────────────────────────────────────────────────────
-document.getElementById('person-select').addEventListener('change', e => {
-  selectedId = e.target.value || null;
-  render();
+searchResults.addEventListener('click', e => {
+  const item = e.target.closest('.result-item');
+  if (!item || item.classList.contains('disabled')) return;
+  addPerson(item.dataset.id);
+  searchInput.value = '';
+  searchResults.classList.remove('open');
+  searchInput.focus();
 });
 
-// ── Animate ────────────────────────────────────────────────────────────────────
-document.getElementById('btn-play').addEventListener('click', () => {
-  if (animTimer) {
-    clearInterval(animTimer);
-    animTimer = null;
-    document.getElementById('btn-play').textContent = '▶ Abspielen';
+document.addEventListener('click', e => {
+  if (!document.getElementById('search-wrap').contains(e.target)) searchResults.classList.remove('open');
+});
+
+function addPerson(id) {
+  if (selectedIds.includes(id) || selectedIds.length >= 10) return;
+  // Assign a stable color
+  const usedColors = selectedIds.map(i => personMap[i].color);
+  const freeColor = PALETTE.find(c => !usedColors.includes(c)) || PALETTE[selectedIds.length % PALETTE.length];
+  personMap[id].color = freeColor;
+  selectedIds.push(id);
+  rebuildChips();
+  renderSearch();
+}
+
+function removePerson(id) {
+  selectedIds = selectedIds.filter(i => i !== id);
+  rebuildChips();
+  renderSearch();
+}
+
+function rebuildChips() {
+  const chips = document.getElementById('chips');
+  const hint  = document.getElementById('chip-hint');
+  chips.innerHTML = selectedIds.map(id => {
+    const p = personMap[id];
+    return `<span class="chip" style="background:${p.color}">
+      ${p.name}
+      <button class="chip-remove" data-id="${id}" title="Entfernen">×</button>
+    </span>`;
+  }).join('');
+  hint.textContent = selectedIds.length === 0
+    ? 'Noch keine Personen gewählt.'
+    : selectedIds.length >= 10 ? 'Maximum (10) erreicht.' : '';
+
+  chips.querySelectorAll('.chip-remove').forEach(btn =>
+    btn.addEventListener('click', () => removePerson(btn.dataset.id))
+  );
+  buildSearchLegend();
+}
+
+function buildSearchLegend() {
+  const el = document.getElementById('legend-persons');
+  if (!selectedIds.length) { el.innerHTML = '<em style="color:var(--muted)">—</em>'; return; }
+  el.innerHTML = selectedIds.map(id => {
+    const p = personMap[id];
+    return `<div class="leg-row" style="cursor:pointer" title="${id}" onclick="removePerson('${id}')">
+      <span class="leg-dot" style="background:${p.color}"></span>
+      <span style="overflow:hidden;text-overflow:ellipsis">${p.name}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('legend-roles').style.display = 'block';
+}
+
+// ── Timeline slider (search) ──────────────────────────────────────────────────
+document.getElementById('s-time-slider').addEventListener('input', e => {
+  sWindowStart = parseInt(e.target.value);
+  updateSWindowLabel();
+  renderSearch();
+});
+
+// ── Animate (search) ─────────────────────────────────────────────────────────
+document.getElementById('s-btn-play').addEventListener('click', () => toggleAnim(
+  's', document.getElementById('s-btn-play'), document.getElementById('s-time-slider'),
+  () => { sWindowStart = parseInt(document.getElementById('s-time-slider').value); updateSWindowLabel(); renderSearch(); }
+));
+
+// ── Render search mode ────────────────────────────────────────────────────────
+function renderSearch() {
+  clearMapLayers();
+  if (!selectedIds.length) {
+    document.getElementById('stats').textContent = 'Keine Personen gewählt.';
+    document.getElementById('detail').innerHTML = '<p class="placeholder">Person über die Suche oben hinzufügen.</p>';
     return;
   }
-  const slider = document.getElementById('time-slider');
-  if (parseInt(slider.value) >= parseInt(slider.max)) slider.value = slider.min;
-  document.getElementById('btn-play').textContent = '⏹ Stopp';
 
-  animTimer = setInterval(() => {
-    const v = parseInt(slider.value);
-    if (v >= parseInt(slider.max)) {
-      clearInterval(animTimer); animTimer = null;
-      document.getElementById('btn-play').textContent = '▶ Abspielen';
-      return;
+  const from = sWindowStart, to = sWindowStart + WINDOW;
+
+  for (const id of selectedIds) {
+    const p = personMap[id];
+
+    // Ghost line (full trajectory, dimmed)
+    if (p.rows.length > 1) {
+      L.polyline(p.rows.map(r => r.coord), {
+        color: p.color, weight: 1, opacity: 0.18, dashArray: '5 5'
+      }).addTo(lineLayer);
     }
-    slider.value = v + 1;
-    windowStart = v + 1;
-    updateWindowLabel();
-    render();
-  }, parseInt(document.getElementById('speed-select').value));
+
+    // Window trajectory
+    const wRows = p.rows.filter(r => r.year >= from && r.year <= to);
+    if (wRows.length > 1) {
+      L.polyline(wRows.map(r => r.coord), {
+        color: p.color, weight: 3, opacity: 0.85
+      }).addTo(lineLayer);
+    }
+
+    // Markers (all events, dim out-of-window)
+    for (const r of p.rows) {
+      const inW = r.year >= from && r.year <= to;
+      makeMarker(r, p.color, !inW);
+    }
+  }
+
+  const total = selectedIds.reduce((s, id) => s + personMap[id].rows.filter(r => r.year >= from && r.year <= to).length, 0);
+  document.getElementById('stats').textContent =
+    `${selectedIds.length} Person(en) · ${total} Ereignisse im Fenster ${from}–${to}`;
+
+  updateSearchDetail(from, to);
+}
+
+function updateSearchDetail(from, to) {
+  const el = document.getElementById('detail');
+  let html = '';
+  for (const id of selectedIds) {
+    const p = personMap[id];
+    html += `<h2 style="color:${p.color};border-left:3px solid ${p.color};padding-left:6px;margin-bottom:6px">${p.name}</h2>`;
+    for (const r of p.rows) {
+      const inW = r.year >= from && r.year <= to;
+      html += `<div class="event-row" style="${inW ? '' : 'opacity:.4'}">
+        <span class="event-year">${r.year}</span> ${ROLE_LABEL[r.role] || r.role}
+        <div class="event-coord">${r.coord[0].toFixed(4)}, ${r.coord[1].toFixed(4)}</div>
+      </div>`;
+    }
+    html += '<br>';
+  }
+  el.innerHTML = html || '<p class="placeholder">Keine Ereignisse.</p>';
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ── MODE 2: Heatmap ──────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+
+// View toggle (window / cumulative)
+document.querySelectorAll('.view-btn').forEach(btn => btn.addEventListener('click', () => {
+  hViewMode = btn.dataset.view;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b === btn));
+  const label = document.getElementById('h-slider-label');
+  label.textContent = hViewMode === 'window' ? 'Zeitfenster (30 Jahre)' : 'Kumulativ bis Jahr';
+  updateHWindowLabel();
+  renderHeatmap();
+}));
+
+// Slider
+document.getElementById('h-time-slider').addEventListener('input', e => {
+  hWindowStart = parseInt(e.target.value);
+  updateHWindowLabel();
+  renderHeatmap();
 });
 
-// ── Render ─────────────────────────────────────────────────────────────────────
-function render() {
+// Radius / blur
+document.getElementById('heat-radius').addEventListener('input', e => {
+  document.getElementById('radius-val').textContent = e.target.value;
+  if (heatLayer) heatLayer.setOptions({ radius: parseInt(e.target.value) });
+});
+document.getElementById('heat-blur').addEventListener('input', e => {
+  document.getElementById('blur-val').textContent = e.target.value;
+  if (heatLayer) heatLayer.setOptions({ blur: parseInt(e.target.value) });
+});
+
+// Animate
+document.getElementById('h-btn-play').addEventListener('click', () => toggleAnim(
+  'h', document.getElementById('h-btn-play'), document.getElementById('h-time-slider'),
+  () => { hWindowStart = parseInt(document.getElementById('h-time-slider').value); updateHWindowLabel(); renderHeatmap(); }
+));
+
+function renderHeatmap() {
+  clearMapLayers();
+  if (!allRows.length) {
+    document.getElementById('stats').textContent = 'Noch keine Daten geladen.';
+    return;
+  }
+
+  const from = hViewMode === 'window' ? hWindowStart : dataMinYear;
+  const to   = hWindowStart + WINDOW;
+  const pts  = getHeatPoints(from, to);
+
+  if (!heatLayer) {
+    heatLayer = L.heatLayer(pts, {
+      radius: parseInt(document.getElementById('heat-radius').value),
+      blur:   parseInt(document.getElementById('heat-blur').value),
+      maxZoom: 20,
+      gradient: { 0.2: '#1a9641', 0.4: '#a6d96a', 0.6: '#ffffbf', 0.8: '#fdae61', 1.0: '#d7191c' },
+    }).addTo(map);
+  } else {
+    heatLayer.setLatLngs(pts);
+  }
+
+  const label = hViewMode === 'window'
+    ? `${hWindowStart} – ${hWindowStart + WINDOW}`
+    : `${dataMinYear} – ${hWindowStart + WINDOW} (kumulativ)`;
+  document.getElementById('stats').textContent = `${pts.length} Ereignisse · ${label}`;
+  document.getElementById('detail').innerHTML = `<p class="placeholder" style="line-height:1.7">
+    ${pts.length} Ereignisse im Zeitraum <strong>${label}</strong>.<br><br>
+    Regler ziehen oder Abspielen drücken um die zeitliche Entwicklung zu verfolgen.
+  </p>`;
+
+  // Hide person legend in heatmap mode
+  document.getElementById('legend-persons').innerHTML = '<em style="color:var(--muted);font-size:.72rem">Heatmap-Modus</em>';
+  document.getElementById('legend-roles').style.display = 'none';
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Shared helpers
+// ══════════════════════════════════════════════════════════════════════════════
+function clearMapLayers() {
   dotLayer.clearLayers();
   lineLayer.clearLayers();
-  if (allRows.length === 0) return;
-
-  const wEnd = windowStart + WINDOW;
-
-  if (mode === 'all') {
-    renderAll(windowStart, wEnd);
-  } else {
-    renderPerson(selectedId, windowStart, wEnd);
-  }
+  if (heatLayer) { heatLayer.setLatLngs([]); }
 }
 
-function renderAll(from, to) {
-  // For each person: show dots within window, draw movement lines for the window
-  let visible = 0, personsSeen = new Set();
-
-  for (const id of personIds) {
-    const p = personMap[id];
-    const windowRows = p.rows.filter(r => r.year >= from && r.year <= to);
-    const allPersonRows = p.rows;
-
-    if (windowRows.length === 0) continue;
-    personsSeen.add(id);
-    visible += windowRows.length;
-
-    // Draw movement line for this person across whole dataset (dimmed) behind window
-    if (allPersonRows.length > 1) {
-      const ghostCoords = allPersonRows.map(r => r.coord);
-      L.polyline(ghostCoords, { color: p.color, weight: 1, opacity: 0.15, dashArray: '4 4' }).addTo(lineLayer);
-    }
-
-    // Draw window movement line
-    if (windowRows.length > 1) {
-      const coords = windowRows.map(r => r.coord);
-      L.polyline(coords, { color: p.color, weight: 2.5, opacity: 0.75 }).addTo(lineLayer);
-    }
-
-    // Draw dots
-    for (const r of windowRows) {
-      makeDot(r, p.color, false);
-    }
-  }
-
-  document.getElementById('stats').textContent =
-    `${visible} Ereignisse · ${personsSeen.size} Personen im Zeitfenster ${from}–${to}`;
-
-  updateDetail(null, from, to);
-}
-
-function renderPerson(id, from, to) {
-  if (!id) {
-    document.getElementById('stats').textContent = 'Keine Person gewählt.';
-    document.getElementById('detail').innerHTML = '<p class="placeholder">Person aus der Liste wählen.</p>';
-    return;
-  }
-  const focus = personMap[id];
-
-  // Dim other persons
-  for (const oid of personIds) {
-    if (oid === id) continue;
-    const op = personMap[oid];
-    const windowRows = op.rows.filter(r => r.year >= from && r.year <= to);
-    for (const r of windowRows) {
-      makeDot(r, DIM_COLOR, true);
-    }
-  }
-
-  // Full trajectory line for selected person
-  if (focus.rows.length > 1) {
-    const coords = focus.rows.map(r => r.coord);
-    L.polyline(coords, { color: focus.color, weight: 2.5, opacity: 0.4, dashArray: '6 4' }).addTo(lineLayer);
-  }
-
-  // Window trajectory line
-  const windowRows = focus.rows.filter(r => r.year >= from && r.year <= to);
-  if (windowRows.length > 1) {
-    const coords = windowRows.map(r => r.coord);
-    L.polyline(coords, { color: focus.color, weight: 3.5, opacity: 0.9 }).addTo(lineLayer);
-  }
-
-  // All dots, highlight in-window
-  for (const r of focus.rows) {
-    const inWindow = r.year >= from && r.year <= to;
-    makeDot(r, focus.color, !inWindow);
-  }
-
-  const total = focus.rows.length;
-  const inW   = windowRows.length;
-  document.getElementById('stats').textContent =
-    `${focus.name} · ${total} Ereignisse gesamt, ${inW} im Fenster ${from}–${to}`;
-
-  updateDetail(id, from, to);
-}
-
-function roleIcon(role, color, dimmed) {
-  const sz = dimmed ? 12 : 16;
-  const op = dimmed ? 0.3 : 1;
-  const fill = dimmed ? DIM_COLOR : color;
-  const stroke = dimmed ? 'rgba(0,0,0,.1)' : 'rgba(255,255,255,.9)';
+function makeMarker(r, color, dimmed) {
+  const sz = dimmed ? 11 : 15;
+  const op = dimmed ? 0.28 : 1;
+  const fill = dimmed ? DIM : color;
+  const stroke = 'rgba(255,255,255,.85)';
   let shape;
-  if (role === 'start') {
-    // Triangle pointing up
+  if (r.role === 'start') {
     shape = `<polygon points="${sz/2},1 ${sz-1},${sz-1} 1,${sz-1}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
-  } else if (role === 'end') {
-    // Triangle pointing down
+  } else if (r.role === 'end') {
     shape = `<polygon points="1,1 ${sz-1},1 ${sz/2},${sz-1}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
   } else {
-    // Circle for 'present'
-    const r = sz/2 - 1;
-    shape = `<circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
+    const rx = sz/2 - 1;
+    shape = `<circle cx="${sz/2}" cy="${sz/2}" r="${rx}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
   }
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" style="opacity:${op};display:block">${shape}</svg>`;
-  return L.divIcon({
-    html: svg,
-    className: '',
-    iconSize: [sz, sz],
-    iconAnchor: [sz/2, sz/2],
-    tooltipAnchor: [0, -sz/2],
+  const marker = L.marker(r.coord, {
+    icon: L.divIcon({ html: svg, className: '', iconSize: [sz,sz], iconAnchor: [sz/2,sz/2], tooltipAnchor: [0,-sz/2] })
   });
-}
-
-const ROLE_LABEL = { start: 'Anfang', present: 'Präsenz', end: 'Ende' };
-
-function makeDot(r, color, dimmed) {
-  const icon = roleIcon(r.role, color, dimmed);
-  const marker = L.marker(r.coord, { icon });
-
   marker.bindTooltip(
-    `<strong>${r.name}</strong><br>${r.year} · ${ROLE_LABEL[r.role] || r.role}<br><small>${r.coord[0].toFixed(4)}, ${r.coord[1].toFixed(4)}</small>`,
-    { direction: 'top', offset: [0, -8] }
+    `<strong>${r.name}</strong><br>${r.year} · ${ROLE_LABEL[r.role] || r.role}`,
+    { direction: 'top', offset: [0, -6] }
   );
-
-  marker.on('click', () => {
-    if (mode === 'person') {
-      selectedId = r.id;
-      document.getElementById('person-select').value = r.id;
-      render();
-    } else {
-      updateDetail(r.id, windowStart, windowStart + WINDOW);
-    }
-  });
-
+  marker.on('click', () => updateSearchDetail(sWindowStart, sWindowStart + WINDOW));
   marker.addTo(dotLayer);
 }
 
-// ── Detail panel ───────────────────────────────────────────────────────────────
-function updateDetail(id, from, to) {
-  const el = document.getElementById('detail');
-  if (!id) {
-    // Show summary of window events
-    const windowRows = allRows.filter(r => r.year >= from && r.year <= to);
-    if (windowRows.length === 0) {
-      el.innerHTML = '<p class="placeholder">Keine Ereignisse im gewählten Zeitraum.</p>';
-      return;
-    }
-    const byPerson = {};
-    for (const r of windowRows) {
-      if (!byPerson[r.id]) byPerson[r.id] = { name: r.name, rows: [] };
-      byPerson[r.id].rows.push(r);
-    }
-    let html = `<h2>${from}–${to}: Übersicht</h2>`;
-    for (const [pid, data] of Object.entries(byPerson)) {
-      const color = personMap[pid]?.color || '#999';
-      html += `<div style="margin-bottom:10px">
-        <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${color};margin-right:4px;vertical-align:middle"></span>
-        <strong>${data.name}</strong> (${data.rows.length} Ereignisse)`;
-      for (const r of data.rows) {
-        html += `<div class="event-row"><span class="event-year">${r.year}</span> ${ROLE_LABEL[r.role] || r.role}</div>`;
-      }
-      html += '</div>';
-    }
-    el.innerHTML = html;
+// Shared animate toggle
+function toggleAnim(prefix, btn, slider, onTick) {
+  const timerKey = prefix === 's' ? 'sAnimTimer' : 'hAnimTimer';
+  if (window[timerKey]) {
+    clearInterval(window[timerKey]);
+    window[timerKey] = null;
+    btn.textContent = '▶ Abspielen';
     return;
   }
-
-  const p = personMap[id];
-  if (!p) { el.innerHTML = ''; return; }
-
-  let html = `<h2>${p.name}</h2>`;
-  for (const r of p.rows) {
-    const active = r.year >= from && r.year <= to;
-    html += `<div class="event-row" style="${active ? '' : 'opacity:.45'}">
-      <span class="event-year">${r.year}</span> ${ROLE_LABEL[r.role] || r.role}
-      <div class="event-coord">${r.coord[0].toFixed(4)}, ${r.coord[1].toFixed(4)}</div>
-    </div>`;
-  }
-  el.innerHTML = html;
+  if (parseInt(slider.value) >= parseInt(slider.max)) slider.value = slider.min;
+  btn.textContent = '⏹ Stopp';
+  const speed = parseInt(document.getElementById(prefix + '-speed').value);
+  window[timerKey] = setInterval(() => {
+    const v = parseInt(slider.value);
+    if (v >= parseInt(slider.max)) {
+      clearInterval(window[timerKey]); window[timerKey] = null;
+      btn.textContent = '▶ Abspielen';
+      return;
+    }
+    slider.value = v + 1;
+    onTick();
+  }, speed);
 }
 
-// ── File handling ──────────────────────────────────────────────────────────────
+// Make timer vars accessible on window
+window.sAnimTimer = null;
+window.hAnimTimer = null;
+
+// ══════════════════════════════════════════════════════════════════════════════
+// File handling
+// ══════════════════════════════════════════════════════════════════════════════
 document.getElementById('file-input').addEventListener('change', e => {
   const f = e.target.files[0];
   if (f) { const r = new FileReader(); r.onload = ev => loadCsv(ev.target.result); r.readAsText(f); }
 });
-
 const dz = document.getElementById('dropzone');
 dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
@@ -628,14 +802,13 @@ dz.addEventListener('drop', e => {
   if (f) { const r = new FileReader(); r.onload = ev => loadCsv(ev.target.result); r.readAsText(f); }
 });
 
-// ── Auto-load test CSV if on localhost ─────────────────────────────────────────
+// Auto-load test CSV when served locally
 (async () => {
   try {
     const res = await fetch('movements_test.csv');
-    if (res.ok) { loadCsv(await res.text()); }
+    if (res.ok) loadCsv(await res.text());
   } catch { /* not on a server */ }
 })();
 </script>
-
 </body>
 </html>

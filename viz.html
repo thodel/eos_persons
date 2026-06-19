@@ -14,13 +14,22 @@
     }
     body { background: var(--bg); color: var(--text); font-family: 'Georgia', serif; font-size: 15px; }
 
-    header {
-      background: var(--accent); color: #fff; padding: 28px 32px 24px;
-      display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap;
+    #site-header {
+      height: 56px; background: var(--accent); color: #fff;
+      display: flex; align-items: center; padding: 0 20px; gap: 16px;
     }
-    header h1 { font-size: 1.5rem; font-weight: normal; }
-    header a { color: rgba(255,255,255,.7); font-size: .85rem; text-decoration: none; }
-    header a:hover { color: #fff; }
+    #logos { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    #logos img { height: 30px; width: auto; filter: brightness(0) invert(1); object-fit: contain; opacity: .9; }
+    #logos img.logo-bern { height: 26px; }
+    #site-title { font-size: .9rem; opacity: .7; white-space: nowrap; flex-shrink: 0; }
+    #page-nav { display: flex; margin-left: auto; }
+    .page-tab {
+      padding: 0 14px; height: 56px; display: flex; align-items: center; text-decoration: none;
+      font-size: .8rem; color: rgba(255,255,255,.65); border-bottom: 3px solid transparent;
+      transition: color .15s, border-color .15s; white-space: nowrap;
+    }
+    .page-tab:hover { color: #fff; }
+    .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
 
     main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
@@ -73,10 +82,19 @@
   </style>
 </head>
 <body>
-<header>
-  <h1>HGB Occupations</h1>
-  <a href="index.html">← Person Index</a>
-</header>
+<div id="site-header">
+  <div id="logos">
+    <img class="logo-bern" src="https://www.unibe.ch/assets/media/image/logo-uni-bern.svg" alt="Universität Bern" onerror="this.style.display='none'">
+    <img src="https://www.unibas.ch/dam/jcr:93abfa0e-58d6-45ed-930a-de414ca40b13/uni-basel-logo.2018-03-26-12-26-39.svg" alt="Universität Basel" onerror="this.style.display='none'">
+  </div>
+  <span id="site-title">Historisches Grundbuch Basel</span>
+  <nav id="page-nav">
+    <a class="page-tab" href="index.html">Personenindex</a>
+    <a class="page-tab" href="map.html">Karte</a>
+    <a class="page-tab active" href="viz.html">Berufe</a>
+    <a class="page-tab" href="movements.html">Personenbewegungen</a>
+  </nav>
+</div>
 
 <div id="loading">Loading data…</div>
 
