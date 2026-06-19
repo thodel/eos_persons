@@ -776,7 +776,7 @@ window.hAnimTimer = null;
 // Load CSV from repo
 (async () => {
   try {
-    const res = await fetch('movements_test.csv');
+    const res = await fetch('movements.csv');
     if (res.ok) { loadCsv(await res.text()); return; }
   } catch { /* ignore */ }
   document.getElementById('data-status').textContent = 'Fehler: CSV nicht gefunden.';

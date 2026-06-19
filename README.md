@@ -23,7 +23,7 @@ The movement map supports two modes:
 
 ### Input CSV
 
-The movement map reads `movements_test.csv` (swap in the real file with the same name). Expected columns:
+The movement map reads `movements.csv`. Expected columns:
 
 | # | Field | Description |
 |---|-------|-------------|
