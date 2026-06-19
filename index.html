@@ -191,20 +191,7 @@
       border-bottom: 1px solid var(--border);
       padding-bottom: 4px;
     }
-    .dossier-list {
-      display: flex; flex-wrap: wrap; gap: 5px;
-    }
-    .dossier-tag {
-      font-size: .75rem;
-      font-family: 'Courier New', monospace;
-      background: var(--tag-bg);
-      border: 1px solid var(--tag-border);
-      border-radius: 3px;
-      padding: 2px 7px;
-      color: var(--accent);
-    }
-
-    .loading {
+.loading {
       text-align: center;
       padding: 80px 32px;
       color: var(--muted);
@@ -242,7 +229,7 @@
 
 <header>
   <h1>HGB Person Index</h1>
-  <p>Haushalts- und Grundbücher Basel — person mentions 1400–1700</p>
+  <p>Historisches Grundbuch Basel — person mentions 1400–1700</p>
   <a href="viz.html" style="margin-left:auto;color:rgba(255,255,255,.8);font-size:.85rem;text-decoration:none;white-space:nowrap">Occupation Visualizations →</a>
 </header>
 
@@ -443,11 +430,6 @@
     if (r.org)  sections.push(section('Org. affiliations', r.org.map(o => tag('org', o)).join('')));
     if (r.loc)  sections.push(section('Locations',         r.loc.map(l => tag('loc', l)).join('')));
     if (r.dead) sections.push(section('Deceased', `<span class="tag deceased">marked deceased in ${r.dead} mention${r.dead !== 1 ? 's' : ''}</span>`));
-
-    if (r.dos && r.dos.length) {
-      const dosHtml = r.dos.map(d => `<span class="dossier-tag">${escHtml(d)}</span>`).join('');
-      sections.push(section(`Dossiers (${r.dos.length})`, `<div class="dossier-list">${dosHtml}</div>`));
-    }
 
     modalBody.innerHTML = sections.join('');
     overlay.classList.add('open');

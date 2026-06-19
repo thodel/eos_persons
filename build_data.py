@@ -9,6 +9,7 @@ import pandas as pd
 import re
 import json
 from collections import defaultdict
+from difflib import SequenceMatcher
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 INPUT_CSV   = "persons.csv"
@@ -101,15 +102,34 @@ def expand(tok: str) -> str:
 
 
 def canonical_key(name: str) -> str:
-    """Stable sort key for cross-dossier matching."""
+    """Stable sort key for cross-dossier matching.
+    Each token is normalized via abbreviation expansion; the key is sorted
+    so 'Hans Müller' and 'Müller Hans' produce the same key.
+    Fuzzy spelling variants (e.g. 'Gisler'/'Gysler') are handled at the
+    within-dossier step; cross-dossier uses the exact expanded key to avoid
+    over-merging unrelated persons with similar names.
+    """
     return " ".join(sorted(expand(t) for t in clean_tokens(name)))
 
 
+def token_sim(t1: str, t2: str) -> bool:
+    """Fast fuzzy similarity: same 2-char prefix + SequenceMatcher ≥ 0.82.
+    The prefix guard avoids SequenceMatcher on clearly different tokens.
+    """
+    if t1 == t2:
+        return True
+    if t1[0] != t2[0]:             # quick rejection: must share first character
+        return False
+    if abs(len(t1) - len(t2)) > 3: # length difference guard
+        return False
+    return SequenceMatcher(None, t1, t2).ratio() >= 0.82
+
+
 def tokens_subset(a: str, b: str) -> bool:
-    """True if every (expanded) token of a appears in (expanded) tokens of b."""
-    ta = {expand(t) for t in clean_tokens(a)}
-    tb = {expand(t) for t in clean_tokens(b)}
-    return len(ta) >= 1 and ta.issubset(tb)
+    """True if every expanded token of a has a fuzzy match in expanded tokens of b."""
+    ta = [expand(t) for t in clean_tokens(a)]
+    tb = [expand(t) for t in clean_tokens(b)]
+    return len(ta) >= 1 and all(any(token_sim(t, p) for p in tb) for t in ta)
 
 
 # ── Union-Find ────────────────────────────────────────────────────────────────
