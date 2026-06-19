@@ -244,7 +244,20 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
                     if o:
                         orgs.add(o)
         years = [int(r["year"]) for r in rows if pd.notna(r.get("year"))]
-        dead = any(r.get("is_deceased") == 1 or r.get("is_deceased") == "1.0" for r in rows)
+
+        def is_dead(r):
+            v = r.get("is_deceased")
+            return v == 1 or v == 1.0 or str(v) == "1.0"
+
+        dead_years = [int(r["year"]) for r in rows
+                      if pd.notna(r.get("year")) and is_dead(r)]
+        live_years = [int(r["year"]) for r in rows
+                      if pd.notna(r.get("year")) and not is_dead(r)]
+
+        # Earliest year a deceased marker appears = upper bound on death year.
+        # The person was already dead at (or before) this document.
+        dead_year = min(dead_years) if dead_years else None
+
         per_dossier.append({
             "canonical": canon,
             "variants": sorted(names),
@@ -256,9 +269,44 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
             "fam": sorted(fam),
             "loc": sorted(locs),
             "org": sorted(orgs),
-            "dead": dead,
+            "dead_year": dead_year,   # earliest year marked deceased (None if never)
+            "live_years": live_years, # years with live (non-deceased) mentions
             "ckey": canonical_key(canon),
         })
+
+    # Step 3b: split any per-dossier cluster where live mentions appear after
+    # the earliest deceased mention (those rows belong to a later generation).
+    split_dossier: list[dict] = []
+    for p in per_dossier:
+        if p["dead_year"] is None or not p["live_years"]:
+            split_dossier.append(p)
+            continue
+        late_live = [y for y in p["live_years"] if y > p["dead_year"]]
+        if not late_live:
+            split_dossier.append(p)
+            continue
+        # Build a "later person" entry from the late live mentions
+        # (keep all fields the same except years and dead_year)
+        early_live = [y for y in p["live_years"] if y <= p["dead_year"]]
+        p_early = dict(p)
+        p_early["live_years"] = early_live
+        all_early = (early_live or []) + [p["dead_year"]]
+        p_early["years"] = [min(all_early), max(all_early)]
+        split_dossier.append(p_early)
+
+        p_late = dict(p)
+        p_late["dead_year"] = None
+        p_late["live_years"] = late_live
+        p_late["years"] = [min(late_live), max(late_live)]
+        p_late["ckey"] = p["ckey"]   # same canonical key, will be re-grouped
+        split_dossier.append(p_late)
+
+    per_dossier = split_dossier
+
+    # Sort per_dossier chronologically so that deceased entries (which mark the
+    # death year upper bound) are always processed AFTER earlier live entries.
+    # This makes the cross-dossier constraint order-independent.
+    per_dossier.sort(key=lambda p: (p["years"][0], p["dead_year"] or 9999))
 
     # Step 4: cross-dossier grouping by canonical key
     # Only merge across dossiers when the canonical name has ≥2 tokens
@@ -268,17 +316,42 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
     for p in per_dossier:
         key_tokens = p["ckey"].split()
         if len(key_tokens) >= 2:
-            # Hard 80-year lifespan cap: a person cannot appear in documents
-            # spanning more than 80 years.  If adding this entry would push the
-            # cluster's total span beyond that, start a new group instead.
             existing = cross[p["ckey"]]
             if existing:
+                # Guard 1 — 80-year lifespan cap
                 all_years = [y for e in existing for y in e["years"] if y > 0] + \
                             [y for y in p["years"] if y > 0]
                 if all_years and max(all_years) - min(all_years) > 80:
                     cross[f"__time_{_uid}"].append(p)
                     _uid += 1
                     continue
+
+                # Guard 2 — deceased constraint
+                # cluster's earliest deceased mention = death_year_ub for that person
+                cluster_dead = min(
+                    (e["dead_year"] for e in existing if e["dead_year"] is not None),
+                    default=None
+                )
+                # new entry's earliest deceased mention
+                p_dead = p["dead_year"]
+
+                # If the cluster already has someone marked dead, no live mention
+                # from after that year can belong to the same person.
+                if cluster_dead and p["live_years"]:
+                    if any(y > cluster_dead for y in p["live_years"]):
+                        cross[f"__dead_{_uid}"].append(p)
+                        _uid += 1
+                        continue
+
+                # Symmetrically: if this entry marks the person dead, the cluster
+                # must not contain live mentions from after that death year.
+                if p_dead:
+                    cluster_live = [y for e in existing for y in e["live_years"]]
+                    if any(y > p_dead for y in cluster_live):
+                        cross[f"__dead_{_uid}"].append(p)
+                        _uid += 1
+                        continue
+
             cross[p["ckey"]].append(p)
         else:
             # keep as isolated entry with a unique key
@@ -298,19 +371,20 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
         dossiers = sorted({e["dossier"] for e in entries})
         all_years = [y for e in entries for y in e["years"] if y > 0]
         mentions = sum(e["mentions"] for e in entries)
-        dead = any(e["dead"] for e in entries)
+        dead_years_all = [e["dead_year"] for e in entries if e["dead_year"] is not None]
+        dead_year_out = min(dead_years_all) if dead_years_all else None
         persons.append({
             "n": canon,
             "v": all_names,
             "c": mentions,
             "d": len(dossiers),
             "y": [min(all_years), max(all_years)] if all_years else [0, 0],
+            "dead_year": dead_year_out,  # earliest year mentioned as deceased
             "occ": occs,
             "tit": titles,
             "fam": fams,
             "loc": locs,
             "org": orgs,
-            "dead": dead,
             "dos": dossiers[:30],
         })
 
