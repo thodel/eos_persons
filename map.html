@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HGB Property Map — Basel 1400–1700</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+    }
+    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 14px; color: var(--text); }
+
+    header {
+      background: var(--accent); color: #fff; padding: 14px 20px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      position: relative; z-index: 1000;
+    }
+    header h1 { font-size: 1.1rem; font-weight: normal; }
+    header nav { display: flex; gap: 16px; margin-left: auto; }
+    header a { color: rgba(255,255,255,.7); font-size: .82rem; text-decoration: none; }
+    header a:hover { color: #fff; }
+
+    #layout { display: flex; height: calc(100vh - 50px); }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: 300px; flex-shrink: 0; background: var(--bg);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    #controls { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+    #controls label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    #controls select, #controls input[type=range] { width: 100%; margin-top: 3px; }
+    #controls select { padding: 5px 8px; border: 1px solid var(--border); border-radius: 4px; background: #fff; font-size: .82rem; }
+
+    .range-row { display: flex; justify-content: space-between; font-size: .78rem; color: var(--muted); margin-top: 2px; }
+
+    #stats { padding: 10px 16px; font-size: .78rem; color: var(--muted); border-bottom: 1px solid var(--border); }
+
+    #detail {
+      flex: 1; overflow-y: auto; padding: 16px;
+    }
+    #detail .placeholder { color: var(--muted); font-style: italic; font-size: .85rem; padding-top: 8px; }
+    #detail h2 { font-size: .95rem; font-weight: normal; color: var(--accent); margin-bottom: 6px; }
+    #detail .meta { font-size: .78rem; color: var(--muted); margin-bottom: 12px; line-height: 1.6; }
+    #detail .person-list { list-style: none; }
+    #detail .person-list li {
+      padding: 7px 0; border-bottom: 1px solid var(--border); font-size: .82rem;
+    }
+    #detail .person-list li:last-child { border-bottom: none; }
+    #detail .person-name { font-weight: bold; }
+    #detail .person-meta { color: var(--muted); font-size: .75rem; }
+    #detail .occ-tag {
+      display: inline-block; background: #f0ebe3; border: 1px solid var(--border);
+      border-radius: 10px; padding: 1px 7px; font-size: .7rem; margin: 2px 2px 0 0;
+    }
+    #detail .more-link { font-size: .78rem; color: var(--accent2); cursor: pointer; text-decoration: underline; margin-top: 6px; display: inline-block; }
+
+    /* ── Map ── */
+    #map { flex: 1; }
+
+    /* Custom circle markers */
+    .dot-marker {
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,.25);
+      cursor: pointer;
+      transition: transform .1s;
+    }
+    .dot-marker:hover { transform: scale(1.4); z-index: 9999 !important; }
+
+    /* Legend */
+    #legend {
+      position: absolute; bottom: 24px; right: 12px; z-index: 900;
+      background: rgba(255,255,255,.92); border: 1px solid var(--border);
+      border-radius: 6px; padding: 10px 14px; font-size: .75rem; min-width: 130px;
+    }
+    #legend h4 { color: var(--accent); font-weight: normal; margin-bottom: 7px; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+    .legend-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(0,0,0,.2); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>HGB Property Map — Basel 1400–1700</h1>
+  <nav>
+    <a href="index.html">← Person Index</a>
+    <a href="viz.html">Occupations</a>
+  </nav>
+</header>
+
+<div id="layout">
+  <div id="sidebar">
+    <div id="controls">
+      <div>
+        <label>Color by</label>
+        <select id="colorBy">
+          <option value="persons">Number of persons</option>
+          <option value="docs">Number of documents</option>
+          <option value="period">Period (year range)</option>
+          <option value="source">Archival source</option>
+        </select>
+      </div>
+      <div>
+        <label>Year range: <span id="yearLabel">1400 – 1700</span></label>
+        <input type="range" id="yearMin" min="1400" max="1700" value="1400" step="10" />
+        <input type="range" id="yearMax" min="1400" max="1700" value="1700" step="10" />
+        <div class="range-row"><span>1400</span><span>1700</span></div>
+      </div>
+      <div>
+        <label>Min. persons per property</label>
+        <select id="minPersons">
+          <option value="0">All properties</option>
+          <option value="1">≥ 1 person</option>
+          <option value="5">≥ 5 persons</option>
+          <option value="10">≥ 10 persons</option>
+          <option value="20">≥ 20 persons</option>
+        </select>
+      </div>
+    </div>
+    <div id="stats">Loading…</div>
+    <div id="detail"><p class="placeholder">Click a property on the map to see details.</p></div>
+  </div>
+
+  <div style="position:relative;flex:1;display:flex;flex-direction:column">
+    <div id="map" style="flex:1"></div>
+    <div id="legend">
+      <h4>Persons</h4>
+      <div class="legend-row"><span class="legend-dot" style="background:#f7f7f7"></span> 0</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#fee8c8"></span> 1–5</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#fdbb84"></span> 6–15</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#e34a33"></span> 16–40</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#8b0000"></span> 40+</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const map = L.map('map').setView([47.5575, 7.5895], 15);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap, © CARTO',
+  maxZoom: 19,
+}).addTo(map);
+
+// ── Color schemes ─────────────────────────────────────────────────────────────
+
+const SOURCE_COLORS = {
+  "Gerichtsarchiv":        "#e34a33",
+  "Hohes Stift und Kammerei": "#c6dbef",
+  "Domstift":              "#9ecae1",
+  "St. Peter":             "#4292c6",
+  "Klingental":            "#2ca25f",
+  "St. Clara":             "#74c476",
+  "Augustiner":            "#fdbb84",
+  "Karthaus":              "#fee8c8",
+  "St. Leonhard":          "#bcbddc",
+  "Barfüsser":             "#9e9ac8",
+  "Predigern":             "#756bb1",
+  "Allmend":               "#bdbdbd",
+};
+
+function personColor(n) {
+  if (n === 0)  return '#f0ece6';
+  if (n <= 5)   return '#fee8c8';
+  if (n <= 15)  return '#fdbb84';
+  if (n <= 40)  return '#e34a33';
+  return '#8b0000';
+}
+
+function docColor(n) {
+  if (n <= 5)  return '#f7f7f7';
+  if (n <= 15) return '#cccccc';
+  if (n <= 30) return '#969696';
+  return '#525252';
+}
+
+function periodColor(ymin) {
+  if (!ymin) return '#bbb';
+  const t = (ymin - 1400) / 300;
+  const r = Math.round(180 - t * 100);
+  const g = Math.round(80 + t * 60);
+  const b = Math.round(40 + t * 140);
+  return `rgb(${r},${g},${b})`;
+}
+
+function sourceColor(sources) {
+  if (!sources || !sources.length) return '#bbb';
+  return SOURCE_COLORS[sources[0]] || '#bbb';
+}
+
+function markerColor(f, colorBy) {
+  if (colorBy === 'persons') return personColor(f.n_persons);
+  if (colorBy === 'docs')    return docColor(f.n_docs);
+  if (colorBy === 'period')  return periodColor(f.year_min);
+  if (colorBy === 'source')  return sourceColor(f.sources);
+  return '#888';
+}
+
+function markerSize(f) {
+  const base = f.n_persons > 40 ? 10 : f.n_persons > 15 ? 8 : f.n_persons > 5 ? 6 : 5;
+  return base;
+}
+
+// ── State & layers ─────────────────────────────────────────────────────────────
+
+let allFeatures = [];
+let markers = [];
+let markerLayer = L.layerGroup().addTo(map);
+let selectedId = null;
+
+// ── Render markers ────────────────────────────────────────────────────────────
+
+function renderMarkers() {
+  const colorBy   = document.getElementById('colorBy').value;
+  const yearMin   = +document.getElementById('yearMin').value;
+  const yearMax   = +document.getElementById('yearMax').value;
+  const minP      = +document.getElementById('minPersons').value;
+
+  markerLayer.clearLayers();
+  markers = [];
+
+  let visible = 0;
+  for (const f of allFeatures) {
+    // Year filter: keep if dossier overlaps with selected range
+    const ylo = f.year_min || 1400;
+    const yhi = f.year_max || 1700;
+    if (yhi < yearMin || ylo > yearMax) continue;
+    if (f.n_persons < minP) continue;
+
+    visible++;
+    const color = markerColor(f, colorBy);
+    const sz = markerSize(f);
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="dot-marker" style="width:${sz*2}px;height:${sz*2}px;background:${color};opacity:.85"></div>`,
+      iconSize: [sz*2, sz*2],
+      iconAnchor: [sz, sz],
+    });
+    const m = L.marker([f.lat, f.lon], { icon, zIndexOffset: f.n_persons })
+      .on('click', () => showDetail(f));
+    markers.push({ marker: m, feature: f });
+    markerLayer.addLayer(m);
+  }
+
+  document.getElementById('stats').textContent =
+    `Showing ${visible.toLocaleString()} of ${allFeatures.length.toLocaleString()} properties`;
+
+  updateLegend(colorBy);
+}
+
+// ── Legend update ─────────────────────────────────────────────────────────────
+
+function updateLegend(colorBy) {
+  const el = document.getElementById('legend');
+  if (colorBy === 'persons') {
+    el.innerHTML = `<h4>Persons</h4>
+      <div class="legend-row"><span class="legend-dot" style="background:#f0ece6"></span> 0</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#fee8c8"></span> 1–5</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#fdbb84"></span> 6–15</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#e34a33"></span> 16–40</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#8b0000"></span> 40+</div>`;
+  } else if (colorBy === 'docs') {
+    el.innerHTML = `<h4>Documents</h4>
+      <div class="legend-row"><span class="legend-dot" style="background:#f7f7f7;border:1px solid #ccc"></span> 1–5</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#cccccc"></span> 6–15</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#969696"></span> 16–30</div>
+      <div class="legend-row"><span class="legend-dot" style="background:#525252"></span> 30+</div>`;
+  } else if (colorBy === 'period') {
+    el.innerHTML = `<h4>Period (earliest)</h4>
+      <div class="legend-row"><span class="legend-dot" style="background:rgb(180,80,40)"></span> 1400s</div>
+      <div class="legend-row"><span class="legend-dot" style="background:rgb(147,107,93)"></span> 1500s</div>
+      <div class="legend-row"><span class="legend-dot" style="background:rgb(113,133,147)"></span> 1600s</div>
+      <div class="legend-row"><span class="legend-dot" style="background:rgb(80,140,180)"></span> 1700s</div>`;
+  } else {
+    const rows = Object.entries(SOURCE_COLORS).slice(0, 8)
+      .map(([s, c]) => `<div class="legend-row"><span class="legend-dot" style="background:${c}"></span>${s.length > 18 ? s.slice(0,18)+'…' : s}</div>`)
+      .join('');
+    el.innerHTML = `<h4>Archive</h4>${rows}`;
+  }
+}
+
+// ── Detail panel ──────────────────────────────────────────────────────────────
+
+function showDetail(f) {
+  selectedId = f.id;
+  const years = f.year_min && f.year_max
+    ? (f.year_min === f.year_max ? f.year_min : `${f.year_min}–${f.year_max}`)
+    : '?';
+  const src = f.sources && f.sources.length ? f.sources.join(', ') : '–';
+
+  let personsHtml = '';
+  if (f.n_persons === 0) {
+    personsHtml = '<p style="color:var(--muted);font-style:italic;font-size:.82rem">No persons indexed for this property.</p>';
+  } else {
+    const shown = f.persons || [];
+    const items = shown.map(p => {
+      const yr = p.y && p.y.length === 2
+        ? (p.y[0] === p.y[1] ? p.y[0] : `${p.y[0]}–${p.y[1]}`)
+        : '';
+      const occs = (p.occ || []).map(o => `<span class="occ-tag">${o}</span>`).join('');
+      return `<li>
+        <div class="person-name">${p.n}</div>
+        <div class="person-meta">${p.c} mention${p.c!==1?'s':''} · ${yr}</div>
+        ${occs ? `<div style="margin-top:3px">${occs}</div>` : ''}
+      </li>`;
+    }).join('');
+
+    const extra = f.n_persons - shown.length;
+    const moreLink = extra > 0
+      ? `<a class="more-link" onclick="openPersonSearch('${f.id}')">+ ${extra} more person${extra!==1?'s':''} → open in index</a>`
+      : `<a class="more-link" onclick="openPersonSearch('${f.id}')">Open all in person index →</a>`;
+
+    personsHtml = `<ul class="person-list">${items}</ul>${moreLink}`;
+  }
+
+  document.getElementById('detail').innerHTML = `
+    <h2>${f.id}</h2>
+    <div class="meta">
+      <strong>Years:</strong> ${years}<br>
+      <strong>Documents:</strong> ${f.n_docs}<br>
+      <strong>Persons:</strong> ${f.n_persons}<br>
+      <strong>Sources:</strong> ${src}
+    </div>
+    ${personsHtml}
+  `;
+}
+
+function openPersonSearch(dossierid) {
+  // Open person index filtered to this dossier — persons page supports ?q= search
+  window.open(`index.html?dos=${encodeURIComponent(dossierid)}`, '_blank');
+}
+
+// ── Controls ──────────────────────────────────────────────────────────────────
+
+document.getElementById('colorBy').addEventListener('change', renderMarkers);
+document.getElementById('minPersons').addEventListener('change', renderMarkers);
+
+function syncRangeSliders() {
+  const lo = +document.getElementById('yearMin').value;
+  const hi = +document.getElementById('yearMax').value;
+  if (lo > hi) document.getElementById('yearMax').value = lo;
+  document.getElementById('yearLabel').textContent = `${Math.min(lo,hi)} – ${Math.max(lo,hi)}`;
+}
+document.getElementById('yearMin').addEventListener('input', () => { syncRangeSliders(); renderMarkers(); });
+document.getElementById('yearMax').addEventListener('input', () => { syncRangeSliders(); renderMarkers(); });
+
+// ── Load data ─────────────────────────────────────────────────────────────────
+
+fetch('dossiers_geo.json')
+  .then(r => r.json())
+  .then(data => {
+    allFeatures = data.features;
+    document.getElementById('stats').textContent =
+      `${allFeatures.length.toLocaleString()} properties loaded`;
+    renderMarkers();
+  });
+</script>
+</body>
+</html>
