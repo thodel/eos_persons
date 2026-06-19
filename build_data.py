@@ -157,23 +157,44 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
     uf = UF()
 
     # Step 1: within each dossier, merge names where one is an unambiguous token-subset
-    # "unambiguous" = exactly one longer name in the dossier is a superset of the shorter
+    # Guards: (a) exactly one superset in the dossier, (b) year ranges within 80 years
     for dossier, grp in df.groupby("dossierid"):
-        names = grp["name"].dropna().unique().tolist()
+        # Build name → year-range map for this dossier
+        name_years: dict[str, list[int]] = {}
+        for _, row in grp.iterrows():
+            nm = row.get("name")
+            yr = row.get("year")
+            if pd.notna(nm) and pd.notna(yr):
+                name_years.setdefault(nm, []).append(int(yr))
+
+        names = [n for n in grp["name"].dropna().unique()]
         names.sort(key=lambda n: -len(clean_tokens(n)))
-        for i, a in enumerate(names):
-            # find all longer names b that contain all tokens of a
+        for a in names:
             supersets = [b for b in names if b != a and tokens_subset(a, b)]
             if len(supersets) == 1:
-                # unambiguous: exactly one match → safe to merge
-                uf.union((dossier, a), (dossier, supersets[0]))
+                b = supersets[0]
+                # Also enforce 80-year cap within a dossier
+                ay = name_years.get(a, [])
+                by = name_years.get(b, [])
+                all_y = ay + by
+                if all_y and max(all_y) - min(all_y) > 80:
+                    continue
+                uf.union((dossier, a), (dossier, b))
 
     # Step 2: collect per-dossier clusters
+    # Node is (dossierid, name, year_bin) so same name in the same dossier but
+    # >80 years apart becomes a different cluster automatically.
+    LIFESPAN = 80
     dossier_clusters: dict[tuple, list[dict]] = defaultdict(list)
     for _, row in df.iterrows():
-        node = (row["dossierid"], row["name"])
-        root = uf.find(node)
-        dossier_clusters[root].append(row.to_dict())
+        yr = int(row["year"]) if pd.notna(row.get("year")) else 0
+        year_bin = yr // LIFESPAN
+        base_node = (row["dossierid"], row["name"])
+        # map the base UF node to the binned node so merged partial names
+        # still land in the correct bin
+        root = uf.find(base_node)
+        binned = (root, year_bin)
+        dossier_clusters[binned].append(row.to_dict())
 
     # Step 3: pick canonical name per cluster (most tokens, fewest abbrevs)
     def pick_canonical(names: list[str]) -> str:
@@ -230,7 +251,7 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
             "dossier": root[0],
             "mentions": len(rows),
             "years": [min(years), max(years)] if years else [0, 0],
-            "occ": sorted(occs),
+            "occ": sorted(occs),   # norm only — occupation_text dropped
             "title": sorted(titles),
             "fam": sorted(fam),
             "loc": sorted(locs),
@@ -247,16 +268,14 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
     for p in per_dossier:
         key_tokens = p["ckey"].split()
         if len(key_tokens) >= 2:
-            # For common names (surname + firstname only), also require year-range
-            # overlap within a human lifetime (≤70 yrs) to avoid merging homonyms
+            # Hard 80-year lifespan cap: a person cannot appear in documents
+            # spanning more than 80 years.  If adding this entry would push the
+            # cluster's total span beyond that, start a new group instead.
             existing = cross[p["ckey"]]
             if existing:
-                # check overlap with the existing cluster's year range
-                cluster_y0 = min(e["years"][0] for e in existing if e["years"][0] > 0)
-                cluster_y1 = max(e["years"][1] for e in existing if e["years"][1] > 0)
-                py0, py1 = p["years"]
-                overlap = py0 <= cluster_y1 + 70 and py1 >= cluster_y0 - 70
-                if not overlap:
+                all_years = [y for e in existing for y in e["years"] if y > 0] + \
+                            [y for y in p["years"] if y > 0]
+                if all_years and max(all_years) - min(all_years) > 80:
                     cross[f"__time_{_uid}"].append(p)
                     _uid += 1
                     continue

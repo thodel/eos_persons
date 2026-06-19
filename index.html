@@ -419,11 +419,8 @@
           variants.map(v => `<span class="tag">${escHtml(v)}</span> `).join('')));
       }
     }
-    if (r.occ || r.occ_t) {
-      const items = r.occ || [];
-      const raw   = r.occ_t || [];
-      const combined = [...new Set([...items, ...raw])];
-      sections.push(section('Occupations', combined.map(o => tag('occ', o)).join('')));
+    if (r.occ && r.occ.length) {
+      sections.push(section('Occupations', r.occ.map(o => tag('occ', o)).join('')));
     }
     if (r.tit)  sections.push(section('Titles',            r.tit.map(t => tag('title', t)).join('')));
     if (r.fam)  sections.push(section('Family relations',  r.fam.map(f => tag('fam', f)).join('')));
