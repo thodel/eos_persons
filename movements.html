@@ -356,12 +356,22 @@ let activeTab = 'search';
 // ══════════════════════════════════════════════════════════════════════════════
 function parseCoord(raw) {
   if (!raw) return null;
-  const s = raw.trim().replace(/[()[\]]/g, '');
-  const parts = s.split(/[,;\s]+/).map(Number).filter(n => !isNaN(n));
+  const s = raw.trim();
+
+  // WKT POINT(E N) — Shapely format
+  const wkt = s.match(/POINT\s*\(\s*([\d.]+)\s+([\d.]+)\s*\)/i);
+  if (wkt) {
+    const [lat, lon] = lv95ToWgs84(parseFloat(wkt[1]), parseFloat(wkt[2]));
+    if (lat < 45 || lat > 50 || lon < 5 || lon > 11) return null;
+    return [lat, lon];
+  }
+
+  // Plain numbers: "lat,lon" or LV95 pair
+  const parts = s.replace(/[()[\]]/g, '').split(/[,;\s]+/).map(Number).filter(n => !isNaN(n));
   if (parts.length < 2) return null;
   let [a, b] = parts;
-  if (a > 2_000_000)       { [a, b] = lv95ToWgs84(a, b); }
-  else if (b > 2_000_000)  { [b, a] = lv95ToWgs84(b, a); }
+  if (a > 2_000_000)      { [a, b] = lv95ToWgs84(a, b); }
+  else if (b > 2_000_000) { [b, a] = lv95ToWgs84(b, a); }
   if (a < 45 || a > 50 || b < 5 || b > 11) return null;
   return [a, b];
 }
