@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personenbewegungen — Basel 1400–1700</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+    }
+    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 14px; color: var(--text); }
+
+    header {
+      background: var(--accent); color: #fff; padding: 14px 20px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      position: relative; z-index: 1000;
+    }
+    header h1 { font-size: 1.1rem; font-weight: normal; }
+    header nav { display: flex; gap: 16px; margin-left: auto; }
+    header a { color: rgba(255,255,255,.7); font-size: .82rem; text-decoration: none; }
+    header a:hover { color: #fff; }
+
+    #layout { display: flex; height: calc(100vh - 50px); }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: 300px; flex-shrink: 0; background: var(--bg);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Drop zone */
+    #dropzone {
+      margin: 14px 16px; padding: 18px 12px; border: 2px dashed var(--border);
+      border-radius: 6px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s;
+      font-size: .8rem; color: var(--muted);
+    }
+    #dropzone.drag-over { border-color: var(--accent); background: #f5ede0; }
+    #dropzone.loaded { border-color: var(--accent2); background: #f5ede0; color: var(--accent); }
+    #dropzone strong { display: block; margin-bottom: 4px; font-size: .85rem; }
+    #file-input { display: none; }
+
+    /* Controls */
+    #controls { padding: 0 16px 14px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+    #controls label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 3px; }
+    #controls select, #controls input[type=text] {
+      width: 100%; padding: 5px 8px; border: 1px solid var(--border);
+      border-radius: 4px; background: #fff; font-size: .82rem; font-family: inherit;
+    }
+    #controls select:disabled { opacity: .5; }
+
+    .slider-wrap { position: relative; }
+    #time-slider { width: 100%; accent-color: var(--accent); }
+    .range-row { display: flex; justify-content: space-between; font-size: .75rem; color: var(--muted); margin-top: 2px; }
+    #window-label { font-size: .82rem; color: var(--text); font-weight: bold; margin-top: 2px; }
+
+    /* Animate controls */
+    #anim-row { display: flex; gap: 8px; align-items: center; }
+    #btn-play {
+      flex: 1; padding: 6px; border: 1px solid var(--accent); border-radius: 4px;
+      background: var(--accent); color: #fff; cursor: pointer; font-size: .8rem; font-family: inherit;
+    }
+    #btn-play:hover { background: var(--accent2); }
+    #speed-select { width: 90px; }
+
+    /* Stats */
+    #stats { padding: 10px 16px; font-size: .78rem; color: var(--muted); border-bottom: 1px solid var(--border); min-height: 36px; }
+
+    /* Detail panel */
+    #detail { flex: 1; overflow-y: auto; padding: 16px; }
+    #detail .placeholder { color: var(--muted); font-style: italic; font-size: .85rem; }
+    #detail h2 { font-size: .95rem; font-weight: normal; color: var(--accent); margin-bottom: 8px; }
+    .event-row { padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .8rem; }
+    .event-row:last-child { border-bottom: none; }
+    .event-year { font-weight: bold; color: var(--accent2); display: inline-block; width: 40px; }
+    .event-role { color: var(--muted); font-size: .75rem; margin-top: 1px; }
+    .event-coord { font-size: .72rem; color: var(--border); margin-top: 1px; font-family: monospace; }
+
+    /* Map */
+    #map { flex: 1; }
+
+    /* Legend */
+    #legend {
+      position: absolute; bottom: 24px; right: 12px; z-index: 900;
+      background: rgba(255,255,255,.93); border: 1px solid var(--border);
+      border-radius: 6px; padding: 10px 14px; font-size: .75rem; max-width: 200px;
+    }
+    #legend h4 { color: var(--accent); font-weight: normal; margin-bottom: 7px; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+    .legend-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(0,0,0,.2); }
+    #legend-items { max-height: 160px; overflow-y: auto; }
+    #legend-roles { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+    .role-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: .75rem; color: var(--muted); }
+
+    /* Mode toggle */
+    #mode-row { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .mode-btn {
+      flex: 1; padding: 5px 4px; font-size: .75rem; font-family: inherit;
+      border: none; background: #fff; cursor: pointer; color: var(--muted); transition: background .15s;
+    }
+    .mode-btn.active { background: var(--accent); color: #fff; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Personenbewegungen — Basel</h1>
+  <nav>
+    <a href="index.html">← Person Index</a>
+    <a href="map.html">Karte</a>
+    <a href="viz.html">Berufe</a>
+  </nav>
+</header>
+
+<div id="layout">
+  <div id="sidebar">
+
+    <!-- Drop / file load -->
+    <div id="dropzone" onclick="document.getElementById('file-input').click()">
+      <strong>CSV laden</strong>
+      Datei hier ablegen oder klicken
+      <input type="file" id="file-input" accept=".csv" />
+    </div>
+
+    <div id="controls">
+
+      <!-- Mode -->
+      <div>
+        <label>Ansicht</label>
+        <div id="mode-row">
+          <button class="mode-btn active" data-mode="all">Alle Personen</button>
+          <button class="mode-btn" data-mode="person">Eine Person</button>
+        </div>
+      </div>
+
+      <!-- Person filter (person mode) -->
+      <div id="person-filter-wrap" style="display:none">
+        <label>Person</label>
+        <select id="person-select"><option value="">— bitte wählen —</option></select>
+      </div>
+
+      <!-- Time window -->
+      <div>
+        <label>Zeitfenster (30 Jahre)</label>
+        <input type="range" id="time-slider" min="1400" max="1670" value="1400" step="1" />
+        <div class="range-row">
+          <span id="year-from">1400</span>
+          <span id="window-label">1400 – 1430</span>
+          <span id="year-to">1700</span>
+        </div>
+      </div>
+
+      <!-- Animate -->
+      <div id="anim-row">
+        <button id="btn-play">▶ Abspielen</button>
+        <select id="speed-select" title="Geschwindigkeit">
+          <option value="800">Langsam</option>
+          <option value="400" selected>Normal</option>
+          <option value="150">Schnell</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div id="stats">Noch keine Daten geladen.</div>
+    <div id="detail"><p class="placeholder">CSV laden und eine Person oder einen Zeitraum auswählen.</p></div>
+  </div>
+
+  <div style="position:relative;flex:1;display:flex;flex-direction:column">
+    <div id="map" style="flex:1"></div>
+    <div id="legend">
+      <h4>Personen</h4>
+      <div id="legend-items"><em style="color:var(--muted);font-size:.75rem">—</em></div>
+      <div id="legend-roles">
+        <div class="role-row"><svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,1 13,13 1,13" fill="#555" stroke="#fff" stroke-width="1"/></svg> Anfang (start)</div>
+        <div class="role-row"><svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#555" stroke="#fff" stroke-width="1"/></svg> Präsenz (present)</div>
+        <div class="role-row"><svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,13 13,1 1,1" fill="#555" stroke="#fff" stroke-width="1"/></svg> Ende (end)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Palette ────────────────────────────────────────────────────────────────────
+const PALETTE = [
+  '#c0392b','#2980b9','#27ae60','#8e44ad','#e67e22',
+  '#16a085','#d35400','#2c3e50','#f39c12','#1abc9c',
+  '#e74c3c','#3498db','#2ecc71','#9b59b6','#e67e22',
+];
+const DIM_COLOR = '#c8c0b4';
+
+// ── Map setup ──────────────────────────────────────────────────────────────────
+const map = L.map('map').setView([47.5565, 7.5880], 16);
+
+// Historical WMS base layer — Situationsplan Basel 1862
+L.tileLayer.wms('https://wms.geo.bs.ch/', {
+  layers: 'HP_Situationsplan_Basel_1862',
+  format: 'image/png',
+  transparent: true,
+  attribution: 'Geodaten Kanton Basel-Stadt',
+  maxZoom: 20,
+  opacity: 0.85,
+}).addTo(map);
+
+// Fallback subtle tile for context
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap, © CARTO',
+  maxZoom: 20,
+  opacity: 0.3,
+  zIndex: 0,
+}).addTo(map);
+
+// ── State ──────────────────────────────────────────────────────────────────────
+let allRows = [];           // parsed CSV rows
+let personMap = {};         // id → { name, color, rows[] }
+let personIds = [];         // ordered list of unique IDs
+let mode = 'all';           // 'all' | 'person'
+let selectedId = null;
+let windowStart = 1400;
+const WINDOW = 30;
+let animTimer = null;
+
+// Layer groups
+const dotLayer   = L.layerGroup().addTo(map);
+const lineLayer  = L.layerGroup().addTo(map);
+
+// ── CSV parsing ────────────────────────────────────────────────────────────────
+function parseCoord(raw) {
+  if (!raw) return null;
+  const s = raw.trim().replace(/[()[\]]/g, '');
+  const parts = s.split(/[,;\s]+/).map(Number).filter(n => !isNaN(n));
+  if (parts.length < 2) return null;
+  let [a, b] = parts;
+  // LV95 detection (E > 2_000_000)
+  if (a > 2_000_000) { [a, b] = lv95ToWgs84(a, b); }
+  else if (b > 2_000_000) { [b, a] = lv95ToWgs84(b, a); }
+  // sanity: Basel lat ~47.5, lon ~7.6
+  if (a < 45 || a > 50 || b < 5 || b > 11) return null;
+  return [a, b];
+}
+
+function lv95ToWgs84(E, N) {
+  // Approximate conversion from LV95 to WGS84 (Swisstopo formula)
+  const y = (E - 2_600_000) / 1_000_000;
+  const x = (N - 1_200_000) / 1_000_000;
+  const lon = 2.6779094
+    + 4.728982 * y
+    + 0.791484 * y * x
+    + 0.1306   * y * x * x
+    - 0.0436   * y * y * y;
+  const lat = 16.9023892
+    + 3.238272 * x
+    - 0.270978 * y * y
+    - 0.002528 * x * x
+    - 0.0447   * y * y * x
+    - 0.0140   * x * x * x;
+  return [lat * 100 / 36, lon * 100 / 36];
+}
+
+function loadCsv(text) {
+  const result = Papa.parse(text, { header: true, skipEmptyLines: true, trimHeaders: true });
+  const cols = result.meta.fields || [];
+  // Map columns by position if headers don't match
+  const [c0, c1, c2, c3, c4] = cols;
+
+  const rows = [];
+  for (const r of result.data) {
+    const coord = parseCoord(r[c2]);
+    if (!coord) continue;
+    const year = parseInt(r[c3]);
+    if (isNaN(year)) continue;
+    rows.push({
+      id:   String(r[c0]).trim(),
+      name: String(r[c1]).trim(),
+      coord,
+      year,
+      role: String(r[c4] || '').trim(),
+    });
+  }
+
+  if (rows.length === 0) { alert('Keine gültigen Zeilen gefunden.'); return; }
+  allRows = rows;
+  buildPersonMap();
+  initControls();
+  render();
+
+  document.getElementById('dropzone').classList.add('loaded');
+  document.getElementById('dropzone').innerHTML =
+    `<strong>${rows.length} Ereignisse geladen</strong>${personIds.length} Personen`;
+}
+
+function buildPersonMap() {
+  personMap = {};
+  personIds = [];
+  for (const r of allRows) {
+    if (!personMap[r.id]) {
+      personMap[r.id] = { name: r.name, color: null, rows: [] };
+      personIds.push(r.id);
+    }
+    personMap[r.id].rows.push(r);
+  }
+  // Sort each person's rows by year
+  for (const id of personIds) {
+    personMap[id].rows.sort((a, b) => a.year - b.year);
+  }
+  // Assign colors
+  personIds.forEach((id, i) => {
+    personMap[id].color = PALETTE[i % PALETTE.length];
+  });
+}
+
+// ── Controls setup ─────────────────────────────────────────────────────────────
+function initControls() {
+  const years = allRows.map(r => r.year);
+  const minY = Math.min(...years);
+  const maxY = Math.max(...years);
+  windowStart = minY;
+
+  const slider = document.getElementById('time-slider');
+  slider.min = minY;
+  slider.max = Math.max(minY, maxY - WINDOW);
+  slider.value = minY;
+  document.getElementById('year-from').textContent = minY;
+  document.getElementById('year-to').textContent = maxY;
+  updateWindowLabel();
+
+  // Person dropdown
+  const sel = document.getElementById('person-select');
+  sel.innerHTML = '<option value="">— bitte wählen —</option>';
+  for (const id of personIds) {
+    const opt = document.createElement('option');
+    opt.value = id;
+    opt.textContent = `${personMap[id].name} (${id})`;
+    sel.appendChild(opt);
+  }
+
+  buildLegend();
+}
+
+function updateWindowLabel() {
+  const from = windowStart;
+  const to   = windowStart + WINDOW;
+  document.getElementById('window-label').textContent = `${from} – ${to}`;
+}
+
+function buildLegend() {
+  const el = document.getElementById('legend-items');
+  el.innerHTML = '';
+  for (const id of personIds) {
+    const p = personMap[id];
+    const row = document.createElement('div');
+    row.className = 'legend-row';
+    row.style.cursor = 'pointer';
+    row.title = id;
+    row.innerHTML = `<span class="legend-dot" style="background:${p.color}"></span>
+                     <span style="overflow:hidden;text-overflow:ellipsis">${p.name}</span>`;
+    row.addEventListener('click', () => {
+      setMode('person');
+      document.getElementById('person-select').value = id;
+      selectedId = id;
+      render();
+    });
+    el.appendChild(row);
+  }
+}
+
+// ── Mode switching ─────────────────────────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+  document.getElementById('person-filter-wrap').style.display = m === 'person' ? 'block' : 'none';
+  if (m === 'all') selectedId = null;
+}
+
+document.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
+  setMode(b.dataset.mode);
+  render();
+}));
+
+// ── Time slider ────────────────────────────────────────────────────────────────
+document.getElementById('time-slider').addEventListener('input', e => {
+  windowStart = parseInt(e.target.value);
+  updateWindowLabel();
+  render();
+});
+
+// ── Person select ──────────────────────────────────────────────────────────────
+document.getElementById('person-select').addEventListener('change', e => {
+  selectedId = e.target.value || null;
+  render();
+});
+
+// ── Animate ────────────────────────────────────────────────────────────────────
+document.getElementById('btn-play').addEventListener('click', () => {
+  if (animTimer) {
+    clearInterval(animTimer);
+    animTimer = null;
+    document.getElementById('btn-play').textContent = '▶ Abspielen';
+    return;
+  }
+  const slider = document.getElementById('time-slider');
+  if (parseInt(slider.value) >= parseInt(slider.max)) slider.value = slider.min;
+  document.getElementById('btn-play').textContent = '⏹ Stopp';
+
+  animTimer = setInterval(() => {
+    const v = parseInt(slider.value);
+    if (v >= parseInt(slider.max)) {
+      clearInterval(animTimer); animTimer = null;
+      document.getElementById('btn-play').textContent = '▶ Abspielen';
+      return;
+    }
+    slider.value = v + 1;
+    windowStart = v + 1;
+    updateWindowLabel();
+    render();
+  }, parseInt(document.getElementById('speed-select').value));
+});
+
+// ── Render ─────────────────────────────────────────────────────────────────────
+function render() {
+  dotLayer.clearLayers();
+  lineLayer.clearLayers();
+  if (allRows.length === 0) return;
+
+  const wEnd = windowStart + WINDOW;
+
+  if (mode === 'all') {
+    renderAll(windowStart, wEnd);
+  } else {
+    renderPerson(selectedId, windowStart, wEnd);
+  }
+}
+
+function renderAll(from, to) {
+  // For each person: show dots within window, draw movement lines for the window
+  let visible = 0, personsSeen = new Set();
+
+  for (const id of personIds) {
+    const p = personMap[id];
+    const windowRows = p.rows.filter(r => r.year >= from && r.year <= to);
+    const allPersonRows = p.rows;
+
+    if (windowRows.length === 0) continue;
+    personsSeen.add(id);
+    visible += windowRows.length;
+
+    // Draw movement line for this person across whole dataset (dimmed) behind window
+    if (allPersonRows.length > 1) {
+      const ghostCoords = allPersonRows.map(r => r.coord);
+      L.polyline(ghostCoords, { color: p.color, weight: 1, opacity: 0.15, dashArray: '4 4' }).addTo(lineLayer);
+    }
+
+    // Draw window movement line
+    if (windowRows.length > 1) {
+      const coords = windowRows.map(r => r.coord);
+      L.polyline(coords, { color: p.color, weight: 2.5, opacity: 0.75 }).addTo(lineLayer);
+    }
+
+    // Draw dots
+    for (const r of windowRows) {
+      makeDot(r, p.color, false);
+    }
+  }
+
+  document.getElementById('stats').textContent =
+    `${visible} Ereignisse · ${personsSeen.size} Personen im Zeitfenster ${from}–${to}`;
+
+  updateDetail(null, from, to);
+}
+
+function renderPerson(id, from, to) {
+  if (!id) {
+    document.getElementById('stats').textContent = 'Keine Person gewählt.';
+    document.getElementById('detail').innerHTML = '<p class="placeholder">Person aus der Liste wählen.</p>';
+    return;
+  }
+  const focus = personMap[id];
+
+  // Dim other persons
+  for (const oid of personIds) {
+    if (oid === id) continue;
+    const op = personMap[oid];
+    const windowRows = op.rows.filter(r => r.year >= from && r.year <= to);
+    for (const r of windowRows) {
+      makeDot(r, DIM_COLOR, true);
+    }
+  }
+
+  // Full trajectory line for selected person
+  if (focus.rows.length > 1) {
+    const coords = focus.rows.map(r => r.coord);
+    L.polyline(coords, { color: focus.color, weight: 2.5, opacity: 0.4, dashArray: '6 4' }).addTo(lineLayer);
+  }
+
+  // Window trajectory line
+  const windowRows = focus.rows.filter(r => r.year >= from && r.year <= to);
+  if (windowRows.length > 1) {
+    const coords = windowRows.map(r => r.coord);
+    L.polyline(coords, { color: focus.color, weight: 3.5, opacity: 0.9 }).addTo(lineLayer);
+  }
+
+  // All dots, highlight in-window
+  for (const r of focus.rows) {
+    const inWindow = r.year >= from && r.year <= to;
+    makeDot(r, focus.color, !inWindow);
+  }
+
+  const total = focus.rows.length;
+  const inW   = windowRows.length;
+  document.getElementById('stats').textContent =
+    `${focus.name} · ${total} Ereignisse gesamt, ${inW} im Fenster ${from}–${to}`;
+
+  updateDetail(id, from, to);
+}
+
+function roleIcon(role, color, dimmed) {
+  const sz = dimmed ? 12 : 16;
+  const op = dimmed ? 0.3 : 1;
+  const fill = dimmed ? DIM_COLOR : color;
+  const stroke = dimmed ? 'rgba(0,0,0,.1)' : 'rgba(255,255,255,.9)';
+  let shape;
+  if (role === 'start') {
+    // Triangle pointing up
+    shape = `<polygon points="${sz/2},1 ${sz-1},${sz-1} 1,${sz-1}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
+  } else if (role === 'end') {
+    // Triangle pointing down
+    shape = `<polygon points="1,1 ${sz-1},1 ${sz/2},${sz-1}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
+  } else {
+    // Circle for 'present'
+    const r = sz/2 - 1;
+    shape = `<circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" style="opacity:${op};display:block">${shape}</svg>`;
+  return L.divIcon({
+    html: svg,
+    className: '',
+    iconSize: [sz, sz],
+    iconAnchor: [sz/2, sz/2],
+    tooltipAnchor: [0, -sz/2],
+  });
+}
+
+const ROLE_LABEL = { start: 'Anfang', present: 'Präsenz', end: 'Ende' };
+
+function makeDot(r, color, dimmed) {
+  const icon = roleIcon(r.role, color, dimmed);
+  const marker = L.marker(r.coord, { icon });
+
+  marker.bindTooltip(
+    `<strong>${r.name}</strong><br>${r.year} · ${ROLE_LABEL[r.role] || r.role}<br><small>${r.coord[0].toFixed(4)}, ${r.coord[1].toFixed(4)}</small>`,
+    { direction: 'top', offset: [0, -8] }
+  );
+
+  marker.on('click', () => {
+    if (mode === 'person') {
+      selectedId = r.id;
+      document.getElementById('person-select').value = r.id;
+      render();
+    } else {
+      updateDetail(r.id, windowStart, windowStart + WINDOW);
+    }
+  });
+
+  marker.addTo(dotLayer);
+}
+
+// ── Detail panel ───────────────────────────────────────────────────────────────
+function updateDetail(id, from, to) {
+  const el = document.getElementById('detail');
+  if (!id) {
+    // Show summary of window events
+    const windowRows = allRows.filter(r => r.year >= from && r.year <= to);
+    if (windowRows.length === 0) {
+      el.innerHTML = '<p class="placeholder">Keine Ereignisse im gewählten Zeitraum.</p>';
+      return;
+    }
+    const byPerson = {};
+    for (const r of windowRows) {
+      if (!byPerson[r.id]) byPerson[r.id] = { name: r.name, rows: [] };
+      byPerson[r.id].rows.push(r);
+    }
+    let html = `<h2>${from}–${to}: Übersicht</h2>`;
+    for (const [pid, data] of Object.entries(byPerson)) {
+      const color = personMap[pid]?.color || '#999';
+      html += `<div style="margin-bottom:10px">
+        <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${color};margin-right:4px;vertical-align:middle"></span>
+        <strong>${data.name}</strong> (${data.rows.length} Ereignisse)`;
+      for (const r of data.rows) {
+        html += `<div class="event-row"><span class="event-year">${r.year}</span> ${ROLE_LABEL[r.role] || r.role}</div>`;
+      }
+      html += '</div>';
+    }
+    el.innerHTML = html;
+    return;
+  }
+
+  const p = personMap[id];
+  if (!p) { el.innerHTML = ''; return; }
+
+  let html = `<h2>${p.name}</h2>`;
+  for (const r of p.rows) {
+    const active = r.year >= from && r.year <= to;
+    html += `<div class="event-row" style="${active ? '' : 'opacity:.45'}">
+      <span class="event-year">${r.year}</span> ${ROLE_LABEL[r.role] || r.role}
+      <div class="event-coord">${r.coord[0].toFixed(4)}, ${r.coord[1].toFixed(4)}</div>
+    </div>`;
+  }
+  el.innerHTML = html;
+}
+
+// ── File handling ──────────────────────────────────────────────────────────────
+document.getElementById('file-input').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (f) { const r = new FileReader(); r.onload = ev => loadCsv(ev.target.result); r.readAsText(f); }
+});
+
+const dz = document.getElementById('dropzone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f) { const r = new FileReader(); r.onload = ev => loadCsv(ev.target.result); r.readAsText(f); }
+});
+
+// ── Auto-load test CSV if on localhost ─────────────────────────────────────────
+(async () => {
+  try {
+    const res = await fetch('movements_test.csv');
+    if (res.ok) { loadCsv(await res.text()); }
+  } catch { /* not on a server */ }
+})();
+</script>
+
+</body>
+</html>
