@@ -226,19 +226,37 @@
     }
 
     /* mention rows */
-    .mention-row {
+    .mention-row, .mention-head {
       display: grid;
-      grid-template-columns: 48px 1fr 1fr;
+      grid-template-columns: 44px 84px 1fr 72px;
       gap: 4px 10px;
       align-items: baseline;
+    }
+    .mention-row {
       padding: 6px 0;
       border-bottom: 1px solid var(--border);
       font-size: .83rem;
+    }
+    .mention-head {
+      font-size: .72rem;
+      color: var(--muted);
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2px;
     }
     .mention-row:last-child { border-bottom: none; }
     .mention-year { color: var(--accent2); font-weight: bold; font-size: .82rem; }
     .mention-role { color: var(--muted); }
     .mention-event { color: var(--text); }
+    .mention-dossier { color: var(--muted); font-size: .76rem; }
+    .mention-img {
+      color: var(--accent2);
+      text-decoration: none;
+      font-size: .76rem;
+      white-space: nowrap;
+    }
+    .mention-img:hover { text-decoration: underline; }
+    .mention-img-none { color: var(--border); font-size: .76rem; }
 
     /* similar names */
     .similar-name {
@@ -274,6 +292,7 @@
     <a class="page-tab" href="index.html">Personenindex</a>
     <a class="page-tab active" href="persons_sparql.html">Personen (SPARQL)</a>
     <a class="page-tab" href="map.html">Karte</a>
+    <a class="page-tab" href="korrelationsanalyse.html">Korrelationsanalyse</a>
     <a class="page-tab" href="viz.html">Berufe</a>
     <a class="page-tab" href="movements.html">Personenbewegungen</a>
   </nav>
@@ -348,7 +367,7 @@
   const panelBody  = document.getElementById('panel-body');
 
   let currentSearch = '';
-  let abortCtrl = null;
+  let searchAbort = null;   // cancels the in-flight live index search
   let cachedIndex = null;   // populated if persons_sparql_index.json is present
 
   // ── Load pre-built index (optional) ──────────────────────
@@ -365,14 +384,20 @@
   // ── SPARQL query ──────────────────────────────────────────
   const QUERY_TIMEOUT_MS = 20000;
 
-  async function sparql(query) {
-    if (abortCtrl) abortCtrl.abort();
-    abortCtrl = new AbortController();
-    const ctrl = abortCtrl;
-    // Distinguish a timeout-driven abort from a manual abort (new search):
+  // Each call gets its own AbortController (so concurrent queries — e.g. the
+  // detail panel's mentions + co-appearing queries — don't cancel each other).
+  // An optional externalSignal lets a caller cancel, e.g. the index search
+  // aborting a stale query when the user keeps typing.
+  async function sparql(query, externalSignal) {
+    const ctrl = new AbortController();
+    // Distinguish a timeout-driven abort from an external (manual) abort:
     // timeouts surface an error, manual aborts stay silent.
     let timedOut = false;
     const timer = setTimeout(() => { timedOut = true; ctrl.abort(); }, QUERY_TIMEOUT_MS);
+    if (externalSignal) {
+      if (externalSignal.aborted) ctrl.abort();
+      else externalSignal.addEventListener('abort', () => ctrl.abort(), { once: true });
+    }
     try {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
@@ -473,7 +498,9 @@ ORDER BY DESC(?cnt)
 LIMIT 80`.trim();
 
     try {
-      const data = await sparql(query);
+      if (searchAbort) searchAbort.abort();
+      searchAbort = new AbortController();
+      const data = await sparql(query, searchAbort.signal);
       spinner.classList.remove('active');
       renderIndex(data.results.bindings, q);
     } catch (e) {
@@ -549,7 +576,8 @@ LIMIT 80`.trim();
     const query = `
 PREFIX eos: <https://eos.lod4hss.org/ontology#>
 PREFIX sim: <https://sdhss.org/ontology/sources-information-metadata/>
-SELECT ?role ?year ?eventClass ?triggerText ?evg WHERE {
+PREFIX ric: <https://www.ica.org/standards/RiC/ontology#>
+SELECT ?role ?year ?eventClass ?triggerText ?evg ?viewer ?dossierTitle WHERE {
   ?er a eos:eventRole .
   ?er eos:hasRole ?role .
   ?er eos:hasRoleText "${escSparql(name)}" .
@@ -558,6 +586,16 @@ SELECT ?role ?year ?eventClass ?triggerText ?evg WHERE {
   ?evg eos:hasYear ?year .
   OPTIONAL { ?evg eos:hasEventGroupClassLabel ?eventClass }
   OPTIONAL { ?evg eos:hasEventGroupTriggerText ?triggerText }
+  # The document IRI is derivable from the event-group IRI:
+  #   evg_{UUID}_{DATE}_evgrN  →  pe{UUID}_{DATE}
+  # From the document we reach the archival dossier and its IIIF viewer link.
+  OPTIONAL {
+    BIND(IRI(REPLACE(REPLACE(STR(?evg), "/resource/evg_", "/resource/pe"), "_evgr[0-9]+$", "")) AS ?doc)
+    ?doc ric:isConstituentOfTransitive ?prd .
+    ?prd ric:isOrWasInstantiationOf ?stad .
+    OPTIONAL { ?stad eos:hasLinkViewer ?viewer }
+    OPTIONAL { ?stad eos:hasTitle ?dossierTitle }
+  }
 }
 ORDER BY ?year ?role
 LIMIT 200`.trim();
@@ -608,22 +646,29 @@ LIMIT 20`.trim();
       const year   = b.year.value;
       const evCls  = b.eventClass ? b.eventClass.value : '';
       const trig   = b.triggerText ? b.triggerText.value : '';
-      const evgFrag = b.evg.value.split('/').pop();
-      // Extract document UUID from evg IRI: evg_UUID_date_evgrN
-      const uuidMatch = evgFrag.match(/^evg_([0-9a-f-]{36})/);
-      const uuid = uuidMatch ? uuidMatch[1] : null;
+      const viewer = b.viewer ? b.viewer.value : '';
+      const dTitle = b.dossierTitle ? b.dossierTitle.value : '';
+
+      const eventCell = dTitle
+        ? `${escHtml(evCls || trig || '—')} <span class="mention-dossier">· ${escHtml(dTitle)}</span>`
+        : escHtml(evCls || trig || '—');
+
+      const imgCell = viewer
+        ? `<a class="mention-img" href="${escAttr(viewer)}" target="_blank" rel="noopener" title="Open the scanned document image (Staatsarchiv Basel)">🖼 image</a>`
+        : '<span class="mention-img-none">–</span>';
 
       return `<div class="mention-row">
         <span class="mention-year">${escHtml(year)}</span>
         <span class="mention-role">${escHtml(role)}</span>
-        <span class="mention-event">${escHtml(evCls || trig || '—')}</span>
+        <span class="mention-event">${eventCell}</span>
+        <span>${imgCell}</span>
       </div>`;
     }).join('');
 
     sections.push(`<div class="panel-section">
       <h3>Mentions <span style="font-weight:normal;text-transform:none;letter-spacing:0">(${cnt})</span></h3>
-      <div style="font-size:.72rem;color:var(--muted);display:grid;grid-template-columns:48px 1fr 1fr;gap:4px 10px;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:2px">
-        <span>Year</span><span>Role</span><span>Event type</span>
+      <div class="mention-head">
+        <span>Year</span><span>Role</span><span>Event type</span><span>Source</span>
       </div>
       ${mentionRows}
     </div>`);

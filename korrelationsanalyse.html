@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HGB — Korrelationsanalyse</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+    }
+    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 15px; color: var(--text); background: var(--bg); line-height: 1.65; }
+    #site-header {
+      height: 56px; background: var(--accent); color: #fff;
+      display: flex; align-items: center; padding: 0 20px; gap: 16px; position: sticky; top: 0; z-index: 1000;
+    }
+    #site-title { font-size: .9rem; opacity: .8; white-space: nowrap; }
+    #page-nav { display: flex; margin-left: auto; }
+    .page-tab {
+      padding: 0 14px; height: 56px; display: flex; align-items: center; text-decoration: none;
+      font-size: .8rem; color: rgba(255,255,255,.65); border-bottom: 3px solid transparent;
+      transition: color .15s, border-color .15s; white-space: nowrap;
+    }
+    .page-tab:hover { color: #fff; }
+    .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
+
+    main { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+    h1 { font-size: 1.8rem; font-weight: normal; color: var(--accent); margin-bottom: 6px; }
+    .lede { color: var(--muted); font-size: 1.02rem; margin-bottom: 28px; }
+    h2 { font-size: 1.25rem; font-weight: normal; color: var(--accent); margin: 38px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 1.02rem; font-weight: normal; color: var(--accent2); margin: 22px 0 8px; }
+    p { margin: 10px 0; }
+    ul, ol { margin: 10px 0 10px 22px; }
+    li { margin: 5px 0; }
+    code { background: #f0ece5; padding: 1px 5px; border-radius: 3px; font-size: .85em; font-family: 'SFMono-Regular', Consolas, monospace; }
+    figure { margin: 20px 0; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px; }
+    figure img { width: 100%; height: auto; border-radius: 3px; display: block; }
+    figcaption { font-size: .82rem; color: var(--muted); margin-top: 8px; font-style: italic; }
+    table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: .86rem; background: var(--surface); }
+    th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+    th { background: #f3eee6; color: var(--accent); font-weight: normal; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .pos { color: #1a7a3a; } .neg { color: #b2422d; }
+    .callout { background: #f3eee6; border-left: 4px solid var(--accent2); padding: 12px 16px; margin: 18px 0; border-radius: 0 4px 4px 0; }
+    .callout strong { color: var(--accent); }
+    .btn { display: inline-block; background: var(--accent); color: #fff; text-decoration: none; padding: 9px 18px; border-radius: 5px; font-size: .9rem; margin: 8px 0; }
+    .btn:hover { background: var(--accent2); }
+    .meta-note { font-size: .82rem; color: var(--muted); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 680px) { .grid2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="site-header">
+    <span id="site-title">HGB — Korrelationsanalyse</span>
+    <nav id="page-nav">
+      <a class="page-tab" href="index.html">Personenindex</a>
+      <a class="page-tab" href="map.html">Karte</a>
+      <a class="page-tab active" href="korrelationsanalyse.html">Korrelationsanalyse</a>
+      <a class="page-tab" href="viz.html">Berufe</a>
+      <a class="page-tab" href="movements.html">Personenbewegungen</a>
+    </nav>
+  </div>
+
+  <main>
+    <h1>Korrelationsanalyse des HGB-Korpus</h1>
+    <p class="lede">Statistische Mustererkennung über 75.447 Dokumente des Historischen
+    Grundbuchs Basel (ca. 1400–1700) — welche Variablen treten gemeinsam auf, welche
+    Dokumenttypen lassen sich datengetrieben unterscheiden, und wie verteilen sich
+    Werte und Abgaben im Raum.</p>
+
+    <div class="callout">
+      <strong>Fragestellung.</strong> Ziel ist die rein statistische Identifikation
+      von Mustern und Korrelationen — ohne historische Verlaufsannahmen. Aus den vier
+      Annotationsebenen jedes Dokuments (Metadaten, Tokens, typisierte Spans,
+      Ereignisgruppen) wird eine vergleichbare Merkmalsmatrix gebaut und mit Korrelations-,
+      Faktor-, Cluster- und Raumanalyse ausgewertet.
+    </div>
+
+    <h2>1. Vergleichbarmachung der Daten</h2>
+    <p>Die Rohgrößen liegen in unvereinbaren Einheiten vor (neun Währungen plus
+    Naturalabgaben; Zählwerte skalieren mit der Dokumentlänge; Archive folgen
+    unterschiedlichen Konventionen). Fünf Transformationen stellen Vergleichbarkeit her:</p>
+    <ol>
+      <li><strong>Währungsvereinheitlichung</strong> — alle Geldbeträge auf eine
+        Basiseinheit (Schilling) umgerechnet (<code>1 Pfund = 20 ß</code>,
+        <code>1 ß = 12 Pfennig</code>; Gulden/Taler näherungsweise). Naturalabgaben
+        (Hühner, Korn, Wein …) werden <em>separat</em> als eigener Kanal geführt.</li>
+      <li><strong>Längennormierung</strong> — alle Zählwerte als Rate pro 100 Tokens,
+        damit die Dokumentlänge keine Scheinkorrelationen erzeugt.</li>
+      <li><strong>Skalierung</strong> — <code>log1p</code> für rechtsschiefe Größen,
+        anschließend z-Standardisierung.</li>
+      <li><strong>Konfidenzgewichtung</strong> — Annotationskonfidenz als Kovariate.</li>
+      <li><strong>Provenienz-/Epochenkontrolle</strong> — jede Variable wird auf
+        <em>Archiv + 25-Jahres-Bin</em> regressiert; ausgewertet werden die Residuen.
+        Das ist entscheidend: das Archiv allein erklärt rund 70 % der Wertvarianz.</li>
+    </ol>
+
+    <h2>2. Stärkste Korrelationen (Spearman, kontrolliert)</h2>
+    <p>Nach Herausrechnen von Archiv und Epoche – und nach Ausschluss definitorisch
+    gekoppelter Paare – bilden sich vier inhaltlich kohärente Bündel:</p>
+
+    <table>
+      <thead><tr><th>Variable A</th><th>Variable B</th><th class="num">ρ (resid.)</th><th>Bündel</th></tr></thead>
+      <tbody>
+        <tr><td>attestation_rate</td><td>noble_rate</td><td class="num pos">+0.54</td><td>Formalität/Elite</td></tr>
+        <tr><td>attestation_rate</td><td>employment</td><td class="num pos">+0.53</td><td>Formalität/Elite</td></tr>
+        <tr><td>sp_seizure_r</td><td>noble_rate</td><td class="num pos">+0.46</td><td>Pfändung/Elite</td></tr>
+        <tr><td>currency_count</td><td>value_schilling</td><td class="num pos">+0.45</td><td>Ökon. Komplexität</td></tr>
+        <tr><td>ev_litigation_count</td><td>master_rate</td><td class="num pos">+0.42</td><td>Streit</td></tr>
+        <tr><td>collective_actor_share</td><td>ev_litigation_count</td><td class="num pos">+0.40</td><td>Streit</td></tr>
+        <tr><td>date_missing_rate</td><td>ev_litigation_count</td><td class="num neg">−0.39</td><td>Streit (gut datiert)</td></tr>
+        <tr><td>currency_count</td><td>event_type_diversity</td><td class="num pos">+0.39</td><td>Ökon. Komplexität</td></tr>
+        <tr><td>named_persons_per_event</td><td>sp_fac_r / sp_loc_r</td><td class="num neg">−0.34</td><td>Objekt vs. Person</td></tr>
+      </tbody>
+    </table>
+
+    <figure>
+      <img src="figures/corr_heatmap.png" alt="Residualisierte Korrelationsmatrix" />
+      <figcaption>Residualisierte Spearman-Korrelationen ausgewählter Variablen
+      (Archiv + Epoche herausgerechnet). Rot = positiv, blau = negativ. Deutlich:
+      Pfändungsrate (sp_seizure_r) korreliert negativ mit Teilnehmerzahl und Wert,
+      aber positiv mit Adel; Naturalanteil und Wert bilden je eigene Achsen.</figcaption>
+    </figure>
+
+    <h3>Interpretation der Bündel</h3>
+    <ul>
+      <li><strong>Formalitäts-/Elitekomplex</strong> — Geschäfte mit Adligen, formaler
+        Anstellung oder Streit weisen mehr Beglaubigung (Zeugen/Konsens) und explizitere
+        Finanzkonditionen (Zins/Kapital) auf.</li>
+      <li><strong>Ökonomische Komplexität</strong> — hochwertige Transaktionen sind
+        mehrwährungs- und verfahrensreicher; dies ist die dominante Faktorachse (PC1).</li>
+      <li><strong>Streitkomplex</strong> — Konflikte involvieren Meister-Handwerker und
+        kollektive Parteien und sind besonders sorgfältig datiert.</li>
+      <li><strong>Objekt-vs.-Person</strong> — beschreibungslastige (Lage/Gebäude)
+        Passagen nennen weniger Personen.</li>
+    </ul>
+
+    <h2>3. Hauptkomponenten (PCA)</h2>
+    <p>Eine PCA zeigt, welche Variablen sich gemeinsam bewegen. <strong>PC1 (13,3 %)</strong>
+    ist eine Größen-/Komplexitätsachse (Ereignisse, Entitäten, Wert, Berufe laden
+    gemeinsam), <strong>PC2 (7,9 %)</strong> kontrastiert Objektbeschreibung gegen
+    Personenbeteiligung, <strong>PC3 (6,4 %)</strong> Geldverpflichtung gegen
+    Personen-/Streitgehalt.</p>
+    <figure>
+      <img src="figures/pca_scatter.png" alt="Dokumente im PC1–PC2-Raum" />
+      <figcaption>Dokumente im Raum der ersten beiden Hauptkomponenten, eingefärbt nach
+      Jahr. Die Streuung bestätigt: Struktur liegt in interpretierbaren Bündeln, nicht
+      in wenigen dominanten Achsen.</figcaption>
+    </figure>
+
+    <h2>4. Datengetriebene Dokumenttypen (Cluster)</h2>
+    <p>k-Means auf den PCA-Werten trennt sechs wiederkehrende Dokumentgenres — ganz
+    ohne das (meist leere) Feld <code>dossiertype</code>:</p>
+    <table>
+      <thead><tr><th>Cluster</th><th class="num">n</th><th>Signatur</th><th>Typ</th></tr></thead>
+      <tbody>
+        <tr><td>3</td><td class="num">19.639</td><td>Wert ≈ 2002 ß, multi-event</td><td>Hochwertige Liegenschaftsgeschäfte</td></tr>
+        <tr><td>1</td><td class="num">20.226</td><td>due-payment, Spital, niedriger Wert</td><td>Routine-Zins-/Abgabenzahlungen</td></tr>
+        <tr><td>4</td><td class="num">17.322</td><td>nur topological</td><td>Grenz-/Lagebeschreibungen</td></tr>
+        <tr><td>0</td><td class="num">7.887</td><td>inheritance, deceased_rate 0.33</td><td>Erbschaft/Testament</td></tr>
+        <tr><td>2</td><td class="num">5.777</td><td>litigation | ownership</td><td>Streitfälle</td></tr>
+        <tr><td>5</td><td class="num">4.596</td><td>status_marker_rate = 1, property-purchase</td><td>Elitäre Liegenschaftskäufe</td></tr>
+      </tbody>
+    </table>
+    <p class="meta-note">Die Clusterzugehörigkeit korreliert stark mit institutioneller
+    Beteiligung (Cramér's V Cluster × gov_org = 0,51) und erklärt 77 % der Varianz der
+    Statusmarker — es handelt sich um reale Dokumentgattungen.</p>
+
+    <h2>5. Ereignis-Kombinationen (PMI / Lift)</h2>
+    <p>Welche Ereignistypen treten im selben Dokument überzufällig häufig — oder
+    auffällig selten — gemeinsam auf?</p>
+    <div class="grid2">
+      <table>
+        <thead><tr><th>Paar (positiv)</th><th class="num">Lift</th></tr></thead>
+        <tbody>
+          <tr><td>pledge × debt</td><td class="num pos">31,9</td></tr>
+          <tr><td>civic-affiliation × rent-purchase</td><td class="num pos">4,0</td></tr>
+          <tr><td>rent-purchase × redemption</td><td class="num pos">3,1</td></tr>
+          <tr><td>family × bequest</td><td class="num pos">2,9</td></tr>
+          <tr><td>property-purchase × civic-affiliation</td><td class="num pos">2,4</td></tr>
+        </tbody>
+      </table>
+      <table>
+        <thead><tr><th>Paar (vermieden)</th><th class="num">Lift</th></tr></thead>
+        <tbody>
+          <tr><td>due-payment × seizure</td><td class="num neg">0,04</td></tr>
+          <tr><td>due-obligation × litigation</td><td class="num neg">0,08</td></tr>
+          <tr><td>due-payment × property-purchase</td><td class="num neg">0,09</td></tr>
+          <tr><td>seizure × rent-purchase</td><td class="num neg">0,12</td></tr>
+          <tr><td>property-purchase × litigation</td><td class="num neg">0,16</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>civic-affiliation</code> wirkt als Knoten eines finanziell-bürgerschaftlichen
+    Komplexes; Routine-Zahlungsakten enthalten dagegen fast nie zugleich
+    Vollstreckung. In 25-Jahres-Bins ausgewertet verstärken sich
+    <code>pledge × debt</code> und <code>civic-affiliation × rent-purchase</code>
+    deutlich nach ~1525–1550.</p>
+
+    <h2>6. Räumliche Analyse: Zentrum / Peripherie</h2>
+    <p>Für die 3.694 georeferenzierten Dossiers zeigt sich ein klares monozentrisches
+    Gefälle. Mit zunehmender Distanz vom Stadtkern <strong>sinkt der Geldwert</strong>
+    (Spearman ρ = −0,155, p ≈ 9·10⁻²⁰) und <strong>steigt der Naturalabgaben-Anteil</strong>
+    (ρ = +0,107, p ≈ 3·10⁻¹⁰).</p>
+    <table>
+      <thead><tr><th></th><th class="num">Kern (≤150 m)</th><th class="num">Peripherie (~1 km)</th></tr></thead>
+      <tbody>
+        <tr><td>Median-Wert</td><td class="num">543 ß</td><td class="num">~50–130 ß</td></tr>
+        <tr><td>Naturalabgaben-Anteil</td><td class="num">3 %</td><td class="num">12 %</td></tr>
+      </tbody>
+    </table>
+    <figure>
+      <img src="figures/centre_periphery_gradient.png" alt="Zentrum-Peripherie-Gradient" />
+      <figcaption>Radiales Gefälle in 150-m-Ringen: Bargeld und hochwertige
+      Transaktionen konzentrieren sich im Kern, Naturalabgaben dominieren zunehmend zur
+      Peripherie (das klassische urbane Rentier-Kern-/Agrar-Rand-Muster).</figcaption>
+    </figure>
+    <a class="btn" href="centre_periphery.html">→ Interaktive Zentrum/Peripherie-Karte</a>
+
+    <h2>7. Daten &amp; Reproduzierbarkeit</h2>
+    <p>Die gesamte Pipeline ist skriptbasiert und reproduzierbar:</p>
+    <ul>
+      <li><code>extract_features.py</code> — streamt das Quell-XML und erzeugt die
+        Dokument-Merkmalsmatrix <code>features_doc.parquet</code> (75.447 × 153),
+        inkl. Teilnehmerstruktur, Zeit-, Ereigniskombinations-, Status- und
+        Verhältnis-Spalten (25-Jahres-Bins).</li>
+      <li><code>analyze_features.py</code> — Korrelations-, PCA-, Cluster-,
+        PMI- und Moran's-I-Analyse → <code>analysis_report.md</code> + Abbildungen.</li>
+      <li><code>centre_periphery.py</code> — Raumanalyse → <code>centre_periphery.csv</code>
+        und Abbildungen, gespeist aus den WGS84-Koordinaten in
+        <code>dossiers_geo.json</code>.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Vorbehalte.</strong> (1) <code>value_schilling</code> beruht auf
+      <em>näherungsweisen</em> Gulden-/Taler-Kursen (editierbar in
+      <code>extract_features.py</code>); die <em>Richtung</em> der Wertbefunde ist robust,
+      exakte Beträge ändern sich mit den Kursen. (2) Die Zeugenrolle ist im Korpus sehr
+      selten (29 Belege); aussagekräftiger ist das breitere Maß
+      <code>attestation_rate</code>. (3) Die Raumanalyse umfasst nur die ~3,7 k Dossiers
+      mit Koordinaten. (4) 5 PCA-Komponenten erfassen 37 % der Varianz — erwartbar für
+      dünn besetzte, kategorial abgeleitete Daten.
+    </div>
+
+    <p class="meta-note" style="margin-top:30px">Universitäten Bern und Basel ·
+    Economies of Space · statistische Auswertung des HGB-Korpus
+    (<code>hgb_full_26_05_29_05.xml</code>).</p>
+  </main>
+</body>
+</html>

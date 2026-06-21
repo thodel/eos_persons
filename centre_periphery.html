@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HGB Zentrum/Peripherie — Wert & Naturalabgaben</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+    }
+    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 14px; color: var(--text); }
+    #site-header {
+      height: 56px; background: var(--accent); color: #fff;
+      display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 1000; position: relative;
+    }
+    #site-title { font-size: .9rem; opacity: .8; white-space: nowrap; }
+    #page-nav { display: flex; margin-left: auto; }
+    .page-tab {
+      padding: 0 14px; height: 56px; display: flex; align-items: center; text-decoration: none;
+      font-size: .8rem; color: rgba(255,255,255,.65); border-bottom: 3px solid transparent;
+      transition: color .15s, border-color .15s; white-space: nowrap;
+    }
+    .page-tab:hover { color: #fff; }
+    .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
+    #layout { display: flex; height: calc(100vh - 56px); }
+    #sidebar {
+      width: 310px; flex-shrink: 0; background: var(--bg);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto;
+    }
+    #controls { padding: 16px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+    #controls label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display:block; margin-bottom:4px;}
+    #controls select { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px; background: #fff; font-size: .85rem; font-family: inherit;}
+    .seg { display:flex; gap:6px; }
+    .seg button { flex:1; padding:7px 4px; border:1px solid var(--border); background:#fff; cursor:pointer; font-family:inherit; font-size:.78rem; border-radius:4px; color:var(--text); }
+    .seg button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    #panel { padding: 16px; font-size: .82rem; line-height:1.6; }
+    #panel h3 { font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; color:var(--accent); margin-bottom:8px; font-weight:normal;}
+    #panel .stat { display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px dotted var(--border);}
+    #panel .stat b { color:var(--accent2); font-weight:normal;}
+    #legend { padding:14px 16px; border-top:1px solid var(--border); font-size:.78rem; color:var(--muted);}
+    .legend-bar { height:12px; border-radius:3px; margin:6px 0 4px;}
+    .legend-row { display:flex; justify-content:space-between;}
+    #map { flex: 1; }
+    .note { font-size:.74rem; color:var(--muted); font-style:italic; margin-top:6px;}
+    .leaflet-popup-content { font-family:'Georgia',serif; font-size:.8rem; line-height:1.5;}
+  </style>
+</head>
+<body>
+  <div id="site-header">
+    <span id="site-title">HGB — Zentrum / Peripherie</span>
+    <nav id="page-nav">
+      <a class="page-tab" href="index.html">Personenindex</a>
+      <a class="page-tab" href="map.html">Karte</a>
+      <a class="page-tab active" href="korrelationsanalyse.html">Korrelationsanalyse</a>
+      <a class="page-tab" href="viz.html">Berufe</a>
+      <a class="page-tab" href="movements.html">Personenbewegungen</a>
+    </nav>
+  </div>
+  <div id="layout">
+    <aside id="sidebar">
+      <div id="controls">
+        <div>
+          <label>Variable</label>
+          <div class="seg" id="varseg">
+            <button data-v="value_schilling" class="active">Wert (Schilling)</button>
+            <button data-v="in_kind_share">Naturalabgaben-Anteil</button>
+          </div>
+        </div>
+        <div>
+          <label>Punktgröße</label>
+          <select id="sizesel">
+            <option value="fixed">einheitlich</option>
+            <option value="n_docs">∝ Anzahl Dokumente</option>
+          </select>
+        </div>
+      </div>
+      <div id="panel">
+        <h3>Befund</h3>
+        <div class="stat"><span>Georeferenzierte Dossiers</span><b id="s-n">–</b></div>
+        <div class="stat"><span>Distanz × Wert (Spearman)</span><b>−0.155 ***</b></div>
+        <div class="stat"><span>Distanz × Naturalanteil</span><b>+0.107 ***</b></div>
+        <div class="stat"><span>Wert Kern → Rand (Median)</span><b>543 → ~80 ß</b></div>
+        <div class="stat"><span>Naturalanteil Kern → Rand</span><b>3% → 12%</b></div>
+        <p class="note">Bargeld und hochwertige Transaktionen konzentrieren sich im
+        Stadtkern; Naturalabgaben (Hühner, Korn, Wein …) dominieren zunehmend zur
+        Peripherie. Zentrum = räumlicher Median aller Dossiers.</p>
+      </div>
+      <div id="legend">
+        <div id="leg-title">Median-Wert (log)</div>
+        <div class="legend-bar" id="leg-bar"></div>
+        <div class="legend-row"><span id="leg-lo">niedrig</span><span id="leg-hi">hoch</span></div>
+      </div>
+    </aside>
+    <div id="map"></div>
+  </div>
+
+<script>
+const map = L.map('map').setView([47.5570, 7.5890], 15);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap, © CARTO', maxZoom: 19
+}).addTo(map);
+
+// centre (spatial median) in WGS84 ≈ data centroid
+const CENTRE = [47.55648, 7.58880];
+L.circleMarker(CENTRE, {radius:7, color:'#c0392b', weight:3, fill:false}).addTo(map)
+  .bindTooltip('Zentrum (räuml. Median)');
+[250,500,750,1000].forEach(r =>
+  L.circle(CENTRE.slice().reverse && CENTRE, {radius:r, fill:false, color:'#999', weight:1, dashArray:'4 4', opacity:.5}).addTo(map));
+
+// colour ramps
+function ramp(t, scheme){ // t in 0..1
+  t = Math.max(0, Math.min(1, t));
+  if (scheme==='viridis'){ // approx viridis
+    const c=[[68,1,84],[59,82,139],[33,145,140],[94,201,98],[253,231,37]];
+    return lerp(c,t);
+  } else { // magma-ish for in-kind
+    const c=[[252,253,191],[252,137,97],[183,55,121],[81,18,124],[0,0,4]];
+    return lerp(c,t);
+  }
+}
+function lerp(c,t){ const n=c.length-1, i=Math.min(n-1,Math.floor(t*n)), f=t*n-i;
+  const a=c[i], b=c[i+1];
+  return `rgb(${Math.round(a[0]+(b[0]-a[0])*f)},${Math.round(a[1]+(b[1]-a[1])*f)},${Math.round(a[2]+(b[2]-a[2])*f)})`;}
+
+let DATA=[], layer=L.layerGroup().addTo(map), curVar='value_schilling', curSize='fixed';
+
+function render(){
+  layer.clearLayers();
+  const vals = DATA.map(d=>d[curVar]).filter(v=>v!=null && !isNaN(v));
+  if(!vals.length) return;
+  const useLog = curVar==='value_schilling';
+  const tx = v => useLog ? Math.log1p(v) : v;
+  const arr = vals.map(tx).sort((a,b)=>a-b);
+  const lo = arr[Math.floor(arr.length*0.02)], hi = arr[Math.floor(arr.length*0.98)];
+  const scheme = useLog ? 'viridis' : 'magma';
+  DATA.forEach(d=>{
+    const v=d[curVar]; if(v==null||isNaN(v)) return;
+    const t=(tx(v)-lo)/(hi-lo||1);
+    const rad = curSize==='n_docs' ? Math.min(14, 3+Math.sqrt(d.n_docs)) : 5;
+    L.circleMarker([d.lat,d.lon],{radius:rad, fillColor:ramp(t,scheme), color:'#fff',
+      weight:.5, fillOpacity:.85}).addTo(layer)
+      .bindPopup(`<b>${d.dossierid}</b><br>Distanz: ${Math.round(d.dist_m)} m<br>`+
+        `Wert (Median): ${d.value_schilling!=null?Math.round(d.value_schilling)+' ß':'–'}<br>`+
+        `Naturalanteil: ${d.in_kind_share!=null?(d.in_kind_share*100).toFixed(0)+'%':'–'}<br>`+
+        `Dokumente: ${d.n_docs}`);
+  });
+  // legend
+  document.getElementById('leg-title').textContent =
+    useLog ? 'Median-Wert (log Schilling)' : 'Naturalabgaben-Anteil';
+  const stops=[0,.25,.5,.75,1].map(t=>ramp(t,scheme)).join(',');
+  document.getElementById('leg-bar').style.background=`linear-gradient(90deg,${stops})`;
+  document.getElementById('leg-lo').textContent = useLog ? 'niedrig' : '0%';
+  document.getElementById('leg-hi').textContent = useLog ? 'hoch' : '100%';
+}
+
+fetch('centre_periphery.csv').then(r=>r.text()).then(txt=>{
+  const lines=txt.trim().split('\n'), head=lines[0].split(',');
+  DATA = lines.slice(1).map(l=>{
+    const p=l.split(','); const o={};
+    head.forEach((h,i)=>{ o[h]= p[i]===''? null : (h==='dossierid'? p[i] : +p[i]); });
+    return o;
+  }).filter(d=>d.lat!=null);
+  document.getElementById('s-n').textContent = DATA.length.toLocaleString('de-CH');
+  render();
+});
+
+document.getElementById('varseg').addEventListener('click', e=>{
+  if(e.target.tagName!=='BUTTON') return;
+  document.querySelectorAll('#varseg button').forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active'); curVar=e.target.dataset.v; render();
+});
+document.getElementById('sizesel').addEventListener('change', e=>{ curSize=e.target.value; render(); });
+</script>
+</body>
+</html>

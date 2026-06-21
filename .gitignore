@@ -220,3 +220,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Correlation-analysis build artifact (regenerable; redundant with parquet)
+features_doc_preview.csv
