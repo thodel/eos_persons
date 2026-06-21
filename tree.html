@@ -119,6 +119,8 @@
       <div class="lg-row"><span class="lg-line" style="border-color:var(--sibling)"></span> Geschwister</div>
       <div class="lg-row"><span class="lg-line" style="border-color:var(--inlaw)"></span> Verschwägert</div>
       <div class="lg-row"><span class="lg-line" style="border-color:var(--heir)"></span> Erbschaft</div>
+      <div class="lg-row"><span class="lg-line" style="border-color:#3a3a3a;border-top-style:dashed"></span> selbe Person (Familienbrücke)</div>
+      <div class="lg-row"><span style="display:inline-block;width:14px;height:14px;border:1.5px dashed #c0392b;border-radius:50%"></span> erweiterbar →</div>
     </div>
     <div id="info"></div>
     <div id="title-bar"></div>
@@ -138,7 +140,11 @@ let GRAPH = null;
 let nodeById = new Map();
 let edgesByComp = new Map();
 let nodesByComp = new Map();
+let bridgesByComp = new Map();   // cid -> [bridge]
+let bridgesByNode = new Map();   // nodeId -> [bridge]
 let components = [];
+let compById = new Map();
+let loaded = new Set();          // cids currently displayed
 let sim = null;
 
 const svg = d3.select("#svg");
@@ -162,13 +168,25 @@ fetch("families_graph.json")
       if (!edgesByComp.has(ca)) edgesByComp.set(ca, []);
       edgesByComp.get(ca).push(e);
     });
+    // cross-family bridges, indexed by component and by node
+    (data.bridges || []).forEach(br => {
+      if (!bridgesByComp.has(br.ca)) bridgesByComp.set(br.ca, []);
+      if (!bridgesByComp.has(br.cb)) bridgesByComp.set(br.cb, []);
+      bridgesByComp.get(br.ca).push(br);
+      bridgesByComp.get(br.cb).push(br);
+      [br.a, br.b].forEach(nid => {
+        if (!bridgesByNode.has(nid)) bridgesByNode.set(nid, []);
+        bridgesByNode.get(nid).push(br);
+      });
+    });
     components = data.components.slice().sort((a, b) => b.size - a.size);
+    compById = new Map(components.map(c => [c.cid, c]));
     renderFamList(components);
 
     const params = new URLSearchParams(location.search);
     const cid = params.get("cid");
-    if (cid != null && nodesByComp.has(+cid)) showComponent(+cid);
-    else showComponent(components[0].cid);
+    if (cid != null && nodesByComp.has(+cid)) focusFamily(+cid);
+    else focusFamily(components[0].cid);
   });
 
 function renderFamList(list) {
@@ -179,7 +197,7 @@ function renderFamList(list) {
     </div>`).join("");
   document.getElementById("famList").innerHTML = html;
   document.querySelectorAll(".fam-item").forEach(el =>
-    el.addEventListener("click", () => showComponent(+el.dataset.cid)));
+    el.addEventListener("click", () => focusFamily(+el.dataset.cid)));
 }
 
 document.getElementById("famSearch").addEventListener("input", e => {
@@ -190,35 +208,102 @@ document.getElementById("famSearch").addEventListener("input", e => {
   renderFamList(filtered);
 });
 
-function showComponent(cid) {
+// Show a single family, replacing whatever was loaded.
+function focusFamily(cid) {
+  loaded = new Set([cid]);
+  render();
+}
+
+// Add a family's nodes to the current view (expansion).
+function expandFamily(cid) {
+  loaded.add(cid);
+  render();
+}
+
+// Bridges from this node to families that are NOT yet on screen.
+function hiddenBridgesOf(nodeId, nodeCid) {
+  return (bridgesByNode.get(nodeId) || [])
+    .map(br => ({ br, other: br.ca === nodeCid ? br.cb : br.ca }))
+    .filter(x => !loaded.has(x.other));
+}
+
+function render() {
   document.getElementById("empty").style.display = "none";
   document.getElementById("info").style.display = "none";
   document.querySelectorAll(".fam-item").forEach(el =>
-    el.classList.toggle("active", +el.dataset.cid === cid));
+    el.classList.toggle("active", loaded.has(+el.dataset.cid)));
 
-  const comp = components.find(c => c.cid === cid);
-  // NB: d3-force writes node.x / node.y as layout coordinates, so move the
-  // year-range array off the `y` key before handing nodes to the simulation.
-  const rawNodes = (nodesByComp.get(cid) || []).map(n => ({ ...n, years: n.y }));
-  const idset = new Set(rawNodes.map(n => n.id));
-  const rawEdges = (edgesByComp.get(cid) || [])
-    .filter(e => idset.has(e.a) && idset.has(e.b))
-    .map(e => ({ ...e, source: e.a, target: e.b }));
+  // gather nodes + intra-family edges from every loaded family
+  const rawNodes = [];
+  const idset = new Set();
+  for (const cid of loaded) {
+    for (const n of (nodesByComp.get(cid) || [])) {
+      if (idset.has(n.id)) continue;
+      idset.add(n.id);
+      rawNodes.push({ ...n, years: n.y });
+    }
+  }
+  let rawEdges = [];
+  for (const cid of loaded) {
+    for (const e of (edgesByComp.get(cid) || [])) {
+      if (idset.has(e.a) && idset.has(e.b))
+        rawEdges.push({ ...e, source: e.a, target: e.b });
+    }
+  }
+  // bridge links where BOTH families are loaded (same person across families)
+  const bridgeLinks = [];
+  const seen = new Set();
+  for (const cid of loaded) {
+    for (const br of (bridgesByComp.get(cid) || [])) {
+      if (!loaded.has(br.ca) || !loaded.has(br.cb)) continue;
+      const key = br.a < br.b ? br.a + "|" + br.b : br.b + "|" + br.a;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      if (idset.has(br.a) && idset.has(br.b))
+        bridgeLinks.push({ ...br, source: br.a, target: br.b, type: "bridge" });
+    }
+  }
 
-  document.getElementById("title-bar").textContent =
-    `${comp.label} — ${rawNodes.length} Personen, ${rawEdges.length} Beziehungen · ${comp.year_min ?? "?"}–${comp.year_max ?? "?"}`;
+  const labels = [...loaded].map(c => compById.get(c)?.label).filter(Boolean);
+  const title = labels.length === 1
+    ? `${labels[0]} — ${rawNodes.length} Personen, ${rawEdges.length} Beziehungen`
+    : `${labels.join(" + ")} — ${rawNodes.length} Personen aus ${loaded.size} Familien, `
+      + `${bridgeLinks.length} Familienbrücken`;
+  document.getElementById("title-bar").innerHTML = title +
+    (loaded.size > 1 ? ` &nbsp;<a href="#" onclick="resetView(event)" style="color:var(--accent2)">↺ zurücksetzen</a>` : "");
 
-  draw(rawNodes, rawEdges);
+  draw(rawNodes, rawEdges, bridgeLinks);
 }
 
-function draw(nodes, links) {
+function resetView(ev) {
+  if (ev) ev.preventDefault();
+  loaded = new Set([[...loaded][0]]);
+  render();
+}
+
+// distinct palette for tinting nodes by family when several are on screen
+const FAM_PALETTE = ["#9e7a48", "#4a7a9e", "#5b8a5b", "#a06870", "#8870b0",
+                     "#b5651d", "#3a8080", "#9e6e3e"];
+function famColor(cid) {
+  const order = [...loaded];
+  const i = order.indexOf(cid);
+  return i < 0 ? GUILD_FALLBACK : FAM_PALETTE[i % FAM_PALETTE.length];
+}
+
+function draw(nodes, links, bridgeLinks = []) {
   g.selectAll("*").remove();
   if (sim) sim.stop();
 
   const W = svg.node().clientWidth, H = svg.node().clientHeight;
+  const multi = loaded.size > 1;
 
   // size by mention count
   const rOf = n => n.linked ? Math.max(5, Math.min(16, 4 + Math.sqrt(n.c || 1) * 1.6)) : 4;
+
+  // bridge links (same person across families) — drawn first, underneath
+  const blink = g.append("g").selectAll("line").data(bridgeLinks).join("line")
+    .attr("stroke", "#3a3a3a").attr("stroke-width", 2)
+    .attr("stroke-dasharray", "2 4").attr("stroke-opacity", .7);
 
   const link = g.append("g").selectAll("line").data(links).join("line")
     .attr("class", "link")
@@ -233,26 +318,37 @@ function draw(nodes, links) {
       .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
       .on("end", (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
 
+  // outer ring on nodes that bridge to families not yet shown — the "expand" cue
+  node.filter(d => hiddenBridgesOf(d.id, d.cid).length > 0)
+    .append("circle")
+    .attr("r", d => rOf(d) + 4)
+    .attr("fill", "none").attr("stroke", "#c0392b").attr("stroke-width", 1.5)
+    .attr("stroke-dasharray", "2 2").style("cursor", "pointer")
+    .on("click", (e, d) => { e.stopPropagation(); expandNode(d); });
+
   node.append("circle")
     .attr("r", rOf)
-    .attr("fill", d => d.linked ? GUILD_FALLBACK : "#cfc6ba")
+    .attr("fill", d => d.linked ? (multi ? famColor(d.cid) : GUILD_FALLBACK) : "#cfc6ba")
     .attr("opacity", d => d.linked ? 1 : .6)
     .on("click", (e, d) => showInfo(d));
 
   // label only for larger nodes to reduce clutter
   node.filter(d => d.linked && (d.c || 0) >= 3).append("text")
-    .attr("x", d => rOf(d) + 3).attr("y", 4)
+    .attr("x", d => rOf(d) + 5).attr("y", 4)
     .text(d => d.name.length > 22 ? d.name.slice(0, 22) + "…" : d.name);
 
   const tick = () => {
+    blink.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+         .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
     link.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
     node.attr("transform", d => `translate(${d.x},${d.y})`);
   };
 
+  const allLinks = links.concat(bridgeLinks);
   sim = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id)
-      .distance(d => d.type === "spouse" ? 38 : 60).strength(.7))
+    .force("link", d3.forceLink(allLinks).id(d => d.id)
+      .distance(d => d.type === "spouse" ? 38 : d.type === "bridge" ? 70 : 60).strength(.7))
     .force("charge", d3.forceManyBody().strength(nodes.length > 40 ? -120 : -220))
     .force("center", d3.forceCenter(W / 2, H / 2))
     .force("collide", d3.forceCollide().radius(d => rOf(d) + 6))
@@ -284,10 +380,33 @@ function fitView(nodes) {
     d3.zoomIdentity.translate(tx, ty).scale(scale));
 }
 
+// Expand every family this node bridges to that isn't already shown.
+function expandNode(d) {
+  const hidden = hiddenBridgesOf(d.id, d.cid);
+  if (!hidden.length) return;
+  hidden.forEach(x => loaded.add(x.other));
+  render();
+}
+
 function showInfo(d) {
   const box = document.getElementById("info");
   const yr = d.years ? (d.years[0] === d.years[1] ? d.years[0] : `${d.years[0]}–${d.years[1]}`) : "?";
   const occs = (d.occ || []).map(o => `<span class="occ-tag">${o}</span>`).join("");
+
+  // cross-family connections (to families not yet on screen)
+  const hidden = hiddenBridgesOf(d.id, d.cid);
+  let xfHtml = "";
+  if (hidden.length) {
+    const items = hidden.map(x => {
+      const c = compById.get(x.other);
+      return `<div style="margin:3px 0">
+        <a href="#" onclick="addFamily(event, ${x.other})" style="color:#c0392b">
+          ⇄ Familie ${c ? c.label : x.other}${c ? ` (${c.size})` : ""} einblenden</a></div>`;
+    }).join("");
+    xfHtml = `<div class="row" style="margin-top:8px;border-top:1px solid var(--border);padding-top:7px">
+      <span style="color:var(--accent)">Verbindungen zu anderen Familien (${hidden.length}):</span>${items}</div>`;
+  }
+
   box.innerHTML = `
     <span class="close" onclick="document.getElementById('info').style.display='none'">✕</span>
     <h3>${d.name}</h3>
@@ -296,9 +415,15 @@ function showInfo(d) {
     ${occs ? `<div style="margin:6px 0">${occs}</div>` : ""}
     ${(d.v && d.v.length) ? `<div class="row" style="margin-top:6px;font-size:.73rem">
        <span style="color:var(--accent)">Schreibvarianten (${d.v.length}):</span> ${d.v.slice(0,8).join(", ")}${d.v.length>8?" …":""}</div>` : ""}
-    ${d.linked ? `<a href="index.html?q=${encodeURIComponent(d.name)}" target="_blank">Im Personenindex öffnen →</a>` : ""}
+    ${xfHtml}
+    ${d.linked ? `<a href="index.html?q=${encodeURIComponent(d.name)}" target="_blank" style="display:inline-block;margin-top:8px">Im Personenindex öffnen →</a>` : ""}
   `;
   box.style.display = "block";
+}
+
+function addFamily(ev, cid) {
+  if (ev) ev.preventDefault();
+  expandFamily(cid);
 }
 </script>
 </body>

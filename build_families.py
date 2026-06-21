@@ -529,6 +529,66 @@ def link_person(name, dossier, persons, name_to_idx, dos_name_to_idx):
     return None
 
 
+# ── Cross-family bridges ─────────────────────────────────────────────────────
+
+def build_bridges(nodes, components, comp_of):
+    """Link nodes in *different* families that are plausibly the same person
+    (same name, overlapping dates). These are the marriage/kin ties between
+    families that connected-component splitting hides. We keep only bridges
+    between components with *different* dominant surnames — same-surname links
+    are either the same lineage or risky look-alikes, not cross-family ties."""
+    comp_label = {c["cid"]: c["label"] for c in components}
+
+    # node year window from own span (edges already folded into nodes via merge)
+    def win(n):
+        return tuple(n["y"]) if n.get("y") else None
+
+    # only surnamed, dated, in a real (multi-person) component
+    cand = []
+    for nid, n in nodes.items():
+        if comp_of.get(nid) is None:
+            continue
+        g, s = given_surname(n["name"])
+        if not g or not s or not n.get("y"):
+            continue
+        cand.append(nid)
+
+    # block by (given-initial, surname-initial) to keep comparisons cheap
+    blocks = collections.defaultdict(list)
+    for nid in cand:
+        g, s = given_surname(nodes[nid]["name"])
+        blocks[(g[0], s[0])].append(nid)
+
+    bridges = []
+    seen_pairs = set()
+    for members in blocks.values():
+        if len(members) < 2:
+            continue
+        for i in range(len(members)):
+            a = members[i]
+            ca = comp_of[a]
+            for j in range(i + 1, len(members)):
+                b = members[j]
+                cb = comp_of[b]
+                if ca == cb:
+                    continue                     # same family — already shown
+                if comp_label.get(ca) == comp_label.get(cb):
+                    continue                     # same surname — not cross-family
+                if years_align(win(nodes[a]), win(nodes[b])) is not True:
+                    continue
+                if not names_similar(nodes[a]["name"], nodes[b]["name"]):
+                    continue
+                key = (a, b)
+                if key in seen_pairs:
+                    continue
+                seen_pairs.add(key)
+                bridges.append({
+                    "a": a, "b": b, "ca": ca, "cb": cb,
+                    "name": nodes[a]["name"],
+                })
+    return bridges
+
+
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def main():
@@ -658,12 +718,31 @@ def main():
     for nid, n in nodes.items():
         n["cid"] = comp_of.get(nid)
 
+    # ── Cross-family bridges ──
+    # The same individual often appears in two different family trees — e.g. a
+    # woman who married into one lineage is a leaf there but a full member of
+    # her birth family's tree. Such pairs were deliberately NOT merged (that
+    # would fuse whole families into one giant component); instead we expose
+    # them as on-demand bridges so the tree can be expanded across families.
+    bridges = build_bridges(nodes, components, comp_of)
+    # tag nodes with how many cross-family bridges they carry
+    bridge_deg = collections.Counter()
+    for br in bridges:
+        bridge_deg[br["a"]] += 1
+        bridge_deg[br["b"]] += 1
+    for nid, n in nodes.items():
+        if bridge_deg.get(nid):
+            n["xf"] = bridge_deg[nid]   # cross-family link count
+
     graph = {
         "nodes": list(nodes.values()),
         "edges": edges,
+        "bridges": bridges,
         "components": [{k: v for k, v in c.items() if k != "members"}
                        for c in components],
     }
+    print(f"  {len(bridges)} cross-family bridges over "
+          f"{sum(1 for n in nodes.values() if n.get('xf'))} bridge nodes")
     with open("families_graph.json", "w") as f:
         json.dump(graph, f, separators=(",", ":"))
     import os
