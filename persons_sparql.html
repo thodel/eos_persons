@@ -363,18 +363,32 @@
     .catch(() => {}); // silently skip if file absent
 
   // ── SPARQL query ──────────────────────────────────────────
+  const QUERY_TIMEOUT_MS = 20000;
+
   async function sparql(query) {
     if (abortCtrl) abortCtrl.abort();
     abortCtrl = new AbortController();
-    const res = await fetch(ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/sparql-query',
-                 'Accept': 'application/sparql-results+json' },
-      body: query,
-      signal: abortCtrl.signal
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return res.json();
+    const ctrl = abortCtrl;
+    // Distinguish a timeout-driven abort from a manual abort (new search):
+    // timeouts surface an error, manual aborts stay silent.
+    let timedOut = false;
+    const timer = setTimeout(() => { timedOut = true; ctrl.abort(); }, QUERY_TIMEOUT_MS);
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/sparql-query',
+                   'Accept': 'application/sparql-results+json' },
+        body: query,
+        signal: ctrl.signal
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (e) {
+      if (timedOut) throw new Error(`Endpoint did not respond within ${QUERY_TIMEOUT_MS / 1000}s`);
+      throw e;
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   // ── Index search ──────────────────────────────────────────
