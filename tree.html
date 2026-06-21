@@ -294,6 +294,8 @@ function showInfo(d) {
     <div class="row">${d.linked ? `${d.c} Erwähnung(en) · ${yr}` : "nur in Beziehung genannt"}</div>
     ${d.dead_year ? `<div class="row">† erwähnt ${d.dead_year}</div>` : ""}
     ${occs ? `<div style="margin:6px 0">${occs}</div>` : ""}
+    ${(d.v && d.v.length) ? `<div class="row" style="margin-top:6px;font-size:.73rem">
+       <span style="color:var(--accent)">Schreibvarianten (${d.v.length}):</span> ${d.v.slice(0,8).join(", ")}${d.v.length>8?" …":""}</div>` : ""}
     ${d.linked ? `<a href="index.html?q=${encodeURIComponent(d.name)}" target="_blank">Im Personenindex öffnen →</a>` : ""}
   `;
   box.style.display = "block";

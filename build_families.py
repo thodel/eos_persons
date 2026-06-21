@@ -128,6 +128,244 @@ def surname_key(name: str) -> "str | None":
     return SURNAME_CANON.get(cand, cand)
 
 
+# ── Identity resolution: merge OCR / spelling variants of one person ──────────
+
+def name_tokens(name):
+    toks = re.sub(r"[^\wäöü]", " ", strip_accents(name.lower())).split()
+    return [t for t in toks if len(t) > 1]
+
+
+def _ratio(a, b):
+    if a == b:
+        return 1.0
+    if a and b and a[0] != b[0]:
+        return 0.0          # first-char blocking (cheap reject)
+    return SequenceMatcher(None, a, b).ratio()
+
+
+def given_surname(name):
+    toks = name_tokens(name)
+    if len(toks) >= 2:
+        return toks[0], toks[-1]
+    if toks:
+        return toks[0], None
+    return None, None
+
+
+def names_similar(a, b):
+    """True if a and b are plausibly the same person's name (OCR/variant)."""
+    ga, sa = given_surname(a)
+    gb, sb = given_surname(b)
+    if not ga or not gb:
+        return False
+    if sa and sb:
+        gr, sr = _ratio(ga, gb), _ratio(sa, sb)
+        return gr >= 0.80 and sr >= 0.82 and (gr + sr) / 2 >= 0.86
+    # at least one is given-name only — require a strong given-name match
+    return ga == gb or _ratio(ga, gb) >= 0.90
+
+
+def years_align(wa, wb):
+    """None if unknown; True if windows plausibly one lifespan; False if not."""
+    if wa is None or wb is None:
+        return None
+    lo, hi = min(wa[0], wb[0]), max(wa[1], wb[1])
+    if hi - lo > 80:
+        return False
+    gap = max(wa[0], wb[0]) - min(wa[1], wb[1])   # >0 ⇒ disjoint
+    return gap <= 20
+
+
+def resolve_identities(nodes, edges):
+    """Collapse nodes that are very likely the same person.
+
+    Two passes, both conservative to avoid re-forming spurious hubs:
+      • global  — surnamed nodes anywhere, requiring aligned year windows;
+      • local   — any nodes inside the same relationship component (already
+                  time-bounded), allowing merges when year info is missing.
+    Returns (new_nodes_dict, new_edges_list).
+    """
+    # year window per node: own span + years seen on incident edges
+    edge_years = collections.defaultdict(list)
+    for e in edges:
+        if e.get("year"):
+            edge_years[e["a"]].append(e["year"])
+            edge_years[e["b"]].append(e["year"])
+
+    def window(nid):
+        n = nodes[nid]
+        yrs = list(edge_years.get(nid, []))
+        if n.get("y"):
+            yrs += [n["y"][0], n["y"][1]]
+        yrs = [y for y in yrs if y]
+        return (min(yrs), max(yrs)) if yrs else None
+
+    win = {nid: window(nid) for nid in nodes}
+
+    # union-find over identities, tracking each group's merged year window so a
+    # chain of pairwise-close merges can never span more than one lifespan.
+    parent = {nid: nid for nid in nodes}
+    grp_win = {nid: win[nid] for nid in nodes}
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    def merged_window(wa, wb):
+        if wa is None:
+            return wb
+        if wb is None:
+            return wa
+        return (min(wa[0], wb[0]), max(wa[1], wb[1]))
+    def union(a, b, cap=True):
+        ra, rb = find(a), find(b)
+        if ra == rb:
+            return False
+        mw = merged_window(grp_win[ra], grp_win[rb])
+        if cap and mw is not None and mw[1] - mw[0] > 80:
+            return False                 # would exceed a lifespan — refuse
+        parent[ra] = rb
+        grp_win[rb] = mw
+        return True
+
+    def surnamed(nid):
+        g, s = given_surname(nodes[nid]["name"])
+        return g is not None and s is not None
+
+    # Same-person variants that share family context are merged by the local
+    # pass below. The global pass only fuses same-named nodes from *different*
+    # contexts — safe for distinctive names, but for very common surnames
+    # (Meyer, Müller, Keller…) it risks merging unrelated families. So restrict
+    # global merges to surnames that are not corpus-common.
+    sur_freq = collections.Counter()
+    for nid in nodes:
+        sk = surname_key(nodes[nid]["name"])
+        if sk:
+            sur_freq[sk] += 1
+    COMMON = 40   # nodes sharing a surname above this ⇒ too ambiguous to merge globally
+
+    # ── Pass 1: global merge of surnamed nodes, blocked by initials ──
+    # Strict: names similar, windows actually overlap, group stays ≤ 80 yr.
+    blocks = collections.defaultdict(list)
+    for nid in nodes:
+        if not surnamed(nid):
+            continue
+        g, s = given_surname(nodes[nid]["name"])
+        blocks[(g[0], s[0])].append(nid)
+    merged_global = 0
+    for key, members in blocks.items():
+        if len(members) < 2:
+            continue
+        for i in range(len(members)):
+            for j in range(i + 1, len(members)):
+                a, b = members[i], members[j]
+                if find(a) == find(b):
+                    continue
+                wa, wb = win[a], win[b]
+                if wa is None or wb is None:
+                    continue             # global merge needs dated overlap
+                gap = max(wa[0], wb[0]) - min(wa[1], wb[1])
+                if gap > 5:              # require (near-)overlap, not just ≤20
+                    continue
+                ska, skb = surname_key(nodes[a]["name"]), surname_key(nodes[b]["name"])
+                if (sur_freq.get(ska, 0) > COMMON) or (sur_freq.get(skb, 0) > COMMON):
+                    continue             # too common to disambiguate by name alone
+                if not names_similar(nodes[a]["name"], nodes[b]["name"]):
+                    continue
+                if union(a, b):
+                    merged_global += 1
+
+    # ── Pass 2: local merge within relationship components ──
+    cparent = {nid: nid for nid in nodes}
+    def cfind(x):
+        while cparent[x] != x:
+            cparent[x] = cparent[cparent[x]]
+            x = cparent[x]
+        return x
+    for e in edges:
+        ra, rb = cfind(e["a"]), cfind(e["b"])
+        if ra != rb:
+            cparent[ra] = rb
+    comp_members = collections.defaultdict(list)
+    for nid in nodes:
+        comp_members[cfind(nid)].append(nid)
+    merged_local = 0
+    for members in comp_members.values():
+        if len(members) < 2:
+            continue
+        for i in range(len(members)):
+            for j in range(i + 1, len(members)):
+                a, b = members[i], members[j]
+                if find(a) == find(b):
+                    continue
+                if not names_similar(nodes[a]["name"], nodes[b]["name"]):
+                    continue
+                if years_align(win[a], win[b]) is not False:   # True or None
+                    if union(a, b):
+                        merged_local += 1
+
+    # ── Collapse: pick representative per identity group ──
+    groups = collections.defaultdict(list)
+    for nid in nodes:
+        groups[find(nid)].append(nid)
+
+    def rep_rank(nid):
+        n = nodes[nid]
+        return (1 if n.get("linked") else 0, n.get("c", 0), len(n["name"]))
+
+    remap = {}
+    new_nodes = {}
+    for members in groups.values():
+        rep = max(members, key=rep_rank)
+        base = dict(nodes[rep])
+        variants = set(base.get("v", []))
+        occ = list(base.get("occ", []))
+        cc = 0
+        ymins, ymaxs, deads = [], [], []
+        for nid in members:
+            remap[nid] = rep
+            n = nodes[nid]
+            if n["name"] != base["name"]:
+                variants.add(n["name"])
+            for o in n.get("occ", []):
+                if o not in occ:
+                    occ.append(o)
+            cc += n.get("c", 0)
+            if n.get("y"):
+                ymins.append(n["y"][0]); ymaxs.append(n["y"][1])
+            if n.get("dead_year"):
+                deads.append(n["dead_year"])
+        base["v"] = sorted(variants)
+        base["occ"] = occ[:4]
+        base["c"] = cc
+        base["linked"] = any(nodes[m].get("linked") for m in members)
+        if ymins:
+            base["y"] = [min(ymins), max(ymaxs)]
+        if deads:
+            base["dead_year"] = min(deads)
+        base["id"] = rep
+        new_nodes[rep] = base
+
+    # ── Remap + dedup edges ──
+    seen = set()
+    new_edges = []
+    for e in edges:
+        a, b = remap[e["a"]], remap[e["b"]]
+        if a == b:
+            continue
+        key = (a, b, e["type"])
+        if key in seen:
+            continue
+        seen.add(key)
+        e2 = dict(e); e2["a"], e2["b"] = a, b
+        new_edges.append(e2)
+
+    print(f"  identity merge: {len(nodes)}→{len(new_nodes)} nodes "
+          f"(global {merged_global}, local {merged_local}); "
+          f"{len(edges)}→{len(new_edges)} edges")
+    return new_nodes, new_edges, remap
+
+
 # ── Resolve a <span> subtree to its head name ────────────────────────────────
 
 def head_name(span):
@@ -364,6 +602,9 @@ def main():
     print(f"  {len(nodes)} nodes ({sum(1 for n in nodes.values() if n['linked'])} linked), "
           f"{len(edges)} unique edges")
 
+    # ── Merge OCR / spelling variants of the same person ──
+    nodes, edges, id_remap = resolve_identities(nodes, edges)
+
     # ── Connected components (family units) ──
     parent = {nid: nid for nid in nodes}
     def find(x):
@@ -453,7 +694,7 @@ def main():
         for entry in p.get("dos", []):
             did = entry[0] if isinstance(entry, list) else entry
             rec["dossiers"].add(did)
-        nid = f"p{i}"
+        nid = id_remap.get(f"p{i}", f"p{i}")   # follow identity merges
         if nid in nodes and nodes[nid].get("cid") is not None:
             rec["cids"].add(nodes[nid]["cid"])
 
