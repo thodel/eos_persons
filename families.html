@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Familien — Historisches Grundbuch Basel</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Georgia', serif; font-size: 15px; }
+
+    #site-header {
+      height: 56px; background: var(--accent); color: #fff;
+      display: flex; align-items: center; padding: 0 20px; gap: 16px; position: sticky; top: 0; z-index: 1000;
+    }
+    #logos { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    #logos img { height: 30px; width: auto; filter: brightness(0) invert(1); object-fit: contain; opacity: .9; }
+    #logos img.logo-bern { height: 26px; }
+    #site-title { font-size: .9rem; opacity: .7; white-space: nowrap; flex-shrink: 0; }
+    #page-nav { display: flex; margin-left: auto; overflow-x: auto; }
+    .page-tab {
+      padding: 0 14px; height: 56px; display: flex; align-items: center; text-decoration: none;
+      font-size: .8rem; color: rgba(255,255,255,.65); border-bottom: 3px solid transparent;
+      transition: color .15s, border-color .15s; white-space: nowrap;
+    }
+    .page-tab:hover { color: #fff; }
+    .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
+    h1 { font-size: 1.4rem; font-weight: normal; color: var(--accent); margin-bottom: 6px; }
+    p.lede { color: var(--muted); font-size: .9rem; margin-bottom: 22px; font-style: italic; }
+
+    .toolbar {
+      display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
+      margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .toolbar .field { display: flex; flex-direction: column; gap: 3px; }
+    .toolbar label { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+    .toolbar input, .toolbar select {
+      padding: 6px 9px; border: 1px solid var(--border); border-radius: 5px;
+      background: #fff; font-size: .85rem; font-family: inherit;
+    }
+    .toolbar input[type=text] { min-width: 200px; }
+    #count { margin-left: auto; font-size: .8rem; color: var(--muted); align-self: center; }
+
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    thead th {
+      text-align: left; color: var(--muted); font-weight: normal; cursor: pointer;
+      text-transform: uppercase; font-size: .7rem; letter-spacing: .05em;
+      padding: 8px 10px; border-bottom: 2px solid var(--border); position: sticky; top: 56px;
+      background: var(--bg); user-select: none;
+    }
+    thead th:hover { color: var(--accent); }
+    thead th .arrow { opacity: .5; font-size: .7rem; }
+    tbody td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody tr:hover td { background: #f5f2ee; }
+    .fam-name { font-weight: bold; color: var(--accent); }
+    .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+    .bar-cell { width: 130px; }
+    .bar-bg { background: #f0ebe3; border-radius: 3px; height: 9px; }
+    .bar-fill { height: 100%; border-radius: 3px; background: var(--accent2); }
+    .occ-tag {
+      display: inline-block; background: #eef4f0; border: 1px solid #c4dac8;
+      border-radius: 9px; padding: 1px 7px; font-size: .7rem; margin: 1px 2px 1px 0;
+    }
+    .given { color: var(--muted); font-size: .78rem; }
+    .tree-link {
+      font-size: .75rem; color: var(--accent2); text-decoration: none;
+      border: 1px solid var(--border); border-radius: 5px; padding: 2px 8px; white-space: nowrap;
+    }
+    .tree-link:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .tree-link.disabled { opacity: .3; pointer-events: none; }
+    #loading { text-align: center; padding: 80px; color: var(--muted); font-style: italic; }
+  </style>
+</head>
+<body>
+
+<div id="site-header">
+  <div id="logos">
+    <img class="logo-bern" src="https://www.unibe.ch/assets/media/image/logo-uni-bern.svg" alt="Universität Bern" onerror="this.style.display='none'">
+    <img src="https://www.unibas.ch/dam/jcr:93abfa0e-58d6-45ed-930a-de414ca40b13/uni-basel-logo.2018-03-26-12-26-39.svg" alt="Universität Basel" onerror="this.style.display='none'">
+  </div>
+  <span id="site-title">Historisches Grundbuch Basel</span>
+  <nav id="page-nav">
+    <a class="page-tab" href="index.html">Personenindex</a>
+    <a class="page-tab" href="map.html">Karte</a>
+    <a class="page-tab" href="korrelationsanalyse.html">Korrelationsanalyse</a>
+    <a class="page-tab" href="viz.html">Berufe</a>
+    <a class="page-tab" href="movements.html">Personenbewegungen</a>
+    <a class="page-tab active" href="families.html">Familien</a>
+    <a class="page-tab" href="tree.html">Stammbaum</a>
+  </nav>
+</div>
+
+<main>
+  <h1>Familien</h1>
+  <p class="lede">
+    Alle im Korpus erwähnten Familien, gruppiert nach normalisiertem Nachnamen
+    (OCR- und Schreibvarianten zusammengeführt). Familien mit dokumentierten
+    Verwandtschaftsbeziehungen verlinken auf den Stammbaum.
+  </p>
+
+  <div class="toolbar">
+    <div class="field">
+      <label>Suche</label>
+      <input type="text" id="q" placeholder="Familienname…" autocomplete="off" autofocus />
+    </div>
+    <div class="field">
+      <label>Min. Personen</label>
+      <select id="minP">
+        <option value="2">≥ 2</option>
+        <option value="5">≥ 5</option>
+        <option value="10" selected>≥ 10</option>
+        <option value="25">≥ 25</option>
+        <option value="50">≥ 50</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Beruf enthält</label>
+      <input type="text" id="occFilter" placeholder="z. B. metzger" autocomplete="off" />
+    </div>
+    <div class="field">
+      <label>Nur mit Stammbaum</label>
+      <select id="treeOnly">
+        <option value="0">Alle</option>
+        <option value="1">Nur verknüpfte</option>
+      </select>
+    </div>
+    <span id="count"></span>
+  </div>
+
+  <div id="loading">Lade Familiendaten…</div>
+
+  <table id="tbl" style="display:none">
+    <thead>
+      <tr>
+        <th data-k="name">Familie <span class="arrow"></span></th>
+        <th data-k="n_persons" class="num">Personen <span class="arrow">▾</span></th>
+        <th data-k="n_mentions" class="num">Erwähnungen <span class="arrow"></span></th>
+        <th data-k="year_min">Zeitraum <span class="arrow"></span></th>
+        <th>Berufe</th>
+        <th>Vornamen</th>
+        <th data-k="n_dossiers" class="num">Dossiers <span class="arrow"></span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+</main>
+
+<script>
+let FAM = [];
+let sortKey = "n_persons", sortDir = -1;
+let maxPersons = 1;
+
+fetch("families_index.json")
+  .then(r => r.json())
+  .then(data => {
+    FAM = data.families;
+    maxPersons = Math.max(...FAM.map(f => f.n_persons));
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("tbl").style.display = "";
+    render();
+  });
+
+function activeFilters() {
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const minP = +document.getElementById("minP").value;
+  const occ = document.getElementById("occFilter").value.trim().toLowerCase();
+  const treeOnly = document.getElementById("treeOnly").value === "1";
+  return { q, minP, occ, treeOnly };
+}
+
+function render() {
+  const { q, minP, occ, treeOnly } = activeFilters();
+  let rows = FAM.filter(f => {
+    if (f.n_persons < minP) return false;
+    if (q && !f.name.toLowerCase().includes(q)) return false;
+    if (occ && !(f.occ || []).some(o => o.toLowerCase().includes(occ))) return false;
+    if (treeOnly && (!f.cids || !f.cids.length)) return false;
+    return true;
+  });
+
+  rows.sort((a, b) => {
+    let va = a[sortKey], vb = b[sortKey];
+    if (typeof va === "string") { va = va.toLowerCase(); vb = (vb||"").toLowerCase(); }
+    if (va == null) va = -Infinity; if (vb == null) vb = -Infinity;
+    return va < vb ? -sortDir : va > vb ? sortDir : 0;
+  });
+
+  document.getElementById("count").textContent =
+    `${rows.length.toLocaleString("de-CH")} Familien`;
+
+  const html = rows.slice(0, 600).map(f => {
+    const occs = (f.occ || []).slice(0, 3).map(o => `<span class="occ-tag">${o}</span>`).join("");
+    const given = (f.given || []).slice(0, 4).join(", ");
+    const period = f.year_min ? (f.year_min === f.year_max ? f.year_min : `${f.year_min}–${f.year_max}`) : "–";
+    const w = (100 * f.n_persons / maxPersons).toFixed(1);
+    const hasTree = f.cids && f.cids.length;
+    const treeLink = hasTree
+      ? `<a class="tree-link" href="tree.html?cid=${f.cids[0]}">Stammbaum →</a>`
+      : `<span class="tree-link disabled">—</span>`;
+    return `<tr>
+      <td><a class="fam-name" href="index.html?q=${encodeURIComponent(f.name)}">${f.name}</a></td>
+      <td class="num">
+        <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+          <div class="bar-bg bar-cell"><div class="bar-fill" style="width:${w}%"></div></div>
+          <span>${f.n_persons}</span>
+        </div>
+      </td>
+      <td class="num">${f.n_mentions.toLocaleString("de-CH")}</td>
+      <td>${period}</td>
+      <td>${occs || '<span class="given">–</span>'}</td>
+      <td class="given">${given}</td>
+      <td class="num">${f.n_dossiers}</td>
+      <td>${treeLink}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("rows").innerHTML = html;
+}
+
+// sorting
+document.querySelectorAll("thead th[data-k]").forEach(th => {
+  th.addEventListener("click", () => {
+    const k = th.dataset.k;
+    if (sortKey === k) sortDir *= -1;
+    else { sortKey = k; sortDir = (k === "name" || k === "year_min") ? 1 : -1; }
+    document.querySelectorAll("thead th .arrow").forEach(a => a.textContent = "");
+    th.querySelector(".arrow").textContent = sortDir < 0 ? "▾" : "▴";
+    render();
+  });
+});
+
+let deb;
+["q", "occFilter"].forEach(id =>
+  document.getElementById(id).addEventListener("input", () => {
+    clearTimeout(deb); deb = setTimeout(render, 180);
+  }));
+["minP", "treeOnly"].forEach(id =>
+  document.getElementById(id).addEventListener("change", render));
+</script>
+</body>
+</html>

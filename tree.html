@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stammbaum — Historisches Grundbuch Basel</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+      --spouse: #b5651d; --parent: #4a7a9e; --child: #4a7a9e;
+      --sibling: #5b8a5b; --inlaw: #8870b0; --heir: #a06870; --guardian: #999;
+    }
+    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 14px; color: var(--text); }
+
+    #site-header {
+      height: 56px; background: var(--accent); color: #fff;
+      display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 1000; position: relative;
+    }
+    #logos { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    #logos img { height: 30px; width: auto; filter: brightness(0) invert(1); object-fit: contain; opacity: .9; }
+    #logos img.logo-bern { height: 26px; }
+    #site-title { font-size: .9rem; opacity: .7; white-space: nowrap; flex-shrink: 0; }
+    #page-nav { display: flex; margin-left: auto; overflow-x: auto; }
+    .page-tab {
+      padding: 0 14px; height: 56px; display: flex; align-items: center; text-decoration: none;
+      font-size: .8rem; color: rgba(255,255,255,.65); border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .page-tab:hover { color: #fff; }
+    .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
+
+    #layout { display: flex; height: calc(100vh - 56px); }
+
+    #sidebar {
+      width: 290px; flex-shrink: 0; background: var(--bg);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden;
+    }
+    #sidebar .pad { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+    #sidebar label { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); display: block; margin-bottom: 4px; }
+    #famSearch { width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 5px; font-size: .85rem; font-family: inherit; }
+    #famList { flex: 1; overflow-y: auto; }
+    .fam-item { padding: 8px 16px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: .83rem; }
+    .fam-item:hover { background: #f5f2ee; }
+    .fam-item.active { background: #efe7db; border-left: 3px solid var(--accent); }
+    .fam-item .nm { font-weight: bold; color: var(--accent); }
+    .fam-item .mt { color: var(--muted); font-size: .73rem; }
+
+    #stage { flex: 1; position: relative; overflow: hidden; background:
+      radial-gradient(circle at 50% 40%, #fff 0%, var(--bg) 90%); }
+    svg { width: 100%; height: 100%; display: block; cursor: grab; }
+    svg:active { cursor: grabbing; }
+
+    .link { stroke-opacity: .55; }
+    .node circle { stroke: #fff; stroke-width: 1.5px; cursor: pointer; }
+    .node text { font-size: 11px; fill: var(--text); pointer-events: none; }
+    .node .halo { fill: #fff; stroke: #fff; stroke-width: 3px; opacity: .85; }
+    .node.dead circle { stroke: #333; stroke-dasharray: 2 2; }
+
+    #legend {
+      position: absolute; top: 14px; left: 14px; background: rgba(255,255,255,.93);
+      border: 1px solid var(--border); border-radius: 6px; padding: 10px 13px; font-size: .73rem;
+    }
+    #legend h4 { font-weight: normal; color: var(--accent); text-transform: uppercase; letter-spacing: .05em; font-size: .72rem; margin-bottom: 7px; }
+    .lg-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+    .lg-line { width: 22px; height: 0; border-top: 3px solid; }
+
+    #info {
+      position: absolute; top: 14px; right: 14px; width: 230px;
+      background: rgba(255,255,255,.96); border: 1px solid var(--border); border-radius: 6px;
+      padding: 14px; font-size: .8rem; display: none;
+    }
+    #info h3 { font-size: .95rem; font-weight: normal; color: var(--accent); margin-bottom: 5px; }
+    #info .row { color: var(--muted); margin-bottom: 3px; }
+    #info .occ-tag { display: inline-block; background: #eef4f0; border: 1px solid #c4dac8; border-radius: 9px; padding: 1px 7px; font-size: .7rem; margin: 2px 2px 0 0; }
+    #info a { color: var(--accent2); font-size: .78rem; }
+    #info .close { float: right; cursor: pointer; color: var(--muted); }
+
+    #title-bar { position: absolute; bottom: 14px; left: 14px; font-size: .82rem; color: var(--muted); background: rgba(255,255,255,.8); padding: 5px 10px; border-radius: 5px; }
+    #empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--muted); font-style: italic; }
+  </style>
+</head>
+<body>
+
+<div id="site-header">
+  <div id="logos">
+    <img class="logo-bern" src="https://www.unibe.ch/assets/media/image/logo-uni-bern.svg" alt="Universität Bern" onerror="this.style.display='none'">
+    <img src="https://www.unibas.ch/dam/jcr:93abfa0e-58d6-45ed-930a-de414ca40b13/uni-basel-logo.2018-03-26-12-26-39.svg" alt="Universität Basel" onerror="this.style.display='none'">
+  </div>
+  <span id="site-title">Historisches Grundbuch Basel</span>
+  <nav id="page-nav">
+    <a class="page-tab" href="index.html">Personenindex</a>
+    <a class="page-tab" href="map.html">Karte</a>
+    <a class="page-tab" href="korrelationsanalyse.html">Korrelationsanalyse</a>
+    <a class="page-tab" href="viz.html">Berufe</a>
+    <a class="page-tab" href="movements.html">Personenbewegungen</a>
+    <a class="page-tab" href="families.html">Familien</a>
+    <a class="page-tab active" href="tree.html">Stammbaum</a>
+  </nav>
+</div>
+
+<div id="layout">
+  <div id="sidebar">
+    <div class="pad">
+      <label>Familie suchen</label>
+      <input type="text" id="famSearch" placeholder="Nachname…" autocomplete="off" />
+    </div>
+    <div id="famList"></div>
+  </div>
+
+  <div id="stage">
+    <svg id="svg"></svg>
+    <div id="legend">
+      <h4>Beziehung</h4>
+      <div class="lg-row"><span class="lg-line" style="border-color:var(--spouse)"></span> Ehe</div>
+      <div class="lg-row"><span class="lg-line" style="border-color:var(--parent)"></span> Eltern–Kind</div>
+      <div class="lg-row"><span class="lg-line" style="border-color:var(--sibling)"></span> Geschwister</div>
+      <div class="lg-row"><span class="lg-line" style="border-color:var(--inlaw)"></span> Verschwägert</div>
+      <div class="lg-row"><span class="lg-line" style="border-color:var(--heir)"></span> Erbschaft</div>
+    </div>
+    <div id="info"></div>
+    <div id="title-bar"></div>
+    <div id="empty">Wähle links eine Familie, um den Stammbaum anzuzeigen.</div>
+  </div>
+</div>
+
+<script>
+const REL_COLOR = {
+  spouse: "var(--spouse)", parent: "var(--parent)", child: "var(--child)",
+  sibling: "var(--sibling)", "in-law": "var(--inlaw)", heir: "var(--heir)",
+  guardian: "var(--guardian)",
+};
+const GUILD_FALLBACK = "#9e7a48";
+
+let GRAPH = null;
+let nodeById = new Map();
+let edgesByComp = new Map();
+let nodesByComp = new Map();
+let components = [];
+let sim = null;
+
+const svg = d3.select("#svg");
+const g = svg.append("g");
+const zoom = d3.zoom().scaleExtent([0.15, 4]).on("zoom", e => g.attr("transform", e.transform));
+svg.call(zoom);
+
+fetch("families_graph.json")
+  .then(r => r.json())
+  .then(data => {
+    GRAPH = data;
+    data.nodes.forEach(n => nodeById.set(n.id, n));
+    data.nodes.forEach(n => {
+      if (n.cid == null) return;
+      if (!nodesByComp.has(n.cid)) nodesByComp.set(n.cid, []);
+      nodesByComp.get(n.cid).push(n);
+    });
+    data.edges.forEach(e => {
+      const ca = nodeById.get(e.a)?.cid;
+      if (ca == null) return;
+      if (!edgesByComp.has(ca)) edgesByComp.set(ca, []);
+      edgesByComp.get(ca).push(e);
+    });
+    components = data.components.slice().sort((a, b) => b.size - a.size);
+    renderFamList(components);
+
+    const params = new URLSearchParams(location.search);
+    const cid = params.get("cid");
+    if (cid != null && nodesByComp.has(+cid)) showComponent(+cid);
+    else showComponent(components[0].cid);
+  });
+
+function renderFamList(list) {
+  const html = list.slice(0, 400).map(c => `
+    <div class="fam-item" data-cid="${c.cid}">
+      <div class="nm">${c.label}</div>
+      <div class="mt">${c.size} Personen · ${c.year_min ?? "?"}–${c.year_max ?? "?"}</div>
+    </div>`).join("");
+  document.getElementById("famList").innerHTML = html;
+  document.querySelectorAll(".fam-item").forEach(el =>
+    el.addEventListener("click", () => showComponent(+el.dataset.cid)));
+}
+
+document.getElementById("famSearch").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  const filtered = !q ? components
+    : components.filter(c => c.label.toLowerCase().includes(q)
+        || (c.surnames || []).some(s => s.includes(q)));
+  renderFamList(filtered);
+});
+
+function showComponent(cid) {
+  document.getElementById("empty").style.display = "none";
+  document.getElementById("info").style.display = "none";
+  document.querySelectorAll(".fam-item").forEach(el =>
+    el.classList.toggle("active", +el.dataset.cid === cid));
+
+  const comp = components.find(c => c.cid === cid);
+  // NB: d3-force writes node.x / node.y as layout coordinates, so move the
+  // year-range array off the `y` key before handing nodes to the simulation.
+  const rawNodes = (nodesByComp.get(cid) || []).map(n => ({ ...n, years: n.y }));
+  const idset = new Set(rawNodes.map(n => n.id));
+  const rawEdges = (edgesByComp.get(cid) || [])
+    .filter(e => idset.has(e.a) && idset.has(e.b))
+    .map(e => ({ ...e, source: e.a, target: e.b }));
+
+  document.getElementById("title-bar").textContent =
+    `${comp.label} — ${rawNodes.length} Personen, ${rawEdges.length} Beziehungen · ${comp.year_min ?? "?"}–${comp.year_max ?? "?"}`;
+
+  draw(rawNodes, rawEdges);
+}
+
+function draw(nodes, links) {
+  g.selectAll("*").remove();
+  if (sim) sim.stop();
+
+  const W = svg.node().clientWidth, H = svg.node().clientHeight;
+
+  // size by mention count
+  const rOf = n => n.linked ? Math.max(5, Math.min(16, 4 + Math.sqrt(n.c || 1) * 1.6)) : 4;
+
+  const link = g.append("g").selectAll("line").data(links).join("line")
+    .attr("class", "link")
+    .attr("stroke", d => REL_COLOR[d.type] || "#bbb")
+    .attr("stroke-width", d => d.type === "spouse" ? 2.4 : 1.6)
+    .attr("stroke-dasharray", d => d.type === "sibling" ? "4 3" : d.type === "heir" ? "1 3" : null);
+
+  const node = g.append("g").selectAll("g").data(nodes).join("g")
+    .attr("class", d => "node" + (d.dead_year ? " dead" : ""))
+    .call(d3.drag()
+      .on("start", (e, d) => { if (!e.active) sim.alphaTarget(.3).restart(); d.fx = d.x; d.fy = d.y; })
+      .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
+      .on("end", (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+  node.append("circle")
+    .attr("r", rOf)
+    .attr("fill", d => d.linked ? GUILD_FALLBACK : "#cfc6ba")
+    .attr("opacity", d => d.linked ? 1 : .6)
+    .on("click", (e, d) => showInfo(d));
+
+  // label only for larger nodes to reduce clutter
+  node.filter(d => d.linked && (d.c || 0) >= 3).append("text")
+    .attr("x", d => rOf(d) + 3).attr("y", 4)
+    .text(d => d.name.length > 22 ? d.name.slice(0, 22) + "…" : d.name);
+
+  const tick = () => {
+    link.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+    node.attr("transform", d => `translate(${d.x},${d.y})`);
+  };
+
+  sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id)
+      .distance(d => d.type === "spouse" ? 38 : 60).strength(.7))
+    .force("charge", d3.forceManyBody().strength(nodes.length > 40 ? -120 : -220))
+    .force("center", d3.forceCenter(W / 2, H / 2))
+    .force("collide", d3.forceCollide().radius(d => rOf(d) + 6))
+    .stop();
+
+  // Settle the layout synchronously so we can fit to the *final* extent
+  // without racing the animation, then paint once and fit.
+  const n = Math.ceil(Math.log(sim.alphaMin()) / Math.log(1 - sim.alphaDecay()));
+  for (let i = 0; i < n; i++) sim.tick();
+  tick();
+  fitView(nodes);
+
+  // keep drag interactive (re-heat only while dragging)
+  sim.on("tick", tick);
+}
+
+function fitView(nodes) {
+  if (!nodes || !nodes.length) return;
+  const xs = nodes.map(n => n.x), ys = nodes.map(n => n.y);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
+  const W = svg.node().clientWidth, H = svg.node().clientHeight;
+  const pad = 60;
+  const scale = Math.min(1.6, (W - pad) / bw, (H - pad) / bh);
+  const tx = W / 2 - scale * (minX + bw / 2);
+  const ty = H / 2 - scale * (minY + bh / 2);
+  svg.transition().duration(500).call(zoom.transform,
+    d3.zoomIdentity.translate(tx, ty).scale(scale));
+}
+
+function showInfo(d) {
+  const box = document.getElementById("info");
+  const yr = d.years ? (d.years[0] === d.years[1] ? d.years[0] : `${d.years[0]}–${d.years[1]}`) : "?";
+  const occs = (d.occ || []).map(o => `<span class="occ-tag">${o}</span>`).join("");
+  box.innerHTML = `
+    <span class="close" onclick="document.getElementById('info').style.display='none'">✕</span>
+    <h3>${d.name}</h3>
+    <div class="row">${d.linked ? `${d.c} Erwähnung(en) · ${yr}` : "nur in Beziehung genannt"}</div>
+    ${d.dead_year ? `<div class="row">† erwähnt ${d.dead_year}</div>` : ""}
+    ${occs ? `<div style="margin:6px 0">${occs}</div>` : ""}
+    ${d.linked ? `<a href="index.html?q=${encodeURIComponent(d.name)}" target="_blank">Im Personenindex öffnen →</a>` : ""}
+  `;
+  box.style.display = "block";
+}
+</script>
+</body>
+</html>
