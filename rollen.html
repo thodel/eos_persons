@@ -75,6 +75,10 @@
     .pcard:hover { border-color: var(--accent2); box-shadow: 0 1px 5px rgba(0,0,0,.06); }
     .pcard .nm { font-weight: bold; color: var(--accent); }
     .pcard .meta { color: var(--muted); font-size: .76rem; margin-top: 2px; }
+    .occ-tag { display: inline-block; background: #eef4f0; border: 1px solid #c4dac8;
+      border-radius: 9px; padding: 1px 7px; font-size: .7rem; margin-top: 5px; }
+    .toolbar select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 5px;
+      font-size: .82rem; font-family: inherit; background: #fff; }
     #intro { color: var(--muted); font-style: italic; padding: 40px 0; }
     #loading { text-align: center; padding: 80px; color: var(--muted); font-style: italic; }
   </style>
@@ -111,6 +115,7 @@
 let DATA = null;
 let current = null;
 let sortMode = "year";   // "year" | "name" | "mentions"
+let guildFilter = "";    // active inferred-guild filter (Zunftmeister)
 
 fetch("roles_data.json")
   .then(r => r.json())
@@ -139,6 +144,7 @@ function buildSidebar() {
 
 function selectRole(id) {
   current = DATA.positions.find(p => p.id === id);
+  guildFilter = "";   // reset guild filter when switching role
   document.querySelectorAll(".role-tab").forEach(el =>
     el.classList.toggle("active", el.dataset.id === id));
   history.replaceState(null, "", `?r=${id}`);
@@ -148,11 +154,25 @@ function selectRole(id) {
 function renderMain() {
   const p = current;
   const span = p.year_min ? `${p.year_min}–${p.year_max}` : "—";
+
+  // guild filter (only for Zunftmeister-type positions, where guild is inferred)
+  let guildHtml = "";
+  if (p.guilds && p.guilds.length) {
+    const opts = ['<option value="">alle Zünfte</option>']
+      .concat(p.guilds.map(g =>
+        `<option value="${g.guild}">${g.guild} (${g.count})</option>`));
+    guildHtml = `<select id="guildSel" title="Zunft (aus Beruf erschlossen)">${opts.join("")}</select>`;
+  }
+
   document.getElementById("main").innerHTML = `
     <h1>${p.label}</h1>
     <div class="sub">${p.count.toLocaleString("de-CH")} Personen · belegt ${span}</div>
+    ${p.guilds ? `<div class="sub" style="margin-top:-12px">Die Zunft ist nur dort bekannt,
+       wo zugleich ein zünftiger Beruf überliefert ist – sonst „unbekannt“ (aus dem
+       Beruf erschlossen, nicht direkt annotiert).</div>` : ""}
     <div class="toolbar">
       <input type="text" id="q" placeholder="Person filtern…" autocomplete="off" />
+      ${guildHtml}
       <button class="sortbtn" data-s="year">nach Jahr</button>
       <button class="sortbtn" data-s="name">nach Name</button>
       <button class="sortbtn" data-s="mentions">nach Erwähnungen</button>
@@ -163,6 +183,11 @@ function renderMain() {
     b.classList.toggle("active", b.dataset.s === sortMode);
     b.addEventListener("click", () => { sortMode = b.dataset.s; renderMain(); });
   });
+  const gsel = document.getElementById("guildSel");
+  if (gsel) {
+    gsel.value = guildFilter;
+    gsel.addEventListener("change", () => { guildFilter = gsel.value; renderGrid(); });
+  }
   const qel = document.getElementById("q");
   let deb;
   qel.addEventListener("input", () => { clearTimeout(deb); deb = setTimeout(renderGrid, 150); });
@@ -171,7 +196,9 @@ function renderMain() {
 
 function renderGrid() {
   const q = (document.getElementById("q").value || "").trim().toLowerCase();
-  let rows = current.persons.filter(r => !q || r.n.toLowerCase().includes(q));
+  let rows = current.persons.filter(r =>
+    (!q || r.n.toLowerCase().includes(q)) &&
+    (!guildFilter || r.g === guildFilter));
   rows = rows.slice().sort((a, b) => {
     if (sortMode === "name") return a.n.localeCompare(b.n, "de");
     if (sortMode === "mentions") return (b.c || 0) - (a.c || 0);
@@ -182,9 +209,12 @@ function renderGrid() {
     `${rows.length.toLocaleString("de-CH")} Personen`;
   document.getElementById("grid").innerHTML = rows.slice(0, 800).map(r => {
     const yr = r.y ? (r.y[0] === r.y[1] ? r.y[0] : `${r.y[0]}–${r.y[1]}`) : "?";
+    const guildTag = (r.g && r.g !== "unbekannt")
+      ? `<span class="occ-tag" style="background:#f0eef8;border-color:#c8c4e0">Zunft: ${r.g}</span>` : "";
     return `<a class="pcard" href="index.html?q=${encodeURIComponent(r.n)}" target="_blank">
       <div class="nm">${r.n}</div>
       <div class="meta">${yr} · ${r.c} Erwähnung${r.c === 1 ? "" : "en"}</div>
+      ${guildTag}
     </a>`;
   }).join("") + (rows.length > 800
     ? `<div style="color:var(--muted);font-size:.8rem;padding:8px">… ${rows.length - 800} weitere (zum Eingrenzen filtern)</div>`

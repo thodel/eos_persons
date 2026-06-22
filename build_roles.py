@@ -12,7 +12,31 @@ import re
 import json
 import collections
 
+from build_data import GUILD_MAP   # reuse the 16-guild occupation mapping
+
 PERSONS = "persons_resolved.json"
+
+# Offices a Zunftmeister may also hold that say nothing about their guild —
+# excluded when inferring the Zunft from a person's other occupations.
+NON_CRAFT = {
+    "rat", "ratsherr", "bürgermeister", "burgermeister", "vogt", "obervogt",
+    "untervogt", "landvogt", "statthalter", "schultheiss", "schaffner",
+    "salzmeister", "rüstmeister", "gerichtsschreiber", "stadtschreiber",
+    "kaplan", "no_occ", "käufer", "zunftmeister", "oberster zunftmeister",
+    "alt-zunftmeister", "alt oberster zunftmeister", "obristmeister",
+}
+
+
+def infer_guild(occs):
+    """Infer a Zunftmeister's guild from any craft occupation they also bear."""
+    for o in occs:
+        o = o.strip().lower()
+        if o in NON_CRAFT:
+            continue
+        g = GUILD_MAP.get(o)
+        if g and g not in ("Klerus & Freie Berufe", "Verwaltung"):
+            return g
+    return None
 
 
 def clean(s):
@@ -48,9 +72,9 @@ POSITIONS = [
               "stadt-bürgermeister"}),
     dict(id="oberstzunftmeister", label="Oberstzunftmeister", cat="regiment",
          occ={"oberster zunftmeister", "alt oberster zunftmeister",
-              "obristmeister", "oberstzunftmeister"}),
+              "obristmeister", "oberstzunftmeister"}, guild_facet=True),
     dict(id="zunftmeister", label="Zunftmeister", cat="regiment",
-         occ={"zunftmeister", "alt-zunftmeister"}),
+         occ={"zunftmeister", "alt-zunftmeister"}, guild_facet=True),
     dict(id="statthalter", label="Statthalter", cat="regiment",
          occ={"statthalter"}),
     dict(id="ratsbote", label="Ratsboten & Ratsknechte", cat="regiment",
@@ -152,13 +176,13 @@ def main():
         name = p["n"]
         if not name or len(name) < 2:
             continue
+        guild = infer_guild(occs)
         for pos in POSITIONS:
             if matches(pos, occs, tits, orgs):
-                buckets[pos["id"]].append({
-                    "n": name,
-                    "y": p.get("y"),
-                    "c": p.get("c", 0),
-                })
+                rec = {"n": name, "y": p.get("y"), "c": p.get("c", 0)}
+                if pos.get("guild_facet"):
+                    rec["g"] = guild or "unbekannt"
+                buckets[pos["id"]].append(rec)
 
     positions_out = []
     for pos in POSITIONS:
@@ -175,10 +199,13 @@ def main():
                 elif r.get("y"):
                     e["y"] = r["y"]
                 e["c"] = max(e["c"], r["c"])
+                # prefer a known guild over "unbekannt"
+                if e.get("g") in (None, "unbekannt") and r.get("g") not in (None, "unbekannt"):
+                    e["g"] = r["g"]
         merged = sorted(by_name.values(),
                         key=lambda r: (r["y"][0] if r.get("y") else 9999, r["n"]))
         years = [r["y"] for r in merged if r.get("y")]
-        positions_out.append({
+        entry = {
             "id": pos["id"],
             "label": pos["label"],
             "cat": pos["cat"],
@@ -186,7 +213,17 @@ def main():
             "year_min": min(y[0] for y in years) if years else None,
             "year_max": max(y[1] for y in years) if years else None,
             "persons": merged,
-        })
+        }
+        if pos.get("guild_facet"):
+            gc = collections.Counter(r.get("g", "unbekannt") for r in merged)
+            # known guilds first (by count), "unbekannt" last
+            known = sorted([(g, n) for g, n in gc.items() if g != "unbekannt"],
+                           key=lambda x: -x[1])
+            facet = [{"guild": g, "count": n} for g, n in known]
+            if gc.get("unbekannt"):
+                facet.append({"guild": "unbekannt", "count": gc["unbekannt"]})
+            entry["guilds"] = facet
+        positions_out.append(entry)
 
     out = {
         "categories": [{"id": cid, "label": lbl} for cid, lbl in CATEGORIES],
