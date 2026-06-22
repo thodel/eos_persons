@@ -154,6 +154,9 @@
     }
     .tag .tag-label { color: var(--muted); margin-right: 2px; }
     .tag.deceased { background: #f8f0f0; border-color: #e8c8c8; color: #7a3a3a; }
+    .tag.hls      { background: #eae4d8; border-color: #c9b896; color: #6b4f2a; font-weight: bold; }
+    .hls-link { color: var(--accent); text-decoration: none; font-weight: bold; }
+    .hls-link:hover { text-decoration: underline; }
     .tag.occ      { background: #eef4f0; border-color: #c4dac8; }
     .tag.title    { background: #f0eef8; border-color: #c8c4e0; }
     .tag.fam      { background: #f8f4ee; border-color: #e0d4c0; }
@@ -413,6 +416,7 @@
     const dossierStr = r.d > 1 ? ` · ${r.d} dossiers` : '';
     let tags = '';
 
+    if (r.hls)  tags += `<span class="tag hls">📖 HLS</span>`;
     if (r.dead) tags += `<span class="tag deceased">† deceased ×${r.dead}</span>`;
     if (r.occ)  tags += r.occ.slice(0,3).map(o =>
       `<span class="tag occ"><span class="tag-label">occ</span>${escHtml(o)}</span>`).join('');
@@ -441,6 +445,11 @@
 
     const sections = [];
 
+    if (r.hls) {
+      const note = r.hls.rel === 'postmortem' ? ' <span style="color:var(--muted)">(postmortale Erwähnung)</span>' : '';
+      sections.push(section('Historisches Lexikon der Schweiz',
+        `<a href="${r.hls.url}" target="_blank" rel="noopener" class="hls-link">📖 ${escHtml(r.hls.t)} – HLS-Artikel öffnen ↗</a>${note}`));
+    }
     if (r.v && r.v.length > 1) {
       const variants = r.v.filter(v => v !== r.n).slice(0, 20);
       if (variants.length) {

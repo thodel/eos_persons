@@ -420,6 +420,9 @@ function showInfo(d) {
     ${occs ? `<div style="margin:6px 0">${occs}</div>` : ""}
     ${(d.v && d.v.length) ? `<div class="row" style="margin-top:6px;font-size:.73rem">
        <span style="color:var(--accent)">Schreibvarianten (${d.v.length}):</span> ${d.v.slice(0,8).join(", ")}${d.v.length>8?" …":""}</div>` : ""}
+    ${d.hls ? `<div class="row" style="margin-top:8px;border-top:1px solid var(--border);padding-top:7px">
+       <a href="${d.hls.url}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:bold">
+       📖 HLS: ${d.hls.t} ↗</a>${d.hls.rel === "postmortem" ? " (postmortal)" : ""}</div>` : ""}
     ${xfHtml}
     ${d.linked ? `<a href="index.html?q=${encodeURIComponent(d.name)}" target="_blank" style="display:inline-block;margin-top:8px">Im Personenindex öffnen →</a>` : ""}
   `;
