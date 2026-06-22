@@ -55,7 +55,9 @@
 
     .link { stroke-opacity: .55; }
     .node circle { stroke: #fff; stroke-width: 1.5px; cursor: pointer; }
-    .node text { font-size: 11px; fill: var(--text); pointer-events: none; }
+    .node text { pointer-events: none; }
+    .node text.lbl-main { font-size: 11px; fill: var(--text); }
+    .node text.lbl-minor { font-size: 9px; fill: var(--muted); opacity: .8; }
     .node .halo { fill: #fff; stroke: #fff; stroke-width: 3px; opacity: .85; }
     .node.dead circle { stroke: #333; stroke-dasharray: 2 2; }
 
@@ -332,10 +334,12 @@ function draw(nodes, links, bridgeLinks = []) {
     .attr("opacity", d => d.linked ? 1 : .6)
     .on("click", (e, d) => showInfo(d));
 
-  // label only for larger nodes to reduce clutter
-  node.filter(d => d.linked && (d.c || 0) >= 3).append("text")
+  // label every node; minor/unnamed-only nodes get a smaller, muted style so
+  // the well-attested people still stand out
+  node.append("text")
+    .attr("class", d => (d.linked && (d.c || 0) >= 3) ? "lbl-main" : "lbl-minor")
     .attr("x", d => rOf(d) + 5).attr("y", 4)
-    .text(d => d.name.length > 22 ? d.name.slice(0, 22) + "…" : d.name);
+    .text(d => d.name.length > 24 ? d.name.slice(0, 24) + "…" : d.name);
 
   const tick = () => {
     blink.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
