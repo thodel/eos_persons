@@ -189,8 +189,10 @@ function render() {
     const dx = Math.cos(rad) * len, dy = Math.sin(rad) * len;
     const x1 = p.x - dx / 2, y1 = p.y - dy / 2, x2 = p.x + dx / 2, y2 = p.y + dy / 2;
     const w = 1.6 + 3.0 * vol;
+    // arrowhead barbs splay backward from the tip, in the same screen
+    // (y-down) frame as the shaft so head and shaft always agree
     const ah = 6 + 5 * vol, a1 = rad + 2.6, a2 = rad - 2.6;
-    const headPts = `${x2},${y2} ${x2 + Math.cos(a1)*ah},${y2 - Math.sin(a1)*ah} ${x2 + Math.cos(a2)*ah},${y2 - Math.sin(a2)*ah}`;
+    const headPts = `${x2},${y2} ${x2 + Math.cos(a1)*ah},${y2 + Math.sin(a1)*ah} ${x2 + Math.cos(a2)*ah},${y2 + Math.sin(a2)*ah}`;
 
     // white casing for contrast against the map
     const casing = document.createElementNS(SVGNS, 'line');
