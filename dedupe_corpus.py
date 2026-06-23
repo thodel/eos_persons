@@ -81,15 +81,82 @@ def given_seq(name):
     return tuple(canon(t) for t in toks[:-1]) if len(toks) >= 2 else tuple(canon(t) for t in toks)
 
 
-def surname_key(name):
+def surname_raw(name):
     toks = name_tokens(name)
     if len(toks) < 2:
         return None
-    last = strip_accents(norm(toks[-1]))
+    return strip_accents(norm(toks[-1]))
+
+
+def surname_key(name):
+    last = surname_raw(name)
+    if not last:
+        return None
     last = SURNAME_CANON.get(last, last)
     if last.endswith("s") and len(last) > 4:
         last = SURNAME_CANON.get(last[:-1], last[:-1])
     return SURNAME_CANON.get(last, last)
+
+
+def koelner(s):
+    """Kölner Phonetik code (German phonetic algorithm) for a surname."""
+    s = strip_accents(s.lower())
+    s = re.sub(r"[^a-z]", "", s)
+    s = s.replace("ç", "c")
+    if not s:
+        return ""
+    codes = []
+    n = len(s)
+    for i, ch in enumerate(s):
+        nxt = s[i + 1] if i + 1 < n else ""
+        prv = s[i - 1] if i > 0 else ""
+        if ch in "aeijouy":
+            c = "0"
+        elif ch == "b":
+            c = "1"
+        elif ch == "p":
+            c = "3" if nxt == "h" else "1"
+        elif ch in "dt":
+            c = "8" if nxt in "csz" else "2"
+        elif ch in "fvw":
+            c = "3"
+        elif ch in "gkq":
+            c = "4"
+        elif ch == "c":
+            if i == 0:
+                c = "4" if nxt in "ahkloqrux" else "8"
+            elif prv in "sz":
+                c = "8"
+            elif nxt in "ahkoqux":
+                c = "4"
+            else:
+                c = "8"
+        elif ch == "x":
+            c = "8" if prv in "ckq" else "48"
+        elif ch == "l":
+            c = "5"
+        elif ch in "mn":
+            c = "6"
+        elif ch == "r":
+            c = "7"
+        elif ch in "sz":
+            c = "8"
+        elif ch == "h":
+            continue
+        else:
+            continue
+        codes.append(c)
+    code = "".join(codes)
+    # collapse consecutive duplicates
+    out = []
+    for d in code:
+        if not out or out[-1] != d:
+            out.append(d)
+    code = "".join(out)
+    # drop all '0' except a leading one
+    if code:
+        code = code[0] + code[1:].replace("0", "")
+    return code
 
 
 def dossier_ids(p):
@@ -155,9 +222,10 @@ def main():
     # precompute per-person keys
     meta = []
     for p in persons:
-        sk = surname_key(p["n"])
+        surn = surname_raw(p["n"])
         meta.append({
-            "sk": sk, "gs": given_seq(p["n"]),
+            "sk": surname_key(p["n"]), "surn": surn or "",
+            "kp": koelner(surn) if surn else "", "gs": given_seq(p["n"]),
             "dos": dossier_ids(p),
             "occ": set(o.lower() for o in p.get("occ", [])),
             "loc": set(l.lower() for l in p.get("loc", [])),
@@ -165,11 +233,12 @@ def main():
             "dead": p.get("dead_year"), "lk": link_key(p),
         })
 
-    # block by (surname, given-sequence); only blockable (has surname) persons
+    # block by (Kölner-Phonetik surname code, given-sequence) so phonetically
+    # equal surnames spelled differently (Gisler/Gysler, Pfister/Bfister) collide
     blocks = collections.defaultdict(list)
     for i, mt in enumerate(meta):
-        if mt["sk"] and mt["gs"]:
-            blocks[(mt["sk"], mt["gs"])].append(i)
+        if mt["kp"] and mt["gs"]:
+            blocks[(mt["kp"], mt["gs"])].append(i)
 
     # union-find with group guards (span / deceased / distinct-identity)
     parent = list(range(len(persons)))
@@ -185,6 +254,11 @@ def main():
         return x
 
     def try_union(a, b):
+        # phonetic blocks can group genuinely different surnames sharing a code;
+        # require the raw surnames to be reasonably similar before merging
+        if meta[a]["surn"] != meta[b]["surn"] and \
+           SequenceMatcher(None, meta[a]["surn"], meta[b]["surn"]).ratio() < 0.6:
+            return
         ra, rb = find(a), find(b)
         if ra == rb:
             return

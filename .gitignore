@@ -223,3 +223,7 @@ __marimo__/
 
 # Correlation-analysis build artifact (regenerable; redundant with parquet)
 features_doc_preview.csv
+
+# generated review artifacts
+dedupe_corpus_candidates.csv
+link_candidates_hls.csv
