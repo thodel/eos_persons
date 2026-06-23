@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bewegungsfeld — Historisches Grundbuch Basel</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+    }
+    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 14px; color: var(--text); }
+
+    #site-header {
+      height: 56px; background: var(--accent); color: #fff;
+      display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 1100; position: relative;
+    }
+    #logos { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    #logos img { height: 30px; width: auto; filter: brightness(0) invert(1); object-fit: contain; opacity: .9; }
+    #logos img.logo-bern { height: 26px; }
+    #site-title { font-size: .9rem; opacity: .7; white-space: nowrap; flex-shrink: 0; }
+    #page-nav { display: flex; margin-left: auto; overflow-x: auto; }
+    .page-tab {
+      padding: 0 13px; height: 56px; display: flex; align-items: center; text-decoration: none;
+      font-size: .8rem; color: rgba(255,255,255,.65); border-bottom: 3px solid transparent; white-space: nowrap;
+    }
+    .page-tab:hover { color: #fff; }
+    .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
+
+    #layout { display: flex; height: calc(100vh - 56px); }
+    #sidebar { width: 290px; flex-shrink: 0; background: var(--bg); border-right: 1px solid var(--border);
+      overflow-y: auto; padding: 16px; }
+    #sidebar h1 { font-size: 1.15rem; font-weight: normal; color: var(--accent); margin-bottom: 6px; }
+    #sidebar p.lede { font-size: .8rem; color: var(--muted); font-style: italic; margin-bottom: 16px; line-height: 1.5; }
+    .ctrl { margin-bottom: 16px; }
+    .ctrl label { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); display: block; margin-bottom: 5px; }
+    .ctrl input[type=range] { width: 100%; }
+    .yearlabel { font-size: 1.1rem; color: var(--accent); font-weight: bold; }
+    .btn { font-family: inherit; font-size: .82rem; padding: 6px 12px; border: 1px solid var(--border);
+      background: #fff; border-radius: 5px; cursor: pointer; }
+    .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .seg { display: flex; gap: 0; }
+    .seg .btn { border-radius: 0; }
+    .seg .btn:first-child { border-radius: 5px 0 0 5px; }
+    .seg .btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
+    .seg .btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .stat { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+
+    #stage { flex: 1; position: relative; }
+    #map { position: absolute; inset: 0; }
+    .arrow-svg { position: absolute; inset: 0; pointer-events: none; z-index: 450; }
+
+    #legend { position: absolute; bottom: 18px; right: 14px; z-index: 500; background: rgba(255,255,255,.93);
+      border: 1px solid var(--border); border-radius: 6px; padding: 11px 14px; font-size: .74rem; max-width: 230px; }
+    #legend h4 { color: var(--accent); font-weight: normal; text-transform: uppercase; letter-spacing: .05em; font-size: .72rem; margin-bottom: 7px; }
+    .lg-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    #loading { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      color: var(--muted); font-style: italic; z-index: 600; background: rgba(250,249,247,.7); }
+  </style>
+</head>
+<body>
+
+<div id="site-header">
+  <div id="logos">
+    <img class="logo-bern" src="https://www.unibe.ch/assets/media/image/logo-uni-bern.svg" alt="Universität Bern" onerror="this.style.display='none'">
+    <img src="https://www.unibas.ch/dam/jcr:93abfa0e-58d6-45ed-930a-de414ca40b13/uni-basel-logo.2018-03-26-12-26-39.svg" alt="Universität Basel" onerror="this.style.display='none'">
+  </div>
+  <span id="site-title">Historisches Grundbuch Basel</span>
+  <nav id="page-nav">
+    <a class="page-tab" href="index.html">Personenindex</a>
+    <a class="page-tab" href="map.html">Karte</a>
+    <a class="page-tab" href="korrelationsanalyse.html">Korrelationsanalyse</a>
+    <a class="page-tab" href="viz.html">Berufe</a>
+    <a class="page-tab" href="movements.html">Personenbewegungen</a>
+    <a class="page-tab active" href="bewegungsfeld.html">Bewegungsfeld</a>
+    <a class="page-tab" href="families.html">Familien</a>
+    <a class="page-tab" href="tree.html">Stammbaum</a>
+    <a class="page-tab" href="rollen.html">Rollen</a>
+  </nav>
+</div>
+
+<div id="layout">
+  <div id="sidebar">
+    <h1>Bewegungsfeld</h1>
+    <p class="lede">
+      Alle Personenbewegungen zwischen Liegenschaften, zu einem Strömungsfeld
+      aggregiert — wie Windpfeile auf einer Wetterkarte. Jeder Pfeil zeigt die
+      vorherrschende Umzugsrichtung in seiner Rasterzelle. Es handelt sich um
+      innerstädtische Verlagerungen, nicht um Zu-/Abwanderung.
+    </p>
+
+    <div class="ctrl">
+      <label>Modus</label>
+      <div class="seg" id="mode">
+        <button class="btn active" data-m="net">Nettofluss</button>
+        <button class="btn" data-m="activity">Aktivität</button>
+      </div>
+    </div>
+
+    <div class="ctrl">
+      <label>Zeitraum</label>
+      <div class="seg" id="timemode">
+        <button class="btn active" data-t="all">Gesamt</button>
+        <button class="btn" data-t="decade">Jahrzehnt</button>
+      </div>
+    </div>
+
+    <div class="ctrl" id="decade-ctrl" style="display:none">
+      <label>Jahrzehnt: <span class="yearlabel" id="declabel">—</span></label>
+      <input type="range" id="decade" min="0" max="0" value="0" step="1" />
+      <div style="margin-top:8px"><button class="btn primary" id="play">▶ Abspielen</button></div>
+    </div>
+
+    <div class="stat" id="stat">Lade…</div>
+  </div>
+
+  <div id="stage">
+    <div id="map"></div>
+    <svg class="arrow-svg" id="arrows"></svg>
+    <div id="legend">
+      <h4>Legende</h4>
+      <div class="lg-row"><svg width="34" height="12"><line x1="2" y1="6" x2="26" y2="6" stroke="#6b4f2a" stroke-width="3"/><polygon points="26,2 33,6 26,10" fill="#6b4f2a"/></svg> Richtung des Umzugs</div>
+      <div class="lg-row">Länge = Häufigkeit der Bewegung</div>
+      <div class="lg-row">Farbe = Gerichtetheit (Kohärenz)</div>
+      <div class="lg-row"><span style="display:inline-block;width:14px;height:10px;background:rgb(42,90,130)"></span> diffus &nbsp;
+        <span style="display:inline-block;width:14px;height:10px;background:rgb(176,30,40)"></span> gerichtet</div>
+    </div>
+    <div id="loading">Lade Bewegungsfeld…</div>
+  </div>
+</div>
+
+<script>
+const map = L.map('map', { zoomControl: true }).setView([47.5565, 7.5880], 16);
+L.tileLayer.wms('https://wms.geo.bs.ch/', {
+  layers: 'HP_Situationsplan_Basel_1862', format: 'image/png', transparent: true,
+  attribution: 'Geodaten Kanton Basel-Stadt', maxZoom: 20, opacity: 0.85,
+}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap, © CARTO', maxZoom: 20, opacity: 0.3, zIndex: 0,
+}).addTo(map);
+
+const svg = document.getElementById('arrows');
+const SVGNS = 'http://www.w3.org/2000/svg';
+let DATA = null, decades = [], mode = 'net', timemode = 'all', decIdx = 0, playTimer = null;
+
+// coherence → high-contrast ramp (diffuse steel-blue → directed crimson),
+// chosen to stand out against the beige 1862 city plan
+function cohColor(c) {
+  const t = Math.max(0, Math.min(1, c));
+  const a = [42, 90, 130], b = [176, 30, 40];
+  return `rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')})`;
+}
+
+fetch('flowfield.json').then(r => r.json()).then(d => {
+  DATA = d; decades = d.decades;
+  document.getElementById('decade').max = decades.length - 1;
+  document.getElementById('loading').style.display = 'none';
+  render();
+  map.on('moveend zoomend', render);
+});
+
+function currentCells() {
+  const key = (timemode === 'all') ? 'all' : decades[decIdx];
+  return DATA.cells.filter(c => c.d === key);
+}
+
+function render() {
+  if (!DATA) return;
+  const cells = currentCells();
+  const maxN = Math.max(1, ...cells.map(c => c.n));
+  const sz = map.getSize(); svg.setAttribute('width', sz.x); svg.setAttribute('height', sz.y);
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  // arrow scale by zoom (so arrows stay ~cell-sized)
+  const base = 18 + (map.getZoom() - 16) * 10;
+
+  for (const c of cells) {
+    const p = map.latLngToContainerPoint([c.lat, c.lon]);
+    if (p.x < -40 || p.y < -40 || p.x > sz.x + 40 || p.y > sz.y + 40) continue;
+    const vol = Math.sqrt(c.n / maxN);                  // 0..1
+    const len = base * (0.45 + 0.55 * vol);
+    const col = (mode === 'net') ? cohColor(c.coh) : '#b01e28';
+    const op = (mode === 'net') ? (0.6 + 0.4 * c.coh) : (0.4 + 0.6 * vol);
+    // screen angle: data ang is 0=E,90=N (math) → screen y is down
+    const rad = -c.ang * Math.PI / 180;
+    const dx = Math.cos(rad) * len, dy = Math.sin(rad) * len;
+    const x1 = p.x - dx / 2, y1 = p.y - dy / 2, x2 = p.x + dx / 2, y2 = p.y + dy / 2;
+    const w = 1.6 + 3.0 * vol;
+    const ah = 6 + 5 * vol, a1 = rad + 2.6, a2 = rad - 2.6;
+    const headPts = `${x2},${y2} ${x2 + Math.cos(a1)*ah},${y2 - Math.sin(a1)*ah} ${x2 + Math.cos(a2)*ah},${y2 - Math.sin(a2)*ah}`;
+
+    // white casing for contrast against the map
+    const casing = document.createElementNS(SVGNS, 'line');
+    casing.setAttribute('x1', x1); casing.setAttribute('y1', y1);
+    casing.setAttribute('x2', x2); casing.setAttribute('y2', y2);
+    casing.setAttribute('stroke', '#fff'); casing.setAttribute('stroke-width', w + 2.2);
+    casing.setAttribute('stroke-opacity', 0.7); casing.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(casing);
+
+    const line = document.createElementNS(SVGNS, 'line');
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+    line.setAttribute('stroke', col); line.setAttribute('stroke-width', w);
+    line.setAttribute('stroke-opacity', op); line.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(line);
+
+    const head = document.createElementNS(SVGNS, 'polygon');
+    head.setAttribute('points', headPts);
+    head.setAttribute('fill', col); head.setAttribute('fill-opacity', op);
+    head.setAttribute('stroke', '#fff'); head.setAttribute('stroke-width', 0.8);
+    head.setAttribute('stroke-opacity', 0.6);
+    svg.appendChild(head);
+  }
+
+  const total = cells.reduce((s, c) => s + c.n, 0);
+  document.getElementById('stat').textContent =
+    `${cells.length} Zellen · ${total.toLocaleString('de-CH')} Bewegungen`
+    + (timemode === 'all' ? ' (gesamt)' : ` · ${decades[decIdx]}er`);
+}
+
+// ── controls ──
+document.querySelectorAll('#mode .btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#mode .btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active'); mode = b.dataset.m; render();
+}));
+document.querySelectorAll('#timemode .btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#timemode .btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active'); timemode = b.dataset.t;
+  document.getElementById('decade-ctrl').style.display = (timemode === 'decade') ? '' : 'none';
+  if (timemode === 'decade') updateDecLabel();
+  render();
+}));
+const decSlider = document.getElementById('decade');
+function updateDecLabel() { document.getElementById('declabel').textContent = decades[decIdx] + 'er'; }
+decSlider.addEventListener('input', () => { decIdx = +decSlider.value; updateDecLabel(); render(); });
+document.getElementById('play').addEventListener('click', function () {
+  if (playTimer) { clearInterval(playTimer); playTimer = null; this.textContent = '▶ Abspielen'; return; }
+  this.textContent = '⏸ Pause';
+  playTimer = setInterval(() => {
+    decIdx = (decIdx + 1) % decades.length;
+    decSlider.value = decIdx; updateDecLabel(); render();
+  }, 900);
+});
+</script>
+</body>
+</html>
