@@ -157,6 +157,10 @@
     .tag.hls      { background: #eae4d8; border-color: #c9b896; color: #6b4f2a; font-weight: bold; }
     .hls-link { color: var(--accent); text-decoration: none; font-weight: bold; }
     .hls-link:hover { text-decoration: underline; }
+    .kin-xref { display: inline-block; font-size: .76rem; color: var(--accent2);
+      text-decoration: none; border: 1px solid var(--border); border-radius: 5px;
+      padding: 1px 7px; margin: 3px 3px 0 0; }
+    .kin-xref:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
     .tag.occ      { background: #eef4f0; border-color: #c4dac8; }
     .tag.title    { background: #f0eef8; border-color: #c8c4e0; }
     .tag.fam      { background: #f8f4ee; border-color: #e0d4c0; }
@@ -464,12 +468,24 @@
       const w = r.wd;
       const dates = (w.b || w.d) ? ` <span style="color:var(--muted)">(${w.b || '?'}–${w.d || '?'})</span>` : '';
       let html = `<a href="https://www.wikidata.org/wiki/${w.qid}" target="_blank" rel="noopener" class="hls-link">🔗 ${w.qid} – Wikidata öffnen ↗</a>${dates}`;
+      // Wikidata returns de+en labels; keep one per relative (by first name token)
+      const dedupe = arr => {
+        const seen = new Set(), out = [];
+        (arr || []).forEach(x => { const k = x.split(/\s+/)[0].toLowerCase();
+          if (!seen.has(k)) { seen.add(k); out.push(x); } });
+        return out;
+      };
       const kin = [];
-      (w.father || []).forEach(x => kin.push(`<span class="tag fam"><span class="tag-label">Vater</span>${escHtml(x)}</span>`));
-      (w.mother || []).forEach(x => kin.push(`<span class="tag fam"><span class="tag-label">Mutter</span>${escHtml(x)}</span>`));
-      (w.sp || []).forEach(x => kin.push(`<span class="tag fam"><span class="tag-label">⚭</span>${escHtml(x)}</span>`));
-      (w.child || []).forEach(x => kin.push(`<span class="tag fam"><span class="tag-label">Kind</span>${escHtml(x)}</span>`));
+      dedupe(w.father).forEach(x => kin.push(`<span class="tag fam"><span class="tag-label">Vater</span>${escHtml(x)}</span>`));
+      dedupe(w.mother).forEach(x => kin.push(`<span class="tag fam"><span class="tag-label">Mutter</span>${escHtml(x)}</span>`));
+      dedupe(w.sp).forEach(x => kin.push(`<span class="tag fam"><span class="tag-label">⚭</span>${escHtml(x)}</span>`));
+      dedupe(w.child).forEach(x => kin.push(`<span class="tag fam"><span class="tag-label">Kind</span>${escHtml(x)}</span>`));
       if (kin.length) html += `<div style="margin-top:6px">${kin.join(' ')}</div>`;
+      if (w.kinlinks && w.kinlinks.length) {
+        const links = w.kinlinks.map(x =>
+          `<a class="kin-xref" href="index.html?q=${encodeURIComponent(x.name)}">${escHtml(x.role)}: ${escHtml(x.name)} →</a>`).join(' ');
+        html += `<div style="margin-top:8px"><span style="font-size:.74rem;color:var(--muted)">Verwandte im Bestand:</span><br>${links}</div>`;
+      }
       if (w.gnd) html += `<div style="margin-top:6px"><a href="https://d-nb.info/gnd/${w.gnd}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--accent2)">GND ${w.gnd} ↗</a></div>`;
       if (w.img) html += `<div style="margin-top:8px"><img src="${w.img}?width=180" alt="" style="max-width:160px;max-height:180px;border-radius:4px;border:1px solid var(--border)"></div>`;
       sections.push(section('Wikidata', html));
