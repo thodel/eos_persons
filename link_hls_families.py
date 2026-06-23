@@ -25,6 +25,7 @@ csv.field_size_limit(10_000_000)
 
 HLS = "/Users/TH_1/Documents/HLS/hls_articles.csv"
 FAM_INDEX = "families_index.json"
+FAM_GRAPH = "families_graph.json"
 
 CANTONS = {"zh", "be", "lu", "ur", "sz", "ow", "nw", "gl", "zg", "fr", "so",
            "bs", "bl", "sh", "ar", "ai", "sg", "gr", "ag", "tg", "ti", "vd",
@@ -110,6 +111,23 @@ def main():
               separators=(",", ":"), ensure_ascii=False)
     print(f"Linked {linked} HGB families to HLS family articles "
           f"→ {FAM_INDEX}")
+
+    # ── also tag family-tree components so the Stammbaum can show the link ──
+    by_surname = {norm(f["key"]): f["hls"] for f in fams if f.get("hls")}
+    try:
+        graph = json.load(open(FAM_GRAPH, encoding="utf-8"))
+    except FileNotFoundError:
+        graph = None
+    if graph:
+        tagged = 0
+        for comp in graph.get("components", []):
+            hls = by_surname.get(norm(comp.get("label", "")))
+            if hls:
+                comp["hls"] = hls
+                tagged += 1
+        json.dump(graph, open(FAM_GRAPH, "w", encoding="utf-8"),
+                  separators=(",", ":"), ensure_ascii=False)
+        print(f"Tagged {tagged} family-tree components → {FAM_GRAPH}")
     print("\nExamples:")
     shown = 0
     for fam in fams:

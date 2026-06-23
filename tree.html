@@ -272,7 +272,14 @@ function render() {
     ? `${labels[0]} — ${rawNodes.length} Personen, ${rawEdges.length} Beziehungen`
     : `${labels.join(" + ")} — ${rawNodes.length} Personen aus ${loaded.size} Familien, `
       + `${bridgeLinks.length} Familienbrücken`;
-  document.getElementById("title-bar").innerHTML = title +
+  // family-level HLS article link (when a single family is focused)
+  let famHls = "";
+  if (loaded.size === 1) {
+    const comp = compById.get([...loaded][0]);
+    if (comp && comp.hls)
+      famHls = ` &nbsp;<a href="${comp.hls.url}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:bold">📖 HLS: ${comp.hls.t} ↗</a>`;
+  }
+  document.getElementById("title-bar").innerHTML = title + famHls +
     (loaded.size > 1 ? ` &nbsp;<a href="#" onclick="resetView(event)" style="color:var(--accent2)">↺ zurücksetzen</a>` : "");
 
   draw(rawNodes, rawEdges, bridgeLinks);
