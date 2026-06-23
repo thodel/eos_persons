@@ -73,6 +73,10 @@
     }
     .tree-link:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
     .tree-link.disabled { opacity: .3; pointer-events: none; }
+    .hls-badge { font-size: .68rem; color: #6b4f2a; background: #eae4d8;
+      border: 1px solid #c9b896; border-radius: 9px; padding: 1px 6px;
+      text-decoration: none; white-space: nowrap; }
+    .hls-badge:hover { background: var(--accent); color: #fff; }
     #loading { text-align: center; padding: 80px; color: var(--muted); font-style: italic; }
   </style>
 </head>
@@ -204,8 +208,11 @@ function render() {
     const treeLink = hasTree
       ? `<a class="tree-link" href="tree.html?cid=${f.cids[0]}">Stammbaum →</a>`
       : `<span class="tree-link disabled">—</span>`;
+    const hlsBadge = f.hls
+      ? ` <a class="hls-badge" href="${f.hls.url}" target="_blank" rel="noopener" title="${f.hls.t} – HLS">📖 HLS</a>`
+      : "";
     return `<tr>
-      <td><a class="fam-name" href="index.html?q=${encodeURIComponent(f.name)}">${f.name}</a></td>
+      <td><a class="fam-name" href="index.html?q=${encodeURIComponent(f.name)}">${f.name}</a>${hlsBadge}</td>
       <td class="num">
         <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
           <div class="bar-bg bar-cell"><div class="bar-fill" style="width:${w}%"></div></div>
