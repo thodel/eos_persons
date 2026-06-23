@@ -450,6 +450,15 @@
       sections.push(section('Historisches Lexikon der Schweiz',
         `<a href="${r.hls.url}" target="_blank" rel="noopener" class="hls-link">📖 ${escHtml(r.hls.t)} – HLS-Artikel öffnen ↗</a>${note}`));
     }
+    if (r.kin && (r.kin.f || r.kin.m || (r.kin.sp && r.kin.sp.length))) {
+      const k = r.kin;
+      const parts = [];
+      if (k.f) parts.push(`<span class="tag fam"><span class="tag-label">Vater</span>${escHtml(k.f)}</span>`);
+      if (k.m) parts.push(`<span class="tag fam"><span class="tag-label">Mutter</span>${escHtml(k.m)}</span>`);
+      (k.sp || []).forEach(s => parts.push(
+        `<span class="tag fam"><span class="tag-label">⚭</span>${escHtml(s.n)}${s.y ? ' (' + s.y + ')' : ''}</span>`));
+      sections.push(section('Verwandtschaft (aus HLS)', parts.join(' ')));
+    }
     if (r.v && r.v.length > 1) {
       const variants = r.v.filter(v => v !== r.n).slice(0, 20);
       if (variants.length) {

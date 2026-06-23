@@ -122,6 +122,7 @@
       <div class="lg-row"><span class="lg-line" style="border-color:var(--sibling)"></span> Geschwister</div>
       <div class="lg-row"><span class="lg-line" style="border-color:var(--inlaw)"></span> Verschwägert</div>
       <div class="lg-row"><span class="lg-line" style="border-color:var(--heir)"></span> Erbschaft</div>
+      <div class="lg-row"><span class="lg-line" style="border-color:var(--parent);border-top-style:dashed"></span> Eltern/Ehe aus HLS</div>
       <div class="lg-row"><span class="lg-line" style="border-color:#3a3a3a;border-top-style:dashed"></span> selbe Person (Familienbrücke)</div>
       <div class="lg-row"><span style="display:inline-block;width:14px;height:14px;border:1.5px dashed #c0392b;border-radius:50%"></span> erweiterbar →</div>
     </div>
@@ -319,7 +320,9 @@ function draw(nodes, links, bridgeLinks = []) {
     .attr("class", "link")
     .attr("stroke", d => REL_COLOR[d.type] || "#bbb")
     .attr("stroke-width", d => d.type === "spouse" ? 2.4 : 1.6)
-    .attr("stroke-dasharray", d => d.type === "sibling" ? "4 3" : d.type === "heir" ? "1 3" : null);
+    .attr("stroke-opacity", d => d.src === "hls" ? .9 : .55)
+    .attr("stroke-dasharray", d => d.src === "hls" ? "5 3"
+      : d.type === "sibling" ? "4 3" : d.type === "heir" ? "1 3" : null);
 
   const node = g.append("g").selectAll("g").data(nodes).join("g")
     .attr("class", d => "node" + (d.dead_year ? " dead" : ""))
