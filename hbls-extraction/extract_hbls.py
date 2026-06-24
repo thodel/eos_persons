@@ -50,6 +50,16 @@ ROW_TOL = 3.0      # spans within this y-distance belong to the same visual line
 SOURCE_DIR = "/Users/TH_1/Documents/HBLS"
 PDF_GLOB = "HBLS_band_*.pdf"   # German volumes only (skip the French DHBS_tome_*)
 
+# The same scans are published online by DigiBern (Universitätsbibliothek Bern);
+# the complete-volume PDFs share our local file names, so page numbers map 1:1.
+# https://www.digibern.ch/katalog/historisch-biographisches-lexikon-der-schweiz
+DIGIBERN_BASE = "https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz"
+
+
+def pdf_url(source_file, page):
+    """Deep link to a page of the public DigiBern HBLS volume PDF."""
+    return f"{DIGIBERN_BASE}/{os.path.basename(source_file)}#page={page}"
+
 # A leading run of capitals where letters may be separated by single spaces, e.g.
 # "A N D W I L", "AN DR IO N", "ANDRIÉ". Capitals include German/French accents.
 CAP = "A-ZÄÖÜÉÈÊÀÂÆŒÇ"
@@ -207,7 +217,7 @@ def extract_articles_from_pdf(pdf_path, page_range=None, collect_qa=False):
                     "keyword": token,
                     "content": remainder,
                     "page": page_no,
-                    "backlink": f"file://{abs_path}#page={page_no}",
+                    "backlink": pdf_url(base, page_no),
                     "source_file": base,
                 }
                 page_headwords.append(token)

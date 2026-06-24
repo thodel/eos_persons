@@ -41,7 +41,7 @@ import unicodedata
 import fitz  # PyMuPDF
 
 from extract_hbls import (HEADER_Y, FOOTER_MARGIN, SOURCE_DIR, PDF_GLOB,
-                          HEADWORD_RE, ENUM_RE, ROMAN_RE,
+                          HEADWORD_RE, ENUM_RE, ROMAN_RE, pdf_url,
                           _despace_caps, _looks_like_headword)
 
 # Bibliographic sigla used throughout HBLS citations — never article headwords.
@@ -355,7 +355,7 @@ def _new_person(article, vol, base, abs_path, page_no, n, given):
         "volume": vol,
         "page": page_no,
         "source_file": base,
-        "backlink": f"file://{abs_path}#page={page_no}",
+        "backlink": pdf_url(base, page_no),
     }
 
 

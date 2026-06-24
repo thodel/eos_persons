@@ -12,6 +12,8 @@ import os
 import re
 from collections import defaultdict
 
+from extract_hbls import pdf_url
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SNIPPET = 320
@@ -46,7 +48,7 @@ for a in articles:
         "p": a["page"],
         "s": snip,
         "m": members,
-        "url": a["backlink"],
+        "url": pdf_url(a["source_file"], a["page"]),
     })
 
 out.sort(key=lambda r: (r["k"], r["v"] or 0, r["p"]))
