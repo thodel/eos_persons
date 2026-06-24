@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preiskarte — Historisches Grundbuch Basel</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --surface: #ffffff; --border: #e2ddd6;
+      --accent: #6b4f2a; --accent2: #9e7a48; --text: #2d2520; --muted: #8a7968;
+    }
+    html, body { height: 100%; font-family: 'Georgia', serif; font-size: 14px; color: var(--text); }
+    #site-header { height: 56px; background: var(--accent); color: #fff;
+      display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 1100; position: relative; }
+    #logos { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    #logos img { height: 30px; width: auto; filter: brightness(0) invert(1); object-fit: contain; opacity: .9; }
+    #logos img.logo-bern { height: 26px; }
+    #site-title { font-size: .9rem; opacity: .7; white-space: nowrap; flex-shrink: 0; }
+    #page-nav { display: flex; margin-left: auto; overflow-x: auto; }
+    .page-tab { padding: 0 13px; height: 56px; display: flex; align-items: center; text-decoration: none;
+      font-size: .8rem; color: rgba(255,255,255,.65); border-bottom: 3px solid transparent; white-space: nowrap; }
+    .page-tab:hover { color: #fff; }
+    .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
+
+    #layout { display: flex; height: calc(100vh - 56px); }
+    #sidebar { width: 290px; flex-shrink: 0; background: var(--bg); border-right: 1px solid var(--border);
+      overflow-y: auto; padding: 16px; }
+    #sidebar h1 { font-size: 1.15rem; font-weight: normal; color: var(--accent); margin-bottom: 6px; }
+    #sidebar p.lede { font-size: .8rem; color: var(--muted); font-style: italic; margin-bottom: 16px; line-height: 1.5; }
+    .ctrl { margin-bottom: 16px; }
+    .ctrl label { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); display: block; margin-bottom: 5px; }
+    .ctrl input[type=range] { width: 100%; }
+    .yearlabel { font-size: 1.15rem; color: var(--accent); font-weight: bold; }
+    .btn { font-family: inherit; font-size: .82rem; padding: 6px 12px; border: 1px solid var(--border);
+      background: #fff; border-radius: 5px; cursor: pointer; }
+    .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .seg { display: flex; } .seg .btn { border-radius: 0; }
+    .seg .btn:first-child { border-radius: 5px 0 0 5px; } .seg .btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
+    .seg .btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .stat { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+    #toplist { margin-top: 14px; }
+    #toplist h4 { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); margin-bottom: 6px; }
+    .top-item { font-size: .78rem; padding: 4px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .top-item:hover { color: var(--accent); }
+    .top-item .pr { font-weight: bold; color: var(--accent); }
+
+    #stage { flex: 1; position: relative; }
+    #map { position: absolute; inset: 0; }
+    #field { position: absolute; inset: 0; pointer-events: none; z-index: 250; }
+    #legend { position: absolute; bottom: 18px; right: 14px; z-index: 500; background: rgba(255,255,255,.93);
+      border: 1px solid var(--border); border-radius: 6px; padding: 11px 14px; font-size: .74rem; }
+    #legend h4 { color: var(--accent); font-weight: normal; text-transform: uppercase; letter-spacing: .05em; font-size: .72rem; margin-bottom: 7px; }
+    .ramp { width: 180px; height: 12px; border-radius: 3px; margin-bottom: 3px;
+      background: linear-gradient(to right, #2c7bb6, #7fcdbb, #ffffbf, #fdae61, #d7191c); }
+    .ramp-lbl { display: flex; justify-content: space-between; font-size: .7rem; color: var(--muted); }
+    #loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-style: italic; z-index: 600; background: rgba(250,249,247,.7); }
+  </style>
+</head>
+<body>
+
+<div id="site-header">
+  <div id="logos">
+    <img class="logo-bern" src="https://www.unibe.ch/assets/media/image/logo-uni-bern.svg" alt="Universität Bern" onerror="this.style.display='none'">
+    <img src="https://www.unibas.ch/dam/jcr:93abfa0e-58d6-45ed-930a-de414ca40b13/uni-basel-logo.2018-03-26-12-26-39.svg" alt="Universität Basel" onerror="this.style.display='none'">
+  </div>
+  <span id="site-title">Historisches Grundbuch Basel</span>
+  <nav id="page-nav">
+    <a class="page-tab" href="index.html">Personenindex</a>
+    <a class="page-tab" href="map.html">Karte</a>
+    <a class="page-tab" href="korrelationsanalyse.html">Korrelationsanalyse</a>
+    <a class="page-tab" href="viz.html">Berufe</a>
+    <a class="page-tab" href="movements.html">Personenbewegungen</a>
+    <a class="page-tab" href="bewegungsfeld.html">Bewegungsfeld</a>
+    <a class="page-tab active" href="preiskarte.html">Preiskarte</a>
+    <a class="page-tab" href="families.html">Familien</a>
+    <a class="page-tab" href="tree.html">Stammbaum</a>
+    <a class="page-tab" href="rollen.html">Rollen</a>
+  </nav>
+</div>
+
+<div id="layout">
+  <div id="sidebar">
+    <h1>Preiskarte</h1>
+    <p class="lede">
+      Liegenschaftspreise als Druckkarte: das Feld zeigt das Preisniveau
+      (Pfund-Äquivalent, log-skaliert) interpoliert über die Stadt; die Marker
+      markieren die teuersten Häuser des Jahrzehnts — die „Hochs“.
+    </p>
+    <div class="ctrl">
+      <label>Jahrzehnt: <span class="yearlabel" id="declabel">—</span></label>
+      <input type="range" id="decade" min="0" max="0" value="0" step="1" />
+      <div style="margin-top:8px"><button class="btn primary" id="play">▶ Abspielen</button></div>
+    </div>
+    <div class="ctrl">
+      <label>Anzeige</label>
+      <div class="seg" id="mode">
+        <button class="btn active" data-m="both">Feld + Häuser</button>
+        <button class="btn" data-m="field">nur Feld</button>
+      </div>
+    </div>
+    <div class="stat" id="stat">Lade…</div>
+    <div id="toplist"></div>
+  </div>
+
+  <div id="stage">
+    <div id="map"></div>
+    <canvas id="field"></canvas>
+    <div id="legend">
+      <h4>Preisniveau (Pfund)</h4>
+      <div class="ramp"></div>
+      <div class="ramp-lbl"><span id="lo">–</span><span id="hi">–</span></div>
+      <div style="margin-top:7px"><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#b01e28;border:2px solid #fff;vertical-align:middle"></span> teuerstes Haus</div>
+    </div>
+    <div id="loading">Lade Preiskarte…</div>
+  </div>
+</div>
+
+<script>
+const map = L.map('map').setView([47.5565, 7.5880], 16);
+L.tileLayer.wms('https://wms.geo.bs.ch/', {
+  layers: 'HP_Situationsplan_Basel_1862', format: 'image/png', transparent: true,
+  attribution: 'Geodaten Kanton Basel-Stadt', maxZoom: 20, opacity: 0.8,
+}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap, © CARTO', maxZoom: 20, opacity: 0.3, zIndex: 0,
+}).addTo(map);
+
+const cv = document.getElementById('field'), ctx = cv.getContext('2d');
+const markerLayer = L.layerGroup().addTo(map);
+let DATA = null, decades = [], decIdx = 0, mode = 'both', playTimer = null;
+let fieldByDec = {}, topByDec = {}, LO = 0, HI = 1;
+
+// log-price → color (blue→cyan→yellow→orange→red, like a pressure ramp)
+const STOPS = [[44,123,182],[127,205,187],[255,255,191],[253,174,97],[215,25,28]];
+function priceColor(p) {
+  let t = (Math.log(p) - LO) / (HI - LO);
+  t = Math.max(0, Math.min(1, t));
+  const s = t * (STOPS.length - 1), i = Math.floor(s), f = s - i;
+  const a = STOPS[i], b = STOPS[Math.min(i + 1, STOPS.length - 1)];
+  return a.map((v, k) => Math.round(v + (b[k] - v) * f));
+}
+
+fetch('prices.json').then(r => r.json()).then(d => {
+  DATA = d; decades = d.decades;
+  LO = Math.log(40); HI = Math.log(Math.min(d.pmax, 6000));   // sensible band
+  document.getElementById('lo').textContent = Math.round(Math.exp(LO));
+  document.getElementById('hi').textContent = Math.round(Math.exp(HI)) + '+';
+  d.field.forEach(c => (fieldByDec[c.d] ||= []).push(c));
+  d.top.forEach(c => (topByDec[c.d] ||= []).push(c));
+  // start at the decade with most data
+  decIdx = decades.indexOf(+Object.entries(fieldByDec).sort((a,b)=>b[1].length-a[1].length)[0][0]);
+  if (decIdx < 0) decIdx = 0;
+  const sl = document.getElementById('decade'); sl.max = decades.length - 1; sl.value = decIdx;
+  document.getElementById('loading').style.display = 'none';
+  sizeCanvas(); updateLabel(); render();
+  map.on('moveend zoomend', render);
+  window.addEventListener('resize', () => { sizeCanvas(); render(); });
+});
+
+function sizeCanvas() {
+  const s = map.getSize(); cv.width = s.x; cv.height = s.y;
+}
+function updateLabel() { document.getElementById('declabel').textContent = decades[decIdx] + 'er'; }
+
+function render() {
+  if (!DATA) return;
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  const cells = fieldByDec[decades[decIdx]] || [];
+  const cd = DATA.grid.cell_deg;
+
+  if (mode !== 'nohouse') {
+    // cell pixel size from a projected cell step near the current view
+    const c0 = map.getCenter();
+    const p0 = map.latLngToContainerPoint([c0.lat, c0.lng]);
+    const pstep = map.latLngToContainerPoint([c0.lat + cd, c0.lng + cd]);
+    const cw = Math.abs(pstep.x - p0.x) + 1.5, ch = Math.abs(pstep.y - p0.y) + 1.5;
+    ctx.globalAlpha = 0.68;
+    for (const c of cells) {
+      const p = map.latLngToContainerPoint([c.lat, c.lon]);
+      if (p.x < -cw || p.y < -ch || p.x > cv.width + cw || p.y > cv.height + ch) continue;
+      const [r, g, b] = priceColor(c.p);
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.fillRect(p.x - cw / 2, p.y - ch / 2, cw, ch);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // top houses
+  markerLayer.clearLayers();
+  const tops = topByDec[decades[decIdx]] || [];
+  if (mode === 'both') {
+    const maxp = Math.max(...tops.map(t => t.p), 1);
+    tops.forEach((t, i) => {
+      const r = 5 + 9 * Math.sqrt(t.p / maxp);
+      const m = L.circleMarker([t.lat, t.lon], {
+        radius: r, color: '#fff', weight: 2, fillColor: '#b01e28',
+        fillOpacity: i < 3 ? 0.95 : 0.7,
+      }).addTo(markerLayer);
+      m.bindTooltip(
+        `<b>${t.p.toLocaleString('de-CH')} ℔</b> · ${decades[decIdx]}er<br>` +
+        `<span style="color:#666">${escapeHtml(t.t || t.dos)}</span>`,
+        { direction: 'top' });
+    });
+  }
+
+  const total = cells.length;
+  document.getElementById('stat').textContent =
+    `${decades[decIdx]}er · ${total} Feldzellen · ${tops.length} teuerste Häuser`;
+  renderToplist(tops);
+}
+
+function renderToplist(tops) {
+  const el = document.getElementById('toplist');
+  if (!tops.length) { el.innerHTML = ''; return; }
+  el.innerHTML = '<h4>Teuerste Häuser</h4>' + tops.slice(0, 8).map((t, i) =>
+    `<div class="top-item" data-lat="${t.lat}" data-lon="${t.lon}">
+       <span class="pr">${t.p.toLocaleString('de-CH')} ℔</span> —
+       ${escapeHtml((t.t || t.dos).slice(0, 42))}</div>`).join('');
+  el.querySelectorAll('.top-item').forEach(d => d.addEventListener('click', () => {
+    map.setView([+d.dataset.lat, +d.dataset.lon], 18);
+  }));
+}
+
+function escapeHtml(s) { return (s || '').replace(/[&<>"]/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+// controls
+const sl = document.getElementById('decade');
+sl.addEventListener('input', () => { decIdx = +sl.value; updateLabel(); render(); });
+document.querySelectorAll('#mode .btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#mode .btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active'); mode = b.dataset.m; render();
+}));
+document.getElementById('play').addEventListener('click', function () {
+  if (playTimer) { clearInterval(playTimer); playTimer = null; this.textContent = '▶ Abspielen'; return; }
+  this.textContent = '⏸ Pause';
+  playTimer = setInterval(() => {
+    decIdx = (decIdx + 1) % decades.length; sl.value = decIdx; updateLabel(); render();
+  }, 1100);
+});
+</script>
+</body>
+</html>
