@@ -240,3 +240,7 @@ hbls-extraction/hbls_persons.csv
 link_hbls_hls_candidates.csv
 hbls-extraction/hbls_persons_basel.csv
 hbls-extraction/hbls_persons_basel.json
+
+# Stage 2 HBLS<->HGB candidates (regenerable)
+link_hbls_hgb_candidates.csv
+link_hbls_hgb_transitive.csv

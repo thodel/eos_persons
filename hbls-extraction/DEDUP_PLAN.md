@@ -53,14 +53,16 @@ Because HLS *is* the successor of HBLS, expect a high unambiguous rate. Treat
 matched HBLS person a stable **HLS id** (and thus an `hls-dhs-dss.ch` URL and,
 via HLS, often a GND/Wikidata id already present in the site's enrichment).
 
-### Stage 2 — HBLS ↔ EOS/HGB persons
+### Stage 2 — HBLS ↔ EOS/HGB persons  *(done for the Basel slice — `link_hbls_hgb.py`)*
 Run the same matcher with HBLS persons on one side and `persons_resolved.json`
 on the other, using the **mention-span** date rule. Two sub-passes:
-  a. **direct** name+date match (new candidate CSV);
+  a. **direct** name+date match — 406 Basel HBLS persons matched ≥1 HGB person
+     (139 unambiguous) → `link_hbls_hgb_candidates.csv`;
   b. **transitive** — if HBLS person *X* ≈ HLS bio *H* (Stage 1) and HGB person
-     *P* ≈ *H* (existing `link_candidates_hls.csv`), then *X*↔*P* is implied.
-     Transitive links that *also* pass a direct name check are the highest-
-     confidence cross-links and need the least review.
+     *P* ≈ *H* (existing `link_candidates_hls.csv`), then *X*↔*P* is implied —
+     374 pairs (170 unambiguous on both sides) → `link_hbls_hgb_transitive.csv`.
+     These shared-HLS links are the highest-confidence cross-links and need the
+     least review. Next: run `--all` to extend beyond Basel.
 
 ### Stage 3 — Build identity clusters
 Model every accepted link as an edge in a graph whose nodes are
