@@ -73,9 +73,11 @@ DEATH_RE = re.compile(rf"(?:†|\+|\b[fj])\s*{DATE}{Y}")
 YEAR_RE = re.compile(rf"\b{Y}\b")
 
 # Words that mark a NON-person (place / topic) article, checked on the lead text
-PLACE_RE = re.compile(r"\b(Kt\.|Bez\.|Gem\b|Gemeinde|Pfarrei|Dorf|Weiler|"
+PLACE_RE = re.compile(r"\b(Kt\.|Kanton|Bez\.|Bezirk|Gem\b|Gemeinde|Pfarrei|"
+                      r"Dorf|Weiler|Stadt|Hauptort|Hauptstadt|Amt\b|Amtsbezirk|"
                       r"Einwohner|Seelen|politische|Kirchgemeinde|S\. GLS|"
-                      r"liegt|Fluss|Berg|Tal|See\b)")
+                      r"Herrschaft|Vogtei|Landschaft|Kloster|Schloss|Burg\b|"
+                      r"liegt|Fluss|Berg\b|Tal\b|See\b|Region|Ortschaft)")
 
 
 def _alpha_key(s):
@@ -111,6 +113,12 @@ def _plausible_given(g):
         return False
     toks = g.split()
     if len(toks) > 3 or len(g) > 26:
+        return False
+    # all-caps tokens are section/place fragments (AMTSBEZIRK, ÄBTE), not names
+    if any(len(t) > 3 and t == t.upper() for t in toks):
+        return False
+    # a single very long lowercase-run token is a concatenated heading
+    if len(toks) == 1 and len(g) > 14 and g[1:] == g[1:].lower():
         return False
     return bool(re.match(r"^[A-ZÄÖÜÉÈÊÀÂÆŒÇ]", g))
 

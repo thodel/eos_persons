@@ -235,3 +235,8 @@ hbls-extraction/hbls_articles.json
 hbls-extraction/hbls_persons.json
 hbls-extraction/hbls_persons.csv
 .DS_Store
+
+# HBLS linking/Basel review artifacts (regenerable via scripts)
+link_hbls_hls_candidates.csv
+hbls-extraction/hbls_persons_basel.csv
+hbls-extraction/hbls_persons_basel.json
