@@ -244,3 +244,6 @@ hbls-extraction/hbls_persons_basel.json
 # Stage 2 HBLS<->HGB candidates (regenerable)
 link_hbls_hgb_candidates.csv
 link_hbls_hgb_transitive.csv
+
+# GND linking (Tier 0) review artifact (regenerable via link_hbls_gnd.py)
+link_hbls_gnd.csv

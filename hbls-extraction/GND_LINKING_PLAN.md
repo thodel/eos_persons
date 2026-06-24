@@ -1,0 +1,92 @@
+# GND linking plan — lobid GND lookup, enrichment & deduplication
+
+## Goal
+Attach a **GND id** (Gemeinsame Normdatei) to our person candidates so that
+(1) GND becomes a strong, authority-controlled identity key for deduplication
+across HBLS / HLS / HGB / Wikidata, and (2) we can pull extra structured data —
+roles (professions), external ids (VIAF, Deutsche Biographie, ISNI), biographical
+notes, relations, and **publications** — onto the merged records.
+
+## API analysis — lobid GND (https://lobid.org/gnd/api)
+
+| Need | Endpoint / field |
+|---|---|
+| Search | `https://lobid.org/gnd/search?q=…&filter=type:DifferentiatedPerson&format=json&size=N&from=…` |
+| Single record | `https://lobid.org/gnd/<gndIdentifier>.json` |
+| Publications/works | `https://lobid.org/resources/search?q=contribution.agent.id:"https://d-nb.info/gnd/<id>"&format=json` |
+| Reconciliation (review) | `https://reconcile.gnd.network/` (OpenRefine API) |
+
+- **Query syntax**: Elasticsearch `query_string`, colon fields, boolean `AND/OR`.
+  ASCII-folded name fields (`preferredName.ascii`, `variantName.ascii`) for OCR
+  robustness. `filter=type:DifferentiatedPerson` excludes name-only stubs.
+- **Person fields**: `gndIdentifier`, `preferredName`, `variantName`,
+  `dateOfBirth`/`dateOfDeath` (messy strings: `"1670"`, `"um 1500"`,
+  `"XX.XX.1788"` — parse leading 4-digit year), `placeOfBirth/Death/Activity`,
+  **`professionOrOccupation` [{id,label}]** (roles), `gender`,
+  `biographicalOrHistoricalInformation`, **`sameAs` [{id,collection}]** (Wikidata,
+  VIAF, Deutsche Biographie, ISNI…), relations (`familialRelationship`,
+  `relatedPerson`, `affiliation`). The GND record carries **no works** — those
+  come from the separate lobid-resources index.
+- **Limits/bulk**: no hard published rate limit; policy asks for a descriptive
+  User-Agent and prefers bulk dumps for large jobs. → throttle + cache for the
+  candidate set; use the full GND JSONL dump only if scaling to the whole corpus.
+
+## Strategy — three tiers
+
+### Tier 0 — transitive GND via HLS → Wikidata → GND  *(implemented: `../link_hbls_gnd.py`)*
+The repo already bridges HLS → Wikidata (Wikidata stores the HLS id as **P902**)
+and reads GND from **P227** (`enrich_wikidata.py`). Our Stage-1 HBLS↔HLS links
+therefore yield GND for free: for every linked HLS id we run one batched WDQS
+query and read back `qid`, `gnd` (P227), `viaf` (P214), Wikidata birth/death
+(P569/P570) and occupations (P106). No lobid traffic; highest precision; also
+**cross-validates** the HBLS↔HLS chain (Wikidata life dates must agree with ours).
+
+*Result:* 2,457 GND links for **2,190 HBLS persons** (of 2,340 linked HLS ids,
+2,145 carried a GND on Wikidata). The date cross-check flags each link
+`ok` / `MISMATCH`: **1,513 ok**, 533 mismatch. Mismatches concentrate in the
+low-confidence HLS links (37% vs 13% for unambiguous score ≥ 0.9) and surface
+genuine problems — mis-parsed HBLS date ranges (e.g. a 1-year "lifespan"), wrong
+family member, or homonym — so `date_check == "ok"` is the auto-accept gate and
+`MISMATCH` routes to review (and back-flags the suspect Stage-1 HLS link).
+
+### Tier 1 — direct lobid lookup for the remainder
+For HBLS persons not covered by Tier 0 and carrying ≥1 life year:
+1. Query `preferredName.ascii`/`variantName.ascii` with `surname`+`given`,
+   `filter=type:DifferentiatedPerson`, `size=10`.
+2. Score each hit with the **same model** as Stages 1–2 (surname/given
+   `SequenceMatcher` + birth/death ±4, floruit-in-span fallback); reuse
+   `link_hls.py` helpers.
+3. Accept only when name+dates uniquely identify one person (`n_candidates==1`,
+   score ≥ threshold); else → review CSV. Date agreement is decisive (homonyms).
+
+### Tier 2 — enrichment fetch for accepted GND ids
+Per accepted `gndIdentifier`, fetch the record once (cached by id) and pull
+`professionOrOccupation` (roles), `sameAs` (VIAF / Deutsche Biographie / ISNI),
+bio prose, places, relations; then one lobid-resources query for **publications**.
+
+## Deduplication use
+GND ids are the strongest merge key available. In the Stage-3 identity graph
+(`DEDUP_PLAN.md`):
+- add **GND edges**: any two of our records (HBLS / HGB / HLS / Wikidata)
+  resolving to the same `gndIdentifier` collapse into one person;
+- **cross-validate** existing links — GND `sameAs`→Wikidata must match our QID,
+  GND dates must match ours; disagreement flags a bad earlier link instead of
+  silently merging;
+- the merged node then carries GND-sourced roles, publications and external ids
+  as new attributes (the "add more data" goal), surfaced as chips in `index.html`
+  next to the existing HLS/Wikidata links.
+
+## Sequencing & safety
+- **Basel slice first** (as in Stages 1–2), then `--all`.
+- Tier 0 uses WDQS batched (≈500 ids/query) with the existing 429-backoff; Tier 1
+  throttles lobid to ~1–2 req/s with on-disk caching of queries and records.
+- Outputs (gitignored, regenerable): `../link_hbls_gnd.csv` (Tier 0),
+  later `../link_hbls_gnd_candidates.csv` (Tier 1) and `gnd_enrichment.json`.
+
+## Caveats
+- **Coverage skews modern/notable** — GND is publication-driven; good for
+  early-modern–modern Basel figures (printers, officials, scholars), sparse for
+  undated medieval entries.
+- **Homonyms** are the main precision risk → never accept on name alone.
+- **Date noise** on both sides (GND `"um …"`, our OCR floruits) → parse leniently,
+  prefer Tier 0 where an id already exists.
