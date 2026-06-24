@@ -21,7 +21,15 @@ python3 -m venv venv && ./venv/bin/pip install pymupdf
 
 # 3. compact data for the static web tab (articles + joined persons)
 ./venv/bin/python make_web_data.py           # -> ../hbls_web.json
+
+# 4. linking & deduplication (see DEDUP_PLAN.md)
+python3 ../link_hbls_hls.py                   # -> ../link_hbls_hls_candidates.csv
+./venv/bin/python basel_subset.py            # -> hbls_persons_basel.{csv,json}
 ```
+
+- `DEDUP_PLAN.md` — staged plan to dedupe people across HBLS / HLS / EOS-HGB.
+- `link_hbls_hls.py` matched 2,388 HBLS persons to HLS bios (2,200 unambiguous).
+- `basel_subset.py` isolates the 4,932 Basel-connected persons (first link slice).
 
 `extract_lexicon.py` is the original prototype, kept for reference; `extract_hbls.py`
 supersedes it (see git history / the report for why the prototype's heuristic failed).
