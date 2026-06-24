@@ -227,3 +227,11 @@ features_doc_preview.csv
 # generated review artifacts
 dedupe_corpus_candidates.csv
 link_candidates_hls.csv
+
+# HBLS extraction: venv + large regenerable intermediates (rebuild via scripts)
+hbls-extraction/venv/
+hbls-extraction/__pycache__/
+hbls-extraction/hbls_articles.json
+hbls-extraction/hbls_persons.json
+hbls-extraction/hbls_persons.csv
+.DS_Store
