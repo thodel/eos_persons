@@ -247,3 +247,10 @@ link_hbls_hgb_transitive.csv
 
 # GND linking (Tier 0) review artifact (regenerable via link_hbls_gnd.py)
 link_hbls_gnd.csv
+
+# GND Tier 1/2 + Stage 3 artifacts (regenerable via scripts)
+link_hbls_gnd_lobid_candidates.csv
+hbls-extraction/.lobid_cache/
+hbls-extraction/gnd_enrichment.json
+identity_clusters.json
+identity_clusters.csv
