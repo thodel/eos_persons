@@ -49,7 +49,7 @@ genuine problems — mis-parsed HBLS date ranges (e.g. a 1-year "lifespan"), wro
 family member, or homonym — so `date_check == "ok"` is the auto-accept gate and
 `MISMATCH` routes to review (and back-flags the suspect Stage-1 HLS link).
 
-### Tier 1 — direct lobid lookup for the remainder
+### Tier 1 — direct lobid lookup for the remainder  *(done — `../link_hbls_gnd_lobid.py`)*
 For HBLS persons not covered by Tier 0 and carrying ≥1 life year:
 1. Query `preferredName.ascii`/`variantName.ascii` with `surname`+`given`,
    `filter=type:DifferentiatedPerson`, `size=10`.
@@ -58,6 +58,12 @@ For HBLS persons not covered by Tier 0 and carrying ≥1 life year:
    `link_hls.py` helpers.
 3. Accept only when name+dates uniquely identify one person (`n_candidates==1`,
    score ≥ threshold); else → review CSV. Date agreement is decisive (homonyms).
+
+*Result (Basel slice):* of 3,334 dated persons unresolved by Tier 0, **353
+matched a GND (321 unambiguous)** — an ~11% hit rate that confirms GND's
+modern/notable skew (floruit-only medieval persons are skipped by default; they
+yield virtually no GND). Throttled lobid calls are cached under
+`.lobid_cache/` so reruns are free.
 
 ### Tier 2 — enrichment fetch for accepted GND ids
 Per accepted `gndIdentifier`, fetch the record once (cached by id) and pull

@@ -64,9 +64,11 @@ on the other, using the **mention-span** date rule. Two sub-passes:
      These shared-HLS links are the highest-confidence cross-links and need the
      least review. Next: run `--all` to extend beyond Basel.
 
-### Stage 3 — Build identity clusters
+### Stage 3 — Build identity clusters  *(done — `../build_identity_clusters.py`)*
 Model every accepted link as an edge in a graph whose nodes are
-`(corpus, local_id)`. Connected components = one real person. Guard against
+`(corpus, local_id)` **plus the shared authority ids** (`gnd:<id>`, `wd:<qid>`),
+so two records pointing at the same GND/Wikidata id merge transitively — the
+strongest dedup signal. Connected components = one real person. Guard against
 over-merging:
   - never merge two records from the **same** corpus into one node unless an
     intra-corpus dedup step says so (HBLS already numbers family members
@@ -74,6 +76,12 @@ over-merging:
   - reject a component if it contains life-date-incompatible members
     (birth years spread > ~15 y), flag for review instead;
   - keep `n_candidates > 1` edges out of auto-merge.
+
+*Result (Basel slice):* 2,463 components (size ≥ 2) → **1,782 conflict-free
+cross-corpus identities** (`identity_clusters.csv`), **1,949 carrying a GND id**,
+70 spanning all three source corpora (HBLS+HGB+HLS). 422 components are flagged
+for review (301 multi-HGB homonyms, 80 birth-spread, 47 multi-HBLS, 19 each
+multi-HLS/GND/Wikidata) — exactly the cases the guards are meant to catch.
 
 ### Stage 4 — Merge & emit
 For each cluster emit a merged person: preferred display name (HLS form if
