@@ -1,6 +1,24 @@
 # HGB Basel — MCP Server
 
-An [MCP](https://modelcontextprotocol.io) server that exposes the Historisches Grundbuch Basel (HGB) corpus for use with Claude and other MCP-compatible clients.
+> ⚠️ **Alpha test** — This endpoint is available at `https://tei.dh.unibe.ch/mpc/eos` for testing purposes. Configuration and availability may change.
+
+An [MCP](https://modelcontextprotocol.io) server that exposes the Historisches Grundbuch Basel (HGB) corpus for use with MCP-compatible clients.
+
+## Quick start (alpha test endpoint)
+
+Add to your MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "eos": {
+      "url": "https://tei.dh.unibe.ch/mpc/eos"
+    }
+  }
+}
+```
+
+Available tools: `corpus_stats`, `search_persons`, `get_document`, `get_dossier`, `search_text`, `get_persons_in_year_range`, `get_cooccurrences`, `list_dossiers`.
 
 ## Architecture
 
@@ -14,7 +32,7 @@ hgb_full_*.xml  ──► build_db.py ──► hgb.db (SQLite + FTS5)
 
 The 800 MB XML is parsed once into a ~100 MB SQLite database. The server then runs stateless queries against it.
 
-## Setup
+## Local setup
 
 ### 1. Install dependencies
 
@@ -58,7 +76,7 @@ claude mcp add hgb --transport sse --url http://<server-ip>:8000/sse
 
 ---
 
-## Docker deployment (recommended for the vServer)
+## Docker deployment (recommended for self-hosting)
 
 ### Build image
 
@@ -82,7 +100,7 @@ docker run --rm \
 docker compose up -d
 ```
 
-Update `/data/hgb` in `docker-compose.yml` to match the actual path on the vServer.
+Update `/data/hgb` in `docker-compose.yml` to match the actual path on the server.
 
 ### Reverse proxy (nginx, optional but recommended)
 

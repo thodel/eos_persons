@@ -71,9 +71,48 @@ periphery (Spearman ρ = −0.155 / +0.107, both p < 1e-9).
 
 `persons_sparql.html` and `build_sparql_index.py` query the Economies of Space LOD endpoint at `https://sparql-gdb.lod4hss.org/eos` ([graph docs](https://github.com/history-unibas/economies-of-space-lod)). When no cached index is present the page falls back to live queries, with a 20 s client-side timeout so an unreachable endpoint surfaces a clear error rather than hanging.
 
-## MCP server
+## MCP server (alpha test)
 
-[`mcp_server/`](mcp_server/) exposes the HGB corpus to MCP-compatible clients (Claude and others) over HTTP/SSE, backed by a SQLite/FTS5 database built from the source XML. See [`mcp_server/README.md`](mcp_server/README.md) for setup.
+**[Alpha test]** An MCP server endpoint is available at:
+
+```
+https://tei.dh.unibe.ch/mpc/eos
+```
+
+Add it to any MCP-compatible client:
+
+```json
+{
+  "mcpServers": {
+    "eos": {
+      "url": "https://tei.dh.unibe.ch/mpc/eos"
+    }
+  }
+}
+```
+
+The server provides access to the full HGB corpus (75,447 documents, ~204k person spans) via the following tools:
+
+| Tool | Description |
+|------|-------------|
+| `corpus_stats` | Document/span/person/event counts and year range |
+| `search_persons(query, limit)` | FTS search for person names (FTS5 syntax) |
+| `get_document(doc_id)` | Full document: text, all spans, events |
+| `get_dossier(dossier_id)` | All documents for a property, ordered by year |
+| `search_text(query, limit)` | Keyword search over raw transcriptions with snippets |
+| `get_persons_in_year_range(year_from, year_to, limit)` | Person mentions filtered by year |
+| `get_cooccurrences(person_name, limit)` | Other persons in the same documents |
+| `list_dossiers(limit)` | All properties with coordinates and year ranges |
+
+And resources:
+
+| URI | Description |
+|-----|-------------|
+| `hgb://stats` | Corpus statistics (JSON) |
+| `hgb://dossiers` | All dossiers (JSON) |
+| `hgb://document/{doc_id}` | Single document (JSON) |
+
+For local development and self-hosting, see [`mcp_server/`](mcp_server/) and [`mcp_server/README.md`](mcp_server/README.md).
 
 ## Deployment
 
