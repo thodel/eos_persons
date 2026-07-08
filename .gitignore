@@ -254,3 +254,4 @@ hbls-extraction/.lobid_cache/
 hbls-extraction/gnd_enrichment.json
 identity_clusters.json
 identity_clusters.csv
+hbls_test.db

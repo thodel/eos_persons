@@ -1,0 +1,20 @@
+services:
+  hbls-mcp:
+    build: .
+    image: hbls-mcp:latest
+    container_name: hbls-mcp
+    restart: unless-stopped
+    ports:
+      - "8003:8003"
+    volumes:
+      # Mount directory containing hbls.db (and optionally persons_resolved.json for rebuild)
+      - /data/hbls:/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8003/sse')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
