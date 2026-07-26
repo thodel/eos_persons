@@ -41,13 +41,21 @@ query and read back `qid`, `gnd` (P227), `viaf` (P214), Wikidata birth/death
 (P569/P570) and occupations (P106). No lobid traffic; highest precision; also
 **cross-validates** the HBLS↔HLS chain (Wikidata life dates must agree with ours).
 
-*Result:* 2,457 GND links for **2,190 HBLS persons** (of 2,340 linked HLS ids,
-2,145 carried a GND on Wikidata). The date cross-check flags each link
-`ok` / `MISMATCH`: **1,513 ok**, 533 mismatch. Mismatches concentrate in the
-low-confidence HLS links (37% vs 13% for unambiguous score ≥ 0.9) and surface
-genuine problems — mis-parsed HBLS date ranges (e.g. a 1-year "lifespan"), wrong
-family member, or homonym — so `date_check == "ok"` is the auto-accept gate and
+*Result:* 2,319 GND links for **2,141 HBLS persons** (of 2,300 linked HLS ids,
+2,108 carried a GND on Wikidata). The date cross-check flags each link
+`ok` / `MISMATCH`: **1,518 ok**, 431 mismatch. Mismatches surface genuine
+problems — mis-parsed HBLS date ranges (e.g. a 1-year "lifespan"), wrong family
+member, or homonym — so `date_check == "ok"` is the auto-accept gate and
 `MISMATCH` routes to review (and back-flags the suspect Stage-1 HLS link).
+
+This cross-check is the most useful independent measure the pipeline has, since
+it validates against Wikidata's dates rather than against our own scoring. It
+is what confirmed the given-name fix (see DEDUP_PLAN.md, Stage 4): mismatches
+fell 533 → 431 (−19%) while confirmed-good links held at 1,513 → 1,518 — bad
+links removed, good links kept. It also sharpened the split by link confidence
+to **12% mismatch for unambiguous score ≥ 0.9 vs 81% for weaker links** (was
+13% vs 37%), so Stage-1 link strength is now a genuinely predictive gate rather
+than a weak correlate.
 
 ### Tier 1 — direct lobid lookup for the remainder  *(done — `../link_hbls_gnd_lobid.py`)*
 For HBLS persons not covered by Tier 0 and carrying ≥1 life year:
@@ -59,8 +67,8 @@ For HBLS persons not covered by Tier 0 and carrying ≥1 life year:
 3. Accept only when name+dates uniquely identify one person (`n_candidates==1`,
    score ≥ threshold); else → review CSV. Date agreement is decisive (homonyms).
 
-*Result (Basel slice):* of 3,334 dated persons unresolved by Tier 0, **353
-matched a GND (321 unambiguous)** — an ~11% hit rate that confirms GND's
+*Result (Basel slice):* of 3,327 dated persons unresolved by Tier 0, **345
+matched a GND (320 unambiguous)** — an ~10% hit rate that confirms GND's
 modern/notable skew (floruit-only medieval persons are skipped by default; they
 yield virtually no GND). Throttled lobid calls are cached under
 `.lobid_cache/` so reruns are free.

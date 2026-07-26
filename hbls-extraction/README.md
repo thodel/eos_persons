@@ -32,7 +32,7 @@ python3 ../build_merged_persons.py            # -> ../merged_persons.{json,csv}
 ```
 
 - `DEDUP_PLAN.md` — staged plan to dedupe people across HBLS / HLS / EOS-HGB.
-- `link_hbls_hls.py` matched 2,388 HBLS persons to HLS bios (2,200 unambiguous).
+- `link_hbls_hls.py` matched 2,339 HBLS persons to HLS bios (2,201 unambiguous).
 - `basel_subset.py` isolates the 4,932 Basel-connected persons (first link slice).
 
 `extract_lexicon.py` is the original prototype, kept for reference; `extract_hbls.py`
