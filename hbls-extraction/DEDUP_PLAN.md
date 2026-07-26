@@ -83,13 +83,42 @@ cross-corpus identities** (`identity_clusters.csv`), **1,949 carrying a GND id**
 for review (301 multi-HGB homonyms, 80 birth-spread, 47 multi-HBLS, 19 each
 multi-HLS/GND/Wikidata) — exactly the cases the guards are meant to catch.
 
-### Stage 4 — Merge & emit
+### Stage 4 — Merge & emit  *(done — `../build_merged_persons.py`)*
 For each cluster emit a merged person: preferred display name (HLS form if
 present, else HBLS), union of life dates (prefer HLS precision), occupations
 (HGB), family links (HBLS genealogy + existing `families_*`), and a
 `sources[]` array with `{corpus, id, url/backlink}` for full provenance.
-Surface the HBLS link in the site exactly like the existing HLS/Wikidata
-chips in `index.html`.
+
+Field precedence is HLS → GND → HBLS for name and life dates (the online
+lexicon is the corrected successor of the printed one); each record carries a
+`provenance` block naming the corpus every chosen value came from. Occupations
+pool the HGB register terms with the GND authority roles but stay separately
+addressable (`occupations_hgb`, `roles_gnd`).
+
+*Result (Basel slice):* 2,463 clusters → **2,012 merged persons**
+(`merged_persons.json`, flat summary in `merged_persons.csv`), 1,991 with life
+dates, 1,722 with a GND id, 1,227 with occupations, 373 with publications, 13
+spanning all three source corpora. 451 go to review. All corpus joins resolve
+(0 dangling members). Names come from HLS for 1,689 and HBLS for 323.
+
+**Given-name gate.** Stage 4 adds a check the earlier stages cannot make:
+`link_hls.split_name` compares `toks[0]` only, so "Hans Ulrich" and "Johann
+Jakob" match perfectly (both canonicalise to `johann`) — yet in early-modern
+Swiss naming the *second* given name is the distinguishing one. Merged records
+are therefore re-scored on the common prefix of **all** given tokens (particles
+and HLS noble epithets stripped, so "Escher vom Luchs" does not leak in); below
+`--name-min` (default 0.6) the cluster is flagged `name_disagreement` instead of
+merged. A missing middle name does not count against a cluster, a conflicting
+one does. This catches 27 clusters that every upstream gate passed — e.g.
+HLS *Konrad Fässler* ↔ HGB *Johannes Faser*, and HBLS *Hans Heinrich Müller* ↔
+HGB *Hanß Otmar Müller*. Manual inspection of all 27 found 26 genuine
+mis-merges and 1 OCR artifact (`Joh.Jakob` ↔ `Jakob`), so the flag is worth
+its review cost — and it indicates the same blind spot inflates the Stage 1–2
+link counts, which the planned precision sampling should quantify.
+
+Still to do: surface the merged records in the site the way the existing
+HLS/Wikidata chips work in `index.html` (`merged_persons.json` is not yet read
+by any page).
 
 ## Intra-HBLS dedup (prerequisite, lightweight)
 The same family is occasionally printed in more than one volume/supplement

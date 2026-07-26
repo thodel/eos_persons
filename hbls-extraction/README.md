@@ -25,6 +25,10 @@ python3 -m venv venv && ./venv/bin/pip install pymupdf
 # 4. linking & deduplication (see DEDUP_PLAN.md)
 python3 ../link_hbls_hls.py                   # -> ../link_hbls_hls_candidates.csv
 ./venv/bin/python basel_subset.py            # -> hbls_persons_basel.{csv,json}
+
+# 5. merge the identity clusters into one record per person (Stage 4)
+python3 ../build_identity_clusters.py         # -> ../identity_clusters.{json,csv}
+python3 ../build_merged_persons.py            # -> ../merged_persons.{json,csv}
 ```
 
 - `DEDUP_PLAN.md` — staged plan to dedupe people across HBLS / HLS / EOS-HGB.

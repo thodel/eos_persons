@@ -254,3 +254,10 @@ hbls-extraction/.lobid_cache/
 hbls-extraction/gnd_enrichment.json
 identity_clusters.json
 identity_clusters.csv
+
+# Stage 4 merged output (regenerable via build_merged_persons.py)
+merged_persons.json
+merged_persons.csv
+
+# rare-surname dedup review artifact (regenerable via dedupe_rare_surnames.py)
+dedupe_rare_candidates.csv
