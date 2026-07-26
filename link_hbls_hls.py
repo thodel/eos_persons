@@ -24,7 +24,7 @@ import csv
 import json
 
 # reuse the battle-tested name normalisation from the HGB→HLS linker
-from link_hls import norm_token, canon_given, ratio, year_of, hls_url
+from link_hls import norm_token, given_key, given_ratio, ratio, year_of, hls_url
 
 csv.field_size_limit(10_000_000)
 
@@ -52,7 +52,7 @@ def load_hls_bios(path):
                 "version": (row.get("version") or "").strip(),
                 "title": row.get("title", "").strip(),
                 "first": first, "family": fam,
-                "given_n": canon_given(first.split()[0]) if first else "",
+                "given_n": given_key(first),
                 "surname_n": norm_token(fam.split()[-1]),
                 "birth": b, "death": d,
                 "lex": (row.get("lexical_class") or "").strip("[]'\""),
@@ -107,7 +107,7 @@ def main():
     matched_persons = 0
     for p in persons:
         surname = norm_token(p["surname"].split()[-1]) if p["surname"] else ""
-        given = canon_given(p["given"].split()[0]) if p["given"] else ""
+        given = given_key(p["given"])
         if not surname or not given:
             continue
         hb, hd = p.get("birth_year"), p.get("death_year")
@@ -120,7 +120,7 @@ def main():
             sr = ratio(surname, bio["surname_n"])
             if sr < args.surname_min:
                 continue
-            gr = ratio(given, bio["given_n"]) if bio["given_n"] else 0.0
+            gr = given_ratio(given, bio["given_n"]) if bio["given_n"] else 0.0
             if gr < args.given_min:
                 continue
             ok, close, label = year_agreement(hb, hd, hfl, bio["birth"], bio["death"])

@@ -75,20 +75,57 @@ def canon_given(t):
     return GIVEN_CANON.get(t, t)
 
 
+def given_key(s):
+    """Canonicalise a dedicated given-name field — every token, not just the first.
+
+    "Hans Ulrich" -> "johann ulrich". Compare two of these with `given_ratio`,
+    never with bare `ratio`: see that function for why.
+    """
+    toks = [t for t in re.sub(r"[.,]", " ", s or "").split() if len(t) > 1]
+    return " ".join(canon_given(t) for t in toks
+                    if norm_token(t) and norm_token(t) not in PARTICLES)
+
+
+GIVEN_MODE = "prefix"   # "first" restores the pre-2026-07 first-token-only rule
+
+
+def given_ratio(a, b):
+    """Compare given names on their common prefix.
+
+    Historically these were compared on the first token alone, which makes
+    "Hans Ulrich" and "Johann Jakob" identical (both canonicalise to "johann")
+    — yet in early-modern Swiss naming the *second* given name is the
+    distinguishing one (Hans Heinrich / Hans Ulrich / Hans Jakob are three
+    different men). Comparing the full string instead would over-penalise a
+    source that merely omits a middle name, so we compare only as many tokens
+    as the shorter side has: a *missing* middle name costs nothing, a
+    *conflicting* one is caught.
+    """
+    ta, tb = (a or "").split(), (b or "").split()
+    if not ta or not tb:
+        return 0.0
+    k = 1 if GIVEN_MODE == "first" else min(len(ta), len(tb))
+    return ratio(" ".join(ta[:k]), " ".join(tb[:k]))
+
+
 def split_name(name):
-    """Return (given, surname) from a full name string, particles stripped."""
+    """Return (given, surname) from a full name string, particles stripped.
+
+    `given` carries every given token (see `given_key`); compare it with
+    `given_ratio`.
+    """
     toks = [t for t in re.sub(r"[.,]", " ", name).split() if len(t) > 1]
     toks = [t for t in toks if norm_token(t)]            # drop punctuation-only
     if len(toks) < 2:
         return (norm_token(toks[0]) if toks else "", "")
-    given = toks[0]
     # surname = last token, unless it's a particle (then second-to-last)
     rest = toks[1:]
     # drop a leading particle in the remainder ("von Hiltallingen")
     while rest and norm_token(rest[0]) in PARTICLES:
         rest = rest[1:]
     surname = rest[-1] if rest else toks[-1]
-    return (canon_given(given), norm_token(surname))
+    given = toks[:1] + rest[:-1] if rest else toks[:1]
+    return (given_key(" ".join(given)), norm_token(surname))
 
 
 def year_of(s):
@@ -137,7 +174,7 @@ def load_hls(path, era_lo=1380, era_hi=1720):
             if hi < era_lo or lo > era_hi:
                 continue
             surname = norm_token(fam.split()[-1]) if fam else ""
-            given = canon_given(first.split()[0]) if first else ""
+            given = given_key(first)
             bios.append({
                 "id": row.get("id"),
                 "version": (row.get("version") or "").strip(),
@@ -192,7 +229,13 @@ def main():
     ap.add_argument("--surname-min", type=float, default=0.82)
     ap.add_argument("--given-min", type=float, default=0.74)
     ap.add_argument("--postmortem-grace", type=int, default=60)
+    ap.add_argument("--given-mode", choices=("prefix", "first"), default="prefix",
+                    help="'first' restores the old first-given-token-only rule, "
+                         "for A/B measurement against the current prefix rule")
     args = ap.parse_args()
+
+    global GIVEN_MODE
+    GIVEN_MODE = args.given_mode
 
     print("Loading HLS biographies …")
     bios = load_hls(args.hls)
@@ -231,7 +274,7 @@ def main():
             sr = ratio(surname, bio["surname_n"])
             if sr < args.surname_min:
                 continue
-            gr = ratio(given, bio["given_n"]) if bio["given_n"] else 0.0
+            gr = given_ratio(given, bio["given_n"]) if bio["given_n"] else 0.0
             if gr < args.given_min:
                 continue
             rel, gap = date_relation(m0, m1, dead, bio["birth"], bio["death"],
@@ -267,7 +310,7 @@ def main():
             "hgb_name", "hgb_year_min", "hgb_year_max", "hgb_dead_year",
             "hgb_mentions", "hls_id", "hls_title", "hls_first", "hls_family",
             "hls_birth", "hls_death", "hls_lexical_class",
-            "n_candidates_for_person", "rank", "hls_url"]
+            "n_candidates_for_person", "rank", "hls_version", "hls_url"]
     with open(args.out, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=cols)
         w.writeheader()

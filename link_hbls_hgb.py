@@ -27,7 +27,7 @@ import csv
 import json
 import os
 
-from link_hls import split_name, norm_token, canon_given, ratio, date_relation
+from link_hls import split_name, norm_token, given_key, given_ratio, ratio, date_relation
 
 csv.field_size_limit(10_000_000)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -64,7 +64,7 @@ def direct_pass(hbls, by_initial, surname_min, given_min, grace):
     matched = 0
     for p in hbls:
         surname = norm_token(p["surname"].split()[-1]) if p["surname"] else ""
-        given = canon_given(p["given"].split()[0]) if p["given"] else ""
+        given = given_key(p["given"])
         if not surname or not given:
             continue
         b, d = hbls_lifespan(p)
@@ -75,7 +75,7 @@ def direct_pass(hbls, by_initial, surname_min, given_min, grace):
             sr = ratio(surname, h["surname"])
             if sr < surname_min:
                 continue
-            gr = ratio(given, h["given"])
+            gr = given_ratio(given, h["given"])
             if gr < given_min:
                 continue
             rel, gap = date_relation(h["m0"], h["m1"], h["dead"], b, d, grace=grace)

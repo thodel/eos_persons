@@ -23,7 +23,7 @@ import unicodedata
 import urllib.parse
 import urllib.request
 
-from link_hls import norm_token, canon_given, ratio
+from link_hls import norm_token, given_key, given_ratio, ratio
 from link_hbls_hls import year_agreement
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -94,8 +94,7 @@ def score_member(p_surname, p_given, hb, hd, hfl, m):
         sr = max(sr, best)
         if sr < 0.85:
             return None
-    gr = ratio(canon_given(p_given.split()[0]) if p_given else "",
-               canon_given(g_pref.split()[0]) if g_pref else "")
+    gr = given_ratio(given_key(p_given), given_key(g_pref))
     if gr < 0.74:
         return None
     gb = first_year(m.get("dateOfBirth"))
