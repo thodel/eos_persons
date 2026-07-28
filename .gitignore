@@ -261,3 +261,6 @@ merged_persons.csv
 
 # rare-surname dedup review artifact (regenerable via dedupe_rare_surnames.py)
 dedupe_rare_candidates.csv
+
+# authority-edge audit review artifact (regenerable via audit_authority_edges.py)
+audit_authority_edges.csv

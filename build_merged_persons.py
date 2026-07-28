@@ -220,7 +220,12 @@ def merge(cluster, hbls, hgb, hls, gnd, seq):
 
     # Do the source corpora actually agree on the given name? (GND's
     # "Surname, Given" form is excluded — different token order.)
-    agree = name_agreement([r["name"] for r in hb] + [r["title"] for r in hl] +
+    # Use the HLS bio fields, not the article title: for ~0.1% of bios the
+    # title drops a given name the record has ("Konrad Fässler" for
+    # bio.first_name "Johann Konrad"), which reads as a false conflict.
+    hl_names = [f"{r['first']} {r['family']}".strip() if r.get("first") else r["title"]
+                for r in hl]
+    agree = name_agreement([r["name"] for r in hb] + hl_names +
                            [k.rsplit("#", 1)[0] for k in hg_keys])
     if agree is not None and agree < NAME_MIN:
         conflicts.append("name_disagreement")

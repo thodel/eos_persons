@@ -81,28 +81,44 @@ def main():
         return (name, str(y[0]), str(y[1])) if y else None
 
     # ── patch persons_resolved.json ──
+    # Clear first, then set: this script used to only ever *set* `hls`, so a
+    # link that stopped being accepted (candidates regenerated, thresholds
+    # changed) stayed baked in forever. `wd` and `kin` are derived from `hls`
+    # by enrich_wikidata.py / link_wikidata_kin.py, so they have to go with it
+    # — otherwise a stale GND id keeps feeding Stage 3, which treats a shared
+    # authority id as its strongest merge signal. Re-run those two scripts
+    # afterwards to rebuild the enrichment from the surviving links.
     persons = json.load(open(args.persons, encoding="utf-8"))
-    n_p = 0
+    n_p = n_cleared = 0
     for p in persons:
         k = key_of(p["n"], p.get("y"))
         if k and k in accepted:
             p["hls"] = accepted[k]
             n_p += 1
+        elif p.get("hls"):
+            for field in ("hls", "wd", "kin"):
+                p.pop(field, None)
+            n_cleared += 1
     json.dump(persons, open(args.persons, "w", encoding="utf-8"),
               separators=(",", ":"), ensure_ascii=False)
-    print(f"  persons_resolved.json: linked {n_p} persons")
+    print(f"  persons_resolved.json: linked {n_p} persons, "
+          f"cleared {n_cleared} no longer supported")
 
     # ── patch families_graph.json nodes ──
     graph = json.load(open(args.graph, encoding="utf-8"))
-    n_n = 0
+    n_n = n_n_cleared = 0
     for node in graph.get("nodes", []):
         k = key_of(node.get("name"), node.get("y"))
         if k and k in accepted:
             node["hls"] = accepted[k]
             n_n += 1
+        elif node.get("hls"):
+            node.pop("hls", None)
+            n_n_cleared += 1
     json.dump(graph, open(args.graph, "w", encoding="utf-8"),
               separators=(",", ":"), ensure_ascii=False)
-    print(f"  families_graph.json: linked {n_n} nodes")
+    print(f"  families_graph.json: linked {n_n} nodes, "
+          f"cleared {n_n_cleared} no longer supported")
 
     # report a few
     print("\nExamples:")

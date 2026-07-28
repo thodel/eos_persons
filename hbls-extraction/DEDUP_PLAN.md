@@ -83,16 +83,16 @@ over-merging:
     (birth years spread > ~15 y), flag for review instead;
   - keep `n_candidates > 1` edges out of auto-merge.
 
-*Result (Basel slice):* 2,457 components (size ≥ 2) → **1,894 conflict-free
-cross-corpus identities** (`identity_clusters.csv`), **2,016 carrying a GND id**,
-75 spanning all three source corpora (HBLS+HGB+HLS). 302 components are flagged
-for review (191 multi-HGB homonyms, 77 birth-spread, 40 multi-HBLS, 19 multi-GND,
+*Result (Basel slice):* 2,458 components (size ≥ 2) → **1,909 conflict-free
+cross-corpus identities** (`identity_clusters.csv`), **2,031 carrying a GND id**,
+70 spanning all three source corpora (HBLS+HGB+HLS). 288 components are flagged
+for review (177 multi-HGB homonyms, 76 birth-spread, 39 multi-HBLS, 19 multi-GND,
 15 each multi-HLS/Wikidata) — exactly the cases the guards are meant to catch.
 
-Every number here improved when the given-name comparison was fixed: clean
-identities 1,782 → 1,894, tri-corpus 70 → 75, flagged 422 → 302. Removing false
-edges both merges *more* (records no longer pulled into a homonym's component
-resolve cleanly) and conflicts *less*.
+Every number here improved through the two fixes below: clean identities
+1,782 → 1,894 (given-name comparison) → **1,909** (authority-edge audit),
+flagged 422 → 302 → **288**. Removing false edges both merges *more* (records no
+longer pulled into a homonym's component resolve cleanly) and conflicts *less*.
 
 ### Stage 4 — Merge & emit  *(done — `../build_merged_persons.py`)*
 For each cluster emit a merged person: preferred display name (HLS form if
@@ -106,11 +106,11 @@ lexicon is the corrected successor of the printed one); each record carries a
 pool the HGB register terms with the GND authority roles but stay separately
 addressable (`occupations_hgb`, `roles_gnd`).
 
-*Result (Basel slice):* 2,457 clusters → **2,147 merged persons**
-(`merged_persons.json`, flat summary in `merged_persons.csv`), 2,123 with life
-dates, 1,827 with a GND id, 1,316 with occupations, 376 with publications, 29
-spanning all three source corpora. 310 go to review. All corpus joins resolve
-(0 dangling members). Names come from HLS for 1,817 and HBLS for 330.
+*Result (Basel slice):* 2,458 clusters → **2,167 merged persons**
+(`merged_persons.json`, flat summary in `merged_persons.csv`), 2,143 with life
+dates, 1,848 with a GND id, 1,334 with occupations, 379 with publications, 33
+spanning all three source corpora. 291 go to review. All corpus joins resolve
+(0 dangling members). Names come from HLS for 1,836 and HBLS for 331.
 
 **Given-name gate.** Merged records are re-scored on the common prefix of
 **all** given tokens (particles and HLS noble epithets stripped, so "Escher vom
@@ -132,18 +132,43 @@ it accepted and the fix rejects, **863 had been scored high-confidence**, and a
 Ludwig Wettstein* ⇄ HLS *Johann Rudolf Wettstein*, HGB *Hanns Lux Burkhardt* ⇄
 HLS *Johann Balthasar Burckhardt*, both scored 1.00 by the old rule.
 
-The Stage 4 gate is retained as a backstop and still earns its place: it flags
-52 clusters (5 with no other conflict), down from 347 before the upstream fix.
-The residue is links the matcher cannot reach — e.g. HGB *Hans Ulrich Grassern*
-⇄ *Johann Jakob Grasser* survives because that edge comes from the HGB→Wikidata
-enrichment (`enrich_wikidata.py`), not from name matching. **Auditing the
-authority-id edges is the obvious next quality step**, since GND/Wikidata edges
-are treated as the strongest merge signal in Stage 3 and are currently the
-weakest-verified.
+The gate is now a pure regression backstop: it flags 21 clusters, **none of
+them on the name check alone** (347 → 51 → 0 uniquely-caught, as the two root
+causes below were fixed). It costs nothing to keep and will catch the defect
+class if it ever returns.
 
-Still to do: surface the merged records in the site the way the existing
-HLS/Wikidata chips work in `index.html` (`merged_persons.json` is not yet read
-by any page).
+**Authority-edge audit** *(`../audit_authority_edges.py`)*. Stage 3 treats a
+shared GND/Wikidata id as its strongest signal — two records on the same
+authority node merge transitively with no name or date check. For HGB records
+those ids are not independently sourced: `enrich_wikidata.py` assigns them
+straight from the HLS article id (`p["wd"] = facts[p["hls"]["id"]]`), which
+`apply_hls_links.py` picked out of `link_candidates_hls.csv`. So every HGB
+authority edge rested entirely on one HGB↔HLS name match, and if that match was
+wrong two different people fused silently.
+
+The audit re-derives what `apply_hls_links.py` would accept from the current
+candidates and classifies each baked-in link as confirmed / changed / revoked.
+First run: of 809 HGB persons carrying an HLS link, **169 were revoked and 5
+changed — 21.5% unsupported**, 171 of them carrying a GND/Wikidata id and **94
+also propagating kinship** into the corpus and the family trees.
+
+Root cause was an idempotency bug: `apply_hls_links.py` only ever *set* `hls`
+and never cleared it, so a link that stopped being accepted stayed baked in
+permanently. It now clears `hls`/`wd`/`kin` for persons whose link no longer
+holds (both in `persons_resolved.json` and in `families_graph.json`), and the
+audit re-runs clean at **796/796 confirmed, 0 unsupported**.
+
+Two independent signals agree in the audit — re-derivation from the fixed
+candidates, and the given-name check — which is why `links failing the
+given-name check` and `unsupported links` both reach 0 together.
+
+Still to do:
+- **Rebuild `kin`** — `link_wikidata_kin.py` could not complete (WDQS returned
+  504s). Stale kinship was *removed* by the `apply_hls_links.py` fix, so the
+  data is correct-but-incomplete; the 5 "changed" links are the ones whose
+  kinship most warrants recomputation.
+- **Surface the merged records** in the site the way the existing HLS/Wikidata
+  chips work in `index.html` (`merged_persons.json` is not yet read by any page).
 
 ## Intra-HBLS dedup (prerequisite, lightweight)
 The same family is occasionally printed in more than one volume/supplement
