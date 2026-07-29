@@ -26,18 +26,7 @@ INVERSE = {"P22": "Kind", "P25": "Kind", "P26": "Ehepartner", "P40": "Elternteil
 CACHE = "/tmp/wd_kin.json"
 
 
-def fetch_kin(qids):
-    import os
-    if os.path.exists(CACHE):
-        cached = json.load(open(CACHE))
-        if cached and "p" in cached[0]:
-            print("  using cached /tmp/wd_kin.json")
-            return cached
-    values = " ".join(f"wd:{q}" for q in qids)
-    q = f"""SELECT ?a ?b ?p WHERE {{
-      VALUES ?a {{ {values} }} VALUES ?b {{ {values} }}
-      VALUES ?p {{ wdt:P22 wdt:P25 wdt:P26 wdt:P40 }}
-      ?a ?p ?b. }}"""
+def _query(q):
     body = urllib.parse.urlencode({"query": q, "format": "json"}).encode()
     for attempt in range(6):
         try:
@@ -46,14 +35,51 @@ def fetch_kin(qids):
                 headers={"User-Agent": UA, "Accept": "application/json",
                          "Content-Type": "application/x-www-form-urlencoded"})
             with urllib.request.urlopen(req, timeout=120) as r:
-                rows = json.load(r)["results"]["bindings"]
-            return [{"a": x["a"]["value"].rsplit("/", 1)[-1],
-                     "b": x["b"]["value"].rsplit("/", 1)[-1],
-                     "p": x["p"]["value"].rsplit("/", 1)[-1]} for x in rows]
+                return json.load(r)["results"]["bindings"]
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt < 5:
                 print("  429 — waiting 65s"); time.sleep(65); continue
+            if e.code in (500, 502, 503, 504) and attempt < 5:
+                wait = 10 * (attempt + 1)
+                print(f"  {e.code} — retrying in {wait}s")
+                time.sleep(wait); continue
             raise
+
+
+def fetch_kin(qids, batch=200):
+    """Kin statements among our linked QIDs, batched.
+
+    This used to bind both ends of the relation in one request
+    (`VALUES ?a {…} VALUES ?b {…}` over the same ~700-id list), which asks WDQS
+    to consider ~N² combinations in a single query and reliably timed out with
+    502/504. Binding only `?a` makes the query linear; the other end is
+    filtered back down to our own set locally, which is the same result for a
+    fraction of the work.
+    """
+    import os
+    if os.path.exists(CACHE):
+        cached = json.load(open(CACHE))
+        if cached and "p" in cached[0]:
+            print("  using cached /tmp/wd_kin.json")
+            return cached
+    want = set(qids)
+    out = []
+    for i in range(0, len(qids), batch):
+        chunk = qids[i:i + batch]
+        values = " ".join(f"wd:{q}" for q in chunk)
+        rows = _query(f"""SELECT ?a ?b ?p WHERE {{
+      VALUES ?a {{ {values} }}
+      VALUES ?p {{ wdt:P22 wdt:P25 wdt:P26 wdt:P40 }}
+      ?a ?p ?b. }}""")
+        for x in rows:
+            b = x["b"]["value"].rsplit("/", 1)[-1]
+            if b in want:
+                out.append({"a": x["a"]["value"].rsplit("/", 1)[-1], "b": b,
+                            "p": x["p"]["value"].rsplit("/", 1)[-1]})
+        print(f"  …{min(i + batch, len(qids))}/{len(qids)} qids, {len(out)} in-corpus statements")
+        time.sleep(1)
+    json.dump(out, open(CACHE, "w"))
+    return out
 
 
 def main():
