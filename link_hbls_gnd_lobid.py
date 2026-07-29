@@ -14,7 +14,9 @@ on-disk response cache (reruns are free), and a throttle between live calls.
     python3 link_hbls_gnd_lobid.py --basel --limit 50 # quick validation
 """
 import argparse
+import collections
 import csv
+import gzip
 import hashlib
 import json
 import os
@@ -63,6 +65,79 @@ def lobid_search(query, size=15, throttle=0.5):
                 print(f"    lobid error for {query!r}: {e}")
                 return []
             time.sleep(2 + attempt * 3)
+
+
+def load_dump(paths):
+    """Index one or more lobid JSON-lines dumps by surname initial.
+
+    Pass several comma-separated slices to union them (deduplicated on
+    gndIdentifier). Neither slice alone is sufficient: the Swiss area code
+    misses Swiss-relevant people catalogued as "Deutschland"/"Land unbekannt",
+    while the era slice misses anyone whose record carries no date at all.
+
+    At full-corpus scale the per-person API search means ~14k requests; lobid's
+    usage policy prefers a bulk download for jobs that size, and one filtered
+    request fetches the whole Swiss-coded person set:
+
+        curl -G -H 'Accept-Encoding: gzip' \\
+          --data-urlencode 'q=type:DifferentiatedPerson AND
+             geographicAreaCode.id:"…/geographic-area-code#XA-CH"' \\
+          --data-urlencode 'format=jsonl' \\
+          https://lobid.org/gnd/search -o gnd_dump_ch.jsonl.gz
+
+    Blocking on the folded surname initial is lossless for the sr ≥ 0.85 gate,
+    since `ratio()` already returns 0 when the first characters differ. Variant
+    names are indexed too, mirroring the API path's variantName fallback.
+    """
+    idx = collections.defaultdict(list)
+    seen = set()
+    for path in paths:
+        opener = gzip.open if path.endswith(".gz") else open
+        with opener(path, "rt", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                m = json.loads(line)
+                if m.get("gndIdentifier") in seen:
+                    continue
+                seen.add(m.get("gndIdentifier"))
+                _index_member(idx, m)
+    return idx
+
+
+def _index_member(idx, m):
+    """Add one dump record to the surname-initial index."""
+    surs = set()
+    for nm in [m.get("preferredName") or ""] + list(m.get("variantName") or []):
+        s = norm_token(ascii_fold(split_pref(nm)[1]))
+        if s:
+            surs.add(s)
+    if not surs:
+        return
+    # keep absent keys absent, so `.get(k, default)` downstream behaves
+    # exactly as it does on an API response
+    slim = {k: m[k] for k in
+            ("gndIdentifier", "preferredName", "variantName",
+             "dateOfBirth", "dateOfDeath", "professionOrOccupation")
+            if m.get(k) is not None}
+    slim["_surs"] = surs
+    gk = given_key(split_pref(m.get("preferredName") or "")[0])
+    slim["_gini"] = gk[0] if gk else ""
+    for ini in {s[0] for s in surs}:
+        idx[ini].append(slim)
+
+
+def dump_search(idx, surname, given):
+    """Offline stand-in for `lobid_search`, returning candidate member records."""
+    s = norm_token(ascii_fold(surname))
+    g = given_key(given)
+    if not s or not g:
+        return []
+    # Both gates require a matching initial (see `ratio`), and sr ≥ 0.85 cannot
+    # hold across a length gap of more than ~2 on names of this length.
+    return [m for m in idx.get(s[0], ())
+            if m["_gini"] == g[0]
+            and any(abs(len(x) - len(s)) <= 2 for x in m["_surs"])]
 
 
 def first_year(date_list):
@@ -123,6 +198,10 @@ def main():
     ap.add_argument("--skip-tier0", default="link_hbls_gnd.csv",
                     help="CSV of persons already GND-linked by Tier 0")
     ap.add_argument("--out", default="link_hbls_gnd_lobid_candidates.csv")
+    ap.add_argument("--dump", default="",
+                    help="comma-separated lobid JSON-lines dumps; resolves "
+                         "locally instead of one API request per person "
+                         "(see load_dump)")
     args = ap.parse_args()
 
     fname = "hbls_persons_basel.json" if args.basel else "hbls_persons.json"
@@ -149,15 +228,27 @@ def main():
     print(f"{len(persons)} persons; {len(done)} already GND-linked (Tier 0); "
           f"{len(todo)} to look up on lobid")
 
+    idx = None
+    if args.dump:
+        paths = [p if os.path.isabs(p) else os.path.join(HERE, p)
+                 for p in (s.strip() for s in args.dump.split(",")) if p]
+        print(f"loading GND dump(s): {', '.join(os.path.basename(p) for p in paths)} …")
+        idx = load_dump(paths)
+        print(f"  indexed {sum(len(v) for v in idx.values())} name keys "
+              f"over {len(idx)} surname initials")
+
     rows = []
     for i, p in enumerate(todo, 1):
         sn = ascii_fold(p["surname"].split()[-1])
         gn = ascii_fold(p["given"].split()[0])
-        q = f'preferredName.ascii:"{sn}" AND preferredName.ascii:"{gn}"'
-        members = lobid_search(q)
-        if not members:
-            members = lobid_search(f'variantName.ascii:"{sn}" AND '
-                                   f'preferredName.ascii:"{gn}"')
+        if idx is not None:
+            members = dump_search(idx, p["surname"].split()[-1], p["given"])
+        else:
+            q = f'preferredName.ascii:"{sn}" AND preferredName.ascii:"{gn}"'
+            members = lobid_search(q)
+            if not members:
+                members = lobid_search(f'variantName.ascii:"{sn}" AND '
+                                       f'preferredName.ascii:"{gn}"')
         hb, hd = p.get("birth_year"), p.get("death_year")
         hfl = p.get("floruit_years")
         cands = []

@@ -67,11 +67,52 @@ For HBLS persons not covered by Tier 0 and carrying ≥1 life year:
 3. Accept only when name+dates uniquely identify one person (`n_candidates==1`,
    score ≥ threshold); else → review CSV. Date agreement is decisive (homonyms).
 
-*Result (Basel slice):* of 3,327 dated persons unresolved by Tier 0, **345
-matched a GND (320 unambiguous)** — an ~10% hit rate that confirms GND's
+*Result (Basel slice, API mode):* of 3,327 dated persons unresolved by Tier 0,
+**345 matched a GND (320 unambiguous)** — an ~10% hit rate that confirms GND's
 modern/notable skew (floruit-only medieval persons are skipped by default; they
 yield virtually no GND). Throttled lobid calls are cached under
 `.lobid_cache/` so reruns are free.
+
+#### Bulk-dump mode (`--dump`), required for the full corpus
+
+One API request per person is fine for a 3.3k slice but means ~14k requests
+corpus-wide, and lobid's usage policy prefers a bulk download at that size. Two
+filtered requests fetch everything instead — a Swiss-area slice and an era
+slice, unioned and deduplicated on `gndIdentifier`:
+
+```bash
+cd hbls-extraction
+curl -sS -G -H 'Accept-Encoding: gzip' -H "User-Agent: <descriptive UA>" \
+  --data-urlencode 'q=type:DifferentiatedPerson AND geographicAreaCode.id:"https://d-nb.info/standards/vocab/gnd/geographic-area-code#XA-CH"' \
+  --data-urlencode 'format=jsonl' https://lobid.org/gnd/search -o gnd_dump_ch.jsonl.gz
+curl -sS -G -H 'Accept-Encoding: gzip' -H "User-Agent: <descriptive UA>" \
+  --data-urlencode 'q=type:DifferentiatedPerson AND (dateOfBirth:[1300 TO 1899] OR dateOfDeath:[1300 TO 1899])' \
+  --data-urlencode 'format=jsonl' https://lobid.org/gnd/search -o gnd_dump_era.jsonl.gz
+
+python3 ../link_hbls_gnd_lobid.py \
+  --dump hbls-extraction/gnd_dump_ch.jsonl.gz,hbls-extraction/gnd_dump_era.jsonl.gz
+```
+
+197,781 + 900,087 records → 347 MB gzipped, ~1.42 M indexed name keys. Records
+are blocked on the folded surname initial, which is lossless for the `sr ≥ 0.85`
+gate because `ratio()` already returns 0 when initials differ.
+
+**Neither slice alone suffices**, and this was measured rather than assumed. The
+Swiss slice alone misses 84 of the 380 API-found Basel pairs — Swiss-relevant
+people catalogued as "Deutschland" or "Land unbekannt" (e.g. *Grasser, Jonas*,
+a perfect-score match). The era slice covers those. Validated on Basel, the
+union reproduces **379 of the 380** API pairs and finds **479 additional** ones,
+because the API query matched given-name *tokens* literally while the dump path
+canonicalises first (so `Hans` ⇄ `Johann` surfaces as a candidate at all).
+
+*Known boundary:* the one uncovered pair is a person who died in 1926 with no
+birth date and a German area code, so falls outside both slices. HBLS was
+published 1921–34, so its subjects can die into the 1930s; extending the era
+slice to 1940 would close this, but that adds ~899k mostly-20th-century records
+— roughly doubling index size and runtime to recover 0.26% of links. Not taken.
+
+*Result (full corpus, dump mode):* see the rollout note at the end of
+DEDUP_PLAN.md.
 
 ### Tier 2 — enrichment fetch for accepted GND ids
 Per accepted `gndIdentifier`, fetch the record once (cached by id) and pull

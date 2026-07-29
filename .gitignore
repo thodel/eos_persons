@@ -264,3 +264,6 @@ dedupe_rare_candidates.csv
 
 # authority-edge audit review artifact (regenerable via audit_authority_edges.py)
 audit_authority_edges.csv
+
+# GND bulk dumps (large, regenerable via the curl in link_hbls_gnd_lobid.load_dump)
+hbls-extraction/gnd_dump_*.jsonl.gz

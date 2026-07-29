@@ -53,7 +53,7 @@ Because HLS *is* the successor of HBLS, expect a high unambiguous rate. Treat
 matched HBLS person a stable **HLS id** (and thus an `hls-dhs-dss.ch` URL and,
 via HLS, often a GND/Wikidata id already present in the site's enrichment).
 
-### Stage 2 — HBLS ↔ EOS/HGB persons  *(done for the Basel slice — `link_hbls_hgb.py`)*
+### Stage 2 — HBLS ↔ EOS/HGB persons  *(done, full corpus — `link_hbls_hgb.py --all`)*
 Run the same matcher with HBLS persons on one side and `persons_resolved.json`
 on the other, using the **mention-span** date rule. Two sub-passes:
   a. **direct** name+date match — 398 Basel HBLS persons matched ≥1 HGB person
@@ -191,3 +191,36 @@ The EOS/HGB data is Basel property-register persons. The realistic, immediately
 useful overlap is therefore Basel-connected HBLS people. The Basel subset is
 already isolated, so Stage 2 can be run on it alone first — smaller, reviewable,
 and directly serving the existing site — before scaling to the full corpus.
+
+
+## Full-corpus rollout  *(done)*
+
+Stage 1 and GND Tier 0 always ran corpus-wide. What was Basel-scoped was Stage 2
+(`--all`) and GND Tier 1 (bulk-dump mode, see GND_LINKING_PLAN.md).
+
+| | Basel slice | full corpus |
+|---|---|---|
+| Stage 2 HBLS↔HGB persons matched | 398 | **1,068** |
+| ...unambiguous | 145 | **431** |
+| Stage 2 transitive pairs | 189 | **796** |
+| GND Tier 1 persons matched | 345 | **2,422** |
+| ...unambiguous | 320 | **1,916** |
+| Stage 3 clusters (size ≥ 2) | 2,458 | **3,723** |
+| Stage 3 conflict-free multi-corpus | 1,909 | **2,003** |
+| Stage 3 carrying a GND id | 2,031 | **3,319** |
+| Stage 3 spanning all 3 corpora | 70 | **85** |
+| Stage 4 merged persons | 2,167 | **3,388** |
+| ...with life dates | 2,143 | **3,312** |
+| ...with a GND id | 1,848 | **3,068** |
+| Stage 4 review queue | 291 | 335 |
+
+The Stage 4 name gate still uniquely catches nothing (26 flagged, 0 on the name
+check alone), so the corpus-wide expansion did not reintroduce the defect class.
+
+**Tier 2 enrichment is now the lagging stage.** `gnd_enrichment.json` still holds
+only the 1,813 Basel-era GND records, against 3,343 GND ids in the merged output
+— **52% coverage**, which is why `with occupations` (1,355) and `with
+publications` (374) barely moved while `with a GND id` nearly doubled. Rolling
+Tier 2 out is the next step, and most of it needs no API traffic at all: roles,
+places, gender and `sameAs` are all present in the bulk dumps already on disk;
+only publications require the separate lobid-resources index.
