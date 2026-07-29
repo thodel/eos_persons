@@ -13,12 +13,12 @@
       --tag-border: #d4c9b8; --shadow: 0 1px 4px rgba(0,0,0,.08);
     }
     body { background: var(--bg); color: var(--text); font-family: 'Georgia', serif; font-size: 15px; line-height: 1.6; }
-    #site-header { height: 56px; background: var(--accent); color: #fff; display: flex; align-items: center; padding: 0 20px; gap: 16px; }
+    #site-header { min-height: 56px; background: var(--accent); color: #fff; display: flex; align-items: center; padding: 0 20px; gap: 16px; }
     #logos { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
     #logos img { height: 30px; width: auto; filter: brightness(0) invert(1); object-fit: contain; opacity: .9; }
     #logos img.logo-bern { height: 26px; }
     #site-title { font-size: .9rem; opacity: .7; white-space: nowrap; flex-shrink: 0; }
-    #page-nav { display: flex; margin-left: auto; flex-wrap: wrap; }
+    #page-nav { display: flex; margin-left: auto; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; }
     .page-tab { padding: 0 14px; height: 56px; display: flex; align-items: center; text-decoration: none; font-size: .8rem; color: rgba(255,255,255,.65); border-bottom: 3px solid transparent; transition: color .15s, border-color .15s; white-space: nowrap; }
     .page-tab:hover { color: #fff; }
     .page-tab.active { color: #fff; border-bottom-color: rgba(255,255,255,.7); }
@@ -66,6 +66,7 @@
     <a class="page-tab" href="tree.html">Stammbaum</a>
     <a class="page-tab" href="rollen.html">Rollen</a>
     <a class="page-tab active" href="hbls.html">HBLS</a>
+    <a class="page-tab" href="identitaeten.html">Identitäten</a>
   </nav>
 </div>
 

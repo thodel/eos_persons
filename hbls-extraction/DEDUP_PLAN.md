@@ -167,8 +167,12 @@ Still to do:
   504s). Stale kinship was *removed* by the `apply_hls_links.py` fix, so the
   data is correct-but-incomplete; the 5 "changed" links are the ones whose
   kinship most warrants recomputation.
-- **Surface the merged records** in the site the way the existing HLS/Wikidata
-  chips work in `index.html` (`merged_persons.json` is not yet read by any page).
+- ~~Surface the merged records in the site~~ *(done)* — `make_persons_web.py`
+  trims `merged_persons.json` to a 2.7 MB `persons_web.json` (tracked) and the
+  **Identitäten** tab (`identitaeten.html`) renders it: search over name,
+  occupation, place and work title; filters for tri-corpus / GND / publications
+  / occupation / attested in the Grundbuch; and every card links back to its
+  HBLS scan page, HLS article, GND, Wikidata and VIAF.
 
 ## Intra-HBLS dedup (prerequisite, lightweight)
 The same family is occasionally printed in more than one volume/supplement
