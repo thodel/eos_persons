@@ -16,6 +16,7 @@ GND_LINKING_PLAN.md (Tier 2).
 """
 import argparse
 import csv
+import gzip
 import json
 import os
 import time
@@ -58,6 +59,32 @@ def fetch(url, throttle=0.4):
                 print(f"    error {url}: {e}")
                 return None
             time.sleep(2 + attempt * 3)
+
+
+def load_records(paths, wanted):
+    """gndIdentifier -> full record, read from lobid JSON-lines bulk dumps.
+
+    The dumps already downloaded for Tier 1 (see GND_LINKING_PLAN.md) carry the
+    complete record — professionOrOccupation, sameAs, places, bio prose,
+    relations — so the per-id API fetch is only needed for accepted ids that
+    fall outside both dump slices (Tier 0 ids arrive via Wikidata and can be
+    any GND). Publications still come from the separate lobid-resources index.
+
+    Only `wanted` ids are retained, so memory stays proportional to the
+    accepted set rather than to the ~1.1M records on disk.
+    """
+    out = {}
+    for path in paths:
+        opener = gzip.open if path.endswith(".gz") else open
+        with opener(path, "rt", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                rec = json.loads(line)
+                g = rec.get("gndIdentifier")
+                if g in wanted and g not in out:
+                    out[g] = rec
+    return out
 
 
 def labels(items):
@@ -118,6 +145,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--no-publications", action="store_true")
+    ap.add_argument("--dump", default="",
+                    help="comma-separated lobid JSON-lines dumps to read GND "
+                         "records from instead of one API fetch per id")
     args = ap.parse_args()
 
     gnds = {}
@@ -137,9 +167,22 @@ def main():
         ids = ids[:args.limit]
     print(f"{len(ids)} distinct accepted GND ids to enrich")
 
+    from_dump = {}
+    if args.dump:
+        paths = [p if os.path.isabs(p) else os.path.join(HERE, p)
+                 for p in (s.strip() for s in args.dump.split(",")) if p]
+        print(f"reading GND records from {', '.join(os.path.basename(p) for p in paths)} …")
+        from_dump = load_records(paths, set(ids))
+        print(f"  {len(from_dump)}/{len(ids)} ids served from the dump; "
+              f"{len(ids) - len(from_dump)} need an API fetch")
+
     enrich = {}
+    n_api = 0
     for i, g in enumerate(ids, 1):
-        rec = fetch(f"https://lobid.org/gnd/{g}.json")
+        rec = from_dump.get(g)
+        if rec is None:
+            rec = fetch(f"https://lobid.org/gnd/{g}.json")
+            n_api += 1
         if not rec:
             continue
         e = extract_record(rec)
@@ -160,6 +203,7 @@ def main():
     nsa = sum(1 for e in enrich.values() if e.get("sameAs"))
     print(f"\nenriched {len(enrich)} GND records -> {OUT}")
     print(f"  with roles: {nrole}  with publications: {npub}  with sameAs: {nsa}")
+    print(f"  record fetches that hit the API: {n_api}")
 
 
 if __name__ == "__main__":

@@ -114,8 +114,14 @@ slice to 1940 would close this, but that adds ~899k mostly-20th-century records
 *Result (full corpus, dump mode):* see the rollout note at the end of
 DEDUP_PLAN.md.
 
-### Tier 2 — enrichment fetch for accepted GND ids
-Per accepted `gndIdentifier`, fetch the record once (cached by id) and pull
+### Tier 2 — enrichment for accepted GND ids  *(done — `../gnd_enrich.py`)*
+Pass `--dump` with the same slices as Tier 1 and the records come from disk:
+only ids outside both slices need the API (3 of 3,362 on the full corpus).
+*Result:* **3,362 enriched records** — 2,526 with roles, 3,249 with `sameAs`,
+683 with publications — covering 92% of the GND ids in the merged output.
+
+Per accepted `gndIdentifier`, read the record (from the dump, else fetch once
+and cache) and pull
 `professionOrOccupation` (roles), `sameAs` (VIAF / Deutsche Biographie / ISNI),
 bio prose, places, relations; then one lobid-resources query for **publications**.
 

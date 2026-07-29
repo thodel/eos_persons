@@ -217,10 +217,22 @@ Stage 1 and GND Tier 0 always ran corpus-wide. What was Basel-scoped was Stage 2
 The Stage 4 name gate still uniquely catches nothing (26 flagged, 0 on the name
 check alone), so the corpus-wide expansion did not reintroduce the defect class.
 
-**Tier 2 enrichment is now the lagging stage.** `gnd_enrichment.json` still holds
-only the 1,813 Basel-era GND records, against 3,343 GND ids in the merged output
-— **52% coverage**, which is why `with occupations` (1,355) and `with
-publications` (374) barely moved while `with a GND id` nearly doubled. Rolling
-Tier 2 out is the next step, and most of it needs no API traffic at all: roles,
-places, gender and `sameAs` are all present in the bulk dumps already on disk;
-only publications require the separate lobid-resources index.
+**Tier 2 enrichment rolled out too** (`gnd_enrich.py --dump`). It reads the GND
+records from the same bulk dumps, falling back to the API only for accepted ids
+outside both slices — in practice **3 of 3,362**, since Tier 0 ids arrive via
+Wikidata and can be any GND. `gnd_enrichment.json` grows 1,813 → **3,362**
+records (2,526 with roles, 3,249 with `sameAs`, 683 with publications), lifting
+coverage of the merged output's 3,343 GND ids from 52% to **92%**.
+
+Re-running Stage 4 on it:
+
+| Stage 4 attribute | Basel | corpus, pre-Tier-2 | corpus, final |
+|---|---|---|---|
+| merged persons | 2,167 | 3,388 | **3,388** |
+| with occupations | 1,334 | 1,355 | **2,426** |
+| with publications | 379 | 374 | **602** |
+| with places | — | — | **1,701** |
+| with external ids (VIAF/DB/ISNI/LC) | — | — | **2,975** |
+
+Publications are the only part still fetched per id, from the separate
+lobid-resources index.
