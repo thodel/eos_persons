@@ -15,6 +15,7 @@ Options:
 """
 
 import json
+import re
 import sys
 import time
 import argparse
@@ -33,6 +34,50 @@ PERSON_ROLES = [
     "pledger", "pledgee", "redeemer", "grantor", "creditor", "bidder",
     "member", "actor", "family-a", "family-b", "lessee",
 ]
+
+# Anaphoric references, determiners and bare generic nouns that the extraction
+# records as person roles. They are correct as *references* to a person, but
+# carry no identity, and being extremely frequent they otherwise dominate the
+# index when it is browsed by mention count ("seine" alone had 11,033).
+#
+# Matched only against the WHOLE normalised string, never as a substring, so
+# multi-word mentions that embed a real name survive — "seine Frau Ennelin"
+# is kept, bare "seine" is dropped. Middle High German / Early New High German
+# orthography varies freely (i/j/y, -in/-en), hence the many variants.
+PRONOUN_STOPWORDS = frozenset("""
+sein seine seinem seinen seiner seines seim seyn sen
+sin sine sinem sinen siner sines sins sim syn synem synen syner sym
+ir ire irem iren irer ires irs
+jr jre jrem jren jrer jres jrs jro jme jnen
+yr yre yrem yren yrer
+ihm ihme ihn ihnen ihr ihre ihrem ihren ihrer ihres
+ime inen
+er sie es sich selbs selbst
+ich wir uns unser unsere unserem unseren unserm unsern
+der die das dem den des ders
+ein eine einem einen einer eines eins
+derselb derselbe derselben desselben demselben denselben
+dieselb dieselbe dieselben dasselbe
+dessen deren denen
+welcher welche welchem welchen welches
+sel selig seligen seelig seeligen sal
+jeder jede jedem jeden
+eig eigen
+eius sue sic idem eiusdem
+wer wem wen was
+und oder aber
+""".split())
+
+# Punctuation/whitespace the extraction leaves attached to a span.
+_NORM_RE = re.compile(r"^[\W_]+|[\W_]+$", flags=re.UNICODE)
+
+
+def is_name_like(text: str) -> bool:
+    """True unless the whole span normalises to a stopword (or to nothing)."""
+    norm = _NORM_RE.sub("", text).casefold()
+    if len(norm) < 2:
+        return False
+    return norm not in PRONOUN_STOPWORDS
 
 
 def sparql(query: str, timeout: int = 90) -> dict:
@@ -93,12 +138,21 @@ def build_index(page_size: int) -> list:
     # Aggregate: name -> {count, min_year, max_year, roles}
     agg: dict[str, dict] = defaultdict(lambda: {"c": 0, "yFrom": None, "yTo": None, "roles": set()})
 
+    kept_rows = 0
+    dropped_rows = 0
+    dropped_forms = defaultdict(int)
+
     total_roles = len(PERSON_ROLES)
     for i, role in enumerate(PERSON_ROLES, 1):
         t0 = time.time()
         print(f"[{i}/{total_roles}] role='{role}'", end=" ", flush=True)
         rows = fetch_role(role, page_size)
         for name, year in rows:
+            if not is_name_like(name):
+                dropped_rows += 1
+                dropped_forms[name] += 1
+                continue
+            kept_rows += 1
             e = agg[name]
             e["c"] += 1
             e["roles"].add(role)
@@ -107,6 +161,11 @@ def build_index(page_size: int) -> list:
             if e["yTo"] is None or year > e["yTo"]:
                 e["yTo"] = year
         print(f"→ {len(rows)} rows in {time.time()-t0:.1f}s", flush=True)
+
+    print(f"\nFiltered {dropped_rows:,} anaphoric/determiner rows "
+          f"({len(dropped_forms)} distinct forms); kept {kept_rows:,}.")
+    for form, n in sorted(dropped_forms.items(), key=lambda kv: -kv[1])[:10]:
+        print(f"    dropped {n:>6}  {form!r}")
 
     # Serialise
     index = [
