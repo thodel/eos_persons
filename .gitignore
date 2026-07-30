@@ -255,8 +255,10 @@ hbls-extraction/gnd_enrichment.json
 identity_clusters.json
 identity_clusters.csv
 
-# Stage 4 merged output (regenerable via build_merged_persons.py)
-merged_persons.json
+# Stage 4 merged output (regenerable via build_merged_persons.py).
+# merged_persons.json is tracked: the MCP server's build_identities.py reads it
+# on the deployment host, which only has what git brings. The CSV is a review
+# convenience and stays ignored.
 merged_persons.csv
 
 # rare-surname dedup review artifact (regenerable via dedupe_rare_surnames.py)

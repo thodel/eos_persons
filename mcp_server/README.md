@@ -138,6 +138,46 @@ server {
 
 ---
 
+## Updating the deployed server
+
+The alpha endpoint at `https://tei.dh.unibe.ch/mpc/eos` runs from this
+directory via Docker. The HGB tables come from the 800 MB XML and change
+almost never; the identity tables change on every pipeline run and rebuild in
+under a second, so a refresh does **not** need the XML.
+
+`merged_persons.json` is tracked in git precisely so this works from a pull —
+if it is missing on the host, `build_identities.py` has nothing to read and the
+identity tools will keep returning "Identity tables not present".
+
+```bash
+# on the deployment host, in the repo checkout
+git pull
+
+# load the current identities into the live database
+#   --db must point at the SAME hgb.db the container serves
+#   (the compose file mounts /data/hgb -> /data, so it is /data/hgb/hgb.db)
+docker run --rm -v /data/hgb:/data hgb-mcp \
+  python build_identities.py --json /data/merged_persons.json --db /data/hgb.db
+
+# if merged_persons.json is not already beside hgb.db, copy it there first:
+#   cp merged_persons.json /data/hgb/merged_persons.json
+
+# rebuild the image only if server code changed, then restart
+docker compose build
+docker compose up -d
+```
+
+Verify from any MCP client, or against the container directly:
+
+```bash
+docker run --rm -v /data/hgb:/data hgb-mcp python -c \
+  "import db; db.set_db_path('/data/hgb.db'); print(db.identity_stats())"
+```
+
+Expected right now: 3,388 identities, 3,068 with a GND id, 38 in all three
+corpora. `build_identities.py` drops and rebuilds only `identities` and
+`fts_identities`, so re-running it is safe and never touches the HGB tables.
+
 ## Available tools
 
 | Tool | Description |
