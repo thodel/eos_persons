@@ -2,9 +2,10 @@
 db.py — SQLite query helpers for the HGB MCP server.
 """
 
+import json
 import sqlite3
 from contextlib import contextmanager
-from typing import Any
+from typing import Any, List, Optional
 
 _DB_PATH: str = "hgb.db"
 
@@ -200,4 +201,102 @@ def db_stats() -> dict[str, Any]:
             "n_dossiers":  c.execute("SELECT COUNT(DISTINCT dossier_id) FROM documents").fetchone()[0],
             "year_min":    c.execute("SELECT MIN(year) FROM documents").fetchone()[0],
             "year_max":    c.execute("SELECT MAX(year) FROM documents").fetchone()[0],
+        }
+
+
+# ── Cross-corpus identities ───────────────────────────────────────────────────
+#
+# One row per real person, resolved across HBLS / HLS / HGB with GND and
+# Wikidata authority ids (see ../hbls-extraction/DEDUP_PLAN.md). Loaded by
+# build_identities.py; absent until that has been run, so every accessor here
+# degrades to an explanatory error rather than an sqlite3 exception.
+
+_JSON_FIELDS = ("conflicts", "occupations", "places", "publications",
+                "dossiers", "sources")
+
+
+def has_identities() -> bool:
+    with conn() as c:
+        return bool(c.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='identities'"
+        ).fetchone())
+
+
+def _identity_row(row) -> dict:
+    """Expand the JSON-encoded columns back into real structures."""
+    d = dict(row)
+    for f in _JSON_FIELDS:
+        if f in d and isinstance(d[f], str):
+            try:
+                d[f] = json.loads(d[f])
+            except (TypeError, ValueError):
+                pass
+    d["corpora"] = d["corpora"].split("+") if d.get("corpora") else []
+    return d
+
+
+def search_identities(query: str, limit: int = 20, corpus: Optional[str] = None,
+                      with_gnd: bool = False) -> list[dict]:
+    sql = ["""SELECT i.* FROM fts_identities f
+              JOIN identities i ON i.id = f.id
+              WHERE fts_identities MATCH ?"""]
+    params: List[Any] = [query]
+    if corpus:
+        sql.append("AND i.corpora LIKE ?")
+        params.append(f"%{corpus}%")
+    if with_gnd:
+        sql.append("AND i.gnd IS NOT NULL")
+    sql.append("ORDER BY rank LIMIT ?")
+    params.append(limit)
+    with conn() as c:
+        rows = c.execute(" ".join(sql), params).fetchall()
+    return [_identity_row(r) for r in rows]
+
+
+def get_identity(identity_id: str) -> dict:
+    with conn() as c:
+        row = c.execute("SELECT * FROM identities WHERE id = ?",
+                        (identity_id,)).fetchone()
+    return _identity_row(row) if row else {}
+
+
+def get_identity_by_authority(scheme: str, value: str) -> dict:
+    col = {"gnd": "gnd", "wikidata": "wikidata", "hls": "hls_id",
+           "viaf": "viaf"}.get(scheme.lower())
+    if not col:
+        return {}
+    with conn() as c:
+        row = c.execute(f"SELECT * FROM identities WHERE {col} = ?",
+                        (value,)).fetchone()
+    return _identity_row(row) if row else {}
+
+
+def identities_in_year_range(year_from: int, year_to: int,
+                             limit: int = 100) -> list[dict]:
+    """Identities whose life span overlaps [year_from, year_to]."""
+    with conn() as c:
+        rows = c.execute(
+            """SELECT * FROM identities
+               WHERE (birth_year IS NOT NULL OR death_year IS NOT NULL)
+                 AND COALESCE(birth_year, death_year) <= ?
+                 AND COALESCE(death_year, birth_year) >= ?
+               ORDER BY COALESCE(birth_year, death_year) LIMIT ?""",
+            (year_to, year_from, limit)).fetchall()
+    return [_identity_row(r) for r in rows]
+
+
+def identity_stats() -> dict[str, Any]:
+    with conn() as c:
+        one = lambda q: c.execute(q).fetchone()[0]  # noqa: E731
+        return {
+            "n_identities":      one("SELECT COUNT(*) FROM identities"),
+            "with_life_dates":   one("SELECT COUNT(*) FROM identities WHERE birth_year IS NOT NULL OR death_year IS NOT NULL"),
+            "with_gnd":          one("SELECT COUNT(*) FROM identities WHERE gnd IS NOT NULL"),
+            "with_wikidata":     one("SELECT COUNT(*) FROM identities WHERE wikidata IS NOT NULL"),
+            "with_occupations":  one("SELECT COUNT(*) FROM identities WHERE occupations != '[]'"),
+            "with_publications": one("SELECT COUNT(*) FROM identities WHERE n_publications > 0"),
+            "in_all_three_corpora": one("SELECT COUNT(*) FROM identities WHERE n_corpora = 3"),
+            "attested_in_hgb":   one("SELECT COUNT(*) FROM identities WHERE corpora LIKE '%hgb%'"),
+            "year_min":          one("SELECT MIN(birth_year) FROM identities"),
+            "year_max":          one("SELECT MAX(death_year) FROM identities"),
         }

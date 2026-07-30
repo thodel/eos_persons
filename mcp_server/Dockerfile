@@ -7,10 +7,12 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy server code
-COPY build_db.py db.py server.py ./
+COPY build_db.py build_identities.py db.py server.py ./
 
-# hgb.db is mounted at runtime (see docker-compose.yml)
-# Build it first with: docker run --rm -v /path/to/data:/data hgb-mcp python build_db.py --xml /data/hgb_full.xml --db /data/hgb.db
+# hgb.db is mounted at runtime (see docker-compose.yml). Build it first with:
+#   docker run --rm -v /path/to/data:/data hgb-mcp python build_db.py --xml /data/hgb_full.xml --db /data/hgb.db
+# then load the cross-corpus identities into the same file:
+#   docker run --rm -v /path/to/data:/data hgb-mcp python build_identities.py --json /data/merged_persons.json --db /data/hgb.db
 
 EXPOSE 8000
 

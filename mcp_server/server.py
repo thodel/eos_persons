@@ -28,7 +28,14 @@ mcp = FastMCP(
         "Documents contain tokenised medieval German text annotated with persons, "
         "dates, money amounts, and legal events (payments, transfers, etc.). "
         "Use search_persons to find person mentions; get_document for full detail; "
-        "search_text for keyword search across the raw transcriptions."
+        "search_text for keyword search across the raw transcriptions. "
+        "Separately, the identity tools (search_identities, get_identity, "
+        "get_identity_by_authority) expose resolved *people* rather than raw "
+        "mentions: one record per person merged across the HGB, the printed "
+        "Historisch-Biographisches Lexikon der Schweiz (HBLS) and its online "
+        "successor (HLS), keyed to GND and Wikidata, with provenance back to "
+        "each source. Use those when the question is about a person; use "
+        "search_persons when it is about where a name occurs in the documents."
     ),
 )
 
@@ -148,6 +155,111 @@ def list_dossiers(limit: int = 200) -> list[dict]:
     return db_module.list_dossiers(min(limit, 2000))
 
 
+# ── Cross-corpus identities ───────────────────────────────────────────────────
+#
+# The tools above work on raw HGB *mentions*: one row per time a name appears in
+# a document. These work on resolved *people*: one record per real person,
+# merged across HBLS, HLS and the HGB and keyed to GND/Wikidata, each carrying
+# a sources[] array back to every contributing corpus.
+
+_NO_IDENTITIES = {
+    "error": "Identity tables not present in this database. "
+             "Run: python build_identities.py --json ../merged_persons.json --db <db>"
+}
+
+
+@mcp.tool()
+def identity_stats() -> dict:
+    """
+    Statistics about the cross-corpus person identities: how many resolved
+    people, how many carry a GND/Wikidata id, how many are attested in all
+    three source corpora.
+    """
+    if not db_module.has_identities():
+        return _NO_IDENTITIES
+    return db_module.identity_stats()
+
+
+@mcp.tool()
+def search_identities(query: str, limit: int = 20, corpus: Optional[str] = None,
+                      with_gnd: bool = False) -> list[dict]:
+    """
+    Search resolved cross-corpus persons by name, occupation, place or the
+    title of a work they authored.
+
+    Prefer this over search_persons when you want *people* rather than raw
+    document mentions: each hit is one person with life dates, occupations,
+    authority ids (GND/Wikidata/VIAF) and provenance back to each source.
+
+    Args:
+        query:    FTS5 query, e.g. "Buchdrucker", "Zwinger", "Basel".
+        limit:    Maximum results (default 20, max 200).
+        corpus:   Restrict to persons attested in a corpus: "hbls", "hls" or "hgb".
+        with_gnd: Only return persons carrying a GND identifier.
+    """
+    if not db_module.has_identities():
+        return [_NO_IDENTITIES]
+    if corpus and corpus.lower() not in ("hbls", "hls", "hgb"):
+        return [{"error": "corpus must be one of: hbls, hls, hgb"}]
+    return db_module.search_identities(
+        query, min(limit, 200), corpus.lower() if corpus else None, with_gnd)
+
+
+@mcp.tool()
+def get_identity(identity_id: str) -> dict:
+    """
+    Fetch one resolved person by id, with full detail: life dates, occupations,
+    places, publications, authority ids, HGB dossiers and the sources[] array
+    linking back to the HBLS scan page, HLS article, GND and Wikidata.
+
+    Args:
+        identity_id: Identity id, e.g. "person:00050".
+    """
+    if not db_module.has_identities():
+        return _NO_IDENTITIES
+    rec = db_module.get_identity(identity_id)
+    return rec or {"error": f"Identity '{identity_id}' not found."}
+
+
+@mcp.tool()
+def get_identity_by_authority(scheme: str, value: str) -> dict:
+    """
+    Look up a resolved person by an external authority identifier — the
+    reliable way in, when you already have an id from another system.
+
+    Args:
+        scheme: One of "gnd", "wikidata", "hls", "viaf".
+        value:  The identifier, e.g. "104334274", "Q6215993", "025956".
+    """
+    if not db_module.has_identities():
+        return _NO_IDENTITIES
+    if scheme.lower() not in ("gnd", "wikidata", "hls", "viaf"):
+        return {"error": "scheme must be one of: gnd, wikidata, hls, viaf"}
+    rec = db_module.get_identity_by_authority(scheme, value)
+    return rec or {"error": f"No identity with {scheme}={value}."}
+
+
+@mcp.tool()
+def get_identities_in_year_range(
+    year_from: int, year_to: int, limit: int = 100
+) -> list[dict]:
+    """
+    Resolved persons whose life span overlaps the given years. Unlike
+    get_persons_in_year_range (which returns document mentions), this returns
+    one record per person.
+
+    Args:
+        year_from: Start year (inclusive).
+        year_to:   End year (inclusive).
+        limit:     Maximum results (default 100, max 500).
+    """
+    if not db_module.has_identities():
+        return [_NO_IDENTITIES]
+    if year_to < year_from:
+        return [{"error": "year_to must be >= year_from"}]
+    return db_module.identities_in_year_range(year_from, year_to, min(limit, 500))
+
+
 # ── Resources ─────────────────────────────────────────────────────────────────
 
 @mcp.resource("hgb://stats")
@@ -166,6 +278,15 @@ def resource_dossiers() -> str:
 def resource_document(doc_id: str) -> str:
     """Full document by ID as JSON."""
     return json.dumps(db_module.get_document(doc_id), indent=2, ensure_ascii=False)
+
+
+@mcp.resource("hgb://identity/{identity_id}")
+def resource_identity(identity_id: str) -> str:
+    """Resolved cross-corpus person by identity id as JSON."""
+    if not db_module.has_identities():
+        return json.dumps(_NO_IDENTITIES, indent=2)
+    return json.dumps(db_module.get_identity(identity_id), indent=2,
+                      ensure_ascii=False)
 
 
 # ── Entry point ────────────────────────────────────────────────────────────────

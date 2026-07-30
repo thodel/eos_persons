@@ -18,7 +18,7 @@ Add to your MCP client configuration:
 }
 ```
 
-Available tools: `corpus_stats`, `search_persons`, `get_document`, `get_dossier`, `search_text`, `get_persons_in_year_range`, `get_cooccurrences`, `list_dossiers`.
+Available tools: `corpus_stats`, `search_persons`, `get_document`, `get_dossier`, `search_text`, `get_persons_in_year_range`, `get_cooccurrences`, `list_dossiers`, `identity_stats`, `search_identities`, `get_identity`, `get_identity_by_authority`, `get_identities_in_year_range`.
 
 ## Architecture
 
@@ -48,6 +48,15 @@ python build_db.py --xml ../hgb_full_26_05_29_05.xml --db hgb.db
 ```
 
 This takes ~10 minutes and produces `hgb.db`. Run it once; repeat only when the XML changes.
+
+Then load the cross-corpus identities into the same database:
+
+```bash
+python build_identities.py --json ../merged_persons.json --db hgb.db
+```
+
+This takes under a second and only touches the `identities` / `fts_identities`
+tables, so it can be re-run after every pipeline run without re-parsing the XML.
 
 ### 3. Start the server
 
@@ -92,6 +101,12 @@ docker run --rm \
   -v /data/hgb:/data \
   hgb-mcp \
   python build_db.py --xml /data/hgb_full_26_05_29_05.xml --db /data/hgb.db
+
+# then load the cross-corpus identities into the same file
+docker run --rm \
+  -v /data/hgb:/data \
+  hgb-mcp \
+  python build_identities.py --json /data/merged_persons.json --db /data/hgb.db
 ```
 
 ### Run
@@ -136,6 +151,31 @@ server {
 | `get_cooccurrences(person_name, limit)` | Other persons in the same documents |
 | `list_dossiers(limit)` | All properties with coordinates and year ranges |
 
+### Cross-corpus identities
+
+The tools above return raw HGB **mentions** — one row per time a name appears in
+a document. These return resolved **people**: one record per real person, merged
+across the HGB, the printed *Historisch-Biographisches Lexikon der Schweiz*
+(HBLS, 1921–34) and its online successor (HLS), keyed to GND and Wikidata, each
+carrying a `sources[]` array back to every contributing corpus. Built by
+`build_identities.py` from Stage 4 of the linking pipeline
+(see [`../hbls-extraction/DEDUP_PLAN.md`](../hbls-extraction/DEDUP_PLAN.md)).
+
+| Tool | Description |
+|------|-------------|
+| `identity_stats` | Counts: resolved people, with GND/Wikidata, in all three corpora |
+| `search_identities(query, limit, corpus, with_gnd)` | FTS over name, occupation, place and work title; optional corpus / has-GND filters |
+| `get_identity(identity_id)` | Full record: life dates, occupations, places, publications, dossiers, sources |
+| `get_identity_by_authority(scheme, value)` | Look up by `gnd`, `wikidata`, `hls` or `viaf` id |
+| `get_identities_in_year_range(year_from, year_to, limit)` | People whose life span overlaps the window |
+
+Current contents: **3,388** resolved people — 3,068 with a GND id, 1,609 with a
+Wikidata QID, 2,426 with occupations, 602 with recorded works, 418 attested in
+the HGB land register, 38 in all three corpora.
+
+If the identity tables have not been built, these tools return an explanatory
+error rather than failing; the HGB tools are unaffected.
+
 ## Available resources
 
 | URI | Description |
@@ -143,3 +183,4 @@ server {
 | `hgb://stats` | Corpus statistics (JSON) |
 | `hgb://dossiers` | All dossiers (JSON) |
 | `hgb://document/{doc_id}` | Single document (JSON) |
+| `hgb://identity/{identity_id}` | Single resolved person (JSON) |
