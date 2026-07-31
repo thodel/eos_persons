@@ -18,7 +18,7 @@ Add to your MCP client configuration:
 }
 ```
 
-Available tools: `corpus_stats`, `search_persons`, `get_document`, `get_dossier`, `search_text`, `get_persons_in_year_range`, `get_cooccurrences`, `list_dossiers`, `identity_stats`, `search_identities`, `get_identity`, `get_identity_by_authority`, `get_identities_in_year_range`.
+Available tools: `corpus_stats`, `search_persons`, `get_document`, `get_dossier`, `search_text`, `get_persons_in_year_range`, `get_cooccurrences`, `list_dossiers`, `identity_stats`, `search_identities`, `get_identity`, `get_identity_by_authority`, `get_identities_in_year_range`, `search_hgb_persons`, `get_hgb_person`.
 
 ## Architecture
 
@@ -52,11 +52,14 @@ This takes ~10 minutes and produces `hgb.db`. Run it once; repeat only when the 
 Then load the cross-corpus identities into the same database:
 
 ```bash
-python build_identities.py --json ../merged_persons.json --db hgb.db
+python build_identities.py --json ../merged_persons.json \
+                           --persons ../persons_resolved.json --db hgb.db
 ```
 
-This takes under a second and only touches the `identities` / `fts_identities`
-tables, so it can be re-run after every pipeline run without re-parsing the XML.
+This takes about five seconds and only touches the person tables
+(`identities`, `hgb_persons` and their FTS indexes), so it can be re-run after
+every pipeline run without re-parsing the XML. Either source can be omitted
+with `--json ''` or `--persons ''` to load just one.
 
 ### 3. Start the server
 
@@ -138,6 +141,43 @@ server {
 
 ---
 
+## Design note — one server, not two
+
+PR [#1](https://github.com/thodel/eos_persons/pull/1) ("Epic 13 — HBLS Knowledge
+Graph MCP Server") proposed a second, standalone server in `hbls_mcp/` on port
+8003, built from `persons_resolved.json`. It was declined in favour of extending
+this server. The reasoning, recorded so it is not relitigated:
+
+- **It contained no HBLS data.** Despite the name, its only source is
+  `persons_resolved.json`, whose fields are `n, v, c, d, y, dead_year, occ, dos,
+  tit, fam, loc, org, hls, wd, kin` — HGB land-register clusters. The actual
+  *Historisch-Biographisches Lexikon der Schweiz* (27,838 extracted persons)
+  appears nowhere in it. A client trusting the name would ask the "HBLS server"
+  about a lexicon entry and get land-register clusters back.
+- **Authority coverage was 0.58%** — 796 of 137,038 records carry any external
+  link. The cross-corpus linking is what makes this data usable for research,
+  and it was almost entirely absent from what the PR exposed.
+- **It duplicated tool names.** `corpus_stats`, `search_persons` and
+  `get_person` collide with this server's, so a client connected to both sees
+  two different answers under one name.
+- **It doubled the deployment.** A second container, port, healthcheck and nginx
+  route, for data already reachable from the single alpha endpoint.
+
+What the PR *did* have that this server lacked was search over the register's
+deduplicated person clusters — `search_persons` here returns mentions, not
+persons. That capability was kept: it is now `search_hgb_persons` /
+`get_hgb_person` above, reading the same `persons_resolved.json`, in the same
+database and process. So closing the PR cost no coverage.
+
+Its 14 tests were not carried over; they assert structural facts about a
+database this server builds differently (`>= 137_000` rows, WAL mode, negative
+BM25 scores). Equivalent coverage here is still missing — see the TODO below.
+
+**TODO:** `mcp_server/` has no test suite. The identity and person tools were
+verified by driving them against a real build with FastMCP stubbed out, but
+that check is not committed. Porting PR #1's structural tests to these tables
+would be a cheap way to close the gap.
+
 ## Updating the deployed server
 
 The alpha endpoint at `https://tei.dh.unibe.ch/mpc/eos` runs from this
@@ -157,7 +197,8 @@ git pull
 #   --db must point at the SAME hgb.db the container serves
 #   (the compose file mounts /data/hgb -> /data, so it is /data/hgb/hgb.db)
 docker run --rm -v /data/hgb:/data hgb-mcp \
-  python build_identities.py --json /data/merged_persons.json --db /data/hgb.db
+  python build_identities.py --json /data/merged_persons.json \
+                             --persons /data/persons_resolved.json --db /data/hgb.db
 
 # if merged_persons.json is not already beside hgb.db, copy it there first:
 #   cp merged_persons.json /data/hgb/merged_persons.json
@@ -208,6 +249,26 @@ carrying a `sources[]` array back to every contributing corpus. Built by
 | `get_identity(identity_id)` | Full record: life dates, occupations, places, publications, dossiers, sources |
 | `get_identity_by_authority(scheme, value)` | Look up by `gnd`, `wikidata`, `hls` or `viaf` id |
 | `get_identities_in_year_range(year_from, year_to, limit)` | People whose life span overlaps the window |
+
+### Land-register persons
+
+One row per **deduplicated name in the register** (~137,000), with spelling
+variants and aggregated mention/dossier counts. Breadth over the HGB, where the
+identity tools above are depth on the people resolvable across corpora. Loaded
+by `build_identities.py --persons ../persons_resolved.json`.
+
+| Tool | Description |
+|------|-------------|
+| `search_hgb_persons(query, limit, year_from, year_to)` | Name/variant/occupation search; bare fragments retry as a prefix search |
+| `get_hgb_person(person_id)` | Variants, occupations, titles, families, locations, dossier ids |
+
+Three levels of granularity, easily confused — pick by the question asked:
+
+| Question | Tool |
+|---|---|
+| Where does this name occur in the documents? | `search_persons` (mentions) |
+| Who appears in the land register? | `search_hgb_persons` (register persons) |
+| Who was this person, across all our sources? | `search_identities` (resolved people) |
 
 Current contents: **3,388** resolved people — 3,068 with a GND id, 1,609 with a
 Wikidata QID, 2,426 with occupations, 602 with recorded works, 418 attested in

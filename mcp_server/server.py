@@ -260,6 +260,50 @@ def get_identities_in_year_range(
     return db_module.identities_in_year_range(year_from, year_to, min(limit, 500))
 
 
+_NO_HGB_PERSONS = {
+    "error": "HGB person tables not present in this database. "
+             "Run: python build_identities.py --persons ../persons_resolved.json --db <db>"
+}
+
+
+@mcp.tool()
+def search_hgb_persons(query: str, limit: int = 20,
+                       year_from: Optional[int] = None,
+                       year_to: Optional[int] = None) -> list[dict]:
+    """
+    Search deduplicated persons of the land register by name, spelling variant
+    or occupation. One row per person, not per mention — use this to ask "who
+    is in the register", and search_persons to ask "where does this name occur".
+
+    Covers every person the HGB mentions (~137k), but only ~0.6% carry an
+    external authority link; for cross-corpus identity use search_identities.
+
+    Args:
+        query:     FTS5 query. A bare fragment retries as a prefix search.
+        limit:     Maximum results (default 20, max 200).
+        year_from: Only persons whose mention span reaches this year or later.
+        year_to:   Only persons whose mention span starts by this year.
+    """
+    if not db_module.has_hgb_persons():
+        return [_NO_HGB_PERSONS]
+    return db_module.search_hgb_persons(query, min(limit, 200), year_from, year_to)
+
+
+@mcp.tool()
+def get_hgb_person(person_id: int) -> dict:
+    """
+    Fetch one resolved land-register person by id, with name variants,
+    occupations, titles, associated families, locations and dossier ids.
+
+    Args:
+        person_id: Numeric id as returned by search_hgb_persons.
+    """
+    if not db_module.has_hgb_persons():
+        return _NO_HGB_PERSONS
+    rec = db_module.get_hgb_person(person_id)
+    return rec or {"error": f"HGB person {person_id} not found."}
+
+
 # ── Resources ─────────────────────────────────────────────────────────────────
 
 @mcp.resource("hgb://stats")

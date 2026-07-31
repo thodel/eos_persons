@@ -1,20 +1,30 @@
 """
-build_identities.py — load merged_persons.json (Stage 4) into hgb.db
+build_identities.py — load the person-level tables into hgb.db
 
-The HGB tables come from an ~800 MB XML parse that takes ~10 minutes; the
-cross-corpus identities are regenerated on every pipeline run. So they get
-their own build step that attaches to the existing database rather than
-forcing a full rebuild:
+The HGB document tables come from an ~800 MB XML parse that takes ~10 minutes.
+The person tables are regenerated on every pipeline run and rebuild in about a
+second, so they get their own build step that attaches to the existing database
+rather than forcing a full rebuild:
 
-    python build_identities.py --json ../merged_persons.json --db hgb.db
+    python build_identities.py --json ../merged_persons.json --db hgb.db \\
+                               --persons ../persons_resolved.json
 
-Safe to re-run: the identity tables are dropped and rebuilt each time, and no
-HGB table is touched.
+Two tables, answering two different questions:
 
-Each row is one real person, resolved across HBLS (printed lexicon 1921–34),
-HLS (its online successor) and the HGB land register, with GND/Wikidata
-authority ids and a sources[] array carrying provenance back to each corpus.
-See ../hbls-extraction/DEDUP_PLAN.md.
+  identities   one row per *resolved person*, merged across HBLS (printed
+               lexicon 1921–34), HLS (its online successor) and the HGB land
+               register, with GND/Wikidata ids and a sources[] array carrying
+               provenance back to each corpus. ~3.4k rows, 91% with a GND id.
+               See ../hbls-extraction/DEDUP_PLAN.md.
+
+  hgb_persons  one row per *deduplicated HGB name cluster* — every person the
+               land register mentions, with name variants and aggregated
+               mention/dossier counts. ~137k rows, but only 0.6% carry any
+               authority link. This is breadth over the register; `identities`
+               is depth on the people who could be resolved across corpora.
+
+Safe to re-run: each table is dropped and rebuilt, and no HGB document table is
+touched. Either source may be omitted; the corresponding table is then skipped.
 """
 
 import argparse
@@ -119,22 +129,104 @@ def fts_text(row, person):
     return occ, pl, (row["bio"] or ""), pub
 
 
+PERSONS_DDL = """
+DROP TABLE IF EXISTS hgb_persons;
+DROP TABLE IF EXISTS fts_hgb_persons;
+
+CREATE TABLE hgb_persons (
+    id            INTEGER PRIMARY KEY,
+    name          TEXT NOT NULL,
+    variants      TEXT,               -- JSON array of spelling variants
+    n_mentions    INTEGER,
+    n_dossiers    INTEGER,
+    year_from     INTEGER,
+    year_to       INTEGER,
+    dead_year     INTEGER,
+    occupations   TEXT,               -- JSON array
+    titles        TEXT,
+    families      TEXT,
+    locations     TEXT,
+    orgs          TEXT,
+    dossiers      TEXT,               -- JSON array of dossier ids
+    hls_id        TEXT,
+    hls_url       TEXT,
+    wikidata      TEXT,
+    gnd           TEXT
+);
+
+CREATE INDEX idx_hgbp_year ON hgb_persons(year_from, year_to);
+CREATE INDEX idx_hgbp_hls  ON hgb_persons(hls_id);
+CREATE INDEX idx_hgbp_wd   ON hgb_persons(wikidata);
+
+CREATE VIRTUAL TABLE fts_hgb_persons USING fts5(
+    id UNINDEXED, name, variants, occupations
+);
+"""
+
+PERSON_COLS = ("id name variants n_mentions n_dossiers year_from year_to "
+               "dead_year occupations titles families locations orgs dossiers "
+               "hls_id hls_url wikidata gnd").split()
+
+
+def load_hgb_persons(con, path):
+    """Load the deduplicated HGB name clusters from persons_resolved.json."""
+    with open(path, encoding="utf-8") as f:
+        people = json.load(f)
+    con.executescript(PERSONS_DDL)
+    ins = (f"INSERT INTO hgb_persons({','.join(PERSON_COLS)}) "
+           f"VALUES({','.join('?' * len(PERSON_COLS))})")
+    js = lambda v: json.dumps(v or [], ensure_ascii=False)  # noqa: E731
+    for i, p in enumerate(people, 1):
+        y = p.get("y") or [None, None]
+        hls, wd = p.get("hls") or {}, p.get("wd") or {}
+        con.execute(ins, (
+            i, p.get("n") or "", js(p.get("v")), p.get("c"), p.get("d"),
+            y[0], y[-1], p.get("dead_year"), js(p.get("occ")), js(p.get("tit")),
+            js(p.get("fam")), js(p.get("loc")), js(p.get("org")),
+            js([d[0] for d in (p.get("dos") or [])]),
+            hls.get("id"), hls.get("url"), wd.get("qid"), wd.get("gnd")))
+        con.execute(
+            "INSERT INTO fts_hgb_persons(id, name, variants, occupations)"
+            " VALUES(?,?,?,?)",
+            (i, p.get("n") or "", " ".join(p.get("v") or []),
+             " ".join(p.get("occ") or [])))
+    return len(people)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--json", default="../merged_persons.json")
+    ap.add_argument("--json", default="../merged_persons.json",
+                    help="Stage 4 merged identities; '' to skip")
+    ap.add_argument("--persons", default="../persons_resolved.json",
+                    help="resolved HGB person clusters; '' to skip")
     ap.add_argument("--db", default="hgb.db")
     ap.add_argument("--include-review", action="store_true",
                     help="also load clusters flagged for review (default: merged only)")
     args = ap.parse_args()
 
     t0 = time.time()
+    con = sqlite3.connect(args.db)
+
+    if args.persons:
+        n = load_hgb_persons(con, args.persons)
+        con.commit()
+        linked = con.execute(
+            "SELECT COUNT(*) FROM hgb_persons WHERE hls_id IS NOT NULL"
+            " OR wikidata IS NOT NULL").fetchone()[0]
+        print(f"{n:,} HGB person clusters from {args.persons} "
+              f"({linked:,} with an authority link)")
+
+    if not args.json:
+        con.close()
+        print(f"  done in {time.time() - t0:.1f}s -> {args.db}")
+        return
+
     with open(args.json, encoding="utf-8") as f:
         people = json.load(f)
     if not args.include_review:
         people = [p for p in people if p.get("status") == "merged"]
     print(f"{len(people):,} identities from {args.json}")
 
-    con = sqlite3.connect(args.db)
     con.executescript(DDL)
     ins = f"INSERT INTO identities({','.join(COLS)}) VALUES({','.join('?' * len(COLS))})"
     for p in people:

@@ -285,6 +285,66 @@ def identities_in_year_range(year_from: int, year_to: int,
     return [_identity_row(r) for r in rows]
 
 
+# ── Resolved HGB person clusters ──────────────────────────────────────────────
+#
+# One row per deduplicated name in the land register, with variants and
+# aggregated mention/dossier counts. Breadth over the register (~137k), where
+# `identities` above is depth on the ~3.4k people resolvable across corpora.
+
+_PERSON_JSON = ("variants", "occupations", "titles", "families", "locations",
+                "orgs", "dossiers")
+
+
+def has_hgb_persons() -> bool:
+    with conn() as c:
+        return bool(c.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='hgb_persons'"
+        ).fetchone())
+
+
+def _person_row(row) -> dict:
+    d = dict(row)
+    for f in _PERSON_JSON:
+        if isinstance(d.get(f), str):
+            try:
+                d[f] = json.loads(d[f])
+            except (TypeError, ValueError):
+                pass
+    return d
+
+
+def search_hgb_persons(query: str, limit: int = 20,
+                       year_from: Optional[int] = None,
+                       year_to: Optional[int] = None) -> list[dict]:
+    sql = ["""SELECT p.* FROM fts_hgb_persons f
+              JOIN hgb_persons p ON p.id = f.id
+              WHERE fts_hgb_persons MATCH ?"""]
+    params: List[Any] = [query]
+    if year_from is not None:
+        sql.append("AND p.year_to >= ?")
+        params.append(year_from)
+    if year_to is not None:
+        sql.append("AND p.year_from <= ?")
+        params.append(year_to)
+    sql.append("ORDER BY rank LIMIT ?")
+    params.append(limit)
+    with conn() as c:
+        rows = c.execute(" ".join(sql), params).fetchall()
+        # FTS5 matches whole tokens; fall back to a prefix search when a bare
+        # name fragment finds nothing (the common case for partial surnames).
+        if not rows and not query.endswith("*") and " " not in query:
+            params[0] = query + "*"
+            rows = c.execute(" ".join(sql), params).fetchall()
+    return [_person_row(r) for r in rows]
+
+
+def get_hgb_person(person_id: int) -> dict:
+    with conn() as c:
+        row = c.execute("SELECT * FROM hgb_persons WHERE id = ?",
+                        (person_id,)).fetchone()
+    return _person_row(row) if row else {}
+
+
 def identity_stats() -> dict[str, Any]:
     with conn() as c:
         one = lambda q: c.execute(q).fetchone()[0]  # noqa: E731
