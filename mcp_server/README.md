@@ -169,14 +169,38 @@ persons. That capability was kept: it is now `search_hgb_persons` /
 `get_hgb_person` above, reading the same `persons_resolved.json`, in the same
 database and process. So closing the PR cost no coverage.
 
-Its 14 tests were not carried over; they assert structural facts about a
-database this server builds differently (`>= 137_000` rows, WAL mode, negative
-BM25 scores). Equivalent coverage here is still missing — see the TODO below.
+Its 14 tests were not carried over verbatim; they assert structural facts about
+a database this server builds differently (`>= 137_000` rows, negative BM25
+scores). The ideas behind them were ported instead — see below.
 
-**TODO:** `mcp_server/` has no test suite. The identity and person tools were
-verified by driving them against a real build with FastMCP stubbed out, but
-that check is not committed. Porting PR #1's structural tests to these tables
-would be a cheap way to close the gap.
+## Tests
+
+```bash
+pip install -r mcp_server/requirements-dev.txt
+python -m pytest mcp_server/tests -q      # from the repo root, or
+python -m pytest tests -q                 # from mcp_server/
+```
+
+Test tooling lives in `requirements-dev.txt`, not `requirements.txt`, so the
+Docker image does not carry pytest.
+
+37 tests covering database structure, the identity and register-person queries,
+and the tool layer. They build both person tables with the real
+`build_identities.py` from small synthetic fixtures that mirror the production
+JSON schemas, so the suite needs neither the 800 MB XML nor a prebuilt
+database and runs in about a second.
+
+One test opts into the real corpus via the `real_db` fixture and skips when
+`merged_persons.json` is absent, so missing data costs one test rather than
+silently skipping the suite.
+
+`test_real_corpus_year_min_is_plausible` is a **strict xfail** recording a live
+upstream defect: three identities carry a truncated GND year (`149`, `152`,
+`169`) because the ingest strips the `X` from GND's decade-level notation
+(`149X`) instead of rejecting or widening it. All three have
+`provenance.birth/death == "gnd"`. The fix belongs in the GND ingest; because
+the marker is strict, the suite will fail once the data is corrected, which is
+the reminder to delete it.
 
 ## Updating the deployed server
 

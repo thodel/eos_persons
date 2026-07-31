@@ -1,0 +1,4 @@
+# Test-only dependencies. Kept out of requirements.txt so the Docker image,
+# which installs that file, stays free of test tooling.
+-r requirements.txt
+pytest>=8.0.0

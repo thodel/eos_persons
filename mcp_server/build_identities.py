@@ -206,6 +206,9 @@ def main():
 
     t0 = time.time()
     con = sqlite3.connect(args.db)
+    # Match build_db.py: the server reads concurrently, and this script also
+    # creates the database outright when run before (or without) build_db.py.
+    con.execute("PRAGMA journal_mode = WAL")
 
     if args.persons:
         n = load_hgb_persons(con, args.persons)
