@@ -240727,7 +240727,7 @@
   "surname": "Griesser",
   "given": "Hans Conrad",
   "birth_year": 1670,
-  "death_year": 169,
+  "death_year": null,
   "floruit_years": null,
   "gender": "Unbekannt",
   "mention_span": null,
@@ -240768,7 +240768,7 @@
   "provenance": {
    "name": "hbls",
    "birth": "gnd",
-   "death": "gnd"
+   "death": null
   },
   "sources": [
    {
@@ -250670,7 +250670,7 @@
   "name": "Benedict May",
   "surname": "May",
   "given": "Benedict",
-  "birth_year": 149,
+  "birth_year": null,
   "death_year": 1569,
   "floruit_years": null,
   "gender": "Unbekannt",
@@ -250703,7 +250703,7 @@
   "name_agreement": null,
   "provenance": {
    "name": "hbls",
-   "birth": "gnd",
+   "birth": null,
    "death": "gnd"
   },
   "sources": [
@@ -267603,7 +267603,7 @@
   "name": "Valentin Rebmann",
   "surname": "Rebmann",
   "given": "Valentin",
-  "birth_year": 152,
+  "birth_year": null,
   "death_year": 1587,
   "floruit_years": null,
   "gender": "Männlich",
@@ -267646,7 +267646,7 @@
   "name_agreement": null,
   "provenance": {
    "name": "hbls",
-   "birth": "gnd",
+   "birth": null,
    "death": "gnd"
   },
   "sources": [

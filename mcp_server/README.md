@@ -194,13 +194,16 @@ One test opts into the real corpus via the `real_db` fixture and skips when
 `merged_persons.json` is absent, so missing data costs one test rather than
 silently skipping the suite.
 
-`test_real_corpus_year_min_is_plausible` is a **strict xfail** recording a live
-upstream defect: three identities carry a truncated GND year (`149`, `152`,
-`169`) because the ingest strips the `X` from GND's decade-level notation
-(`149X`) instead of rejecting or widening it. All three have
-`provenance.birth/death == "gnd"`. The fix belongs in the GND ingest; because
-the marker is strict, the suite will fail once the data is corrected, which is
-the reminder to delete it.
+`test_real_corpus_year_min_is_plausible` is a regression guard for a defect
+this porting exposed and which is now fixed. GND writes decade-level
+uncertainty as `149X`; a bare `\d{3,4}` search read that as the year 149, so
+three identities reached the published corpus with 3-digit life dates
+(Benedict May birth=149, Valentin Rebmann birth=152, Hans Conrad Griesser
+death=169) — indistinguishable from real years once in the statistics.
+`link_hls.year_of` now returns `None` for an imprecise date rather than
+guessing at it, and Stage 4 has been rebuilt: `year_min` is 1100, no record
+carries a 3-digit year, and every other figure is unchanged. The test fails
+again if that parsing regresses.
 
 ## Updating the deployed server
 

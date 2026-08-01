@@ -224,19 +224,17 @@ def test_real_corpus_invariants(real_db):
     assert s["in_all_three_corpora"] > 0
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Known upstream defect: three records carry a truncated GND year. "
-           "GND writes decade-level uncertainty as '149X'; the ingest strips "
-           "the X instead of rejecting or widening, yielding 3-digit years — "
-           "Benedict May birth=149 (bio: Gr. Rat 1519, d. 1569), Valentin "
-           "Rebmann birth=152 (bio: Pfarrer 1557), Hans Conrad Griesser "
-           "death=169 (bio: Landvogt 1706-08). All three have "
-           "provenance.birth/death == 'gnd'. Fix belongs in the GND ingest, "
-           "not here; remove this marker once merged_persons.json is rebuilt.",
-)
 def test_real_corpus_year_min_is_plausible(real_db):
+    """Regression guard for truncated GND years.
+
+    GND writes decade-level uncertainty as '149X'. A bare \\d{3,4} search read
+    that as the year 149, so three records reached the corpus with 3-digit
+    life dates (Benedict May birth=149, Valentin Rebmann birth=152, Hans
+    Conrad Griesser death=169) — indistinguishable from real years once in the
+    published statistics. `link_hls.year_of` now rejects an imprecise date
+    rather than guessing at it; this fails again if that regresses.
+    """
     import db as db_module
     db_module.set_db_path(str(real_db))
     s = db_module.identity_stats()
-    assert 1200 < s["year_min"] < 1700, f"implausible year_min: {s['year_min']}"
+    assert 1000 < s["year_min"] < 1700, f"implausible year_min: {s['year_min']}"

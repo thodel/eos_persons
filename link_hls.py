@@ -128,10 +128,30 @@ def split_name(name):
     return (given_key(" ".join(given)), norm_token(surname))
 
 
+# A run of 3-4 digits that is not part of a longer number and is not cut short
+# by an uncertainty placeholder. The trailing (?![\dXx]) is the point: GND
+# writes an imprecise year by replacing its last digits with X, so a bare
+# \d{3,4} search reads '[149X]' ("some year in the 1490s") as the year 149.
+_YEAR_RE = re.compile(r"(?<!\d)(\d{3,4})(?![\dXx])")
+
+
 def year_of(s):
+    """First precise calendar year in a date string, else None.
+
+    Shapes present in the HLS export and the GND enrichment:
+
+        1724, 1792-06-16, 1695-10   -> 1724, 1792, 1695
+        [1290/1300]                 -> 1290   (range: earliest bound)
+        [149X], [16XX], [1XXX]      -> None   (decade/century only)
+        [XXXX]                      -> None
+
+    An imprecise date yields None rather than a guess: a wrong precise year
+    propagates into life spans, year-range filters and the published corpus
+    statistics, where it is indistinguishable from a real one.
+    """
     if not s:
         return None
-    m = re.search(r"(\d{3,4})", s)
+    m = _YEAR_RE.search(str(s))
     return int(m.group(1)) if m else None
 
 
