@@ -269,3 +269,6 @@ audit_authority_edges.csv
 
 # GND bulk dumps (large, regenerable via the curl in link_hbls_gnd_lobid.load_dump)
 hbls-extraction/gnd_dump_*.jsonl.gz
+
+# Stage-4 review triage worksheet (regenerable via build_review_worksheet.py)
+review_worksheet.csv
