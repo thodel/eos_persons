@@ -112,6 +112,15 @@ dates, 1,848 with a GND id, 1,334 with occupations, 379 with publications, 33
 spanning all three source corpora. 291 go to review. All corpus joins resolve
 (0 dangling members). Names come from HLS for 1,836 and HBLS for 331.
 
+**HGB-under-resolution promotion.** A cluster whose *only* conflicts are HGB-side
+(`multi_hgb` / `hgb_key_ambiguous`) with every HGB mention year inside the life
+span (birth − 5 … death + 15) is one person the register mentions across several
+dossiers, not a bad merge — so it is promoted to `merged`, the benign flags moved
+to an `auto_resolved` field for audit. On the full corpus this moved **88 records
+review → merged (335 → 247 review)**; homonym clusters with an out-of-span HGB
+record (`TRIM_HGB`) stay in review. `../build_review_worksheet.py` triages the
+remaining queue into actions.
+
 **Given-name gate.** Merged records are re-scored on the common prefix of
 **all** given tokens (particles and HLS noble epithets stripped, so "Escher vom
 Luchs" does not leak in); below `--name-min` (default 0.6) the cluster is

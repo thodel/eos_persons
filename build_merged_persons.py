@@ -47,6 +47,30 @@ HBLS_URL = "https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz"
 # Matthäus/Matheus) merged while catching genuinely different names.
 NAME_MIN = 0.6
 
+# HGB-side-only conflicts: the HGB register simply mentions one person across
+# several dossiers/years, which Stage 3 flags conservatively. When these are the
+# ONLY conflicts and every HGB mention year sits inside the person's life span
+# (birth − TOL_BEFORE … death + GRACE_AFTER, post-mortem references allowed), the
+# cluster is really one under-resolved person and is promoted merged. Outliers
+# (a Basel homonym of a different era) keep the cluster in review.
+BENIGN_HGB_CONFLICTS = {"multi_hgb", "hgb_key_ambiguous"}
+TOL_BEFORE = 5
+GRACE_AFTER = 15
+
+
+def hgb_underresolved(conflicts, hg_keys, birth, death):
+    """True if the only conflicts are HGB-side and all HGB years are in span."""
+    if not conflicts or set(conflicts) - BENIGN_HGB_CONFLICTS:
+        return False
+    lo = (birth or (death - 80 if death else None))
+    hi = (death or (birth + 80 if birth else None))
+    if lo is None or hi is None:
+        return False
+    lo, hi = lo - TOL_BEFORE, hi + GRACE_AFTER
+    years = [int(m.group(1)) for k in hg_keys
+             if (m := re.search(r"#(\d{3,4})$", k))]
+    return bool(years) and all(lo <= y <= hi for y in years)
+
 
 def first(*vals):
     """First non-empty value, with the label it came from."""
@@ -230,11 +254,19 @@ def merge(cluster, hbls, hgb, hls, gnd, seq):
     if agree is not None and agree < NAME_MIN:
         conflicts.append("name_disagreement")
 
+    # promote HGB-under-resolved clusters (all HGB years in span) to merged,
+    # moving the benign flags to `auto_resolved` for an audit trail.
+    auto_resolved = []
+    if hgb_underresolved(conflicts, hg_keys, birth, death):
+        auto_resolved = conflicts
+        conflicts = []
+
     rec = {
         "id": f"person:{seq:05d}",
         "cluster_id": cluster["id"],
         "status": "review" if conflicts else "merged",
         "conflicts": conflicts,
+        "auto_resolved": auto_resolved,
         "corpora": cluster["corpora"],
         "name": name,
         "surname": surname,
