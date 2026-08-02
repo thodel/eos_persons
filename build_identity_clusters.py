@@ -39,15 +39,19 @@ parent = {}
 meta = {}            # node -> {corpus, name, b, d}
 
 
-def node(key, corpus, name="", b=None, d=None):
+def node(key, corpus, name="", b=None, d=None, span=None):
     parent.setdefault(key, key)
-    m = meta.setdefault(key, {"corpus": corpus, "name": name, "b": b, "d": d})
+    m = meta.setdefault(key,
+                        {"corpus": corpus, "name": name, "b": b, "d": d,
+                         "span": span})
     if name and not m["name"]:
         m["name"] = name
     if b and not m["b"]:
         m["b"] = b
     if d and not m["d"]:
         m["d"] = d
+    if span and not m.get("span"):
+        m["span"] = span
     return key
 
 
@@ -108,7 +112,8 @@ for r in rd("link_hbls_hls_candidates.csv"):
 for r in rd("link_candidates_hls.csv"):
     if (r["n_candidates_for_person"] == "1" and r["date_relation"] == "overlap"
             and float(r["score"]) >= 0.85):
-        g = node(hgb_key(r["hgb_name"], r["hgb_year_min"]), "hgb", r["hgb_name"])
+        g = node(hgb_key(r["hgb_name"], r["hgb_year_min"]), "hgb", r["hgb_name"],
+                 span=(to_int(r["hgb_year_min"]), to_int(r["hgb_year_max"])))
         h = node(f"hls:{r['hls_id']}", "hls", r.get("hls_title", ""),
                  to_int(r["hls_birth"]), to_int(r["hls_death"]))
         union(g, h); stats["hgb_hls"] += 1
@@ -118,7 +123,8 @@ for r in rd("link_hbls_hgb_candidates.csv"):
     if (r["n_candidates"] == "1" and r["date_relation"] == "overlap"
             and float(r["score"]) >= 0.8):
         a = hbls_node(r["hbls_id"], r["hbls_name"])
-        g = node(hgb_key(r["hgb_name"], r["hgb_year_min"]), "hgb", r["hgb_name"])
+        g = node(hgb_key(r["hgb_name"], r["hgb_year_min"]), "hgb", r["hgb_name"],
+                 span=(to_int(r["hgb_year_min"]), to_int(r["hgb_year_max"])))
         union(a, g); stats["hbls_hgb"] += 1
 
 # 4) HBLS ↔ GND (Tier 0, date-validated) — also ties in its HLS + Wikidata
@@ -146,11 +152,47 @@ if os.path.exists(pr):
         wd = p.get("wd")
         if not wd or not p.get("y"):
             continue
-        g = node(hgb_key(p["n"], p["y"][0]), "hgb", p["n"])
+        g = node(hgb_key(p["n"], p["y"][0]), "hgb", p["n"],
+                 span=(p["y"][0], p["y"][-1]))
         if wd.get("gnd"):
             union(g, node(f"gnd:{wd['gnd']}", "gnd")); stats["hgb_gnd"] += 1
         if wd.get("qid"):
             union(g, node(f"wd:{wd['qid']}", "wd"))
+
+
+# TRIM_HGB: an HGB mention-cluster whose years fall entirely outside the person's
+# authoritative life span (from HLS/HBLS dates) is a Basel homonym of another era
+# that a loose HGB↔HLS name match pulled in. Detach it before scoring conflicts,
+# so the remaining, in-span records form one clean identity.
+TRIM_TOL_BEFORE = 5
+TRIM_GRACE_AFTER = 15
+
+
+def life_span(nodes):
+    """Authoritative [lo, hi] from the HLS/HBLS dated nodes of a component."""
+    dated = [meta[n] for n in nodes if meta[n]["corpus"] in ("hls", "hbls")]
+    births = [m["b"] for m in dated if m["b"]]
+    deaths = [m["d"] for m in dated if m["d"]]
+    b = min(births) if births else None
+    d = max(deaths) if deaths else None
+    lo = b if b else (d - 80 if d else None)
+    hi = d if d else (b + 80 if b else None)
+    if lo is None:
+        return None, None
+    return lo - TRIM_TOL_BEFORE, hi + TRIM_GRACE_AFTER
+
+
+def out_of_span(span, lo, hi):
+    """Out of span if the FIRST mention year falls outside [lo, hi]. A person
+    cannot appear in the register before birth (− tol) or after death (+ grace);
+    the last-mention year may legitimately extend past death (post-mortem
+    property references), so only the first mention is tested."""
+    if not span:
+        return False
+    m0 = span[0] if span[0] is not None else span[1]
+    if m0 is None:
+        return False
+    return m0 < lo or m0 > hi
 
 
 # ── assemble components ──────────────────────────────────────────────────────
@@ -160,9 +202,29 @@ for n in parent:
 
 SRC = {"hbls", "hgb", "hls"}
 clusters = []
+n_trimmed_hgb = 0
+n_trimmed_clusters = 0
 for root, nodes in comp.items():
     if len(nodes) < 2:
         continue
+
+    # trim out-of-span HGB homonyms first, using the HLS/HBLS life span
+    lo, hi = life_span(nodes)
+    trimmed = []
+    if lo is not None:
+        kept = []
+        for n in nodes:
+            if meta[n]["corpus"] == "hgb" and out_of_span(meta[n].get("span"), lo, hi):
+                trimmed.append(n)
+            else:
+                kept.append(n)
+        nodes = kept
+    if trimmed:
+        n_trimmed_hgb += len(trimmed)
+        n_trimmed_clusters += 1
+    if len(nodes) < 2:
+        continue
+
     by_corpus = defaultdict(list)
     for n in nodes:
         by_corpus[meta[n]["corpus"]].append(n)
@@ -192,6 +254,7 @@ for root, nodes in comp.items():
         "gnd": [n[4:] for n in by_corpus.get("gnd", [])],
         "wikidata": [n[3:] for n in by_corpus.get("wd", [])],
         "conflicts": conflicts,
+        "trimmed_hgb": [n[4:] for n in trimmed],
         "members": members,
     })
 
@@ -224,6 +287,8 @@ multi = [c for c in clusters if len(c["corpora"]) >= 2]
 flagged = [c for c in clusters if c["conflicts"]]
 withgnd = [c for c in clusters if c["gnd"]]
 print("edges unioned:", dict(stats))
+print(f"trimmed HGB homonyms         : {n_trimmed_hgb} "
+      f"from {n_trimmed_clusters} clusters (out-of-span, detached)")
 print(f"\nclusters (size≥2)            : {len(clusters)}")
 print(f"  multi-corpus (dedup links) : {len(multi)}")
 print(f"  conflict-free multi-corpus : {len(clean)}  -> identity_clusters.csv")

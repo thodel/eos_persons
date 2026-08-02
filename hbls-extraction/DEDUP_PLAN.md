@@ -83,6 +83,17 @@ over-merging:
     (birth years spread > ~15 y), flag for review instead;
   - keep `n_candidates > 1` edges out of auto-merge.
 
+**TRIM_HGB.** A loose HGB↔HLS name match sometimes pulls a Basel homonym of
+another era into a cluster. Before scoring conflicts, each component computes its
+authoritative life span from the HLS/HBLS dates and detaches any HGB
+mention-cluster whose **first** mention year falls outside `birth − 5 … death +
+15` — a person cannot appear in the register before birth, and (unlike the last
+mention, which may run on as a post-mortem property reference) the first can't
+follow death. On the full corpus this detached **196 HGB records from 146
+clusters**, dropping `multi_hgb` conflicts 177 → 17; e.g. *Johannes Schneider*
+(1590–1639) keeps the 1624 and 1643 records and detaches the 1529/1562/1668
+Schneiders.
+
 *Result (Basel slice):* 2,458 components (size ≥ 2) → **1,909 conflict-free
 cross-corpus identities** (`identity_clusters.csv`), **2,031 carrying a GND id**,
 70 spanning all three source corpora (HBLS+HGB+HLS). 288 components are flagged
