@@ -313,6 +313,7 @@
     <input type="number" id="year-to"   placeholder="to"   min="1400" max="1700" />
     <label>Role</label>
     <select id="role-filter">
+    <!-- BEGIN generated:roles-options — build_sparql_index.py --sync-page -->
       <option value="">— all —</option>
       <option value="owner">owner</option>
       <option value="buyer">buyer</option>
@@ -326,6 +327,23 @@
       <option value="claimant">claimant</option>
       <option value="debitor">debitor</option>
       <option value="resident">resident</option>
+      <option value="bequeather">bequeather</option>
+      <option value="consenting">consenting</option>
+      <option value="proclaimer">proclaimer</option>
+      <option value="party1">party1</option>
+      <option value="party2">party2</option>
+      <option value="pledger">pledger</option>
+      <option value="pledgee">pledgee</option>
+      <option value="redeemer">redeemer</option>
+      <option value="grantor">grantor</option>
+      <option value="creditor">creditor</option>
+      <option value="bidder">bidder</option>
+      <option value="member">member</option>
+      <option value="actor">actor</option>
+      <option value="family-a">family-a</option>
+      <option value="family-b">family-b</option>
+      <option value="lessee">lessee</option>
+    <!-- END generated:roles-options -->
     </select>
   </div>
 </div>
@@ -353,13 +371,15 @@
   const INDEX_URL = 'persons_sparql_index.json';
 
   // Person roles considered as person references
+  // BEGIN generated:roles-js — build_sparql_index.py --sync-page
   const PERSON_ROLES = [
-    'owner','buyer','seller','payer','employer','employee',
-    'beneficiary','heir','decedent','claimant','debitor','resident',
-    'bequeather','consenting','proclaimer','party1','party2',
-    'pledger','pledgee','redeemer','grantor','creditor','bidder',
-    'member','actor','family-a','family-b','lessee'
+    'owner','buyer','seller','payer','employer','employee','beneficiary',
+    'heir','decedent','claimant','debitor','resident','bequeather',
+    'consenting','proclaimer','party1','party2','pledger','pledgee',
+    'redeemer','grantor','creditor','bidder','member','actor','family-a',
+    'family-b','lessee'
   ];
+  // END generated:roles-js
 
   const qEl        = document.getElementById('q');
   const yearFrom   = document.getElementById('year-from');

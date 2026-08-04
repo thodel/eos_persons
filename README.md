@@ -71,6 +71,17 @@ periphery (Spearman ρ = −0.155 / +0.107, both p < 1e-9).
 
 `persons_sparql.html` and `build_sparql_index.py` query the Economies of Space LOD endpoint at `https://sparql-gdb.lod4hss.org/eos` ([graph docs](https://github.com/history-unibas/economies-of-space-lod)). When no cached index is present the page falls back to live queries, with a 20 s client-side timeout so an unreachable endpoint surfaces a clear error rather than hanging.
 
+### Person roles
+
+`PERSON_ROLES` in `build_sparql_index.py` is the single source of truth for which event roles denote a person. The page needs the same set twice — for its live-SPARQL filter and for its role dropdown — and is served statically, so rather than fetching the list at runtime the two regions are generated into the HTML between `BEGIN/END generated:` markers:
+
+```bash
+python3 build_sparql_index.py --sync-page     # rewrite the page from PERSON_ROLES
+python3 build_sparql_index.py --check-page    # exit non-zero if it has drifted
+```
+
+Edit the Python list, run `--sync-page`, commit both files. `tests/test_person_roles_sync.py` fails if they diverge.
+
 ## MCP server (alpha test)
 
 **[Alpha test]** An MCP server endpoint is available at:
