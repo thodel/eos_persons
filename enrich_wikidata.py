@@ -25,7 +25,7 @@ import urllib.request
 
 PERSONS = "persons_resolved.json"
 WDQS = "https://query.wikidata.org/sparql"
-UA = "hgb-hls-linker/1.0 (https://github.com/thodel/eos_persons; tobiashodel@gmail.com)"
+UA = "hgb-hls-linker/1.0 (https://github.com/thodel/eos_persons; tobias.hodel@unibe.ch)"
 CHUNK = 515   # WDQS is rate-limiting (1 req/min) — keep request count minimal
 
 QUERY = """

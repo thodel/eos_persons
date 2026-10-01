@@ -31,7 +31,7 @@ from link_hbls_hls import year_agreement
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = os.path.join(HERE, "hbls-extraction", ".lobid_cache")
 UA = ("eos-persons-linker/1.0 "
-      "(https://github.com/thodel/eos_persons; tobiashodel@gmail.com)")
+      "(https://github.com/thodel/eos_persons; tobias.hodel@unibe.ch)")
 BASE = "https://lobid.org/gnd/search"
 
 

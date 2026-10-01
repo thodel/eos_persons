@@ -17,7 +17,7 @@ import time
 
 PERSONS = "persons_resolved.json"
 GRAPH = "families_graph.json"
-UA = "hgb-hls-linker/1.0 (https://github.com/thodel/eos_persons; tobiashodel@gmail.com)"
+UA = "hgb-hls-linker/1.0 (https://github.com/thodel/eos_persons; tobias.hodel@unibe.ch)"
 
 ROLE = {"P22": "Vater", "P25": "Mutter", "P26": "Ehepartner", "P40": "Kind"}
 INVERSE = {"P22": "Kind", "P25": "Kind", "P26": "Ehepartner", "P40": "Elternteil"}
