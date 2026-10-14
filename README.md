@@ -82,6 +82,22 @@ python3 build_sparql_index.py --check-page    # exit non-zero if it has drifted
 
 Edit the Python list, run `--sync-page`, commit both files. `tests/test_person_roles_sync.py` fails if they diverge.
 
+## Jahrrechnungen der Stadt Basel 1535–1610 (srbas)
+
+Cross-link of the Basel city accounts (GAMS Graz, `context:srbas`) with the HGB
+persons and places. The edition has no person/place markup, so names are
+recovered from the booking texts and places from the account hierarchy; see
+[`srbas-extraction/README.md`](srbas-extraction/README.md) for the source, the
+access URLs and the pipeline.
+
+| file | what |
+|---|---|
+| `srbas-extraction/srbas_name_mentions.csv` | heuristic person-name mentions in 78,728 bookings, with citable GAMS URI |
+| `srbas-extraction/srbas_account_places.csv` | the Ämter/Vogteien accounts geo-referenced via Wikidata (review column) |
+| `build_hgb_street_persons.py` | street-level HGB person index from the DHBern annotated release (read-only input) → `hgb_street_persons.json` (gitignored) |
+| `link_srbas_hgb.py` | srbas names → HGB persons: `link_srbas_hgb_candidates.csv` (corpus) and `link_srbas_hgb_street_candidates.csv` (street level, with coordinates) |
+| `tests/test_srbas_names.py` | inflection handling (dative/genitive) the match depends on |
+
 ## MCP server (alpha test)
 
 **[Alpha test]** An MCP server endpoint is available at:
