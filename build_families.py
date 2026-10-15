@@ -627,6 +627,10 @@ def main():
                     "y": p.get("y"), "dead_year": p.get("dead_year"),
                     "c": p.get("c", 0),
                 }
+                # the HLS link lives on the person index (apply_hls_links.py);
+                # carry it over so the tree shows it after every rebuild
+                if p.get("hls"):
+                    nodes[nid]["hls"] = p["hls"]
             return nid
         # dangling (has surname but no canonical match) — scope to dossier to be safe
         nid = f"n:{dossier}:{clean_name(name)}"
