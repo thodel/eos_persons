@@ -9,7 +9,7 @@ read-only here) ships one XML per street (street_data/street_HGB_1_NNN.xml):
 series = street, collection = dossier (with LV95 point), document = entry
 with nested spans. Person references are <span element="reference"
 class="per"> with a <span element="head" class="nam"> child; occupations,
-titles and kin sit in appositions, a <span class="dead"> apposition ("selig",
+titles and kin sit in appositions, a <span class="dead"> child ("selig",
 "wilent") marks the person as deceased; event roles point at span ids.
 
 Mentions are collected per street and then resolved into persons with the
@@ -93,11 +93,13 @@ def person_mentions(doc):
             continue
         occ, dead = [], False
         for ap in ref:
-            if ap.get("element") != "appo":
-                continue
+            # "sel.", "wilent": an attr (sometimes appo) child of the reference
             if ap.get("class") == "dead":
                 dead = True
-            elif ap.get("class") == "occ":
+                continue
+            if ap.get("element") != "appo":
+                continue
+            if ap.get("class") == "occ":
                 for h in ap.iter("span"):
                     if h.get("element") == "head" and h.get("class") == "occ":
                         n = h.get("norm", "")
