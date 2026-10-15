@@ -93,6 +93,15 @@ scripts bridge that:
 CSVs are missing, and keeps the publications a previous `merged_persons.json`
 recorded per GND id when the lobid-resources index cannot be queried.
 
+*Result of the 2026-10 rebuild:* edges unioned — 7,003 frozen authority, 1,932
+HGB↔HLS, 114 HBLS↔HGB (direct; the transitive pass needs Stage 1's CSV), 615
+HGB↔GND; TRIM_HGB detached 275 HGB records from 133 clusters. 3,630 clusters →
+3,630 merged persons (3,444 merged / 186 review), 3,356 with a GND id, 515
+attested in the HGB, 67 spanning all three corpora. The drop from 85 to 67
+tri-corpus identities is the price of the HBLS id recovery: 2,078 of the 3,445
+old HBLS ids could be mapped onto `hbls_web.json` members, the rest stay as
+authority-only nodes named from GND.
+
 ### Stage 3 — Build identity clusters  *(done — `../build_identity_clusters.py`)*
 Model every accepted link as an edge in a graph whose nodes are
 `(corpus, local_id)` **plus the shared authority ids** (`gnd:<id>`, `wd:<qid>`),
