@@ -1,17 +1,24 @@
 """
-build_db.py — parse hgb_full_*.xml into hgb.db (SQLite + FTS5)
+build_db.py — parse the HGB corpus XML into hgb.db (SQLite + FTS5)
 
 Run once before starting the server:
-    python build_db.py --xml ../hgb_full_26_05_29_05.xml --db hgb.db
+    python build_db.py --street-dir ../../economies-of-space-automatically-annotated-data/street_data --db hgb.db
+    python build_db.py --xml ../hgb_full_26_05_29_05.xml --db hgb.db     # legacy single file
 
-The XML is ~800 MB; streaming iterparse keeps memory usage low (~200 MB peak).
+The corpus is the street-split export of
+DHBern/economies-of-space-automatically-annotated-data (~865 MB, 120 files);
+hgb_corpus.iter_documents() streams it with low memory (~200 MB peak) and also
+still reads the earlier single-file export.
 """
 
 import argparse
+import os
 import sqlite3
 import sys
 import time
-from lxml import etree
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+import hgb_corpus  # noqa: E402
 
 
 # ── Schema ────────────────────────────────────────────────────────────────────
@@ -28,8 +35,12 @@ CREATE TABLE IF NOT EXISTS documents (
     location    TEXT,         -- WKT POINT(E N) or NULL
     language    TEXT,
     pages       INTEGER,
-    text_raw    TEXT,         -- full document text from metadata/@text
-    checked     INTEGER       -- 0/1
+    text_raw    TEXT,         -- full document text from metadata/text
+    checked     INTEGER,      -- 0/1
+    street_id   TEXT,         -- HGB_1_005
+    address     TEXT,         -- dossier address (collection metadata)
+    dossiertype TEXT,         -- Liegenschaft, Strassenkörper, …
+    page_url    TEXT          -- first Transkribus page image
 );
 
 CREATE TABLE IF NOT EXISTS spans (
@@ -92,7 +103,7 @@ def init_db(path: str) -> sqlite3.Connection:
 
 # ── Parsing ───────────────────────────────────────────────────────────────────
 
-def parse(xml_path: str, db_path: str, batch: int = 500):
+def parse(db_path: str, batch: int = 500, street_dir=None, files=None):
     con = init_db(db_path)
     cur = con.cursor()
 
@@ -100,30 +111,25 @@ def parse(xml_path: str, db_path: str, batch: int = 500):
     n_docs = 0
     t0 = time.time()
 
-    context = etree.iterparse(xml_path, events=("end",), tag="document")
-
-    for _, doc_el in context:
-        doc_id = doc_el.get("id")
+    for doc_el, meta in hgb_corpus.iter_documents(street_dir, files, progress=False):
+        doc_id = meta["doc_id"]
         if not doc_id:
-            doc_el.clear()
-            continue
-
-        # metadata element
-        meta = doc_el.find("metadata")
-        if meta is None:
-            doc_el.clear()
             continue
 
         doc_rows.append((
             doc_id,
-            meta.get("dossierid"),
-            _int(meta.get("year")),
-            meta.get("source"),
-            meta.get("location"),
-            meta.get("language"),
-            _int(meta.get("pages")),
-            meta.get("text", ""),
-            1 if meta.get("checked_by_gpt") == "true" else 0,
+            meta["dossier_id"],
+            meta["year"],
+            meta["source"],
+            meta["location"],
+            meta["language"],
+            meta["n_pages"],
+            meta["text"] or "",
+            1 if meta["checked_by_gpt"] else 0,
+            meta["street_id"],
+            meta["address"],
+            meta["dossiertype"],
+            meta["pages"][0][1] if meta["pages"] else None,
         ))
 
         # spans
@@ -159,7 +165,6 @@ def parse(xml_path: str, db_path: str, batch: int = 500):
                 ev.get("modality"),
             ))
 
-        doc_el.clear()
         n_docs += 1
 
         if n_docs % batch == 0:
@@ -179,7 +184,7 @@ def parse(xml_path: str, db_path: str, batch: int = 500):
 
 def _flush(cur, docs, spans, events):
     cur.executemany(
-        "INSERT OR IGNORE INTO documents VALUES (?,?,?,?,?,?,?,?,?)", docs
+        "INSERT OR IGNORE INTO documents VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", docs
     )
     cur.executemany(
         "INSERT INTO spans(doc_id,span_id,parent_id,class,element,text,"
@@ -205,9 +210,14 @@ def _float(v):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--xml", default="../hgb_full_26_05_29_05.xml")
+    ap.add_argument("--xml", default=None,
+                    help="legacy single-file export (hgb_full_*.xml)")
+    ap.add_argument("--street-dir", default=None,
+                    help="street_data/ of the DHBern data repo (default: auto-detect)")
     ap.add_argument("--db",  default="hgb.db")
     ap.add_argument("--batch", type=int, default=500)
     args = ap.parse_args()
-    print(f"Parsing {args.xml} → {args.db}")
-    parse(args.xml, args.db, args.batch)
+    files = [args.xml] if args.xml else None
+    src = args.xml or hgb_corpus.street_dir(args.street_dir) or "<no corpus found>"
+    print(f"Parsing {src} → {args.db}")
+    parse(args.db, args.batch, street_dir=args.street_dir, files=files)

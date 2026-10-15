@@ -1,6 +1,9 @@
 services:
   hgb-mcp:
-    build: .
+    build:
+      # context is the repository root: build_db.py imports ../hgb_corpus.py
+      context: ..
+      dockerfile: mcp_server/Dockerfile
     image: hgb-mcp:latest
     container_name: hgb-mcp
     restart: unless-stopped

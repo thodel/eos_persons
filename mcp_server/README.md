@@ -23,14 +23,15 @@ Available tools: `corpus_stats`, `search_persons`, `get_document`, `get_dossier`
 ## Architecture
 
 ```
-hgb_full_*.xml  ──► build_db.py ──► hgb.db (SQLite + FTS5)
+street_data/*.xml ──► build_db.py ──► hgb.db (SQLite + FTS5)
+(DHBern/economies-of-space-automatically-annotated-data, read via ../hgb_corpus.py)
                                          │
                                     server.py  (FastMCP / HTTP SSE)
                                          │
                               http://<host>:8000/sse
 ```
 
-The 800 MB XML is parsed once into a ~100 MB SQLite database. The server then runs stateless queries against it.
+The ~865 MB of street XML is parsed once into a ~100 MB SQLite database. The server then runs stateless queries against it.
 
 ## Local setup
 
@@ -44,7 +45,9 @@ pip install -r requirements.txt
 ### 2. Build the database
 
 ```bash
-python build_db.py --xml ../hgb_full_26_05_29_05.xml --db hgb.db
+python build_db.py --db hgb.db          # auto-detects ../../economies-of-space-automatically-annotated-data/street_data
+python build_db.py --street-dir /path/to/street_data --db hgb.db
+python build_db.py --xml ../hgb_full_26_05_29_05.xml --db hgb.db   # legacy single-file export
 ```
 
 This takes ~10 minutes and produces `hgb.db`. Run it once; repeat only when the XML changes.
@@ -99,11 +102,11 @@ docker compose build
 ### First-time: build the database
 
 ```bash
-# Copy XML to /data/hgb/ on the server, then:
+# Copy the street_data/ folder of the data repo to /data/hgb/street_data on the server, then:
 docker run --rm \
   -v /data/hgb:/data \
   hgb-mcp \
-  python build_db.py --xml /data/hgb_full_26_05_29_05.xml --db /data/hgb.db
+  python build_db.py --street-dir /data/street_data --db /data/hgb.db
 
 # then load the cross-corpus identities into the same file
 docker run --rm \

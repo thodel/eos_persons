@@ -20,9 +20,8 @@ import re
 import json
 import math
 import collections
-import lxml.etree as ET
+import hgb_corpus
 
-XML = "hgb_full_26_05_29_05.xml"
 OUT = "prices.json"
 
 SALE = {"property-purchase", "sale", "rent-purchase"}
@@ -37,13 +36,7 @@ RADIUS = 0.0026        # ~290 m IDW search radius
 DECADE_STEP = 10
 
 
-def lv95_to_wgs84(E, N):
-    e = (E - 2_600_000) / 1e6
-    n = (N - 1_200_000) / 1e6
-    lon = (2.6779094 + 4.728982*e + 0.791484*e*n + 0.1306*e*n**2 - 0.0436*e**3) * 100/36
-    lat = (16.9023892 + 3.238272*n - 0.270978*e**2 - 0.002528*n**2
-           - 0.0447*e**2*n - 0.0140*n**3) * 100/36
-    return lat, lon
+lv95_to_wgs84 = hgb_corpus.lv95_to_wgs84
 
 
 def to_pfund(norm):
@@ -57,31 +50,25 @@ def to_pfund(norm):
 
 def extract():
     tx = []
-    ctx = ET.iterparse(XML, events=("end",), tag="document", recover=True)
-    for _, doc in ctx:
-        meta = doc.find("metadata")
-        if meta is None:
-            doc.clear(); continue
-        yr = meta.get("year", "")
-        loc = meta.get("location", "")
-        if not yr.isdigit() or "POINT" not in loc:
-            doc.clear(); continue
+    for doc, meta in hgb_corpus.iter_documents(progress=False):
+        yr, loc = meta["year"], meta["location"]
+        if not yr or not loc:
+            continue
         if not any(eg.get("class") in SALE for eg in doc.iter("eventGroup")):
-            doc.clear(); continue
+            continue
         vals = [to_pfund(sp.get("norm")) for sp in doc.iter("span")
                 if sp.get("class") == "money" and sp.get("norm")]
         vals = [v for v in vals if v]
         if not vals:
-            doc.clear(); continue
+            continue
         price = max(vals)
         if not (PRICE_MIN <= price <= PRICE_MAX):
-            doc.clear(); continue
-        m = re.search(r"POINT\(([\d.]+)\s+([\d.]+)\)", loc)
-        lat, lon = lv95_to_wgs84(float(m.group(1)), float(m.group(2)))
-        tx.append({"y": int(yr), "lat": round(lat, 6), "lon": round(lon, 6),
-                   "p": round(price), "dos": meta.get("dossierid", ""),
-                   "t": (meta.get("text", "") or "")[:90]})
-        doc.clear()
+            continue
+        E, N = hgb_corpus.parse_point(loc)
+        lat, lon = lv95_to_wgs84(E, N)
+        tx.append({"y": yr, "lat": round(lat, 6), "lon": round(lon, 6),
+                   "p": round(price), "dos": meta["dossier_id"] or "",
+                   "t": (meta["text"] or "")[:90]})
     return tx
 
 

@@ -70,6 +70,29 @@ on the other, using the **mention-span** date rule. Two sub-passes:
   halves, since it inherits the HGB↔HLS edges that the fix pruned most heavily;
   that drop is not independently sampled yet.)*
 
+### Rebuilding without the private inputs  *(2026-10)*
+
+When the HGB person base is regenerated (now from the street-split corpus of
+DHBern/economies-of-space-automatically-annotated-data, see the top-level
+README), the HGB side of every edge below has to be recomputed, while the
+HBLS↔HLS / GND / Wikidata side is unaffected — but its candidate CSVs need the
+HBLS PDFs and the HLS export, which a fresh checkout does not have. Three
+scripts bridge that:
+
+- `../build_hls_table.py` → `hls_bios_wikidata.csv`: the HLS biography table
+  (id, names, life dates, gender, GND) rebuilt from Wikidata property P902; the
+  linkers use it whenever `hls_articles.csv` is absent (`link_hls.default_hls`).
+- `rebuild_hbls_persons.py` → `hbls_persons.json` from `../hbls_web.json`.
+- `../freeze_authority_edges.py` → `authority_edges.csv`: the non-HGB members
+  of every previous merged person, grouped. Stage 3 unions each group first
+  (edge type `frozen_authority`), then attaches the HGB records from the
+  freshly computed `link_candidates_hls.csv` / `link_hbls_hgb_candidates.csv`
+  and the `wd` field of `persons_resolved.json`.
+
+`gnd_enrich.py` takes its GND ids from `authority_edges.csv` when the Tier 0/1
+CSVs are missing, and keeps the publications a previous `merged_persons.json`
+recorded per GND id when the lobid-resources index cannot be queried.
+
 ### Stage 3 — Build identity clusters  *(done — `../build_identity_clusters.py`)*
 Model every accepted link as an edge in a graph whose nodes are
 `(corpus, local_id)` **plus the shared authority ids** (`gnd:<id>`, `wd:<qid>`),

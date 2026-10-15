@@ -24,7 +24,7 @@ import csv
 import json
 
 # reuse the battle-tested name normalisation from the HGB→HLS linker
-from link_hls import norm_token, given_key, given_ratio, ratio, year_of, hls_url
+from link_hls import norm_token, given_key, given_ratio, ratio, year_of, hls_url, default_hls
 
 csv.field_size_limit(10_000_000)
 
@@ -84,7 +84,7 @@ def year_agreement(hb, hd, hfl, b, d):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hbls", default="hbls-extraction/hbls_persons.json")
-    ap.add_argument("--hls", default="/Users/TH_1/Documents/HLS/hls_articles.csv")
+    ap.add_argument("--hls", default=default_hls())
     ap.add_argument("--out", default="link_hbls_hls_candidates.csv")
     ap.add_argument("--surname-min", type=float, default=0.85)
     ap.add_argument("--given-min", type=float, default=0.74)

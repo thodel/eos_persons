@@ -1,8 +1,9 @@
 """
 extract_features.py
 ===================
-Streams the HGB source XML (hgb_full_26_05_29_05.xml, ~800 MB, 75k documents)
-and emits a tidy **document-level feature matrix** as parquet (+ csv preview).
+Streams the HGB corpus (the street files of
+DHBern/economies-of-space-automatically-annotated-data, read via hgb_corpus.py;
+~865 MB, 75k documents) and emits a tidy **document-level feature matrix** as parquet (+ csv preview).
 
 One row per <document>. Columns are grouped into families that are designed to
 be *comparable across archives, currencies, and eras*:
@@ -33,11 +34,11 @@ import math
 import re
 from collections import defaultdict, Counter
 
-from lxml import etree
 import pandas as pd
 
+import hgb_corpus
+
 # ── Config ──────────────────────────────────────────────────────────────────
-XML_PATH   = "hgb_full_26_05_29_05.xml"
 OUT_PARQUET = "features_doc.parquet"
 OUT_PREVIEW = "features_doc_preview.csv"
 BIN_WIDTH  = 25          # year time-bin width (requested)
@@ -144,26 +145,25 @@ class UF:
             self.p[ra] = rb
 
 
-def process_document(doc):
-    """Return a flat dict of features for one <document> element."""
-    row = {}
-    meta = doc.find("metadata")
-    if meta is None:
-        return None
+def process_document(doc, meta):
+    """Return a flat dict of features for one <document> element.
 
-    year = meta.get("year")
-    year = int(year) if year and year.isdigit() else None
-    row["doc_id"]      = doc.get("id")
-    row["dossierid"]   = meta.get("dossierid")
-    row["dossiertype"] = meta.get("dossiertype") or None
+    `meta` is the uniform metadata dict from hgb_corpus.doc_meta().
+    """
+    row = {}
+    year = meta["year"]
+    row["doc_id"]      = meta["doc_id"]
+    row["dossierid"]   = meta["dossier_id"]
+    row["dossiertype"] = meta["dossiertype"] or None
+    row["street_id"]   = meta["street_id"]
     row["year"]        = year
     row["time_bin"]    = (BIN_ORIGIN + BIN_WIDTH * ((year - BIN_ORIGIN) // BIN_WIDTH)
                           if year is not None else None)
-    row["source"]      = meta.get("source") or None
-    row["language"]    = meta.get("language") or None
-    row["pages"]       = int(meta.get("pages")) if (meta.get("pages") or "").isdigit() else None
-    row["checked_by_gpt"] = meta.get("checked_by_gpt") == "true"
-    cx, cy = parse_point(meta.get("location"))
+    row["source"]      = meta["source"] or None
+    row["language"]    = meta["language"] or None
+    row["pages"]       = meta["n_pages"]
+    row["checked_by_gpt"] = bool(meta["checked_by_gpt"])
+    cx, cy = parse_point(meta["location"])
     row["coord_x"], row["coord_y"] = cx, cy
     row["has_coord"] = cx is not None
 
@@ -379,18 +379,13 @@ def process_document(doc):
 def main():
     rows = []
     n = 0
-    ctx = etree.iterparse(XML_PATH, events=("end",), tag="document")
-    for _, doc in ctx:
-        r = process_document(doc)
+    for doc, meta in hgb_corpus.iter_documents(progress=False):
+        r = process_document(doc, meta)
         if r is not None:
             rows.append(r)
         n += 1
         if n % 5000 == 0:
             print(f"  …{n} documents", flush=True)
-        # free memory: clear element and preceding siblings
-        doc.clear()
-        while doc.getprevious() is not None:
-            del doc.getparent()[0]
     print(f"parsed {n} documents", flush=True)
 
     df = pd.DataFrame(rows)

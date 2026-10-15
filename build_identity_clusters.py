@@ -9,6 +9,9 @@ the GND linking, and treats each connected component as one real person.
   node namespaces:  hbls:<id>  hgb:<name>#<year>  hls:<id>  gnd:<id>  wd:<qid>
 
   edges (only confident links are unioned — see the gates below):
+    frozen     authority_edges.csv               HBLS/HLS/GND/WD groups kept
+                                                 from the previous run
+                                                 (freeze_authority_edges.py)
     HBLS↔HLS   link_hbls_hls_candidates.csv      score≥.9, unambiguous
     HGB ↔HLS   link_candidates_hls.csv           score≥.85, unambiguous, overlap
     HBLS↔HGB   link_hbls_hgb_candidates.csv      score≥.8, unambiguous, overlap
@@ -99,6 +102,33 @@ def hbls_node(hid, name=""):
 
 # ── edges ────────────────────────────────────────────────────────────────────
 stats = defaultdict(int)
+
+# 0) Frozen authority-side clusters (authority_edges.csv, written by
+#    freeze_authority_edges.py from the previous merged_persons.json). These
+#    carry the HBLS↔HLS↔GND↔Wikidata identities whose candidate CSVs cannot be
+#    regenerated here; the HGB records are attached afresh below.
+_groups = defaultdict(list)
+for r in rd("authority_edges.csv"):
+    c = r["corpus"]
+    if c == "hbls":
+        n = hbls_node(r["node"][5:], r["name"])
+        if r.get("birth") and not meta[n]["b"]:
+            meta[n]["b"] = to_int(r["birth"])
+        if r.get("death") and not meta[n]["d"]:
+            meta[n]["d"] = to_int(r["death"])
+    elif c == "hls":
+        n = node(r["node"], "hls", r["name"], to_int(r["birth"]), to_int(r["death"]))
+    elif c == "gnd":
+        n = node(r["node"], "gnd")
+    elif c == "wikidata":
+        n = node(r["node"], "wd")
+    else:
+        continue
+    _groups[r["group"]].append(n)
+for members in _groups.values():
+    for n in members[1:]:
+        union(members[0], n)
+    stats["frozen_authority"] += len(members) - 1
 
 # 1) HBLS ↔ HLS
 for r in rd("link_hbls_hls_candidates.csv"):

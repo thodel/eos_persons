@@ -20,6 +20,7 @@ Run locally:
         --hls /Users/TH_1/Documents/HLS/hls_articles.csv \
         --out link_candidates_hls.csv
 """
+import os
 import re
 import csv
 import json
@@ -29,6 +30,18 @@ import collections
 from difflib import SequenceMatcher
 
 csv.field_size_limit(10_000_000)
+
+# The HLS metadata export is private and lives on the maintainer's machine; when
+# it is absent the linkers fall back to the public table built from Wikidata by
+# build_hls_table.py (same column layout, see there for what it lacks).
+HLS_PRIVATE = "/Users/TH_1/Documents/HLS/hls_articles.csv"
+HLS_PUBLIC = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          "hls_bios_wikidata.csv")
+
+
+def default_hls():
+    return HLS_PRIVATE if os.path.exists(HLS_PRIVATE) else HLS_PUBLIC
+
 
 # Particles that precede a surname; stripped before comparison.
 PARTICLES = {"von", "vom", "van", "zem", "zum", "zur", "zer", "ze", "im", "in",
@@ -244,7 +257,7 @@ def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3):
 def main():
     ap = argparse.ArgumentParser(description="Link HGB persons to HLS biographies.")
     ap.add_argument("--persons", default="persons_resolved.json")
-    ap.add_argument("--hls", default="/Users/TH_1/Documents/HLS/hls_articles.csv")
+    ap.add_argument("--hls", default=default_hls())
     ap.add_argument("--out", default="link_candidates_hls.csv")
     ap.add_argument("--surname-min", type=float, default=0.82)
     ap.add_argument("--given-min", type=float, default=0.74)
