@@ -245,7 +245,7 @@ docker run --rm -v /data/hgb:/data hgb-mcp python -c \
   "import db; db.set_db_path('/data/hgb.db'); print(db.identity_stats())"
 ```
 
-Expected right now (rebuild of 2026-10 from the street-split corpus): 3,630
+Expected right now (rebuild of 2026-10 from the street-split corpus): 3,631
 identities, 3,356 with a GND id, 67 in all three corpora. `build_identities.py` drops and rebuilds only `identities` and
 `fts_identities`, so re-running it is safe and never touches the HGB tables.
 
@@ -300,8 +300,8 @@ Three levels of granularity, easily confused — pick by the question asked:
 | Who appears in the land register? | `search_hgb_persons` (register persons) |
 | Who was this person, across all our sources? | `search_identities` (resolved people) |
 
-Current contents: **3,630** resolved people — 3,356 with a GND id, 1,843 with a
-Wikidata QID, 2,607 with occupations, 622 with recorded works, 515 attested in
+Current contents: **3,631** resolved people — 3,356 with a GND id, 1,843 with a
+Wikidata QID, 2,608 with occupations, 622 with recorded works, 516 attested in
 the HGB land register, 67 in all three corpora (186 flagged for review).
 
 If the identity tables have not been built, these tools return an explanatory

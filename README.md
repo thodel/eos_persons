@@ -67,10 +67,10 @@ module, but is no longer the reference.
 | 9 | `link_hbls_hgb.py --all`, `build_identity_clusters.py`, `build_merged_persons.py`, `make_persons_web.py` | cross-corpus identities (`merged_persons.json`, `persons_web.json`; see `hbls-extraction/DEDUP_PLAN.md`) |
 
 Figures of the current build (street corpus 0.3.0): 238,957 person mentions in
-75,447 documents → 153,170 resolved names → **136,986 persons** after dedupe;
+75,447 documents → 153,170 resolved names → **136,470 persons** after dedupe;
 713 carry an HLS/Wikidata link (2,193 confident links before dedupe, from 4,940
 candidates); 3,694 geolocated dossiers; 15,082 persons with movement between
-≥2 properties; 3,630 cross-corpus identities (515 attested in the register).
+≥2 properties; 3,631 cross-corpus identities (516 attested in the register).
 
 ### HLS data without the private export
 
