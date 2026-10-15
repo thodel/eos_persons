@@ -52,6 +52,7 @@ python3 build_account_places.py     # -> srbas_account_places.csv  (tracked, Wik
 python3 ../build_hgb_street_persons.py   # -> ../hgb_street_persons.json (gitignored, 51 MB)
 python3 ../link_srbas_hgb.py             # -> ../link_srbas_hgb_candidates.csv
                                          #    ../link_srbas_hgb_street_candidates.csv
+python3 ../make_srbas_web.py                # -> ../srbas_web.json for ../jahrrechnungen.html
 python3 -m pytest ../tests/test_srbas_names.py ../tests/test_street_resolution.py
 ```
 
@@ -123,6 +124,17 @@ Both outputs are candidate tables for review, one row per (srbas profile,
 HGB person) pair, sorted by score, with `n_candidates` for ambiguity.
 `srbas_uri` points at the first booking; the full list of bookings for a
 profile is in `srbas_name_mentions.csv`.
+
+## Web page: `../jahrrechnungen.html`
+
+`make_srbas_web.py` compacts everything above into `srbas_web.json` (one
+record per name profile with up to four cited bookings spread over the years,
+a text excerpt of ≤ 140 characters each, and the three best candidates per
+target; street candidates carry WGS84 points converted from LV95). The page
+shows the street-level hits and the bailiwick accounts on a map, filters by
+target, score, ambiguity and mention count, and links every booking to its
+GAMS fragment. The excerpts are short quotations for verification; the full
+texts stay with the edition.
 
 ## Known limitations
 

@@ -13,6 +13,7 @@ A web-based exploration tool for person mentions and property records in the his
 | [`centre_periphery.html`](centre_periphery.html) | Interactive centre/periphery map — value vs. in-kind obligations per geolocated dossier (linked from the Korrelationsanalyse page) |
 | [`viz.html`](viz.html) | Occupation visualisations — trajectories, co-occurrence, and frequency charts |
 | [`movements.html`](movements.html) | **Personenbewegungen** — two-mode movement map on the historical Situationsplan Basel 1862 |
+| [`jahrrechnungen.html`](jahrrechnungen.html) | **Jahrrechnungen** — the Basel city accounts 1535–1610 (GAMS Graz) cross-linked with HGB persons: cited bookings, street-level and corpus-level candidates on a map, the geo-referenced bailiwick accounts |
 
 ## Personenbewegungen
 
@@ -96,6 +97,7 @@ access URLs and the pipeline.
 | `srbas-extraction/srbas_account_places.csv` | the Ämter/Vogteien accounts geo-referenced via Wikidata (review column) |
 | `build_hgb_street_persons.py` | street-level HGB person index from the DHBern annotated release (read-only input), HGB identity resolution applied per street → `hgb_street_persons.json` (gitignored) |
 | `link_srbas_hgb.py` | srbas names → HGB persons: `link_srbas_hgb_candidates.csv` (corpus) and `link_srbas_hgb_street_candidates.csv` (street level, with coordinates) |
+| `make_srbas_web.py` | joins mentions, booking excerpts, account places and both candidate tables into `srbas_web.json` for `jahrrechnungen.html` |
 | `tests/test_srbas_names.py`, `tests/test_street_resolution.py` | inflection handling the match depends on; the street-scoped resolution rules |
 
 ## MCP server (alpha test)
