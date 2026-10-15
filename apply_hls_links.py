@@ -21,6 +21,8 @@ import collections
 
 csv.field_size_limit(10_000_000)
 
+from link_hls import default_hls  # noqa: E402
+
 MIN_SCORE = 0.90
 MARGIN = 0.05
 
@@ -34,7 +36,7 @@ def hls_url(article_id, version):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--candidates", default="link_candidates_hls.csv")
-    ap.add_argument("--hls", default="/Users/TH_1/Documents/HLS/hls_articles.csv")
+    ap.add_argument("--hls", default=default_hls())
     ap.add_argument("--persons", default="persons_resolved.json")
     ap.add_argument("--graph", default="families_graph.json")
     ap.add_argument("--min-score", type=float, default=MIN_SCORE)

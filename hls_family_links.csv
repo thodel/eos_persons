@@ -1,0 +1,423 @@
+surname_key,hls_id,url,title,conf
+abt,029503,https://hls-dhs-dss.ch/de/articles/029503/2002-05-31/,Abt,unique
+ackermann,024916,https://hls-dhs-dss.ch/de/articles/024916/2011-10-06/,Ackermann,unique
+alt,009745,https://hls-dhs-dss.ch/de/articles/009745/2001-06-18/,Alt,unique
+amerbach,015298,https://hls-dhs-dss.ch/de/articles/015298/2001-07-06/,Amerbach,basel
+amman,003013,https://hls-dhs-dss.ch/de/articles/003013/2020-02-19/,d' Amman,unique
+andlau,019982,https://hls-dhs-dss.ch/de/articles/019982/2020-03-24/,von Andlau,basel
+archer,020861,https://hls-dhs-dss.ch/de/articles/020861/2001-09-11/,Archer,unique
+arnold,025080,https://hls-dhs-dss.ch/de/articles/025080/2001-09-17/,Arnold,basel
+arx,023089,https://hls-dhs-dss.ch/de/articles/023089/2001-09-18/,von Arx,basel
+bachofen,010732,https://hls-dhs-dss.ch/de/articles/010732/2002-11-27/,Bachofen,basel
+baden,019983,https://hls-dhs-dss.ch/de/articles/019983/2001-12-20/,von Baden,basel
+balthasar,022206,https://hls-dhs-dss.ch/de/articles/022206/2001-12-19/,Balthasar,unique
+barenfels,019984,https://hls-dhs-dss.ch/de/articles/019984/2002-01-15/,von Bärenfels,basel
+barth,043150,https://hls-dhs-dss.ch/de/articles/043150/2002-01-11/,Barth BS,basel
+bary,012441,https://hls-dhs-dss.ch/de/articles/012441/2002-11-29/,de Bary,basel
+basel,020003,https://hls-dhs-dss.ch/de/articles/020003/2002-01-15/,Marschalk von Basel,basel
+battier,015972,https://hls-dhs-dss.ch/de/articles/015972/2002-05-02/,Battier,basel
+bauhin,007675,https://hls-dhs-dss.ch/de/articles/007675/2002-05-02/,Bauhin,basel
+baumann,013864,https://hls-dhs-dss.ch/de/articles/013864/2002-04-11/,"Baumann UR, Altdorf",basel
+bavier,021888,https://hls-dhs-dss.ch/de/articles/021888/2002-06-18/,Bavier,unique
+bayer,022768,https://hls-dhs-dss.ch/de/articles/022768/2002-04-29/,von Bayer,unique
+beder,032393,https://hls-dhs-dss.ch/de/articles/032393/2002-05-27/,Beder,unique
+bener,024891,https://hls-dhs-dss.ch/de/articles/024891/2002-06-25/,Bener,unique
+benninger,024979,https://hls-dhs-dss.ch/de/articles/024979/2002-05-23/,Benninger,unique
+berger,030777,https://hls-dhs-dss.ch/de/articles/030777/2004-05-11/,Berger,unique
+bernoulli,020951,https://hls-dhs-dss.ch/de/articles/020951/2004-06-11/,Bernoulli,basel
+bertschinger,024684,https://hls-dhs-dss.ch/de/articles/024684/2004-06-14/,Bertschinger,unique
+biberstein,025031,https://hls-dhs-dss.ch/de/articles/025031/2002-09-25/,Biberstein,unique
+bieder,021004,https://hls-dhs-dss.ch/de/articles/021004/2002-10-14/,Bieder,basel
+bischoff,021016,https://hls-dhs-dss.ch/de/articles/021016/2002-10-31/,Bischoff,basel
+blarer,022771,https://hls-dhs-dss.ch/de/articles/022771/2008-04-24/,Blarer,basel
+blatter,019550,https://hls-dhs-dss.ch/de/articles/019550/2002-11-06/,Blatter,unique
+blum,024952,https://hls-dhs-dss.ch/de/articles/024952/2004-10-05/,Blum,unique
+blumer,021027,https://hls-dhs-dss.ch/de/articles/021027/2004-06-03/,Blumer,unique
+bons,019551,https://hls-dhs-dss.ch/de/articles/019551/2002-11-20/,de Bons,unique
+bornhauser,025062,https://hls-dhs-dss.ch/de/articles/025062/2005-11-07/,Bornhauser,unique
+borsinger,020434,https://hls-dhs-dss.ch/de/articles/020434/2004-06-07/,Borsinger,unique
+bosch,022772,https://hls-dhs-dss.ch/de/articles/022772/2003-01-07/,Bösch,unique
+boss,029825,https://hls-dhs-dss.ch/de/articles/029825/2004-08-19/,Boss,unique
+bram,023787,https://hls-dhs-dss.ch/de/articles/023787/2004-08-19/,Bräm,unique
+brand,020953,https://hls-dhs-dss.ch/de/articles/020953/2011-02-10/,Brand BS,basel
+bremgarten,019603,https://hls-dhs-dss.ch/de/articles/019603/2004-09-01/,von Bremgarten,unique
+brenner,025063,https://hls-dhs-dss.ch/de/articles/025063/2002-12-18/,Brenner,unique
+brodbeck,021005,https://hls-dhs-dss.ch/de/articles/021005/2004-08-26/,Brodbeck,basel
+broger,020857,https://hls-dhs-dss.ch/de/articles/020857/2002-12-30/,Broger,unique
+brucker,023396,https://hls-dhs-dss.ch/de/articles/023396/2003-01-31/,Brücker,unique
+bruckner,020954,https://hls-dhs-dss.ch/de/articles/020954/2004-08-26/,Bruckner,basel
+brugger,021892,https://hls-dhs-dss.ch/de/articles/021892/2003-01-08/,Brügger,unique
+brunn,020955,https://hls-dhs-dss.ch/de/articles/020955/2010-01-20/,von Brunn,basel
+brunschweiler,025064,https://hls-dhs-dss.ch/de/articles/025064/2004-08-26/,Brunschweiler,unique
+buch,022838,https://hls-dhs-dss.ch/de/articles/022838/2003-01-27/,Buch Familie,unique
+bucherer,024923,https://hls-dhs-dss.ch/de/articles/024923/2002-07-16/,Bucherer,basel
+buman,021070,https://hls-dhs-dss.ch/de/articles/021070/2017-03-20/,de Buman,unique
+burckhardt,020956,https://hls-dhs-dss.ch/de/articles/020956/2024-08-20/,Burckhardt,basel
+burger,024710,https://hls-dhs-dss.ch/de/articles/024710/2003-08-21/,Burger,unique
+burgund,047795,https://hls-dhs-dss.ch/de/articles/047795/2020-05-28/,von Burgund,unique
+buttikon,019618,https://hls-dhs-dss.ch/de/articles/019618/2005-01-24/,von Büttikon,basel
+buxtorf,020957,https://hls-dhs-dss.ch/de/articles/020957/2003-08-25/,Buxtorf,basel
+byss,022837,https://hls-dhs-dss.ch/de/articles/022837/2005-02-16/,Byss,unique
+christ,020958,https://hls-dhs-dss.ch/de/articles/020958/2003-12-19/,Christ BS,basel
+clausen,023568,https://hls-dhs-dss.ch/de/articles/023568/2017-05-04/,Clausen,unique
+clauser,047551,https://hls-dhs-dss.ch/de/articles/047551/2002-03-04/,Clauser,unique
+conrad,021901,https://hls-dhs-dss.ch/de/articles/021901/2004-02-18/,Conrad,unique
+decker,045482,https://hls-dhs-dss.ch/de/articles/045482/2004-03-19/,Decker,basel
+degen,022880,https://hls-dhs-dss.ch/de/articles/022880/2016-12-07/,Degen Familie,unique
+diethelm,022934,https://hls-dhs-dss.ch/de/articles/022934/2015-12-22/,Diethelm,unique
+dietschi,015154,https://hls-dhs-dss.ch/de/articles/015154/2004-04-23/,Dietschi,unique
+dietschy,025425,https://hls-dhs-dss.ch/de/articles/025425/2004-04-23/,Dietschy,basel
+dorer,020437,https://hls-dhs-dss.ch/de/articles/020437/2004-04-08/,Dorer,unique
+dumelin,022935,https://hls-dhs-dss.ch/de/articles/022935/2004-07-21/,Dumelin,unique
+dur,020936,https://hls-dhs-dss.ch/de/articles/020936/2004-07-22/,Dür,unique
+durrer,024104,https://hls-dhs-dss.ch/de/articles/024104/2004-07-22/,Durrer,unique
+eberler,019203,https://hls-dhs-dss.ch/de/articles/019203/2020-02-14/,Eberler,basel
+ebneter,024102,https://hls-dhs-dss.ch/de/articles/024102/2005-11-07/,Ebneter,unique
+efringen,019989,https://hls-dhs-dss.ch/de/articles/019989/2004-08-23/,von Efringen,basel
+eggs,020438,https://hls-dhs-dss.ch/de/articles/020438/2002-07-05/,Eggs,unique
+eglin,030174,https://hls-dhs-dss.ch/de/articles/030174/2002-04-05/,Eglin,unique
+ehinger,020959,https://hls-dhs-dss.ch/de/articles/020959/2004-08-26/,Ehinger BS,basel
+eisenhut,028716,https://hls-dhs-dss.ch/de/articles/028716/2005-10-17/,Eisenhut,unique
+enderlin,021906,https://hls-dhs-dss.ch/de/articles/021906/2004-08-16/,Enderlin,unique
+engelberger,024105,https://hls-dhs-dss.ch/de/articles/024105/2004-10-25/,Engelberger,unique
+eptingen,019990,https://hls-dhs-dss.ch/de/articles/019990/2005-11-14/,von Eptingen,basel
+erlach,020041,https://hls-dhs-dss.ch/de/articles/020041/2006-04-07/,von Erlach,unique
+ernst,020870,https://hls-dhs-dss.ch/de/articles/020870/2004-12-01/,Ernst,unique
+eschenbach,019615,https://hls-dhs-dss.ch/de/articles/019615/2004-11-01/,von Eschenbach,unique
+escher,023794,https://hls-dhs-dss.ch/de/articles/023794/2024-08-27/,Escher,unique
+esslinger,023801,https://hls-dhs-dss.ch/de/articles/023801/2004-11-04/,Esslinger,unique
+faesch,020960,https://hls-dhs-dss.ch/de/articles/020960/2024-08-22/,Faesch,basel
+falkeisen,020961,https://hls-dhs-dss.ch/de/articles/020961/2004-05-26/,Falkeisen,basel
+falkner,020962,https://hls-dhs-dss.ch/de/articles/020962/2015-12-22/,Falkner,basel
+fasi,023802,https://hls-dhs-dss.ch/de/articles/023802/2004-11-17/,Fäsi,unique
+fatio,025506,https://hls-dhs-dss.ch/de/articles/025506/2006-03-27/,Fatio,basel
+fels,022782,https://hls-dhs-dss.ch/de/articles/022782/2005-01-10/,von Fels,unique
+flachslanden,022049,https://hls-dhs-dss.ch/de/articles/022049/2009-04-03/,von Flachslanden,basel
+fleckenstein,022217,https://hls-dhs-dss.ch/de/articles/022217/2017-03-15/,Fleckenstein,basel
+frauen,020250,https://hls-dhs-dss.ch/de/articles/020250/2005-01-26/,Der Frauen,unique
+frei,025324,https://hls-dhs-dss.ch/de/articles/025324/2005-10-31/,Frei ZG,unique
+freuler,021031,https://hls-dhs-dss.ch/de/articles/021031/2005-03-03/,Freuler,unique
+freundstein,020032,https://hls-dhs-dss.ch/de/articles/020032/2013-08-07/,Waldner von Freundstein,basel
+frey,020964,https://hls-dhs-dss.ch/de/articles/020964/2019-08-15/,Frey BS,basel
+froweler,019992,https://hls-dhs-dss.ch/de/articles/019992/2017-10-24/,Fröweler,basel
+fuchs,024984,https://hls-dhs-dss.ch/de/articles/024984/2005-07-26/,Fuchs,unique
+fuchslin,020442,https://hls-dhs-dss.ch/de/articles/020442/2006-11-14/,Füchslin,unique
+furrer,025088,https://hls-dhs-dss.ch/de/articles/025088/2006-11-14/,Furrer,unique
+furst,020251,https://hls-dhs-dss.ch/de/articles/020251/2006-11-20/,Fürst,unique
+gachnang,020219,https://hls-dhs-dss.ch/de/articles/020219/2017-05-05/,von Gachnang,unique
+gassen,020222,https://hls-dhs-dss.ch/de/articles/020222/2007-01-19/,In Gassen,unique
+gassmann,041211,https://hls-dhs-dss.ch/de/articles/041211/2011-08-11/,Gassmann,unique
+gay,025114,https://hls-dhs-dss.ch/de/articles/025114/2003-06-03/,Gay,unique
+geiger,025579,https://hls-dhs-dss.ch/de/articles/025579/2006-11-20/,Geiger,unique
+geigy,021017,https://hls-dhs-dss.ch/de/articles/021017/2005-08-18/,Geigy Familie,basel
+germann,022783,https://hls-dhs-dss.ch/de/articles/022783/2005-11-14/,Germann,unique
+gessler,020097,https://hls-dhs-dss.ch/de/articles/020097/2020-01-09/,Gessler,unique
+gessner,023796,https://hls-dhs-dss.ch/de/articles/023796/2006-12-11/,Gessner,unique
+geymuller,045506,https://hls-dhs-dss.ch/de/articles/045506/2006-12-11/,Geymüller,basel
+gilgen,022219,https://hls-dhs-dss.ch/de/articles/022219/2015-11-17/,zur Gilgen,unique
+gisler,025091,https://hls-dhs-dss.ch/de/articles/025091/2017-11-23/,Gisler,unique
+gloggner,024927,https://hls-dhs-dss.ch/de/articles/024927/2006-12-28/,Gloggner,unique
+goldlin,022220,https://hls-dhs-dss.ch/de/articles/022220/2005-11-25/,Göldlin,unique
+gotz,045603,https://hls-dhs-dss.ch/de/articles/045603/2005-09-12/,Götz,basel
+graf,022845,https://hls-dhs-dss.ch/de/articles/022845/2006-01-03/,Graf SO,basel
+grafen,019512,https://hls-dhs-dss.ch/de/articles/019512/2004-04-27/,von Falkenstein Grafen,basel
+grand,048646,https://hls-dhs-dss.ch/de/articles/048646/2005-05-19/,Grand,unique
+grebel,023798,https://hls-dhs-dss.ch/de/articles/023798/2007-01-23/,von Grebel,unique
+greder,022844,https://hls-dhs-dss.ch/de/articles/022844/2006-01-13/,Greder,unique
+grieb,020965,https://hls-dhs-dss.ch/de/articles/020965/2006-01-24/,Grieb,basel
+grimm,022846,https://hls-dhs-dss.ch/de/articles/022846/2006-11-30/,Grimm,unique
+grob,020665,https://hls-dhs-dss.ch/de/articles/020665/2020-03-24/,Grob,unique
+gross,020879,https://hls-dhs-dss.ch/de/articles/020879/2006-02-02/,Gross,unique
+grulich,020444,https://hls-dhs-dss.ch/de/articles/020444/2006-03-16/,Grülich,unique
+grunenberg,019624,https://hls-dhs-dss.ch/de/articles/019624/2010-09-02/,von Grünenberg,unique
+grunenfels,019625,https://hls-dhs-dss.ch/de/articles/019625/2009-12-16/,von Grünenfels,unique
+grunenstein,020230,https://hls-dhs-dss.ch/de/articles/020230/2017-06-14/,von Grünenstein,unique
+gruner,025428,https://hls-dhs-dss.ch/de/articles/025428/2006-11-30/,Gruner BS,basel
+grynaeus,020966,https://hls-dhs-dss.ch/de/articles/020966/2017-12-13/,Grynaeus,basel
+gschwind,021007,https://hls-dhs-dss.ch/de/articles/021007/2006-03-06/,Gschwind,basel
+gsell,022785,https://hls-dhs-dss.ch/de/articles/022785/2006-03-16/,Gsell,basel
+guder,020881,https://hls-dhs-dss.ch/de/articles/020881/2007-03-20/,Güder,unique
+gugger,022847,https://hls-dhs-dss.ch/de/articles/022847/2013-07-23/,Gugger,unique
+gutzwiller,021008,https://hls-dhs-dss.ch/de/articles/021008/2006-03-08/,Gutzwiller,basel
+gysin,021009,https://hls-dhs-dss.ch/de/articles/021009/2006-12-05/,Gysin,basel
+haab,023806,https://hls-dhs-dss.ch/de/articles/023806/2007-10-16/,Haab,unique
+haas,041671,https://hls-dhs-dss.ch/de/articles/041671/2006-08-09/,Haas,basel
+haberlin,025067,https://hls-dhs-dss.ch/de/articles/025067/2007-10-16/,Häberlin,unique
+hagenbach,020967,https://hls-dhs-dss.ch/de/articles/020967/2006-03-13/,Hagenbach,basel
+hagenbuch,019628,https://hls-dhs-dss.ch/de/articles/019628/2007-11-27/,von Hagenbuch,unique
+haller,020070,https://hls-dhs-dss.ch/de/articles/020070/2006-06-16/,Haller,unique
+hammer,025025,https://hls-dhs-dss.ch/de/articles/025025/2009-11-05/,Hammer,unique
+hasenburg,019629,https://hls-dhs-dss.ch/de/articles/019629/2007-11-28/,von Hasenburg,basel
+hattstatt,019632,https://hls-dhs-dss.ch/de/articles/019632/2007-11-29/,von Hattstatt,basel
+haus,048082,https://hls-dhs-dss.ch/de/articles/048082/2009-03-27/,Haus,basel
+hecht,022222,https://hls-dhs-dss.ch/de/articles/022222/2006-08-23/,Hecht,unique
+heidelberg,020232,https://hls-dhs-dss.ch/de/articles/020232/2007-12-04/,von Heidelberg,unique
+heim,020667,https://hls-dhs-dss.ch/de/articles/020667/2006-08-28/,Heim,unique
+heinrich,025376,https://hls-dhs-dss.ch/de/articles/025376/2006-08-29/,Heinrich Familie,unique
+helg,022053,https://hls-dhs-dss.ch/de/articles/022053/2006-06-26/,Helg,unique
+herbort,020883,https://hls-dhs-dss.ch/de/articles/020883/2006-09-07/,Herbort,unique
+hertenberg,019995,https://hls-dhs-dss.ch/de/articles/019995/2006-08-30/,von Hertenberg,basel
+hertenstein,020256,https://hls-dhs-dss.ch/de/articles/020256/2006-09-07/,von Hertenstein,basel
+herzog,022225,https://hls-dhs-dss.ch/de/articles/022225/2006-08-30/,Herzog,unique
+heusler,020968,https://hls-dhs-dss.ch/de/articles/020968/2006-06-27/,Heusler,basel
+hewen,031777,https://hls-dhs-dss.ch/de/articles/031777/2007-12-13/,von Hewen,unique
+hochberg,019518,https://hls-dhs-dss.ch/de/articles/019518/2006-11-03/,von Hochberg,unique
+hof,020971,https://hls-dhs-dss.ch/de/articles/020971/2008-01-22/,Im Hof BS,basel
+hoffmann,025429,https://hls-dhs-dss.ch/de/articles/025429/2007-12-18/,Hoffmann BS,basel
+hofmeister,023811,https://hls-dhs-dss.ch/de/articles/023811/2008-01-08/,Hofmeister ZH,unique
+hofstetten,019631,https://hls-dhs-dss.ch/de/articles/019631/2008-01-08/,von Hofstetten,unique
+hofstetter,020914,https://hls-dhs-dss.ch/de/articles/020914/2008-01-08/,Hofstetter,unique
+holzach,020969,https://hls-dhs-dss.ch/de/articles/020969/2008-01-08/,Holzach,basel
+hor,022791,https://hls-dhs-dss.ch/de/articles/022791/2008-01-15/,Hör,unique
+hotz,025380,https://hls-dhs-dss.ch/de/articles/025380/2006-11-17/,Hotz,unique
+huber,020970,https://hls-dhs-dss.ch/de/articles/020970/2006-11-17/,Huber BS,basel
+hug,024931,https://hls-dhs-dss.ch/de/articles/024931/2017-12-08/,Hug,unique
+hugi,022848,https://hls-dhs-dss.ch/de/articles/022848/2008-01-16/,Hugi,unique
+hun,020782,https://hls-dhs-dss.ch/de/articles/020782/2008-01-16/,Hün,unique
+hunenberg,020259,https://hls-dhs-dss.ch/de/articles/020259/2021-03-23/,von Hünenberg,unique
+iselin,020972,https://hls-dhs-dss.ch/de/articles/020972/2008-01-28/,Iselin jüngeres Geschlecht,basel
+iten,025382,https://hls-dhs-dss.ch/de/articles/025382/2006-08-22/,Iten,unique
+jacobi,029730,https://hls-dhs-dss.ch/de/articles/029730/2011-08-11/,Jacobi,basel
+jecklin,021915,https://hls-dhs-dss.ch/de/articles/021915/2008-01-29/,Jecklin,unique
+jenny,021038,https://hls-dhs-dss.ch/de/articles/021038/2018-01-25/,Jenny,unique
+jossen,023577,https://hls-dhs-dss.ch/de/articles/023577/2013-10-17/,Jossen,unique
+kappeler,022959,https://hls-dhs-dss.ch/de/articles/022959/2007-08-24/,Kappeler,basel
+keiser,025383,https://hls-dhs-dss.ch/de/articles/025383/2014-11-26/,Keiser ZG,unique
+kern,021018,https://hls-dhs-dss.ch/de/articles/021018/2007-08-10/,Kern Familie,basel
+kessler,022796,https://hls-dhs-dss.ch/de/articles/022796/2007-01-11/,Kessler,unique
+keyser,024106,https://hls-dhs-dss.ch/de/articles/024106/2008-10-14/,Keyser,unique
+kiefer,022850,https://hls-dhs-dss.ch/de/articles/022850/2008-10-16/,Kiefer,unique
+kien,019736,https://hls-dhs-dss.ch/de/articles/019736/2007-08-10/,von Kien,unique
+kilchmann,020000,https://hls-dhs-dss.ch/de/articles/020000/2006-03-16/,Kilchmann,basel
+kind,021918,https://hls-dhs-dss.ch/de/articles/021918/2007-08-10/,Kind,unique
+kirchhofer,025014,https://hls-dhs-dss.ch/de/articles/025014/2008-10-16/,Kirchhofer,unique
+kissling,023099,https://hls-dhs-dss.ch/de/articles/023099/2013-11-07/,Kissling,unique
+klingenberg,020239,https://hls-dhs-dss.ch/de/articles/020239/2007-08-20/,von Klingenberg,unique
+kloten,020286,https://hls-dhs-dss.ch/de/articles/020286/2008-10-21/,von Kloten,unique
+knecht,020887,https://hls-dhs-dss.ch/de/articles/020887/2007-08-20/,Knecht,unique
+kocher,025030,https://hls-dhs-dss.ch/de/articles/025030/2007-08-23/,Kocher,unique
+kolin,025385,https://hls-dhs-dss.ch/de/articles/025385/2008-09-02/,Kolin,unique
+konig,020888,https://hls-dhs-dss.ch/de/articles/020888/2008-10-28/,König,unique
+kopp,024932,https://hls-dhs-dss.ch/de/articles/024932/2008-10-30/,Kopp,unique
+krauer,024933,https://hls-dhs-dss.ch/de/articles/024933/2005-07-22/,Krauer,basel
+krus,022232,https://hls-dhs-dss.ch/de/articles/022232/2007-10-29/,Krus,unique
+kundig,022233,https://hls-dhs-dss.ch/de/articles/022233/2007-11-01/,Kündig,unique
+kuon,023404,https://hls-dhs-dss.ch/de/articles/023404/2008-11-06/,Kuon,unique
+kyburg,019520,https://hls-dhs-dss.ch/de/articles/019520/2024-02-20/,von Kyburg,unique
+landenberg,020289,https://hls-dhs-dss.ch/de/articles/020289/2007-11-12/,von Landenberg,unique
+landis,025137,https://hls-dhs-dss.ch/de/articles/025137/2022-09-21/,Landis,unique
+langenstein,019740,https://hls-dhs-dss.ch/de/articles/019740/2018-01-31/,von Langenstein,unique
+langhans,020890,https://hls-dhs-dss.ch/de/articles/020890/2007-11-22/,Langhans,unique
+langin,020607,https://hls-dhs-dss.ch/de/articles/020607/2007-11-28/,de Langin,unique
+laufen,020001,https://hls-dhs-dss.ch/de/articles/020001/2011-03-17/,von Laufen BS,basel
+legrand,020973,https://hls-dhs-dss.ch/de/articles/020973/2006-06-08/,Legrand,basel
+leu,023819,https://hls-dhs-dss.ch/de/articles/023819/2015-01-23/,Leu,unique
+leuw,024107,https://hls-dhs-dss.ch/de/articles/024107/2008-11-25/,Leuw,unique
+linder,020976,https://hls-dhs-dss.ch/de/articles/020976/2008-11-27/,Linder,basel
+lochmann,023821,https://hls-dhs-dss.ch/de/articles/023821/2009-10-13/,Lochmann,unique
+lotscher,032193,https://hls-dhs-dss.ch/de/articles/032193/2008-07-10/,Lötscher,unique
+lowenberg,019751,https://hls-dhs-dss.ch/de/articles/019751/2011-03-17/,"von Löwenberg BS, JU",basel
+lowenstein,020140,https://hls-dhs-dss.ch/de/articles/020140/2008-07-15/,von Löwenstein,unique
+lullin,025527,https://hls-dhs-dss.ch/de/articles/025527/2017-06-14/,Lullin,unique
+mar,020618,https://hls-dhs-dss.ch/de/articles/020618/2008-08-20/,de Mar,unique
+marti,021043,https://hls-dhs-dss.ch/de/articles/021043/2008-08-25/,Marti,unique
+martin,021011,https://hls-dhs-dss.ch/de/articles/021011/2008-08-25/,Martin BL,basel
+marty,022899,https://hls-dhs-dss.ch/de/articles/022899/2007-11-30/,Marty,unique
+matt,024119,https://hls-dhs-dss.ch/de/articles/024119/2009-11-24/,von Matt,unique
+matter,020045,https://hls-dhs-dss.ch/de/articles/020045/2009-10-29/,Matter,unique
+maurer,023345,https://hls-dhs-dss.ch/de/articles/023345/2008-08-22/,Maurer,unique
+may,020046,https://hls-dhs-dss.ch/de/articles/020046/2009-10-29/,May,unique
+mel,020143,https://hls-dhs-dss.ch/de/articles/020143/2008-01-22/,Mel,unique
+merian,020977,https://hls-dhs-dss.ch/de/articles/020977/2008-10-30/,Merian,basel
+merz,020670,https://hls-dhs-dss.ch/de/articles/020670/2008-10-31/,Merz AR,basel
+meyenberg,025391,https://hls-dhs-dss.ch/de/articles/025391/2008-11-10/,Meyenberg,unique
+meyer,020979,https://hls-dhs-dss.ch/de/articles/020979/2008-11-10/,"Meyer BS, zum Pfeil",basel
+mezger,025015,https://hls-dhs-dss.ch/de/articles/025015/2008-11-11/,Mezger,unique
+molin,023898,https://hls-dhs-dss.ch/de/articles/023898/2008-11-26/,de Molin,unique
+morand,025123,https://hls-dhs-dss.ch/de/articles/025123/2008-01-07/,Morand,unique
+morlot,020896,https://hls-dhs-dss.ch/de/articles/020896/2008-04-10/,Morlot,basel
+morsberg,020005,https://hls-dhs-dss.ch/de/articles/020005/2009-01-06/,von Mörsberg,basel
+muhll,020996,https://hls-dhs-dss.ch/de/articles/020996/2009-09-08/,Vonder Mühll,basel
+munch,020006,https://hls-dhs-dss.ch/de/articles/020006/2009-11-19/,Münch,basel
+munzinger,023093,https://hls-dhs-dss.ch/de/articles/023093/2009-01-22/,Munzinger,unique
+munzmeister,019991,https://hls-dhs-dss.ch/de/articles/019991/2011-03-17/,Münzmeister Familie,basel
+murer,020008,https://hls-dhs-dss.ch/de/articles/020008/2010-09-02/,Murer BS,basel
+nager,025099,https://hls-dhs-dss.ch/de/articles/025099/2010-09-02/,Nager,unique
+nef,011503,https://hls-dhs-dss.ch/de/articles/011503/2009-01-15/,Nef,unique
+ner,022060,https://hls-dhs-dss.ch/de/articles/022060/2008-10-17/,Ner,basel
+neuenstein,020009,https://hls-dhs-dss.ch/de/articles/020009/2008-08-11/,von Neuenstein,basel
+oberried,020981,https://hls-dhs-dss.ch/de/articles/020981/2008-12-03/,Oberried Familie,basel
+ochs,020982,https://hls-dhs-dss.ch/de/articles/020982/2009-08-20/,Ochs,basel
+offenburg,020010,https://hls-dhs-dss.ch/de/articles/020010/2010-09-14/,Offenburg,basel
+ostein,022062,https://hls-dhs-dss.ch/de/articles/022062/2009-03-23/,von Ostein,basel
+passavant,021023,https://hls-dhs-dss.ch/de/articles/021023/2009-11-20/,Passavant,basel
+petri,020984,https://hls-dhs-dss.ch/de/articles/020984/2010-10-28/,Petri,basel
+pfaff,020011,https://hls-dhs-dss.ch/de/articles/020011/2010-09-27/,Pfaff,basel
+pfirt,019533,https://hls-dhs-dss.ch/de/articles/019533/2010-02-01/,von Pfirt,basel
+pfirter,020012,https://hls-dhs-dss.ch/de/articles/020012/2010-02-01/,Pfirter,unique
+pfister,023352,https://hls-dhs-dss.ch/de/articles/023352/2010-02-01/,Pfister,unique
+pfluger,022852,https://hls-dhs-dss.ch/de/articles/022852/2010-05-11/,Pfluger,unique
+pfyffer,022243,https://hls-dhs-dss.ch/de/articles/022243/2017-03-15/,Pfyffer,unique
+planta,020149,https://hls-dhs-dss.ch/de/articles/020149/2011-11-03/,von Planta,unique
+preiswerk,021020,https://hls-dhs-dss.ch/de/articles/021020/2013-12-17/,Preiswerk,basel
+raber,024937,https://hls-dhs-dss.ch/de/articles/024937/2018-01-25/,Räber,unique
+raillard,020985,https://hls-dhs-dss.ch/de/articles/020985/2010-07-26/,Raillard,basel
+ramstein,019604,https://hls-dhs-dss.ch/de/articles/019604/2010-07-27/,von Ramstein,basel
+rauch,022969,https://hls-dhs-dss.ch/de/articles/022969/2011-12-16/,Rauch,unique
+reding,022904,https://hls-dhs-dss.ch/de/articles/022904/2014-12-11/,Reding,unique
+reichenstein,020014,https://hls-dhs-dss.ch/de/articles/020014/2013-08-27/,Reich von Reichenstein,basel
+reinach,020105,https://hls-dhs-dss.ch/de/articles/020105/2017-03-15/,von Reinach,basel
+reinhard,023835,https://hls-dhs-dss.ch/de/articles/023835/2011-12-23/,Reinhard,unique
+renner,023413,https://hls-dhs-dss.ch/de/articles/023413/2010-01-04/,Renner,unique
+respinger,025432,https://hls-dhs-dss.ch/de/articles/025432/2010-08-19/,Respinger,basel
+rey,029128,https://hls-dhs-dss.ch/de/articles/029128/2011-12-23/,Rey,unique
+reyff,021095,https://hls-dhs-dss.ch/de/articles/021095/2012-05-11/,Reyff,unique
+rhein,020016,https://hls-dhs-dss.ch/de/articles/020016/2016-04-14/,Zu Rhein,basel
+rheinfelden,019788,https://hls-dhs-dss.ch/de/articles/019788/2009-10-06/,Truchsessen von Rheinfelden,basel
+ried,020080,https://hls-dhs-dss.ch/de/articles/020080/2010-10-20/,von Ried,unique
+rietmann,022807,https://hls-dhs-dss.ch/de/articles/022807/2012-01-04/,Rietmann,unique
+rinck,020154,https://hls-dhs-dss.ch/de/articles/020154/2011-11-25/,Rinck,basel
+ris,049044,https://hls-dhs-dss.ch/de/articles/049044/2012-09-11/,Ris,unique
+ritter,022809,https://hls-dhs-dss.ch/de/articles/022809/2020-01-24/,Ritter,unique
+ritz,025127,https://hls-dhs-dss.ch/de/articles/025127/2017-05-04/,Ritz,unique
+roche,021019,https://hls-dhs-dss.ch/de/articles/021019/2008-11-13/,La Roche Familie,basel
+rodt,020900,https://hls-dhs-dss.ch/de/articles/020900/2010-11-22/,Rodt,unique
+roger,030724,https://hls-dhs-dss.ch/de/articles/030724/2012-05-16/,Roger,unique
+roggenbach,022068,https://hls-dhs-dss.ch/de/articles/022068/2010-12-06/,von Roggenbach,basel
+rohrer,022346,https://hls-dhs-dss.ch/de/articles/022346/2010-11-23/,Rohrer,unique
+romer,023836,https://hls-dhs-dss.ch/de/articles/023836/2024-03-06/,Römer,unique
+rot,020018,https://hls-dhs-dss.ch/de/articles/020018/2012-01-05/,Rot,basel
+rotberg,020019,https://hls-dhs-dss.ch/de/articles/020019/2012-01-05/,von Rotberg,basel
+roten,023598,https://hls-dhs-dss.ch/de/articles/023598/2012-01-05/,Roten,unique
+ruchti,022855,https://hls-dhs-dss.ch/de/articles/022855/2012-01-05/,Ruchti,unique
+rumer,020310,https://hls-dhs-dss.ch/de/articles/020310/2010-11-24/,Rümer,unique
+rusch,020860,https://hls-dhs-dss.ch/de/articles/020860/2010-11-29/,Rusch,unique
+russ,022245,https://hls-dhs-dss.ch/de/articles/022245/2010-11-24/,Russ,unique
+russinger,022812,https://hls-dhs-dss.ch/de/articles/022812/2010-06-14/,Russinger,basel
+rust,020273,https://hls-dhs-dss.ch/de/articles/020273/2010-11-25/,Rust,unique
+ruti,019762,https://hls-dhs-dss.ch/de/articles/019762/2012-09-11/,von Rüti,unique
+rych,047460,https://hls-dhs-dss.ch/de/articles/047460/2011-04-14/,Rych,unique
+ryff,049543,https://hls-dhs-dss.ch/de/articles/049543/2011-12-09/,Ryff,basel
+ryhiner,020986,https://hls-dhs-dss.ch/de/articles/020986/2012-01-06/,Ryhiner,basel
+sager,022971,https://hls-dhs-dss.ch/de/articles/022971/2009-05-04/,Sager,unique
+sal,049584,https://hls-dhs-dss.ch/de/articles/049584/2012-01-06/,von Sal,unique
+salis,020157,https://hls-dhs-dss.ch/de/articles/020157/2012-01-12/,Salis,basel
+sarasin,025561,https://hls-dhs-dss.ch/de/articles/025561/2010-12-03/,Sarasin GE,basel
+sax,019541,https://hls-dhs-dss.ch/de/articles/019541/2011-02-18/,von Sax,unique
+schafer,024753,https://hls-dhs-dss.ch/de/articles/024753/2011-02-18/,Schäfer,unique
+schaffter,026762,https://hls-dhs-dss.ch/de/articles/026762/2011-02-22/,Schaffter,basel
+schaler,020020,https://hls-dhs-dss.ch/de/articles/020020/2011-07-08/,Schaler,basel
+schell,025399,https://hls-dhs-dss.ch/de/articles/025399/2011-07-12/,Schell,unique
+scherb,022966,https://hls-dhs-dss.ch/de/articles/022966/2011-07-25/,Scherb,basel
+scherer,023415,https://hls-dhs-dss.ch/de/articles/023415/2010-11-29/,Scherer,unique
+scherrer,022817,https://hls-dhs-dss.ch/de/articles/022817/2012-11-20/,"Scherrer SG, Alttoggenburg",basel
+schilling,020022,https://hls-dhs-dss.ch/de/articles/020022/2012-10-18/,Schilling BS,basel
+schlatt,020315,https://hls-dhs-dss.ch/de/articles/020315/2013-01-17/,von Schlatt,unique
+schlatter,022818,https://hls-dhs-dss.ch/de/articles/022818/2011-08-09/,Schlatter SG,unique
+schmitz,047781,https://hls-dhs-dss.ch/de/articles/047781/2011-08-19/,Schmitz,unique
+schnell,020940,https://hls-dhs-dss.ch/de/articles/020940/2011-08-24/,Schnell BE,unique
+schnyder,025128,https://hls-dhs-dss.ch/de/articles/025128/2011-08-24/,Schnyder,unique
+schon,025402,https://hls-dhs-dss.ch/de/articles/025402/2010-05-18/,Schön,unique
+schonauer,020988,https://hls-dhs-dss.ch/de/articles/020988/2011-08-25/,Schönauer,basel
+schonenberg,020023,https://hls-dhs-dss.ch/de/articles/020023/2010-12-29/,von Schönenberg BS,basel
+schoni,020903,https://hls-dhs-dss.ch/de/articles/020903/2011-05-12/,Schöni,unique
+schonwetter,048127,https://hls-dhs-dss.ch/de/articles/048127/2022-03-15/,Schönwetter,unique
+schopfer,020051,https://hls-dhs-dss.ch/de/articles/020051/2011-08-25/,Schopfer,unique
+schorsch,021939,https://hls-dhs-dss.ch/de/articles/021939/2011-08-25/,Schorsch,unique
+schreiber,027614,https://hls-dhs-dss.ch/de/articles/027614/2012-11-21/,Schreiber,unique
+schulthess,023834,https://hls-dhs-dss.ch/de/articles/023834/2012-11-21/,Schulthess,unique
+schumacher,022250,https://hls-dhs-dss.ch/de/articles/022250/2012-09-11/,Schumacher,unique
+schwartz,021941,https://hls-dhs-dss.ch/de/articles/021941/2011-11-21/,Schwartz,unique
+schweizer,049726,https://hls-dhs-dss.ch/de/articles/049726/2011-11-11/,Schweizer,unique
+seiler,025129,https://hls-dhs-dss.ch/de/articles/025129/2012-12-18/,Seiler VS,basel
+sevogel,020024,https://hls-dhs-dss.ch/de/articles/020024/2010-05-19/,Sevogel,basel
+siegfried,024706,https://hls-dhs-dss.ch/de/articles/024706/2012-10-31/,Siegfried,unique
+sigerist,025021,https://hls-dhs-dss.ch/de/articles/025021/2011-11-25/,Sigerist,unique
+sigrist,022353,https://hls-dhs-dss.ch/de/articles/022353/2012-12-19/,Sigrist,unique
+sigristen,023602,https://hls-dhs-dss.ch/de/articles/023602/2012-12-19/,Sigristen,unique
+simon,022072,https://hls-dhs-dss.ch/de/articles/022072/2010-09-09/,Simon,unique
+singer,024943,https://hls-dhs-dss.ch/de/articles/024943/2011-08-31/,Singer,unique
+sinner,020904,https://hls-dhs-dss.ch/de/articles/020904/2012-12-19/,Sinner,basel
+sintz,020025,https://hls-dhs-dss.ch/de/articles/020025/2010-05-05/,Sintz,basel
+socin,020989,https://hls-dhs-dss.ch/de/articles/020989/2011-03-01/,Socin,basel
+spengler,044390,https://hls-dhs-dss.ch/de/articles/044390/2012-02-15/,Spengler,unique
+speyr,020990,https://hls-dhs-dss.ch/de/articles/020990/2012-02-13/,von Speyr,basel
+spiser,022821,https://hls-dhs-dss.ch/de/articles/022821/2010-05-10/,Spiser,unique
+spleiss,023359,https://hls-dhs-dss.ch/de/articles/023359/2012-02-15/,Spleiss,unique
+sprungli,023840,https://hls-dhs-dss.ch/de/articles/023840/2013-01-10/,Sprüngli,unique
+stahelin,025438,https://hls-dhs-dss.ch/de/articles/025438/2012-02-16/,Stähelin BS,basel
+stamler,020027,https://hls-dhs-dss.ch/de/articles/020027/2012-02-27/,Stamler,basel
+staub,025407,https://hls-dhs-dss.ch/de/articles/025407/2013-01-10/,Staub,unique
+stehli,025142,https://hls-dhs-dss.ch/de/articles/025142/2012-11-07/,Stehli,unique
+stehlin,025441,https://hls-dhs-dss.ch/de/articles/025441/2012-02-20/,Stehlin,basel
+stein,020055,https://hls-dhs-dss.ch/de/articles/020055/2017-03-16/,vom Stein,unique
+stickelberger,020993,https://hls-dhs-dss.ch/de/articles/020993/2011-09-08/,Stickelberger,basel
+stierlin,023361,https://hls-dhs-dss.ch/de/articles/023361/2013-11-26/,Stierlin,unique
+stoffel,022975,https://hls-dhs-dss.ch/de/articles/022975/2012-08-22/,Stoffel,unique
+straub,022823,https://hls-dhs-dss.ch/de/articles/022823/2012-06-29/,Straub,unique
+streiff,021054,https://hls-dhs-dss.ch/de/articles/021054/2013-12-03/,Streiff,unique
+strubin,021014,https://hls-dhs-dss.ch/de/articles/021014/2012-07-02/,Strübin,basel
+sturler,020909,https://hls-dhs-dss.ch/de/articles/020909/2012-07-20/,Stürler,unique
+sulger,020994,https://hls-dhs-dss.ch/de/articles/020994/2011-06-16/,Sulger,basel
+sulzer,023871,https://hls-dhs-dss.ch/de/articles/023871/2012-08-22/,Sulzer Familie,unique
+sunnen,020034,https://hls-dhs-dss.ch/de/articles/020034/2014-02-12/,Zer Sunnen,basel
+sutter,020849,https://hls-dhs-dss.ch/de/articles/020849/2013-12-03/,Sutter,unique
+tegerfelden,019780,https://hls-dhs-dss.ch/de/articles/019780/2012-08-15/,von Tegerfelden,unique
+thierstein,019544,https://hls-dhs-dss.ch/de/articles/019544/2023-09-11/,von Thierstein,basel
+thomann,023844,https://hls-dhs-dss.ch/de/articles/023844/2012-10-04/,Thomann,unique
+thomas,028964,https://hls-dhs-dss.ch/de/articles/028964/2014-02-19/,Thomas,unique
+thor,022977,https://hls-dhs-dss.ch/de/articles/022977/2014-03-03/,Zum Thor,basel
+thurneysen,020995,https://hls-dhs-dss.ch/de/articles/020995/2012-10-22/,Thurneysen,basel
+trey,023912,https://hls-dhs-dss.ch/de/articles/023912/2014-02-25/,de Trey,basel
+tschudi,021057,https://hls-dhs-dss.ch/de/articles/021057/2012-11-21/,Tschudi,unique
+ulm,020327,https://hls-dhs-dss.ch/de/articles/020327/2020-03-12/,von Ulm,unique
+vetter,023366,https://hls-dhs-dss.ch/de/articles/023366/2011-06-29/,Vetter,unique
+vetterli,025076,https://hls-dhs-dss.ch/de/articles/025076/2025-01-07/,Vetterli,unique
+vitztum,020030,https://hls-dhs-dss.ch/de/articles/020030/2013-08-06/,Vitztum,basel
+vogel,021058,https://hls-dhs-dss.ch/de/articles/021058/2013-08-06/,Vogel,unique
+vogeli,023849,https://hls-dhs-dss.ch/de/articles/023849/2011-11-07/,Vögeli ZH,unique
+vogler,025077,https://hls-dhs-dss.ch/de/articles/025077/2013-08-06/,Vogler,unique
+vogt,025032,https://hls-dhs-dss.ch/de/articles/025032/2014-11-04/,Vogt,unique
+volmar,023850,https://hls-dhs-dss.ch/de/articles/023850/2012-10-05/,Volmar,unique
+vorster,048545,https://hls-dhs-dss.ch/de/articles/048545/2011-12-09/,Vorster,unique
+waber,020919,https://hls-dhs-dss.ch/de/articles/020919/2013-08-17/,Wäber,unique
+wabern,020056,https://hls-dhs-dss.ch/de/articles/020056/2014-11-04/,von Wabern,unique
+walder,025078,https://hls-dhs-dss.ch/de/articles/025078/2013-08-20/,Walder,unique
+waldkirch,023367,https://hls-dhs-dss.ch/de/articles/023367/2013-08-21/,von Waldkirch,basel
+walther,020920,https://hls-dhs-dss.ch/de/articles/020920/2014-11-04/,Walther,unique
+wangen,020258,https://hls-dhs-dss.ch/de/articles/020258/2013-08-21/,von Wangen,unique
+wassermann,025453,https://hls-dhs-dss.ch/de/articles/025453/2012-10-01/,Wassermann,unique
+watt,022826,https://hls-dhs-dss.ch/de/articles/022826/2014-11-04/,von Watt,unique
+weck,021105,https://hls-dhs-dss.ch/de/articles/021105/2013-06-18/,Weck,unique
+wecken,023350,https://hls-dhs-dss.ch/de/articles/023350/2009-11-27/,Peyer mit den Wecken,unique
+wegerich,021954,https://hls-dhs-dss.ch/de/articles/021954/2007-03-01/,Wegerich,unique
+weidmann,022921,https://hls-dhs-dss.ch/de/articles/022921/2012-03-26/,Weidmann,unique
+weiss,020922,https://hls-dhs-dss.ch/de/articles/020922/2013-10-10/,Weiss,unique
+wenk,020997,https://hls-dhs-dss.ch/de/articles/020997/2013-10-02/,Wenk,basel
+werdenberg,019548,https://hls-dhs-dss.ch/de/articles/019548/2013-10-03/,von Werdenberg,unique
+werdmuller,023853,https://hls-dhs-dss.ch/de/articles/023853/2015-01-11/,Werdmüller,unique
+werenfels,020998,https://hls-dhs-dss.ch/de/articles/020998/2013-10-03/,Werenfels,basel
+wessenberg,020114,https://hls-dhs-dss.ch/de/articles/020114/2013-10-04/,von Wessenberg,basel
+wettstein,021000,https://hls-dhs-dss.ch/de/articles/021000/2014-11-11/,Wettstein,basel
+widen,020420,https://hls-dhs-dss.ch/de/articles/020420/2013-07-04/,von Widen,unique
+wieland,021001,https://hls-dhs-dss.ch/de/articles/021001/2013-10-29/,Wieland,basel
+wil,022325,https://hls-dhs-dss.ch/de/articles/022325/2013-10-30/,von Wil,unique
+wildegg,020121,https://hls-dhs-dss.ch/de/articles/020121/2007-10-10/,Truchsessen von Habsburg und Wildegg,unique
+wile,020115,https://hls-dhs-dss.ch/de/articles/020115/2013-04-03/,von Wile,unique
+wiler,019803,https://hls-dhs-dss.ch/de/articles/019803/2012-04-03/,von Wiler,unique
+wirth,025054,https://hls-dhs-dss.ch/de/articles/025054/2013-05-02/,Wirth,unique
+wirz,022326,https://hls-dhs-dss.ch/de/articles/022326/2012-02-03/,Wirz LU,basel
+wolf,023855,https://hls-dhs-dss.ch/de/articles/023855/2013-11-20/,Wolf,unique
+wolff,023613,https://hls-dhs-dss.ch/de/articles/023613/2013-11-20/,de Wolff,unique
+wolleb,023427,https://hls-dhs-dss.ch/de/articles/023427/2012-05-30/,Wolleb,unique
+zehender,020058,https://hls-dhs-dss.ch/de/articles/020058/2012-08-14/,Zehender,unique
+zetter,025028,https://hls-dhs-dss.ch/de/articles/025028/2014-02-12/,Zetter,unique
+ziegler,025029,https://hls-dhs-dss.ch/de/articles/025029/2013-10-22/,Ziegler SO,basel
+zoller,023860,https://hls-dhs-dss.ch/de/articles/023860/2014-02-26/,Zoller,unique
+zollikofer,022830,https://hls-dhs-dss.ch/de/articles/022830/2014-02-24/,Zollikofer,unique
+zuber,023618,https://hls-dhs-dss.ch/de/articles/023618/2014-02-24/,Zuber,unique
+zundel,023372,https://hls-dhs-dss.ch/de/articles/023372/2012-02-29/,Zündel,unique
+zurcher,025421,https://hls-dhs-dss.ch/de/articles/025421/2014-02-24/,Zürcher,unique
+zust,035099,https://hls-dhs-dss.ch/de/articles/035099/2014-03-03/,Züst,unique
+zwilchenbart,048721,https://hls-dhs-dss.ch/de/articles/048721/2014-03-04/,Zwilchenbart,basel
+zwinger,021003,https://hls-dhs-dss.ch/de/articles/021003/2013-12-09/,Zwinger,basel

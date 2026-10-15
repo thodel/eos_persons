@@ -16,9 +16,10 @@ import collections
 import unicodedata
 from difflib import SequenceMatcher
 
-import lxml.etree as ET
+import hgb_corpus
 
-XML = "hgb_full_26_05_29_05.xml"
+# The corpus is read street file by street file from the DHBern data checkout
+# (see hgb_corpus.py for how the directory is located).
 PERSONS = "persons_resolved.json"
 
 # ── Relationship-type classification ─────────────────────────────────────────
@@ -394,16 +395,11 @@ def span_is_dead(span):
 
 def extract_edges():
     raw_edges = []   # dicts: a_name, b_name, type, dir, year, dossier, conf, b_dead
-    context = ET.iterparse(XML, events=("end",), tag="document", recover=True)
     n_docs = 0
-    for _, doc in context:
+    for doc, meta in hgb_corpus.iter_documents(progress=False):
         n_docs += 1
-        meta = doc.find("metadata")
-        if meta is None:
-            doc.clear(); continue
-        dossier = meta.get("dossierid", "")
-        yr_raw = meta.get("year", "")
-        year = int(yr_raw) if yr_raw.isdigit() else None
+        dossier = meta["dossier_id"] or ""
+        year = meta["year"]
 
         # build span-id -> element index
         spans = {}
@@ -488,7 +484,6 @@ def extract_edges():
                         "conf": 0.9,
                         "b_dead": True,
                     })
-        doc.clear()
         if n_docs % 10000 == 0:
             print(f"  …{n_docs} docs, {len(raw_edges)} edges")
     print(f"Parsed {n_docs} docs → {len(raw_edges)} raw kinship edges")
@@ -632,6 +627,10 @@ def main():
                     "y": p.get("y"), "dead_year": p.get("dead_year"),
                     "c": p.get("c", 0),
                 }
+                # the HLS link lives on the person index (apply_hls_links.py);
+                # carry it over so the tree shows it after every rebuild
+                if p.get("hls"):
+                    nodes[nid]["hls"] = p["hls"]
             return nid
         # dangling (has surname but no canonical match) — scope to dossier to be safe
         nid = f"n:{dossier}:{clean_name(name)}"

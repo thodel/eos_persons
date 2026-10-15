@@ -8,7 +8,7 @@ so spelling variants that previously looked like separate one-off people now
 form a single trajectory across the city.
 
 Pipeline:
-  • dossier → LV95 coordinate, read from the corpus XML metadata;
+  • dossier → LV95 coordinate, read from dossiers.csv (extract_persons.py);
   • each raw mention (persons.csv: name, occupation, year, dossier) is mapped to
     its resolved person via the person's (dossier, name) list;
   • a person who appears at ≥2 distinct locations is emitted as a trajectory,
@@ -24,7 +24,7 @@ import collections
 
 csv.field_size_limit(10_000_000)
 
-XML = "hgb_full_26_05_29_05.xml"
+DOSSIERS = "dossiers.csv"      # written by extract_persons.py
 PERSONS = "persons_resolved.json"
 RAW = "persons.csv"
 OUT = "movements.csv"
@@ -32,16 +32,13 @@ MIN_LOCATIONS = 2     # a "movement" needs at least two distinct places
 
 
 def dossier_coords():
-    """dossier id → 'POINT(E N)' (LV95), first occurrence in the XML."""
+    """dossier id → 'POINT(E N)' (LV95), from dossiers.csv (extract_persons.py)."""
     coords = {}
-    pat = re.compile(r'dossierid="([^"]+)"[^>]*location="(POINT\([^"]+\))"')
-    with open(XML, errors="replace") as f:
-        for line in f:
-            if "dossierid" not in line or "location" not in line:
-                continue
-            m = pat.search(line)
-            if m and m.group(1) not in coords:
-                coords[m.group(1)] = m.group(2)
+    with open(DOSSIERS, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            loc = (row.get("location") or "").strip()
+            if loc.startswith("POINT") and row.get("dossierid"):
+                coords[row["dossierid"]] = loc
     return coords
 
 

@@ -70,6 +70,38 @@ on the other, using the **mention-span** date rule. Two sub-passes:
   halves, since it inherits the HGB↔HLS edges that the fix pruned most heavily;
   that drop is not independently sampled yet.)*
 
+### Rebuilding without the private inputs  *(2026-10)*
+
+When the HGB person base is regenerated (now from the street-split corpus of
+DHBern/economies-of-space-automatically-annotated-data, see the top-level
+README), the HGB side of every edge below has to be recomputed, while the
+HBLS↔HLS / GND / Wikidata side is unaffected — but its candidate CSVs need the
+HBLS PDFs and the HLS export, which a fresh checkout does not have. Three
+scripts bridge that:
+
+- `../build_hls_table.py` → `hls_bios_wikidata.csv`: the HLS biography table
+  (id, names, life dates, gender, GND) rebuilt from Wikidata property P902; the
+  linkers use it whenever `hls_articles.csv` is absent (`link_hls.default_hls`).
+- `rebuild_hbls_persons.py` → `hbls_persons.json` from `../hbls_web.json`.
+- `../freeze_authority_edges.py` → `authority_edges.csv`: the non-HGB members
+  of every previous merged person, grouped. Stage 3 unions each group first
+  (edge type `frozen_authority`), then attaches the HGB records from the
+  freshly computed `link_candidates_hls.csv` / `link_hbls_hgb_candidates.csv`
+  and the `wd` field of `persons_resolved.json`.
+
+`gnd_enrich.py` takes its GND ids from `authority_edges.csv` when the Tier 0/1
+CSVs are missing, and keeps the publications a previous `merged_persons.json`
+recorded per GND id when the lobid-resources index cannot be queried.
+
+*Result of the 2026-10 rebuild:* edges unioned — 7,003 frozen authority, 1,932
+HGB↔HLS, 114 HBLS↔HGB (direct; the transitive pass needs Stage 1's CSV), 615
+HGB↔GND; TRIM_HGB detached 275 HGB records from 133 clusters. 3,631 clusters →
+3,631 merged persons (3,445 merged / 186 review), 3,356 with a GND id, 516
+attested in the HGB, 67 spanning all three corpora. The drop from 85 to 67
+tri-corpus identities is the price of the HBLS id recovery: 2,078 of the 3,445
+old HBLS ids could be mapped onto `hbls_web.json` members, the rest stay as
+authority-only nodes named from GND.
+
 ### Stage 3 — Build identity clusters  *(done — `../build_identity_clusters.py`)*
 Model every accepted link as an edge in a graph whose nodes are
 `(corpus, local_id)` **plus the shared authority ids** (`gnd:<id>`, `wd:<qid>`),

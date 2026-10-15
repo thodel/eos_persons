@@ -31,6 +31,12 @@ python3 ../build_identity_clusters.py         # -> ../identity_clusters.{json,cs
 python3 ../build_merged_persons.py            # -> ../merged_persons.{json,csv}
 ```
 
+- `rebuild_hbls_persons.py` — **without the PDFs**: recovers a link-ready
+  `hbls_persons.json` (19,703 members, 12,435 with life years) and the Basel
+  slice from the tracked `../hbls_web.json`, and maps the old running ids cited by
+  `../merged_persons.json` to the new deterministic ones (`hbls_id_map.csv`).
+  Use it on a fresh checkout; `build_persons.py` remains the reference when the
+  scans are available.
 - `DEDUP_PLAN.md` — staged plan to dedupe people across HBLS / HLS / EOS-HGB.
 - `link_hbls_hls.py` matched 2,339 HBLS persons to HLS bios (2,201 unambiguous).
 - `basel_subset.py` isolates the 4,932 Basel-connected persons (first link slice).

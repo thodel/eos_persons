@@ -23,14 +23,15 @@ Available tools: `corpus_stats`, `search_persons`, `get_document`, `get_dossier`
 ## Architecture
 
 ```
-hgb_full_*.xml  ──► build_db.py ──► hgb.db (SQLite + FTS5)
+street_data/*.xml ──► build_db.py ──► hgb.db (SQLite + FTS5)
+(DHBern/economies-of-space-automatically-annotated-data, read via ../hgb_corpus.py)
                                          │
                                     server.py  (FastMCP / HTTP SSE)
                                          │
                               http://<host>:8000/sse
 ```
 
-The 800 MB XML is parsed once into a ~100 MB SQLite database. The server then runs stateless queries against it.
+The ~865 MB of street XML is parsed once into a ~100 MB SQLite database. The server then runs stateless queries against it.
 
 ## Local setup
 
@@ -44,7 +45,9 @@ pip install -r requirements.txt
 ### 2. Build the database
 
 ```bash
-python build_db.py --xml ../hgb_full_26_05_29_05.xml --db hgb.db
+python build_db.py --db hgb.db          # auto-detects ../../economies-of-space-automatically-annotated-data/street_data
+python build_db.py --street-dir /path/to/street_data --db hgb.db
+python build_db.py --xml ../hgb_full_26_05_29_05.xml --db hgb.db   # legacy single-file export
 ```
 
 This takes ~10 minutes and produces `hgb.db`. Run it once; repeat only when the XML changes.
@@ -99,11 +102,11 @@ docker compose build
 ### First-time: build the database
 
 ```bash
-# Copy XML to /data/hgb/ on the server, then:
+# Copy the street_data/ folder of the data repo to /data/hgb/street_data on the server, then:
 docker run --rm \
   -v /data/hgb:/data \
   hgb-mcp \
-  python build_db.py --xml /data/hgb_full_26_05_29_05.xml --db /data/hgb.db
+  python build_db.py --street-dir /data/street_data --db /data/hgb.db
 
 # then load the cross-corpus identities into the same file
 docker run --rm \
@@ -242,8 +245,8 @@ docker run --rm -v /data/hgb:/data hgb-mcp python -c \
   "import db; db.set_db_path('/data/hgb.db'); print(db.identity_stats())"
 ```
 
-Expected right now: 3,388 identities, 3,068 with a GND id, 38 in all three
-corpora. `build_identities.py` drops and rebuilds only `identities` and
+Expected right now (rebuild of 2026-10 from the street-split corpus): 3,631
+identities, 3,356 with a GND id, 67 in all three corpora. `build_identities.py` drops and rebuilds only `identities` and
 `fts_identities`, so re-running it is safe and never touches the HGB tables.
 
 ## Available tools
@@ -297,9 +300,9 @@ Three levels of granularity, easily confused — pick by the question asked:
 | Who appears in the land register? | `search_hgb_persons` (register persons) |
 | Who was this person, across all our sources? | `search_identities` (resolved people) |
 
-Current contents: **3,388** resolved people — 3,068 with a GND id, 1,609 with a
-Wikidata QID, 2,426 with occupations, 602 with recorded works, 418 attested in
-the HGB land register, 38 in all three corpora.
+Current contents: **3,631** resolved people — 3,356 with a GND id, 1,843 with a
+Wikidata QID, 2,608 with occupations, 622 with recorded works, 516 attested in
+the HGB land register, 67 in all three corpora (186 flagged for review).
 
 If the identity tables have not been built, these tools return an explanatory
 error rather than failing; the HGB tools are unaffected.

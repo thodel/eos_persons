@@ -39,7 +39,8 @@ from link_hls import year_of, hls_url, canon_given, norm_token, ratio, PARTICLES
 HERE = os.path.dirname(os.path.abspath(__file__))
 csv.field_size_limit(10_000_000)
 
-HLS_DEFAULT = "/Users/TH_1/Documents/HLS/hls_articles.csv"
+from link_hls import default_hls
+HLS_DEFAULT = default_hls()
 HBLS_URL = "https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz"
 
 # Below this, the source corpora disagree on the given name and the cluster

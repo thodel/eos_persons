@@ -15,6 +15,7 @@ Links use the dated online HLS pattern
   https://hls-dhs-dss.ch/de/articles/<id>/<version>/
 and are attached to families_index.json entries (field `hls`).
 """
+import os
 import re
 import csv
 import json
@@ -24,6 +25,10 @@ import collections
 csv.field_size_limit(10_000_000)
 
 HLS = "/Users/TH_1/Documents/HLS/hls_articles.csv"
+# Surname → HLS family article links accepted on an earlier run (written from
+# families_index.json). Used when the HLS export itself is not available: the
+# link is keyed by surname only, so it does not depend on the person base.
+LINKS = "hls_family_links.csv"
 FAM_INDEX = "families_index.json"
 FAM_GRAPH = "families_graph.json"
 
@@ -58,22 +63,39 @@ def article_surname(title):
     return norm(toks[-1])
 
 
+def load_frozen_links():
+    """surname key -> [article] from hls_family_links.csv (no HLS export needed)."""
+    fam_articles = collections.defaultdict(list)
+    for row in csv.DictReader(open(LINKS, encoding="utf-8")):
+        fam_articles[row["surname_key"]].append({
+            "id": row["hls_id"],
+            "version": (re.search(r"/articles/\d+/([\d-]+)/", row.get("url", "")) or [None, ""])[1],
+            "title": row["title"],
+            "basel": row.get("conf") == "basel",
+        })
+    return fam_articles
+
+
 def main():
     # ── load HLS family articles ──
-    fam_articles = collections.defaultdict(list)   # surname -> [article]
-    for row in csv.DictReader(open(HLS, encoding="utf-8")):
-        if row.get("category") != "fam":
-            continue
-        sn = article_surname(row.get("title", ""))
-        if not sn:
-            continue
-        ct = row.get("content_text", "") or ""
-        fam_articles[sn].append({
-            "id": row["id"],
-            "version": (row.get("version") or "").strip(),
-            "title": row.get("title", "").strip(),
-            "basel": bool(re.search(r"basel|basler", ct, re.I)),
-        })
+    if not os.path.exists(HLS) and os.path.exists(LINKS):
+        fam_articles = load_frozen_links()
+        print(f"HLS export not present — using {LINKS}")
+    else:
+      fam_articles = collections.defaultdict(list)   # surname -> [article]
+      for row in csv.DictReader(open(HLS, encoding="utf-8")):
+          if row.get("category") != "fam":
+              continue
+          sn = article_surname(row.get("title", ""))
+          if not sn:
+              continue
+          ct = row.get("content_text", "") or ""
+          fam_articles[sn].append({
+              "id": row["id"],
+              "version": (row.get("version") or "").strip(),
+              "title": row.get("title", "").strip(),
+              "basel": bool(re.search(r"basel|basler", ct, re.I)),
+          })
     print(f"HLS family articles indexed under {len(fam_articles)} surnames")
 
     # ── load HGB families ──

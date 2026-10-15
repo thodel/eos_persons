@@ -30,7 +30,7 @@ import json
 import argparse
 import collections
 
-from link_hls import given_key, given_ratio, split_name, norm_token, ratio
+from link_hls import given_key, given_ratio, split_name, norm_token, ratio, default_hls
 from apply_hls_links import MIN_SCORE, MARGIN
 
 csv.field_size_limit(10_000_000)
@@ -75,7 +75,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--persons", default="persons_resolved.json")
     ap.add_argument("--candidates", default="link_candidates_hls.csv")
-    ap.add_argument("--hls", default="/Users/TH_1/Documents/HLS/hls_articles.csv")
+    ap.add_argument("--hls", default=default_hls())
     ap.add_argument("--min-score", type=float, default=MIN_SCORE)
     ap.add_argument("--margin", type=float, default=MARGIN)
     ap.add_argument("--name-min", type=float, default=0.6,

@@ -145,6 +145,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--no-publications", action="store_true")
+    ap.add_argument("--pubs-fallback", default=os.path.join(HERE, "merged_persons.json"),
+                    help="when publications are not fetched (flag above, or the "
+                         "lobid-resources index is unreachable), keep the ones a "
+                         "previous merged_persons.json recorded for the same GND id")
     ap.add_argument("--dump", default="",
                     help="comma-separated lobid JSON-lines dumps to read GND "
                          "records from instead of one API fetch per id")
@@ -162,6 +166,21 @@ def main():
             if r.get("n_candidates") == "1" and r.get("gnd"):
                 gnds.setdefault(r["gnd"], set()).add(r["hbls_id"])
 
+    # Frozen authority clusters (freeze_authority_edges.py) carry the accepted
+    # GND ids too — the only source when the Tier 0/1 candidate CSVs (which need
+    # the private HBLS/HLS inputs) are not present.
+    fz = os.path.join(HERE, "authority_edges.csv")
+    if not gnds and os.path.exists(fz):
+        groups = {}
+        for r in csv.DictReader(open(fz, encoding="utf-8")):
+            groups.setdefault(r["group"], []).append(r)
+        for rows in groups.values():
+            hb = {r["node"][5:] for r in rows if r["corpus"] == "hbls"}
+            for r in rows:
+                if r["corpus"] == "gnd":
+                    gnds.setdefault(r["node"][4:], set()).update(hb)
+        print(f"GND ids taken from {os.path.basename(fz)}")
+
     ids = sorted(gnds)
     if args.limit:
         ids = ids[:args.limit]
@@ -175,6 +194,16 @@ def main():
         from_dump = load_records(paths, set(ids))
         print(f"  {len(from_dump)}/{len(ids)} ids served from the dump; "
               f"{len(ids) - len(from_dump)} need an API fetch")
+
+    # publications recorded on a previous run, by GND id (lobid-resources sits
+    # behind a bot challenge at times; the GND record endpoint does not)
+    old_pubs = {}
+    if args.pubs_fallback and os.path.exists(args.pubs_fallback):
+        for p in json.load(open(args.pubs_fallback, encoding="utf-8")):
+            for g in (p.get("authority") or {}).get("gnd", []):
+                if p.get("publications"):
+                    old_pubs.setdefault(g, p["publications"])
+        print(f"{len(old_pubs)} GND ids with publications from {os.path.basename(args.pubs_fallback)}")
 
     enrich = {}
     n_api = 0
@@ -192,6 +221,9 @@ def main():
             if pubs:
                 e["publications"] = pubs
                 e["n_publications"] = total
+        if "publications" not in e and g in old_pubs:
+            e["publications"] = old_pubs[g]
+            e["n_publications"] = len(old_pubs[g])
         enrich[g] = e
         if i % 100 == 0:
             print(f"  …{i}/{len(ids)} enriched")
