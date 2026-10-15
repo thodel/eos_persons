@@ -94,9 +94,9 @@ access URLs and the pipeline.
 |---|---|
 | `srbas-extraction/srbas_name_mentions.csv` | heuristic person-name mentions in 78,728 bookings, with citable GAMS URI |
 | `srbas-extraction/srbas_account_places.csv` | the Ämter/Vogteien accounts geo-referenced via Wikidata (review column) |
-| `build_hgb_street_persons.py` | street-level HGB person index from the DHBern annotated release (read-only input) → `hgb_street_persons.json` (gitignored) |
+| `build_hgb_street_persons.py` | street-level HGB person index from the DHBern annotated release (read-only input), HGB identity resolution applied per street → `hgb_street_persons.json` (gitignored) |
 | `link_srbas_hgb.py` | srbas names → HGB persons: `link_srbas_hgb_candidates.csv` (corpus) and `link_srbas_hgb_street_candidates.csv` (street level, with coordinates) |
-| `tests/test_srbas_names.py` | inflection handling (dative/genitive) the match depends on |
+| `tests/test_srbas_names.py`, `tests/test_street_resolution.py` | inflection handling the match depends on; the street-scoped resolution rules |
 
 ## MCP server (alpha test)
 

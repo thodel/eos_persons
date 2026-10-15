@@ -52,7 +52,7 @@ python3 build_account_places.py     # -> srbas_account_places.csv  (tracked, Wik
 python3 ../build_hgb_street_persons.py   # -> ../hgb_street_persons.json (gitignored, 51 MB)
 python3 ../link_srbas_hgb.py             # -> ../link_srbas_hgb_candidates.csv
                                          #    ../link_srbas_hgb_street_candidates.csv
-python3 -m pytest ../tests/test_srbas_names.py
+python3 -m pytest ../tests/test_srbas_names.py ../tests/test_street_resolution.py
 ```
 
 ### Persons: `extract_names.py`
@@ -107,10 +107,16 @@ years; no post-mortem grace, a person paid in a Jahrrechnung is alive):
    `../build_hgb_street_persons.py` from the DHBern release
    *Economies of Space: Full Annotated Dataset*
    (<https://github.com/DHBern/economies-of-space-automatically-annotated-data>,
-   used read-only; clone it next to this repo or pass `--src`). One record per
-   (street, name key) with mention years, dossiers, LV95 point, occupations
-   (normalised where the release has it) and event roles. A hit here places
-   the Jahrrechnung name on the map and keeps homonyms on different streets
+   used read-only; clone it next to this repo or pass `--src`). Mentions are
+   resolved into persons *per street* with the same rules as the corpus-wide
+   index: token-subset merge inside a dossier, 80-year lifespan bins and
+   death splits, canonical-key merge across the dossiers of the street, and
+   the Kölner-Phonetik pass of `dedupe_corpus.py` with the street itself as
+   the context anchor. One record per resolved person with canonical name,
+   merged variants, mention years, `dead_year`, dossiers, LV95 point,
+   occupations (normalised where the release has it), event roles and a
+   `merged_by` trace. Nothing merges across streets. A hit here places the
+   Jahrrechnung name on the map and keeps homonyms on different streets
    apart — the cleaner target for the actual cross-link.
 
 Both outputs are candidate tables for review, one row per (srbas profile,
@@ -125,6 +131,7 @@ profile is in `srbas_name_mentions.csv`.
 - Given-name lexicon recall; dative stripping can over-strip genuine `-en`
   surnames (*Hagen*) — the raw form is kept and also compared.
 - Account places are bailiwicks, not the places named in the texts.
-- `hgb_street_persons.json` keys persons by `split_name` of the head span, so
-  spelling variants of one person on one street stay separate records (the
-  HGB-side identity resolution of `persons_resolved.json` is not applied).
+- The street-level resolution never merges across streets by design; a
+  person with property on two streets is two records, and only the
+  corpus-wide index joins them. Different canonical given-name sequences
+  (Hans vs. Hans Heinrich) never merge across dossiers, as in the HGB rules.

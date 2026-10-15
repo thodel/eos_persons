@@ -108,8 +108,11 @@ def koelner(s):
     codes = []
     n = len(s)
     for i, ch in enumerate(s):
-        nxt = s[i + 1] if i + 1 < n else ""
-        prv = s[i - 1] if i > 0 else ""
+        # "~" never matches a letter class: at the word edges the neighbour must
+        # not test as a member of every class ("" in "csz" is True in Python),
+        # which encoded a final t/d as 8 instead of 2 (Vogt -> 348, Vogtt -> 3428)
+        nxt = s[i + 1] if i + 1 < n else "~"
+        prv = s[i - 1] if i > 0 else "~"
         if ch in "aeijouy":
             c = "0"
         elif ch == "b":

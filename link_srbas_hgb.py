@@ -12,10 +12,11 @@ matched against two HGB targets:
   (a) CORPUS   persons_resolved.json — the corpus-wide HGB name index used by
                link_hbls_hgb.py. Broad recall, homonyms across the whole city.
   (b) STREET   hgb_street_persons.json — street-level persons built from the
-               DHBern annotated release (build_hgb_street_persons.py). Each
-               candidate carries street, dossiers and LV95 point, so a hit
-               places the Jahrrechnung name on the map; homonyms on different
-               streets stay apart.
+               DHBern annotated release (build_hgb_street_persons.py), with
+               the HGB identity resolution applied per street. Each candidate
+               carries street, dossiers and LV95 point, so a hit places the
+               Jahrrechnung name on the map; homonyms on different streets
+               stay apart.
 
 Name comparison reuses link_hls (ratio on surname, given_ratio on the
 canonicalised given names). Surnames are compared on the raw form, the
@@ -142,14 +143,21 @@ def load_corpus(path):
 
 
 def load_street(path):
+    from link_hls import split_name
     persons = []
     for p in json.load(open(path, encoding="utf-8")):
-        given, surname = p["key"].split("|", 1)
+        given, surname = split_name(p["name"])
         if not given or not surname or not p.get("years"):
             continue
+        # every spelling the street-level resolution merged into this person
+        forms = set()
+        for v in [p["name"]] + p.get("variants", []):
+            _, sn = split_name(v)
+            if sn:
+                forms |= surname_forms(sn) | {sn}
         persons.append({
-            "id": f"{p['street_id']}|{p['key']}", "name": p["name"], "given": given,
-            "forms": surname_forms(surname) | {surname},
+            "id": p.get("id") or f"{p['street_id']}|{p['name']}", "name": p["name"],
+            "given": given, "forms": forms,
             "y0": p["years"][0], "y1": p["years"][1], "ment": p["n"],
             "dos": len(p["dossiers"]), "occ": ";".join(p.get("occ", [])[:4]),
             "street": p.get("street", ""), "street_id": p["street_id"],
