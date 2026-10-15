@@ -272,3 +272,8 @@ hbls-extraction/gnd_dump_*.jsonl.gz
 
 # Stage-4 review triage worksheet (regenerable via build_review_worksheet.py)
 review_worksheet.csv
+
+# srbas (Jahrrechnungen Basel) — raw downloads and regenerable intermediates
+srbas-extraction/tei/
+srbas-extraction/srbas_entries.jsonl
+hgb_street_persons.json

@@ -1,0 +1,73 @@
+account_id,label,place,osm,wikidata,matched_name,kind,geonames,lat,lon,country,status
+bs_AmtLiestalEinnahmen,Amt Liestal,Liestal,R1683670,Q68972,Liestal,town,,47.48397,7.73478,Schweiz,auto
+bs_LiestalEinnahmen,Liestal,Liestal,R1683670,Q68972,Liestal,town,,47.48397,7.73478,Schweiz,auto
+bs_FüllinsdorfLupsingenZiefenEinnahmen,"Füllinsdorf, Lupsingen, Ziefen",Füllinsdorf,R1683648,Q66523,Füllinsdorf,village,,47.50567,7.72996,Schweiz,auto
+bs_FüllinsdorfLupsingenZiefenEinnahmen,"Füllinsdorf, Lupsingen, Ziefen",Lupsingen,R1683672,Q66506,Lupsingen,village,,47.44667,7.6939,Schweiz,auto
+bs_FüllinsdorfLupsingenZiefenEinnahmen,"Füllinsdorf, Lupsingen, Ziefen",Ziefen,R1683725,Q64705,Ziefen,village,,47.43058,7.70634,Schweiz,auto
+bs_WildensteinEinnahmen,Wildenstein,Wildenstein,N12919389619,,Wildenstein,locality,,46.67952,7.50842,Schweiz,auto
+bs_OffenburgEinnahmen,Offenburger Zins- und Zehntenrechte,Offenburg,R452988,Q4044,Offenburg,town,,48.4696,7.94292,Deutschland,auto
+bs_WaldenburgEinnahmen,Amt Waldenburg,Waldenburg,R1683719,Q67092,Waldenburg,village,,47.38336,7.74851,Schweiz,auto
+bs_HomburgEinnahmen,Amt Homburg,Homburg,R1684530,Q67205,Homburg,village,,47.63443,9.00623,Schweiz,auto
+bs_RamsteinEinnahmen,Amt Ramstein,Ramstein,N9723732717,,Ramstein,information,,47.39016,7.657,Schweiz,review
+bs_AmtFarnsburgEinnahmen,Amt Farnsburg,Farnsburg,N1811496783,,Farnsburg,farm,,47.49197,7.87248,Schweiz,review
+bs_FarnsburgEinnahmen,Farnsburg,Farnsburg,N1811496783,,Farnsburg,farm,,47.49197,7.87248,Schweiz,review
+bs_SissachEinnahmen,Sissach,Sissach,R1683708,Q66554,Sissach,village,,47.46348,7.81256,Schweiz,auto
+bs_BöcktenEinnahmen,Böckten,Böckten,R1683638,Q66731,Böckten,village,,47.4634,7.83872,Schweiz,auto
+bs_IttingenEinnahmen,Ittingen,Ittingen,N247703251,Q1734525,Kartause Ittingen,hamlet,,47.58328,8.86583,Schweiz,review
+bs_ZunzgenEinnahmen,Zunzgen,Zunzgen,R1683726,Q66240,Zunzgen,village,,47.45042,7.8046,Schweiz,auto
+bs_DiegtenEinnahmen,Diegten,Diegten,R1683640,Q65046,Diegten,village,,47.40994,7.80908,Schweiz,auto
+bs_EptingenEinnahmen,Eptingen,Eptingen,R1683645,Q64715,Eptingen,village,,47.38478,7.82172,Schweiz,auto
+bs_TennikenEinnahmen,Tenniken,Tenniken,R1683712,Q67351,Tenniken,village,,47.43637,7.81169,Schweiz,auto
+bs_ArisdorfEinnahmen,Arisdorf,Arisdorf,R1683615,Q66564,Arisdorf,village,,47.51239,7.7655,Schweiz,auto
+bs_AmtMünchensteinEinnahmen,Amt Münchenstein,Münchenstein,R1683678,Q69030,Münchenstein,town,,47.51879,7.61745,Schweiz,auto
+bs_MünchensteinEinnahmen,Münchenstein,Münchenstein,R1683678,Q69030,Münchenstein,town,,47.51879,7.61745,Schweiz,auto
+bs_ArlesheimEinnahmen,Arlesheim,Arlesheim,R1683616,Q581647,Arlesheim,village,,47.49311,7.6202,Schweiz,auto
+bs_MuttenzEinnahmen,Muttenz,Muttenz,R1683677,Q66191,Muttenz,town,,47.52511,7.64774,Schweiz,auto
+bs_WittumMuttenzEinnahmen,Wittum Muttenz,Muttenz,R1683677,Q66191,Muttenz,town,,47.52511,7.64774,Schweiz,auto
+bs_BenkenEinnahmen,Benken,Benken,W751515806,,Benken,farm,,47.44261,8.02468,Schweiz,review
+bs_PrattelnEinnahmen,Pratteln,Pratteln,R1683690,Q64679,Pratteln,town,,47.5192,7.69447,Schweiz,auto
+bs_BinningenBottmingenEinnahmen,"Binningen, Bottmingen",Binningen,R1683625,Q69621,Binningen,town,,47.53656,7.57008,Schweiz,auto
+bs_BinningenBottmingenEinnahmen,"Binningen, Bottmingen",Bottmingen,R1683629,Q70036,Bottmingen,village,,47.52345,7.57487,Schweiz,auto
+bs_HardvogtMuttenzEinnahmen,Hardvogt Muttenz,Muttenz,R1683677,Q66191,Muttenz,town,,47.52511,7.64774,Schweiz,auto
+bs_VogteiRiehenEinnahmen,Vogtei Riehen,Riehen,R1683696,Q5262,Riehen,town,,47.58169,7.64797,Schweiz,auto
+bs_RiehenEinnahmen,Riehen,Riehen,R1683696,Q5262,Riehen,town,,47.58169,7.64797,Schweiz,auto
+bs_BettingenEinnahmen,Bettingen,Bettingen,R1683623,Q67530,Bettingen,village,,47.57141,7.66398,Schweiz,auto
+bs_WettingenEinnahmen,Wettingen,Wettingen,R1684458,Q27576,Wettingen,town,,47.46584,8.32661,Schweiz,auto
+bs_HüningenMichelfeldenEinnahmen,Hüningen und Michelfelden,Hüningen,R85247,Q83415,Hüningen,village,,47.59415,7.57946,Frankreich,auto
+bs_HüningenMichelfeldenEinnahmen,Hüningen und Michelfelden,Michelfelden,N11778660880,,Michelfelden,quarter,,47.59854,7.5556,Frankreich,review
+bs_AmtLiestalAusgaben,Amt Liestal,Liestal,R1683670,Q68972,Liestal,town,,47.48397,7.73478,Schweiz,auto
+bs_LiestalAusgaben,Liestal,Liestal,R1683670,Q68972,Liestal,town,,47.48397,7.73478,Schweiz,auto
+bs_FüllinsdorfLupsingenZiefenAusgaben,"Füllinsdorf, Lupsingen, Ziefen",Füllinsdorf,R1683648,Q66523,Füllinsdorf,village,,47.50567,7.72996,Schweiz,auto
+bs_FüllinsdorfLupsingenZiefenAusgaben,"Füllinsdorf, Lupsingen, Ziefen",Lupsingen,R1683672,Q66506,Lupsingen,village,,47.44667,7.6939,Schweiz,auto
+bs_FüllinsdorfLupsingenZiefenAusgaben,"Füllinsdorf, Lupsingen, Ziefen",Ziefen,R1683725,Q64705,Ziefen,village,,47.43058,7.70634,Schweiz,auto
+bs_WildensteinAusgaben,Wildenstein,Wildenstein,N12919389619,,Wildenstein,locality,,46.67952,7.50842,Schweiz,auto
+bs_OffenburgAusgaben,Offenburger Zins- und Zehntenrechte,Offenburg,R452988,Q4044,Offenburg,town,,48.4696,7.94292,Deutschland,auto
+bs_WaldenburgAusgaben,Amt Waldenburg,Waldenburg,R1683719,Q67092,Waldenburg,village,,47.38336,7.74851,Schweiz,auto
+bs_HomburgAusgaben,Amt Homburg,Homburg,R1684530,Q67205,Homburg,village,,47.63443,9.00623,Schweiz,auto
+bs_RamsteinAusgaben,Amt Ramstein,Ramstein,N9723732717,,Ramstein,information,,47.39016,7.657,Schweiz,review
+bs_AmtFarnsburgAusgaben,Amt Farnsburg,Farnsburg,N1811496783,,Farnsburg,farm,,47.49197,7.87248,Schweiz,review
+bs_FarnsburgAusgaben,Farnsburg,Farnsburg,N1811496783,,Farnsburg,farm,,47.49197,7.87248,Schweiz,review
+bs_SissachBöcktenIttingenAusgaben,"Sissach, Böckten, Ittingen",Sissach,R1683708,Q66554,Sissach,village,,47.46348,7.81256,Schweiz,auto
+bs_SissachBöcktenIttingenAusgaben,"Sissach, Böckten, Ittingen",Böckten,R1683638,Q66731,Böckten,village,,47.4634,7.83872,Schweiz,auto
+bs_SissachBöcktenIttingenAusgaben,"Sissach, Böckten, Ittingen",Ittingen,N247703251,Q1734525,Kartause Ittingen,hamlet,,47.58328,8.86583,Schweiz,review
+bs_ZunzgenAusgaben,Zunzgen,Zunzgen,R1683726,Q66240,Zunzgen,village,,47.45042,7.8046,Schweiz,auto
+bs_DiegtenEptingenAusgaben,"Diegten, Eptingen",Diegten,R1683640,Q65046,Diegten,village,,47.40994,7.80908,Schweiz,auto
+bs_DiegtenEptingenAusgaben,"Diegten, Eptingen",Eptingen,R1683645,Q64715,Eptingen,village,,47.38478,7.82172,Schweiz,auto
+bs_ArisdorfAusgaben,Arisdorf,Arisdorf,R1683615,Q66564,Arisdorf,village,,47.51239,7.7655,Schweiz,auto
+bs_AmtMünchensteinAusgaben,Amt Münchenstein,Münchenstein,R1683678,Q69030,Münchenstein,town,,47.51879,7.61745,Schweiz,auto
+bs_MünchensteinArlesheimSierentzMuttenzAusgaben,"Münchenstein, Arlesheim, Sierentz, Muttenz",Münchenstein,R1683678,Q69030,Münchenstein,town,,47.51879,7.61745,Schweiz,auto
+bs_MünchensteinArlesheimSierentzMuttenzAusgaben,"Münchenstein, Arlesheim, Sierentz, Muttenz",Arlesheim,R1683616,Q581647,Arlesheim,village,,47.49311,7.6202,Schweiz,auto
+bs_MünchensteinArlesheimSierentzMuttenzAusgaben,"Münchenstein, Arlesheim, Sierentz, Muttenz",Sierentz,,,,,,,,,review
+bs_MünchensteinArlesheimSierentzMuttenzAusgaben,"Münchenstein, Arlesheim, Sierentz, Muttenz",Muttenz,R1683677,Q66191,Muttenz,town,,47.52511,7.64774,Schweiz,auto
+bs_WittumMuttenzAusgaben,Wittum zu Muttenz,Muttenz,R1683677,Q66191,Muttenz,town,,47.52511,7.64774,Schweiz,auto
+bs_BenkenAusgaben,Benken,Benken,W751515806,,Benken,farm,,47.44261,8.02468,Schweiz,review
+bs_PrattelnAusgaben,Pratteln,Pratteln,R1683690,Q64679,Pratteln,town,,47.5192,7.69447,Schweiz,auto
+bs_BinningenBottmingenAusgaben,"Binningen, Bottmingen",Binningen,R1683625,Q69621,Binningen,town,,47.53656,7.57008,Schweiz,auto
+bs_BinningenBottmingenAusgaben,"Binningen, Bottmingen",Bottmingen,R1683629,Q70036,Bottmingen,village,,47.52345,7.57487,Schweiz,auto
+bs_HardvogtMuttenzAusgaben,Hardvogt zu Muttenz,Muttenz,R1683677,Q66191,Muttenz,town,,47.52511,7.64774,Schweiz,auto
+bs_VogteiRiehenAusgaben,Vogtei Riehen,Riehen,R1683696,Q5262,Riehen,town,,47.58169,7.64797,Schweiz,auto
+bs_RiehenAusgaben,Riehen,Riehen,R1683696,Q5262,Riehen,town,,47.58169,7.64797,Schweiz,auto
+bs_BettingenAusgaben,Bettingen,Bettingen,R1683623,Q67530,Bettingen,village,,47.57141,7.66398,Schweiz,auto
+bs_WettingenAusgaben,Wettingen,Wettingen,R1684458,Q27576,Wettingen,town,,47.46584,8.32661,Schweiz,auto
+bs_HüningenMichelfeldenAusgaben,Hüningen und Michelfelden,Hüningen,R85247,Q83415,Hüningen,village,,47.59415,7.57946,Frankreich,auto
+bs_HüningenMichelfeldenAusgaben,Hüningen und Michelfelden,Michelfelden,N11778660880,,Michelfelden,quarter,,47.59854,7.5556,Frankreich,review
