@@ -79,8 +79,14 @@ linkers use from Wikidata (every HLS biography carries the HLS id as property
 P902) into `hls_bios_wikidata.csv` (tracked: 25,157 biographies, 23,877 with
 life dates, 22,846 with a GND id). `link_hls.default_hls()` returns the private
 export when present and this table otherwise, so the link stage runs from public
-data. Two things the table does not have: the article text — so the
-text-mining passes `extract_genealogy.py`, `extract_spouses.py` need the real
+data. Caveat: the given name is taken from the Wikidata label, which for 339 of the
+472 linked articles is a single token ("Johannes Wettstein") where the export's
+`bio.first_name` may carry the full form; since the matcher only compares the
+common prefix of the given names, such an article can absorb register persons
+that differ in their second given name (105 of the 472 linked articles collect
+more than one given-name sequence). Re-run `link_hls.py` with the private export
+to tighten this. Two more things the table does not have: the article text — so
+the text-mining passes `extract_genealogy.py`, `extract_spouses.py` need the real
 export — and the family articles, for which `link_hls_families.py` falls back to
 `hls_family_links.csv`, the surname → HLS family article links accepted on an
 earlier run.
