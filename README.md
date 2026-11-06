@@ -61,16 +61,58 @@ module, but is no longer the reference.
 | 3 | `build_families.py` | `families_graph.json`, `families_index.json` (kinship edges from the `family` / inheritance event groups) |
 | 4 | `link_hls.py` → `apply_hls_links.py` | `link_candidates_hls.csv` → `hls` field on persons and tree nodes |
 | 5 | `enrich_wikidata.py`, `link_wikidata_kin.py` | `wd` (QID, dates, GND, kin) and `kin` cross-references |
+| 5b | `link_humanlineage.py` | `hl` (Human Lineage profile, life dates, parents/children/spouses, in-corpus cross-links) and `src="hl"` edges in `families_graph.json`; answers cached in `humanlineage_cache.json` (tracked) — see [Human Lineage](#human-lineage) |
 | 6 | `dedupe_persons.py`, `dedupe_corpus.py --apply`, `dedupe_offices.py --apply`, `dedupe_rare_surnames.py --apply` | deduplicated `persons_resolved.json` |
-| 7 | `build_families.py`, `apply_hls_links.py`, `link_wikidata_kin.py`, `link_hls_families.py` | family data refreshed from the deduplicated index |
+| 7 | `build_families.py`, `apply_hls_links.py`, `link_wikidata_kin.py`, `link_humanlineage.py --offline`, `link_hls_families.py` | family data refreshed from the deduplicated index |
 | 8 | `build_roles.py`, `build_movements.py`, `build_flowfield.py`, `build_prices.py`, `build_dossiers_geo.py` | `roles_data.json`, `movements.csv`, `flowfield.json`, `prices.json`, `dossiers_geo.json` |
-| 9 | `link_hbls_hgb.py --all`, `build_identity_clusters.py`, `build_merged_persons.py`, `make_persons_web.py` | cross-corpus identities (`merged_persons.json`, `persons_web.json`; see `hbls-extraction/DEDUP_PLAN.md`) |
+| 9 | `link_hbls_hgb.py --all`, `build_identity_clusters.py`, `build_merged_persons.py`, `make_persons_web.py` | cross-corpus identities (`merged_persons.json`, `persons_web.json` — the latter carries the `hl` block of step 5b compactly; see `hbls-extraction/DEDUP_PLAN.md`) |
 
 Figures of the current build (street corpus 0.3.0): 238,957 person mentions in
 75,447 documents → 153,170 resolved names → **136,470 persons** after dedupe;
 713 carry an HLS/Wikidata link (2,193 confident links before dedupe, from 4,940
 candidates); 3,694 geolocated dossiers; 15,082 persons with movement between
-≥2 properties; 3,631 cross-corpus identities (516 attested in the register).
+≥2 properties; 3,631 cross-corpus identities (516 attested in the register); 524 persons
+(344 distinct profiles) linked to Human Lineage, snapshot 2026-10-10.
+
+### Human Lineage
+
+[Human Lineage](https://humanlineage.org) is an open genealogical graph
+(Zenodo, concept DOI 10.5281/zenodo.23284943, **CC BY-SA 4.0**), served to the
+fleet as an MCP server ([thodel/humanlineage_mcp](https://github.com/thodel/humanlineage_mcp);
+`https://tei.dh.unibe.ch/mcp/humanlineage/mcp`, UniBE VPN). `link_humanlineage.py`
+joins every register person that carries a Wikidata QID through
+`get_by_identifier("wikidata", qid)` and takes the family from `get_person(pid)`;
+persons with an HLS article number but no QID go through `get_by_identifier("hls", …)`
+(none at present — every HLS-linked person also has a QID). Only identifier joins
+are made: the server's name resolver without years is weak (P@1 0.15 on this
+register), so the 136,000 persons without an identifier stay out. The person
+modal of `index.html` shows the profile link, life dates, parents, children and
+spouses, and «Verwandte im Bestand» — relatives whose own profile belongs to a
+register person, joined by Human Lineage id, never by name.
+
+Measured on the snapshot **2026-10-10** (2,733,441 deceased persons):
+
+| | n |
+|---|---|
+| register persons with a QID | 713 (472 distinct QIDs) |
+| QIDs found in the snapshot | **344** (72.9 %); 128 not imported there (yet) |
+| persons carrying `hl` | **524** (344 profiles) |
+| relatives of joined persons in the snapshot | 72, of them **20** register persons themselves |
+| persons with in-corpus cross-links | 22 (Platter, Burckhardt, Froben, Zwinger, Amerbach) |
+| `families_graph.json` edges `src="hl"` | 9 parent–child (one more pair already carried a Wikidata edge); 11 nodes and 2 family units added for joined persons the kinship extraction had no node for |
+
+`no_candidates` means «not in this snapshot», never «no such person», so the
+site makes no negative statement. Every `hl` block records the snapshot date;
+`humanlineage_cache.json` holds every server answer (472 lookups, 344 persons),
+so `link_humanlineage.py --offline` rebuilds without the network and `--refresh`
+re-asks after a new Zenodo version.
+
+**Licence.** The `hl` fields, the cache and the `src="hl"` edges are derived
+from Human Lineage and are themselves CC BY-SA 4.0: wherever they are shown,
+credit «Human Lineage» with the profile URL (`https://humanlineage.org/person/{id}`)
+and the snapshot date — the modal prints «Quelle: Human Lineage, CC BY-SA 4.0»
+with both. Siblings are not exported (the server derives them, the dump does
+not assert them).
 
 ### HLS data without the private export
 
