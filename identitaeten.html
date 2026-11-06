@@ -138,6 +138,10 @@ function card(r) {
   const src = r.s.map(s => s.u
       ? `<a href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.l)} ↗</a>`
       : `<span>${esc(s.l)}</span>`).join("");
+  // Human Lineage profile (CC BY-SA 4.0): the credit with the profile URL is a licence condition
+  const hlp = r.hl
+      ? `<a href="${esc(r.hl.u)}" target="_blank" rel="noopener" title="Quelle: Human Lineage, CC BY-SA 4.0 · Snapshot ${esc(r.hl.snap||"")}">Human Lineage (CC BY-SA 4.0) ↗</a>`
+      : "";
   const pubs = r.pt.length
     ? `<div class="pubs"><span class="lbl">Werke (${r.np})</span><ul>` +
       r.pt.map(t => `<li>${hl(t, term)}</li>`).join("") + `</ul></div>`
@@ -148,7 +152,7 @@ function card(r) {
     ${chips("Orte", r.pl)}
     ${r.sn ? `<div class="snip">${hl(r.sn, term)}</div>` : ""}
     ${pubs}
-    <div class="sources">${src}${auth}</div>
+    <div class="sources">${src}${auth}${hlp}</div>
   </div>`;
 }
 

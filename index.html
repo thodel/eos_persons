@@ -161,6 +161,8 @@
       text-decoration: none; border: 1px solid var(--border); border-radius: 5px;
       padding: 1px 7px; margin: 3px 3px 0 0; }
     .kin-xref:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .hl-credit { margin-top: 8px; font-size: .72rem; color: var(--muted); }
+    .hl-credit a { color: var(--accent2); word-break: break-all; }
     .tag.occ      { background: #eef4f0; border-color: #c4dac8; }
     .tag.title    { background: #f0eef8; border-color: #c8c4e0; }
     .tag.fam      { background: #f8f4ee; border-color: #e0d4c0; }
@@ -401,9 +403,9 @@
     if (slice.length === 0) {
       html.push('<div class="no-results">No persons found.</div>');
     } else {
-      for (const r of slice) {
-        html.push(cardHtml(r, q));
-      }
+      slice.forEach((r, i) => {
+        html.push(cardHtml(r, q, i));
+      });
       if (filtered.length > slice.length) {
         html.push(`<div class="show-more-wrap">
           <button id="show-more">Show more (${filtered.length - slice.length} remaining)</button>
@@ -413,20 +415,23 @@
 
     resultsEl.innerHTML = html.join('');
 
+    // bind by position in the slice, not by name: several register persons can
+    // share a name (two «Felix Platters»), and each card must open its own record
     document.querySelectorAll('.card').forEach(el => {
-      el.addEventListener('click', () => openModal(data.find(r => r.n === el.dataset.name)));
+      el.addEventListener('click', () => openModal(slice[+el.dataset.idx]));
     });
     const showMore = document.getElementById('show-more');
     if (showMore) showMore.addEventListener('click', () => { page++; renderResults(); });
   }
 
-  function cardHtml(r, q) {
+  function cardHtml(r, q, idx) {
     const yearStr = r.y[0] === r.y[1] ? r.y[0] : `${r.y[0]}–${r.y[1]}`;
     const dossierStr = r.d > 1 ? ` · ${r.d} dossiers` : '';
     let tags = '';
 
     if (r.hls)  tags += `<span class="tag hls">📖 HLS</span>`;
     if (r.wd)   tags += `<span class="tag hls" style="background:#dde7ee;border-color:#9bb6cc">🔗 WD</span>`;
+    if (r.hl)   tags += `<span class="tag hls" style="background:#e4efe4;border-color:#9cc29c">🔗 HL</span>`;
     if (r.dead) tags += `<span class="tag deceased">† deceased ×${r.dead}</span>`;
     if (r.occ)  tags += r.occ.slice(0,3).map(o =>
       `<span class="tag occ"><span class="tag-label">occ</span>${escHtml(o)}</span>`).join('');
@@ -439,7 +444,7 @@
     if (r.loc)  tags += r.loc.slice(0,1).map(l =>
       `<span class="tag loc"><span class="tag-label">loc</span>${escHtml(l)}</span>`).join('');
 
-    return `<div class="card" data-name="${escHtml(r.n).replace(/"/g,'&quot;')}">
+    return `<div class="card" data-idx="${idx}" data-name="${escHtml(r.n).replace(/"/g,'&quot;')}">
       <div class="card-name">${highlight(r.n, q)}</div>
       <div class="card-meta">${r.c} mention${r.c !== 1 ? 's' : ''} · ${yearStr}${dossierStr}</div>
       ${tags ? `<div class="card-tags">${tags}</div>` : ''}
@@ -494,6 +499,28 @@
       if (w.gnd) html += `<div style="margin-top:6px"><a href="https://d-nb.info/gnd/${w.gnd}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--accent2)">GND ${w.gnd} ↗</a></div>`;
       if (w.img) html += `<div style="margin-top:8px"><img src="${w.img}?width=180" alt="" style="max-width:160px;max-height:180px;border-radius:4px;border:1px solid var(--border)"></div>`;
       sections.push(section('Wikidata', html));
+    }
+    if (r.hl) {
+      // Human Lineage (humanlineage.org), CC BY-SA 4.0 — the credit line with the
+      // profile URL and the snapshot date is a licence condition, keep it.
+      const h = r.hl;
+      const dates = (h.b || h.d) ? ` <span style="color:var(--muted)">(${h.b || '?'}–${h.d || '?'})</span>` : '';
+      const who = h.n && h.n !== r.n ? ` <span style="color:var(--muted)">${escHtml(h.n)}</span>` : '';
+      let html = `<a href="${escHtml(h.url)}" target="_blank" rel="noopener" class="hls-link">🔗 ${escHtml(h.id)} – Human-Lineage-Profil öffnen ↗</a>${who}${dates}`;
+      if (h.status === 'ambiguous') html += ` <span style="color:var(--muted)">(mehrere Treffer – erster gewählt)</span>`;
+      const kin = [];
+      const relTag = (label, x) => `<span class="tag fam"><span class="tag-label">${label}</span>${escHtml(x.n)}</span>`;
+      (h.parents || []).forEach(x => kin.push(relTag(x.g === 'f' ? 'Mutter' : x.g === 'm' ? 'Vater' : 'Elternteil', x)));
+      (h.spouses || []).forEach(x => kin.push(relTag('⚭', x)));
+      (h.children || []).forEach(x => kin.push(relTag('Kind', x)));
+      if (kin.length) html += `<div style="margin-top:6px">${kin.join(' ')}</div>`;
+      if (h.kinlinks && h.kinlinks.length) {
+        const links = h.kinlinks.map(x =>
+          `<a class="kin-xref" href="index.html?q=${encodeURIComponent(x.name)}">${escHtml(x.role)}: ${escHtml(x.name)} →</a>`).join(' ');
+        html += `<div style="margin-top:8px"><span style="font-size:.74rem;color:var(--muted)">Verwandte im Bestand:</span><br>${links}</div>`;
+      }
+      html += `<div class="hl-credit">Quelle: Human Lineage, CC BY-SA 4.0 – <a href="${escHtml(h.url)}" target="_blank" rel="noopener">${escHtml(h.url)}</a>${h.snapshot ? ` · Snapshot ${escHtml(h.snapshot)}` : ''}</div>`;
+      sections.push(section('Human Lineage', html));
     }
     if (r.v && r.v.length > 1) {
       const variants = r.v.filter(v => v !== r.n).slice(0, 20);

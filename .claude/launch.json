@@ -4,7 +4,7 @@
     {
       "name": "hgb-persons",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4321", "--directory", "/Users/TH_1/Documents/Repo/eos_persons"],
+      "runtimeArgs": ["-m", "http.server", "4321", "--directory", "."],
       "port": 4321
     }
   ]
