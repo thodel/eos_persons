@@ -27,7 +27,9 @@ from difflib import SequenceMatcher
 
 csv.field_size_limit(10_000_000)
 
-HLS = "/Users/TH_1/Documents/HLS/hls_articles.csv"
+from link_hls import private_hls
+
+HLS = private_hls()      # needs the article texts: the private export only
 PERSONS = "persons_resolved.json"
 GRAPH = "families_graph.json"
 
@@ -110,6 +112,10 @@ def similar(a, b):
 
 
 def main():
+    if HLS is None:
+        print("private HLS export not found ($HLS_ARTICLES / private_inputs/) — "
+              "nothing to mine, skipping")
+        return
     persons = json.load(open(PERSONS, encoding="utf-8"))
     linked = {p["hls"]["id"]: p for p in persons if p.get("hls")}
     print(f"{len(linked)} linked persons")

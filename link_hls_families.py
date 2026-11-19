@@ -24,7 +24,9 @@ import collections
 
 csv.field_size_limit(10_000_000)
 
-HLS = "/Users/TH_1/Documents/HLS/hls_articles.csv"
+from link_hls import private_hls
+
+HLS = private_hls() or ""       # family articles are in the private export only
 # Surname → HLS family article links accepted on an earlier run (written from
 # families_index.json). Used when the HLS export itself is not available: the
 # link is keyed by surname only, so it does not depend on the person base.
@@ -78,7 +80,7 @@ def load_frozen_links():
 
 def main():
     # ── load HLS family articles ──
-    if not os.path.exists(HLS) and os.path.exists(LINKS):
+    if not HLS and os.path.exists(LINKS):
         fam_articles = load_frozen_links()
         print(f"HLS export not present — using {LINKS}")
     else:

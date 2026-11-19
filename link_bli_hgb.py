@@ -570,7 +570,7 @@ def main(argv=None):
             continue
         ms = L["used"]
         years = [m["year"] for m in ms if m["year"]]
-        idx = sorted(L["pc"], key=lambda i: -L["pc"][i])
+        idx = sorted(L["pc"], key=lambda i: (-L["pc"][i], pkey(P[i]), i))
         who = " | ".join(f"{pkey(P[i])} ×{L['pc'][i]}" for i in idx)
         both = "both" if len(idx) == 1 else "bli"
         dead_at = min((m["year"] for m in ms if m["dead"] and m["year"]), default=None)
@@ -907,14 +907,16 @@ def main(argv=None):
                 "n_owner_docs": len(L["odocs"]), "link_level": L["level"],
                 "n_mentions": len(L["used"]), "shared_name_in_dossier": int(L["shared"]),
                 "n_persons": len(L["pc"]),
-                "persons": " | ".join(pkey(P[i]) for i in sorted(L["pc"], key=lambda i: -L["pc"][i])),
+                "persons": " | ".join(pkey(P[i]) for i in sorted(L["pc"], key=lambda i: (-L["pc"][i], pkey(P[i]), i))),
                 "n_street_persons": len(L["sc"]),
-                "street_persons": "|".join(SI.R[s]["id"] for s in sorted(L["sc"], key=lambda s: -L["sc"][s])) if SI else "",
+                "street_persons": "|".join(SI.R[s]["id"] for s in sorted(L["sc"], key=lambda s: (-L["sc"][s], SI.R[s]["id"]))) if SI else "",
                 "bli_death_year": a.get("d_yr") or "",
                 "bli_occ": "|".join(a.get("occ") or []),
             })
 
-    F.sort(key=lambda r: (-r["severity"], r["type"], r["dossier"]))
+    # a total order, so that two runs on the same data write the same files
+    F.sort(key=lambda r: (-r["severity"], r["type"], r["dossier"], r["bli"], r["eos"],
+                          r["evidence"]))
     with open(args.findings, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["type", "likely_side", "severity", "dossier",
                                           "bli", "eos", "evidence"])

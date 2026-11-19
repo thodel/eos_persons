@@ -31,16 +31,28 @@ from difflib import SequenceMatcher
 
 csv.field_size_limit(10_000_000)
 
-# The HLS metadata export is private and lives on the maintainer's machine; when
-# it is absent the linkers fall back to the public table built from Wikidata by
-# build_hls_table.py (same column layout, see there for what it lacks).
+# The HLS metadata export is private; when it is absent the linkers fall back
+# to the public table built from Wikidata by build_hls_table.py (same column
+# layout, see there for what it lacks). The export is looked for in
+# $HLS_ARTICLES, on the maintainer's machine, and in private_inputs/ next to
+# the scripts (gitignored — the export must never be committed).
+_HERE = os.path.dirname(os.path.abspath(__file__))
 HLS_PRIVATE = "/Users/TH_1/Documents/HLS/hls_articles.csv"
-HLS_PUBLIC = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                          "hls_bios_wikidata.csv")
+HLS_PUBLIC = os.path.join(_HERE, "hls_bios_wikidata.csv")
+
+
+def private_hls():
+    """Path of the private HLS export (with article texts and family articles),
+    or None where only the public table is available."""
+    for p in (os.environ.get("HLS_ARTICLES"), HLS_PRIVATE,
+              os.path.join(_HERE, "private_inputs", "hls_articles.csv")):
+        if p and os.path.exists(p):
+            return p
+    return None
 
 
 def default_hls():
-    return HLS_PRIVATE if os.path.exists(HLS_PRIVATE) else HLS_PUBLIC
+    return private_hls() or HLS_PUBLIC
 
 
 # Particles that precede a surname; stripped before comparison.

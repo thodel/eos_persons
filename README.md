@@ -160,6 +160,13 @@ python3 link_bli_hgb.py && python3 dedupe_spelling.py            # dry run
 python3 dedupe_spelling.py --apply && python3 link_bli_hgb.py    # repeat while clusters > 0
 ```
 
+### One command
+
+`./rebuild.sh` runs the whole pipeline in the order above — `./rebuild.sh --list`
+shows the stages (`extract data links dedupe spelling families identities srbas
+report`), `./rebuild.sh links` starts at a stage, `./rebuild.sh links dedupe`
+runs a range.
+
 ### HLS data without the private export
 
 The HLS metadata export (`hls_articles.csv`) that the linkers were written
@@ -168,7 +175,8 @@ linkers use from Wikidata (every HLS biography carries the HLS id as property
 P902) into `hls_bios_wikidata.csv` (tracked: 25,157 biographies, 23,877 with
 life dates, 22,846 with a GND id). `link_hls.default_hls()` returns the private
 export when present and this table otherwise, so the link stage runs from public
-data. Caveat: the given name is taken from the Wikidata label, which for 339 of the
+data. The export is looked for in `$HLS_ARTICLES`, then in
+`private_inputs/hls_articles.csv` (gitignored — it must not be committed). Caveat: the given name is taken from the Wikidata label, which for 339 of the
 472 linked articles is a single token ("Johannes Wettstein") where the export's
 `bio.first_name` may carry the full form; since the matcher only compares the
 common prefix of the given names, such an article can absorb register persons
