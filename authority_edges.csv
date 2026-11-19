@@ -7,12 +7,12 @@ person:00002,hbls,hbls:hbls:4:301:HORNGACHER:2:1,,,,https://biblio.unibe.ch/digi
 person:00002,hls,hls:019232,Melchior Hornlocher,1539,1619,https://hls-dhs-dss.ch/de/articles/019232/2009-09-03/,merged,
 person:00002,gnd,gnd:1074217136,,,,https://d-nb.info/gnd/1074217136,merged,
 person:00002,wikidata,wd:Q96322036,,,,https://www.wikidata.org/wiki/Q96322036,merged,
-person:00003,hbls,hbls:hbls:3:206:FORCART:2,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=206,review,multi_gnd|multi_hbls|birth_spread
-person:00003,hbls,hbls:hbls:3:1108,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=206,review,multi_gnd|multi_hbls|birth_spread
-person:00003,hls,hls:019215,Dietrich Forcart,1685,1740,https://hls-dhs-dss.ch/de/articles/019215/2005-10-31/,review,multi_gnd|multi_hbls|birth_spread
-person:00003,gnd,gnd:1074071344,,,,https://d-nb.info/gnd/1074071344,review,multi_gnd|multi_hbls|birth_spread
-person:00003,gnd,gnd:1175559709,,,,https://d-nb.info/gnd/1175559709,review,multi_gnd|multi_hbls|birth_spread
-person:00003,wikidata,wd:Q96364112,,,,https://www.wikidata.org/wiki/Q96364112,review,multi_gnd|multi_hbls|birth_spread
+person:00003,hbls,hbls:hbls:3:206:FORCART:2,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=206,review,multi_hbls|multi_gnd|birth_spread
+person:00003,hbls,hbls:hbls:3:1108,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=206,review,multi_hbls|multi_gnd|birth_spread
+person:00003,hls,hls:019215,Dietrich Forcart,1685,1740,https://hls-dhs-dss.ch/de/articles/019215/2005-10-31/,review,multi_hbls|multi_gnd|birth_spread
+person:00003,gnd,gnd:1074071344,,,,https://d-nb.info/gnd/1074071344,review,multi_hbls|multi_gnd|birth_spread
+person:00003,gnd,gnd:1175559709,,,,https://d-nb.info/gnd/1175559709,review,multi_hbls|multi_gnd|birth_spread
+person:00003,wikidata,wd:Q96364112,,,,https://www.wikidata.org/wiki/Q96364112,review,multi_hbls|multi_gnd|birth_spread
 person:00004,hbls,hbls:hbls:4:64:HAHN:3,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_04.pdf#page=64,merged,
 person:00004,hls,hls:018398,Balthasar Han,1505,1578,https://hls-dhs-dss.ch/de/articles/018398/2020-01-16/,merged,
 person:00004,gnd,gnd:136949967,,,,https://d-nb.info/gnd/136949967,merged,
@@ -136,24 +136,24 @@ person:00033,gnd,gnd:11718991X,,,,https://d-nb.info/gnd/11718991X,review,birth_s
 person:00034,hbls,hbls:hbls:3:584:GLASER:1,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=584,merged,
 person:00034,hls,hls:018397,Michel Glaser,1435,1474,https://hls-dhs-dss.ch/de/articles/018397/2005-11-18/,merged,
 person:00034,wikidata,wd:Q96318974,,,,https://www.wikidata.org/wiki/Q96318974,merged,
-person:00035,hbls,hbls:hbls:5:1889,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=192,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,hbls,hbls:hbls:5:1893,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=192,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,hbls,hbls:hbls:5:2005,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=201,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,hls,hls:005897,Johann Heinrich Müller,1829,1891,https://hls-dhs-dss.ch/de/articles/005897/2009-02-03/,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,hls,hls:006085,Johann Jakob Müller,1829,1891,https://hls-dhs-dss.ch/de/articles/006085/2009-02-03/,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,hls,hls:015084,Johann Martin Müller,1829,1891,https://hls-dhs-dss.ch/de/articles/015084/2007-10-11/,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,hls,hls:031533,Johann Müller Argoviensis,1829,1891,https://hls-dhs-dss.ch/de/articles/031533/2007-07-16/,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,hls,hls:042094,Johann Rudolf Müller,1829,1891,https://hls-dhs-dss.ch/de/articles/042094/2008-02-07/,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,gnd,gnd:118872850,,,,https://d-nb.info/gnd/118872850,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,gnd,gnd:1051654491,,,,https://d-nb.info/gnd/1051654491,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,gnd,gnd:1059781816,,,,https://d-nb.info/gnd/1059781816,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,gnd,gnd:1049718747,,,,https://d-nb.info/gnd/1049718747,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,gnd,gnd:104241330,,,,https://d-nb.info/gnd/104241330,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,wikidata,wd:Q1474158,,,,https://www.wikidata.org/wiki/Q1474158,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,wikidata,wd:Q138911512,,,,https://www.wikidata.org/wiki/Q138911512,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,wikidata,wd:Q96622054,,,,https://www.wikidata.org/wiki/Q96622054,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,wikidata,wd:Q96487144,,,,https://www.wikidata.org/wiki/Q96487144,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
-person:00035,wikidata,wd:Q2504914,,,,https://www.wikidata.org/wiki/Q2504914,review,multi_gnd|multi_hls|multi_wd|multi_hbls|name_disagreement
+person:00035,hbls,hbls:hbls:5:1889,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=192,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,hbls,hbls:hbls:5:1893,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=192,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,hbls,hbls:hbls:5:2005,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=201,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,hls,hls:005897,Johann Heinrich Müller,1829,1891,https://hls-dhs-dss.ch/de/articles/005897/2009-02-03/,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,hls,hls:006085,Johann Jakob Müller,1829,1891,https://hls-dhs-dss.ch/de/articles/006085/2009-02-03/,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,hls,hls:015084,Johann Martin Müller,1829,1891,https://hls-dhs-dss.ch/de/articles/015084/2007-10-11/,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,hls,hls:031533,Johann Müller Argoviensis,1829,1891,https://hls-dhs-dss.ch/de/articles/031533/2007-07-16/,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,hls,hls:042094,Johann Rudolf Müller,1829,1891,https://hls-dhs-dss.ch/de/articles/042094/2008-02-07/,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,gnd,gnd:118872850,,,,https://d-nb.info/gnd/118872850,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,gnd,gnd:1051654491,,,,https://d-nb.info/gnd/1051654491,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,gnd,gnd:1059781816,,,,https://d-nb.info/gnd/1059781816,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,gnd,gnd:1049718747,,,,https://d-nb.info/gnd/1049718747,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,gnd,gnd:104241330,,,,https://d-nb.info/gnd/104241330,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,wikidata,wd:Q1474158,,,,https://www.wikidata.org/wiki/Q1474158,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,wikidata,wd:Q138911512,,,,https://www.wikidata.org/wiki/Q138911512,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,wikidata,wd:Q96622054,,,,https://www.wikidata.org/wiki/Q96622054,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,wikidata,wd:Q96487144,,,,https://www.wikidata.org/wiki/Q96487144,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00035,wikidata,wd:Q2504914,,,,https://www.wikidata.org/wiki/Q2504914,review,multi_hbls|multi_gnd|multi_wd|multi_hls|name_disagreement
 person:00036,hls,hls:019186,Bernhard Brand,1525,1594,https://hls-dhs-dss.ch/de/articles/019186/2002-12-13/,merged,
 person:00036,gnd,gnd:1055656774,,,,https://d-nb.info/gnd/1055656774,merged,
 person:00036,wikidata,wd:Q57357550,,,,https://www.wikidata.org/wiki/Q57357550,merged,
@@ -163,15 +163,15 @@ person:00037,wikidata,wd:Q825631,,,,https://www.wikidata.org/wiki/Q825631,merged
 person:00038,hls,hls:019314,Henman Offenburg,1379,1459,https://hls-dhs-dss.ch/de/articles/019314/2009-08-24/,merged,
 person:00038,gnd,gnd:11858961X,,,,https://d-nb.info/gnd/11858961X,merged,
 person:00038,wikidata,wd:Q19840804,,,,https://www.wikidata.org/wiki/Q19840804,merged,
-person:00039,hbls,hbls:hbls:3:1262,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=254,review,multi_gnd|multi_hls|multi_wd|multi_hbls
-person:00039,hbls,hbls:hbls:3:1263,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=254,review,multi_gnd|multi_hls|multi_wd|multi_hbls
-person:00039,hbls,hbls:hbls:3:1264,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=254,review,multi_gnd|multi_hls|multi_wd|multi_hbls
-person:00039,hls,hls:004493,Hans Frei,1870,1932,https://hls-dhs-dss.ch/de/articles/004493/2005-02-25/,review,multi_gnd|multi_hls|multi_wd|multi_hbls
-person:00039,hls,hls:022029,Hans Frei,1870,1932,https://hls-dhs-dss.ch/de/articles/022029/2023-08-02/,review,multi_gnd|multi_hls|multi_wd|multi_hbls
-person:00039,gnd,gnd:1020554177,,,,https://d-nb.info/gnd/1020554177,review,multi_gnd|multi_hls|multi_wd|multi_hbls
-person:00039,gnd,gnd:104833905X,,,,https://d-nb.info/gnd/104833905X,review,multi_gnd|multi_hls|multi_wd|multi_hbls
-person:00039,wikidata,wd:Q20605269,,,,https://www.wikidata.org/wiki/Q20605269,review,multi_gnd|multi_hls|multi_wd|multi_hbls
-person:00039,wikidata,wd:Q99305208,,,,https://www.wikidata.org/wiki/Q99305208,review,multi_gnd|multi_hls|multi_wd|multi_hbls
+person:00039,hbls,hbls:hbls:3:1262,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=254,review,multi_hbls|multi_gnd|multi_wd|multi_hls
+person:00039,hbls,hbls:hbls:3:1263,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=254,review,multi_hbls|multi_gnd|multi_wd|multi_hls
+person:00039,hbls,hbls:hbls:3:1264,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=254,review,multi_hbls|multi_gnd|multi_wd|multi_hls
+person:00039,hls,hls:004493,Hans Frei,1870,1932,https://hls-dhs-dss.ch/de/articles/004493/2005-02-25/,review,multi_hbls|multi_gnd|multi_wd|multi_hls
+person:00039,hls,hls:022029,Hans Frei,1870,1932,https://hls-dhs-dss.ch/de/articles/022029/2023-08-02/,review,multi_hbls|multi_gnd|multi_wd|multi_hls
+person:00039,gnd,gnd:1020554177,,,,https://d-nb.info/gnd/1020554177,review,multi_hbls|multi_gnd|multi_wd|multi_hls
+person:00039,gnd,gnd:104833905X,,,,https://d-nb.info/gnd/104833905X,review,multi_hbls|multi_gnd|multi_wd|multi_hls
+person:00039,wikidata,wd:Q20605269,,,,https://www.wikidata.org/wiki/Q20605269,review,multi_hbls|multi_gnd|multi_wd|multi_hls
+person:00039,wikidata,wd:Q99305208,,,,https://www.wikidata.org/wiki/Q99305208,review,multi_hbls|multi_gnd|multi_wd|multi_hls
 person:00040,hls,hls:012925,Arnold von Rotberg,1394,1458,https://hls-dhs-dss.ch/de/articles/012925/2009-10-30/,merged,
 person:00040,gnd,gnd:1057990779,,,,https://d-nb.info/gnd/1057990779,merged,
 person:00040,wikidata,wd:Q15621578,,,,https://www.wikidata.org/wiki/Q15621578,merged,
@@ -181,97 +181,97 @@ person:00041,wikidata,wd:Q55856336,,,,https://www.wikidata.org/wiki/Q55856336,me
 person:00042,hls,hls:019208,Johann Rudolf Faesch,1572,1659,https://hls-dhs-dss.ch/de/articles/019208/2015-12-22/,merged,
 person:00042,gnd,gnd:122119673,,,,https://d-nb.info/gnd/122119673,merged,
 person:00042,wikidata,wd:Q21567780,,,,https://www.wikidata.org/wiki/Q21567780,merged,
-person:00043,hbls,hbls:hbls:2:68:BAUR:1:1,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_02.pdf#page=68,review,multi_gnd|multi_hls|multi_wd
-person:00043,hls,hls:012435,Johann Jakob Bär,1799,1841,https://hls-dhs-dss.ch/de/articles/012435/2002-01-15/,review,multi_gnd|multi_hls|multi_wd
-person:00043,hls,hls:030971,Johannes Baur,1799,1841,https://hls-dhs-dss.ch/de/articles/030971/2002-05-16/,review,multi_gnd|multi_hls|multi_wd
-person:00043,gnd,gnd:1080271937,,,,https://d-nb.info/gnd/1080271937,review,multi_gnd|multi_hls|multi_wd
-person:00043,gnd,gnd:1044611049,,,,https://d-nb.info/gnd/1044611049,review,multi_gnd|multi_hls|multi_wd
-person:00043,wikidata,wd:Q76826276,,,,https://www.wikidata.org/wiki/Q76826276,review,multi_gnd|multi_hls|multi_wd
-person:00043,wikidata,wd:Q55681524,,,,https://www.wikidata.org/wiki/Q55681524,review,multi_gnd|multi_hls|multi_wd
-person:00044,hbls,hbls:hbls:3:347,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=86,review,multi_gnd|multi_hls|multi_wd
-person:00044,hls,hls:013461,Hans Conrad Escher vom Luchs,1743,1814,https://hls-dhs-dss.ch/de/articles/013461/2004-11-03/,review,multi_gnd|multi_hls|multi_wd
-person:00044,hls,hls:020330,Hans Conrad Escher vom Glas,1743,1814,https://hls-dhs-dss.ch/de/articles/020330/2004-11-03/,review,multi_gnd|multi_hls|multi_wd
-person:00044,gnd,gnd:1051586453,,,,https://d-nb.info/gnd/1051586453,review,multi_gnd|multi_hls|multi_wd
-person:00044,gnd,gnd:135935288,,,,https://d-nb.info/gnd/135935288,review,multi_gnd|multi_hls|multi_wd
-person:00044,wikidata,wd:Q125319,,,,https://www.wikidata.org/wiki/Q125319,review,multi_gnd|multi_hls|multi_wd
-person:00044,wikidata,wd:Q139267452,,,,https://www.wikidata.org/wiki/Q139267452,review,multi_gnd|multi_hls|multi_wd
-person:00045,hbls,hbls:hbls:3:1159,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=211,review,multi_gnd|multi_hls|multi_wd
-person:00045,hls,hls:003972,Robert Forrer,1868,1927,https://hls-dhs-dss.ch/de/articles/003972/2005-01-21/,review,multi_gnd|multi_hls|multi_wd
-person:00045,hls,hls:044836,Robert Forrer,1868,1927,https://hls-dhs-dss.ch/de/articles/044836/2005-12-20/,review,multi_gnd|multi_hls|multi_wd
-person:00045,gnd,gnd:1066278571,,,,https://d-nb.info/gnd/1066278571,review,multi_gnd|multi_hls|multi_wd
-person:00045,gnd,gnd:119252511,,,,https://d-nb.info/gnd/119252511,review,multi_gnd|multi_hls|multi_wd
-person:00045,wikidata,wd:Q99305168,,,,https://www.wikidata.org/wiki/Q99305168,review,multi_gnd|multi_hls|multi_wd
-person:00045,wikidata,wd:Q119493,,,,https://www.wikidata.org/wiki/Q119493,review,multi_gnd|multi_hls|multi_wd
-person:00046,hbls,hbls:hbls:5:589,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=68,review,multi_gnd|multi_hls|multi_wd
-person:00046,hls,hls:017105,Friedrich May,1696,1767,https://hls-dhs-dss.ch/de/articles/017105/2008-08-27/,review,multi_gnd|multi_hls|multi_wd
-person:00046,hls,hls:024033,Friedrich May,1696,1767,https://hls-dhs-dss.ch/de/articles/024033/2009-10-29/,review,multi_gnd|multi_hls|multi_wd
-person:00046,gnd,gnd:136683975,,,,https://d-nb.info/gnd/136683975,review,multi_gnd|multi_hls|multi_wd
-person:00046,gnd,gnd:1074370708,,,,https://d-nb.info/gnd/1074370708,review,multi_gnd|multi_hls|multi_wd
-person:00046,wikidata,wd:Q94779654,,,,https://www.wikidata.org/wiki/Q94779654,review,multi_gnd|multi_hls|multi_wd
-person:00046,wikidata,wd:Q136636577,,,,https://www.wikidata.org/wiki/Q136636577,review,multi_gnd|multi_hls|multi_wd
-person:00047,hbls,hbls:hbls:5:1933,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=196,review,multi_gnd|multi_hls|multi_wd
-person:00047,hls,hls:005407,Josef Alois Müller,1871,1967,https://hls-dhs-dss.ch/de/articles/005407/2009-09-08/,review,multi_gnd|multi_hls|multi_wd
-person:00047,hls,hls:012170,Josef Müller,1871,1967,https://hls-dhs-dss.ch/de/articles/012170/2008-01-08/,review,multi_gnd|multi_hls|multi_wd
-person:00047,gnd,gnd:1053992130,,,,https://d-nb.info/gnd/1053992130,review,multi_gnd|multi_hls|multi_wd
-person:00047,gnd,gnd:133724530,,,,https://d-nb.info/gnd/133724530,review,multi_gnd|multi_hls|multi_wd
-person:00047,wikidata,wd:Q1704182,,,,https://www.wikidata.org/wiki/Q1704182,review,multi_gnd|multi_hls|multi_wd
-person:00047,wikidata,wd:Q1505645,,,,https://www.wikidata.org/wiki/Q1505645,review,multi_gnd|multi_hls|multi_wd
-person:00048,hbls,hbls:hbls:5:1982,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=200,review,multi_gnd|multi_hls|multi_wd
-person:00048,hls,hls:004400,Alois Müller,1821,1889,https://hls-dhs-dss.ch/de/articles/004400/2007-11-29/,review,multi_gnd|multi_hls|multi_wd
-person:00048,hls,hls:030543,Alois Müller,1821,1889,https://hls-dhs-dss.ch/de/articles/030543/2008-01-08/,review,multi_gnd|multi_hls|multi_wd
-person:00048,gnd,gnd:1080837701,,,,https://d-nb.info/gnd/1080837701,review,multi_gnd|multi_hls|multi_wd
-person:00048,gnd,gnd:1054162387,,,,https://d-nb.info/gnd/1054162387,review,multi_gnd|multi_hls|multi_wd
-person:00048,wikidata,wd:Q60334373,,,,https://www.wikidata.org/wiki/Q60334373,review,multi_gnd|multi_hls|multi_wd
-person:00048,wikidata,wd:Q99305206,,,,https://www.wikidata.org/wiki/Q99305206,review,multi_gnd|multi_hls|multi_wd
-person:00049,hbls,hbls:hbls:5:2011,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=201,review,multi_gnd|multi_hls|multi_wd
-person:00049,hls,hls:029493,Hans Müller,1868,1953,https://hls-dhs-dss.ch/de/articles/029493/2009-02-02/,review,multi_gnd|multi_hls|multi_wd
-person:00049,hls,hls:029519,Johann Paul Müller,1868,1953,https://hls-dhs-dss.ch/de/articles/029519/2008-02-20/,review,multi_gnd|multi_hls|multi_wd
-person:00049,gnd,gnd:1080839348,,,,https://d-nb.info/gnd/1080839348,review,multi_gnd|multi_hls|multi_wd
-person:00049,gnd,gnd:1080837809,,,,https://d-nb.info/gnd/1080837809,review,multi_gnd|multi_hls|multi_wd
-person:00049,wikidata,wd:Q78067224,,,,https://www.wikidata.org/wiki/Q78067224,review,multi_gnd|multi_hls|multi_wd
-person:00049,wikidata,wd:Q15965122,,,,https://www.wikidata.org/wiki/Q15965122,review,multi_gnd|multi_hls|multi_wd
-person:00050,hbls,hbls:hbls:6:776,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=183,review,multi_gnd|multi_hls|multi_wd
-person:00050,hls,hls:026144,Johann Scheuchzer,1738,1815,https://hls-dhs-dss.ch/de/articles/026144/2011-07-26/,review,multi_gnd|multi_hls|multi_wd
-person:00050,hls,hls:044671,Johann Jakob Scheuchzer,1738,1815,https://hls-dhs-dss.ch/de/articles/044671/2011-07-26/,review,multi_gnd|multi_hls|multi_wd
-person:00050,gnd,gnd:1045595756,,,,https://d-nb.info/gnd/1045595756,review,multi_gnd|multi_hls|multi_wd
-person:00050,gnd,gnd:1069601934,,,,https://d-nb.info/gnd/1069601934,review,multi_gnd|multi_hls|multi_wd
-person:00050,wikidata,wd:Q58638081,,,,https://www.wikidata.org/wiki/Q58638081,review,multi_gnd|multi_hls|multi_wd
-person:00050,wikidata,wd:Q21607893,,,,https://www.wikidata.org/wiki/Q21607893,review,multi_gnd|multi_hls|multi_wd
-person:00051,hbls,hbls:hbls:6:1101,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=219,review,multi_gnd|multi_hls|multi_wd
-person:00051,hls,hls:003589,Johann Schmid,1850,1931,https://hls-dhs-dss.ch/de/articles/003589/2011-08-16/,review,multi_gnd|multi_hls|multi_wd
-person:00051,hls,hls:031840,Johann Friedrich Schmid,1850,1931,https://hls-dhs-dss.ch/de/articles/031840/2012-11-20/,review,multi_gnd|multi_hls|multi_wd
-person:00051,gnd,gnd:105239681X,,,,https://d-nb.info/gnd/105239681X,review,multi_gnd|multi_hls|multi_wd
-person:00051,gnd,gnd:1069168270,,,,https://d-nb.info/gnd/1069168270,review,multi_gnd|multi_hls|multi_wd
-person:00051,wikidata,wd:Q1577465,,,,https://www.wikidata.org/wiki/Q1577465,review,multi_gnd|multi_hls|multi_wd
-person:00051,wikidata,wd:Q84477787,,,,https://www.wikidata.org/wiki/Q84477787,review,multi_gnd|multi_hls|multi_wd
-person:00052,hbls,hbls:hbls:6:3808,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=628,review,multi_gnd|multi_hls|multi_wd|name_disagreement
-person:00052,hls,hls:012337,Johann Georg Sulzer,1720,1779,https://hls-dhs-dss.ch/de/articles/012337/2012-08-17/,review,multi_gnd|multi_hls|multi_wd|name_disagreement
-person:00052,hls,hls:014658,Johann Caspar Sulzer,1720,1779,https://hls-dhs-dss.ch/de/articles/014658/2011-06-27/,review,multi_gnd|multi_hls|multi_wd|name_disagreement
-person:00052,gnd,gnd:11879941X,,,,https://d-nb.info/gnd/11879941X,review,multi_gnd|multi_hls|multi_wd|name_disagreement
-person:00052,gnd,gnd:117374199,,,,https://d-nb.info/gnd/117374199,review,multi_gnd|multi_hls|multi_wd|name_disagreement
-person:00052,wikidata,wd:Q116036,,,,https://www.wikidata.org/wiki/Q116036,review,multi_gnd|multi_hls|multi_wd|name_disagreement
-person:00052,wikidata,wd:Q55126702,,,,https://www.wikidata.org/wiki/Q55126702,review,multi_gnd|multi_hls|multi_wd|name_disagreement
-person:00053,hbls,hbls:hbls:6:3946,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=641,review,multi_gnd|multi_hls|multi_wd
-person:00053,hls,hls:005752,Johann Heinrich Suter,1798,1864,https://hls-dhs-dss.ch/de/articles/005752/2013-12-03/,review,multi_gnd|multi_hls|multi_wd
-person:00053,hls,hls:015094,Johann Ulrich Sutter,1798,1864,https://hls-dhs-dss.ch/de/articles/015094/2012-07-25/,review,multi_gnd|multi_hls|multi_wd
-person:00053,gnd,gnd:1017073961,,,,https://d-nb.info/gnd/1017073961,review,multi_gnd|multi_hls|multi_wd
-person:00053,gnd,gnd:1053395884,,,,https://d-nb.info/gnd/1053395884,review,multi_gnd|multi_hls|multi_wd
-person:00053,wikidata,wd:Q92257041,,,,https://www.wikidata.org/wiki/Q92257041,review,multi_gnd|multi_hls|multi_wd
-person:00053,wikidata,wd:Q59287169,,,,https://www.wikidata.org/wiki/Q59287169,review,multi_gnd|multi_hls|multi_wd
-person:00054,hbls,hbls:hbls:7:2086,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_07.pdf#page=471,review,multi_gnd|multi_hls|multi_wd
-person:00054,hls,hls:005722,Karl von Weber,1879,1964,https://hls-dhs-dss.ch/de/articles/005722/2012-11-16/,review,multi_gnd|multi_hls|multi_wd
-person:00054,hls,hls:041623,Karl Weber,1879,1964,https://hls-dhs-dss.ch/de/articles/041623/2012-08-02/,review,multi_gnd|multi_hls|multi_wd
-person:00054,gnd,gnd:1053582080,,,,https://d-nb.info/gnd/1053582080,review,multi_gnd|multi_hls|multi_wd
-person:00054,gnd,gnd:132781379,,,,https://d-nb.info/gnd/132781379,review,multi_gnd|multi_hls|multi_wd
-person:00054,wikidata,wd:Q63323749,,,,https://www.wikidata.org/wiki/Q63323749,review,multi_gnd|multi_hls|multi_wd
-person:00054,wikidata,wd:Q15450840,,,,https://www.wikidata.org/wiki/Q15450840,review,multi_gnd|multi_hls|multi_wd
-person:00055,hbls,hbls:hbls:7:2818,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_07.pdf#page=615,review,multi_gnd|multi_hls|multi_wd
-person:00055,hls,hls:018210,Hans Ulrich Wolf,1559,1624,https://hls-dhs-dss.ch/de/articles/018210/2021-08-02/,review,multi_gnd|multi_hls|multi_wd
-person:00055,hls,hls:048925,Johannes Wolf,1559,1624,https://hls-dhs-dss.ch/de/articles/048925/2013-11-20/,review,multi_gnd|multi_hls|multi_wd
-person:00055,gnd,gnd:103752361X,,,,https://d-nb.info/gnd/103752361X,review,multi_gnd|multi_hls|multi_wd
-person:00055,gnd,gnd:1075816289,,,,https://d-nb.info/gnd/1075816289,review,multi_gnd|multi_hls|multi_wd
-person:00055,wikidata,wd:Q59391200,,,,https://www.wikidata.org/wiki/Q59391200,review,multi_gnd|multi_hls|multi_wd
-person:00055,wikidata,wd:Q58212867,,,,https://www.wikidata.org/wiki/Q58212867,review,multi_gnd|multi_hls|multi_wd
+person:00043,hbls,hbls:hbls:2:68:BAUR:1:1,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_02.pdf#page=68,review,multi_gnd|multi_wd|multi_hls
+person:00043,hls,hls:012435,Johann Jakob Bär,1799,1841,https://hls-dhs-dss.ch/de/articles/012435/2002-01-15/,review,multi_gnd|multi_wd|multi_hls
+person:00043,hls,hls:030971,Johannes Baur,1799,1841,https://hls-dhs-dss.ch/de/articles/030971/2002-05-16/,review,multi_gnd|multi_wd|multi_hls
+person:00043,gnd,gnd:1080271937,,,,https://d-nb.info/gnd/1080271937,review,multi_gnd|multi_wd|multi_hls
+person:00043,gnd,gnd:1044611049,,,,https://d-nb.info/gnd/1044611049,review,multi_gnd|multi_wd|multi_hls
+person:00043,wikidata,wd:Q76826276,,,,https://www.wikidata.org/wiki/Q76826276,review,multi_gnd|multi_wd|multi_hls
+person:00043,wikidata,wd:Q55681524,,,,https://www.wikidata.org/wiki/Q55681524,review,multi_gnd|multi_wd|multi_hls
+person:00044,hbls,hbls:hbls:3:347,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=86,review,multi_gnd|multi_wd|multi_hls
+person:00044,hls,hls:013461,Hans Conrad Escher vom Luchs,1743,1814,https://hls-dhs-dss.ch/de/articles/013461/2004-11-03/,review,multi_gnd|multi_wd|multi_hls
+person:00044,hls,hls:020330,Hans Conrad Escher vom Glas,1743,1814,https://hls-dhs-dss.ch/de/articles/020330/2004-11-03/,review,multi_gnd|multi_wd|multi_hls
+person:00044,gnd,gnd:1051586453,,,,https://d-nb.info/gnd/1051586453,review,multi_gnd|multi_wd|multi_hls
+person:00044,gnd,gnd:135935288,,,,https://d-nb.info/gnd/135935288,review,multi_gnd|multi_wd|multi_hls
+person:00044,wikidata,wd:Q125319,,,,https://www.wikidata.org/wiki/Q125319,review,multi_gnd|multi_wd|multi_hls
+person:00044,wikidata,wd:Q139267452,,,,https://www.wikidata.org/wiki/Q139267452,review,multi_gnd|multi_wd|multi_hls
+person:00045,hbls,hbls:hbls:3:1159,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_03.pdf#page=211,review,multi_gnd|multi_wd|multi_hls
+person:00045,hls,hls:003972,Robert Forrer,1868,1927,https://hls-dhs-dss.ch/de/articles/003972/2005-01-21/,review,multi_gnd|multi_wd|multi_hls
+person:00045,hls,hls:044836,Robert Forrer,1868,1927,https://hls-dhs-dss.ch/de/articles/044836/2005-12-20/,review,multi_gnd|multi_wd|multi_hls
+person:00045,gnd,gnd:1066278571,,,,https://d-nb.info/gnd/1066278571,review,multi_gnd|multi_wd|multi_hls
+person:00045,gnd,gnd:119252511,,,,https://d-nb.info/gnd/119252511,review,multi_gnd|multi_wd|multi_hls
+person:00045,wikidata,wd:Q99305168,,,,https://www.wikidata.org/wiki/Q99305168,review,multi_gnd|multi_wd|multi_hls
+person:00045,wikidata,wd:Q119493,,,,https://www.wikidata.org/wiki/Q119493,review,multi_gnd|multi_wd|multi_hls
+person:00046,hbls,hbls:hbls:5:589,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=68,review,multi_gnd|multi_wd|multi_hls
+person:00046,hls,hls:017105,Friedrich May,1696,1767,https://hls-dhs-dss.ch/de/articles/017105/2008-08-27/,review,multi_gnd|multi_wd|multi_hls
+person:00046,hls,hls:024033,Friedrich May,1696,1767,https://hls-dhs-dss.ch/de/articles/024033/2009-10-29/,review,multi_gnd|multi_wd|multi_hls
+person:00046,gnd,gnd:136683975,,,,https://d-nb.info/gnd/136683975,review,multi_gnd|multi_wd|multi_hls
+person:00046,gnd,gnd:1074370708,,,,https://d-nb.info/gnd/1074370708,review,multi_gnd|multi_wd|multi_hls
+person:00046,wikidata,wd:Q94779654,,,,https://www.wikidata.org/wiki/Q94779654,review,multi_gnd|multi_wd|multi_hls
+person:00046,wikidata,wd:Q136636577,,,,https://www.wikidata.org/wiki/Q136636577,review,multi_gnd|multi_wd|multi_hls
+person:00047,hbls,hbls:hbls:5:1933,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=196,review,multi_gnd|multi_wd|multi_hls
+person:00047,hls,hls:005407,Josef Alois Müller,1871,1967,https://hls-dhs-dss.ch/de/articles/005407/2009-09-08/,review,multi_gnd|multi_wd|multi_hls
+person:00047,hls,hls:012170,Josef Müller,1871,1967,https://hls-dhs-dss.ch/de/articles/012170/2008-01-08/,review,multi_gnd|multi_wd|multi_hls
+person:00047,gnd,gnd:1053992130,,,,https://d-nb.info/gnd/1053992130,review,multi_gnd|multi_wd|multi_hls
+person:00047,gnd,gnd:133724530,,,,https://d-nb.info/gnd/133724530,review,multi_gnd|multi_wd|multi_hls
+person:00047,wikidata,wd:Q1704182,,,,https://www.wikidata.org/wiki/Q1704182,review,multi_gnd|multi_wd|multi_hls
+person:00047,wikidata,wd:Q1505645,,,,https://www.wikidata.org/wiki/Q1505645,review,multi_gnd|multi_wd|multi_hls
+person:00048,hbls,hbls:hbls:5:1982,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=200,review,multi_gnd|multi_wd|multi_hls
+person:00048,hls,hls:004400,Alois Müller,1821,1889,https://hls-dhs-dss.ch/de/articles/004400/2007-11-29/,review,multi_gnd|multi_wd|multi_hls
+person:00048,hls,hls:030543,Alois Müller,1821,1889,https://hls-dhs-dss.ch/de/articles/030543/2008-01-08/,review,multi_gnd|multi_wd|multi_hls
+person:00048,gnd,gnd:1080837701,,,,https://d-nb.info/gnd/1080837701,review,multi_gnd|multi_wd|multi_hls
+person:00048,gnd,gnd:1054162387,,,,https://d-nb.info/gnd/1054162387,review,multi_gnd|multi_wd|multi_hls
+person:00048,wikidata,wd:Q60334373,,,,https://www.wikidata.org/wiki/Q60334373,review,multi_gnd|multi_wd|multi_hls
+person:00048,wikidata,wd:Q99305206,,,,https://www.wikidata.org/wiki/Q99305206,review,multi_gnd|multi_wd|multi_hls
+person:00049,hbls,hbls:hbls:5:2011,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_05.pdf#page=201,review,multi_gnd|multi_wd|multi_hls
+person:00049,hls,hls:029493,Hans Müller,1868,1953,https://hls-dhs-dss.ch/de/articles/029493/2009-02-02/,review,multi_gnd|multi_wd|multi_hls
+person:00049,hls,hls:029519,Johann Paul Müller,1868,1953,https://hls-dhs-dss.ch/de/articles/029519/2008-02-20/,review,multi_gnd|multi_wd|multi_hls
+person:00049,gnd,gnd:1080839348,,,,https://d-nb.info/gnd/1080839348,review,multi_gnd|multi_wd|multi_hls
+person:00049,gnd,gnd:1080837809,,,,https://d-nb.info/gnd/1080837809,review,multi_gnd|multi_wd|multi_hls
+person:00049,wikidata,wd:Q78067224,,,,https://www.wikidata.org/wiki/Q78067224,review,multi_gnd|multi_wd|multi_hls
+person:00049,wikidata,wd:Q15965122,,,,https://www.wikidata.org/wiki/Q15965122,review,multi_gnd|multi_wd|multi_hls
+person:00050,hbls,hbls:hbls:6:776,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=183,review,multi_gnd|multi_wd|multi_hls
+person:00050,hls,hls:026144,Johann Scheuchzer,1738,1815,https://hls-dhs-dss.ch/de/articles/026144/2011-07-26/,review,multi_gnd|multi_wd|multi_hls
+person:00050,hls,hls:044671,Johann Jakob Scheuchzer,1738,1815,https://hls-dhs-dss.ch/de/articles/044671/2011-07-26/,review,multi_gnd|multi_wd|multi_hls
+person:00050,gnd,gnd:1045595756,,,,https://d-nb.info/gnd/1045595756,review,multi_gnd|multi_wd|multi_hls
+person:00050,gnd,gnd:1069601934,,,,https://d-nb.info/gnd/1069601934,review,multi_gnd|multi_wd|multi_hls
+person:00050,wikidata,wd:Q58638081,,,,https://www.wikidata.org/wiki/Q58638081,review,multi_gnd|multi_wd|multi_hls
+person:00050,wikidata,wd:Q21607893,,,,https://www.wikidata.org/wiki/Q21607893,review,multi_gnd|multi_wd|multi_hls
+person:00051,hbls,hbls:hbls:6:1101,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=219,review,multi_gnd|multi_wd|multi_hls
+person:00051,hls,hls:003589,Johann Schmid,1850,1931,https://hls-dhs-dss.ch/de/articles/003589/2011-08-16/,review,multi_gnd|multi_wd|multi_hls
+person:00051,hls,hls:031840,Johann Friedrich Schmid,1850,1931,https://hls-dhs-dss.ch/de/articles/031840/2012-11-20/,review,multi_gnd|multi_wd|multi_hls
+person:00051,gnd,gnd:105239681X,,,,https://d-nb.info/gnd/105239681X,review,multi_gnd|multi_wd|multi_hls
+person:00051,gnd,gnd:1069168270,,,,https://d-nb.info/gnd/1069168270,review,multi_gnd|multi_wd|multi_hls
+person:00051,wikidata,wd:Q1577465,,,,https://www.wikidata.org/wiki/Q1577465,review,multi_gnd|multi_wd|multi_hls
+person:00051,wikidata,wd:Q84477787,,,,https://www.wikidata.org/wiki/Q84477787,review,multi_gnd|multi_wd|multi_hls
+person:00052,hbls,hbls:hbls:6:3808,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=628,review,multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00052,hls,hls:012337,Johann Georg Sulzer,1720,1779,https://hls-dhs-dss.ch/de/articles/012337/2012-08-17/,review,multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00052,hls,hls:014658,Johann Caspar Sulzer,1720,1779,https://hls-dhs-dss.ch/de/articles/014658/2011-06-27/,review,multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00052,gnd,gnd:11879941X,,,,https://d-nb.info/gnd/11879941X,review,multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00052,gnd,gnd:117374199,,,,https://d-nb.info/gnd/117374199,review,multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00052,wikidata,wd:Q116036,,,,https://www.wikidata.org/wiki/Q116036,review,multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00052,wikidata,wd:Q55126702,,,,https://www.wikidata.org/wiki/Q55126702,review,multi_gnd|multi_wd|multi_hls|name_disagreement
+person:00053,hbls,hbls:hbls:6:3946,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=641,review,multi_gnd|multi_wd|multi_hls
+person:00053,hls,hls:005752,Johann Heinrich Suter,1798,1864,https://hls-dhs-dss.ch/de/articles/005752/2013-12-03/,review,multi_gnd|multi_wd|multi_hls
+person:00053,hls,hls:015094,Johann Ulrich Sutter,1798,1864,https://hls-dhs-dss.ch/de/articles/015094/2012-07-25/,review,multi_gnd|multi_wd|multi_hls
+person:00053,gnd,gnd:1017073961,,,,https://d-nb.info/gnd/1017073961,review,multi_gnd|multi_wd|multi_hls
+person:00053,gnd,gnd:1053395884,,,,https://d-nb.info/gnd/1053395884,review,multi_gnd|multi_wd|multi_hls
+person:00053,wikidata,wd:Q92257041,,,,https://www.wikidata.org/wiki/Q92257041,review,multi_gnd|multi_wd|multi_hls
+person:00053,wikidata,wd:Q59287169,,,,https://www.wikidata.org/wiki/Q59287169,review,multi_gnd|multi_wd|multi_hls
+person:00054,hbls,hbls:hbls:7:2086,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_07.pdf#page=471,review,multi_gnd|multi_wd|multi_hls
+person:00054,hls,hls:005722,Karl von Weber,1879,1964,https://hls-dhs-dss.ch/de/articles/005722/2012-11-16/,review,multi_gnd|multi_wd|multi_hls
+person:00054,hls,hls:041623,Karl Weber,1879,1964,https://hls-dhs-dss.ch/de/articles/041623/2012-08-02/,review,multi_gnd|multi_wd|multi_hls
+person:00054,gnd,gnd:1053582080,,,,https://d-nb.info/gnd/1053582080,review,multi_gnd|multi_wd|multi_hls
+person:00054,gnd,gnd:132781379,,,,https://d-nb.info/gnd/132781379,review,multi_gnd|multi_wd|multi_hls
+person:00054,wikidata,wd:Q63323749,,,,https://www.wikidata.org/wiki/Q63323749,review,multi_gnd|multi_wd|multi_hls
+person:00054,wikidata,wd:Q15450840,,,,https://www.wikidata.org/wiki/Q15450840,review,multi_gnd|multi_wd|multi_hls
+person:00055,hbls,hbls:hbls:7:2818,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_07.pdf#page=615,review,multi_gnd|multi_wd|multi_hls
+person:00055,hls,hls:018210,Hans Ulrich Wolf,1559,1624,https://hls-dhs-dss.ch/de/articles/018210/2021-08-02/,review,multi_gnd|multi_wd|multi_hls
+person:00055,hls,hls:048925,Johannes Wolf,1559,1624,https://hls-dhs-dss.ch/de/articles/048925/2013-11-20/,review,multi_gnd|multi_wd|multi_hls
+person:00055,gnd,gnd:103752361X,,,,https://d-nb.info/gnd/103752361X,review,multi_gnd|multi_wd|multi_hls
+person:00055,gnd,gnd:1075816289,,,,https://d-nb.info/gnd/1075816289,review,multi_gnd|multi_wd|multi_hls
+person:00055,wikidata,wd:Q59391200,,,,https://www.wikidata.org/wiki/Q59391200,review,multi_gnd|multi_wd|multi_hls
+person:00055,wikidata,wd:Q58212867,,,,https://www.wikidata.org/wiki/Q58212867,review,multi_gnd|multi_wd|multi_hls
 person:00056,hbls,hbls:hbls:6:2964,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=544,review,multi_hbls|birth_spread
 person:00056,hbls,hbls:hbls:6:2975,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=545,review,multi_hbls|birth_spread
 person:00056,hbls,hbls:hbls:6:2993,,,,https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz/HBLS_band_06.pdf#page=546,review,multi_hbls|birth_spread

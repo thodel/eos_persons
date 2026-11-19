@@ -71,7 +71,7 @@ Figures of the current build (street corpus 0.3.0): 238,957 person mentions in
 75,447 documents → 152,250 resolved names → 137,612 persons after the name-based
 dedupe passes → **127,132 persons** after `dedupe_spelling.py`;
 309 carry an HLS link, to 253 biographies (1,025 confident links before dedupe,
-from 1,709 candidates), 209 of them with parents or spouses read from the article
+from 1,709 candidates), 208 of them with parents or spouses read from the article
 text; 3,694 geolocated dossiers; 14,917 persons with movement between
 ≥2 properties; 3,488 cross-corpus identities (326 attested in the register).
 The HLS and identity figures are those of the run with the private HLS export
@@ -208,8 +208,8 @@ Three things the first run with the article texts brought up, and what
   export's two dates lie less than 15 years apart.
 
 With the texts at hand `extract_genealogy.py` and `extract_spouses.py` read
-parents and spouses from the articles (203 fathers, 98 mothers, 131 spouses for
-209 persons) and `link_hls_families.py` links the family articles afresh (403
+parents and spouses from the articles (203 fathers, 98 mothers, 174 spouses for
+208 persons) and `link_hls_families.py` links the family articles afresh (403
 surname families).
 
 **Without the export** the link stage runs from public data:

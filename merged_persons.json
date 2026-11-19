@@ -302,8 +302,8 @@
   "cluster_id": "gnd:1074071344",
   "status": "review",
   "conflicts": [
-   "multi_gnd",
    "multi_hbls",
+   "multi_gnd",
    "birth_spread"
   ],
   "auto_resolved": [],
@@ -4621,10 +4621,10 @@
   "cluster_id": "gnd:104241330",
   "status": "review",
   "conflicts": [
-   "multi_gnd",
-   "multi_hls",
-   "multi_wd",
    "multi_hbls",
+   "multi_gnd",
+   "multi_wd",
+   "multi_hls",
    "name_disagreement"
   ],
   "auto_resolved": [],
@@ -5328,10 +5328,10 @@
   "cluster_id": "gnd:1020554177",
   "status": "review",
   "conflicts": [
+   "multi_hbls",
    "multi_gnd",
-   "multi_hls",
    "multi_wd",
-   "multi_hbls"
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -5956,8 +5956,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -6077,8 +6077,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -6198,8 +6198,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -6418,8 +6418,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -6520,8 +6520,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -6634,8 +6634,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -6740,8 +6740,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -6842,8 +6842,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -6961,8 +6961,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -7086,8 +7086,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
    "multi_wd",
+   "multi_hls",
    "name_disagreement"
   ],
   "auto_resolved": [],
@@ -7320,8 +7320,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -7426,8 +7426,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -7545,8 +7545,8 @@
   "status": "review",
   "conflicts": [
    "multi_gnd",
-   "multi_hls",
-   "multi_wd"
+   "multi_wd",
+   "multi_hls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12895,8 +12895,7 @@
    "Sohn"
   ],
   "kin": [
-   "f",
-   "sp"
+   "f"
   ],
   "dossiers": [
    "HGB_1_063_103",
@@ -15051,7 +15050,8 @@
   },
   "family": [],
   "kin": [
-   "f"
+   "f",
+   "sp"
   ],
   "dossiers": [
    "HGB_1_010_119",
@@ -140973,7 +140973,8 @@
   },
   "family": [],
   "kin": [
-   "f"
+   "f",
+   "sp"
   ],
   "dossiers": [
    "HGB_1_058_017",
@@ -141900,9 +141901,7 @@
    ". hechten",
    "arzine"
   ],
-  "kin": [
-   "sp"
-  ],
+  "kin": [],
   "dossiers": [
    "HGB_1_058_157",
    "HGB_1_024_053",
@@ -144389,8 +144388,7 @@
   "family": [],
   "kin": [
    "f",
-   "m",
-   "sp"
+   "m"
   ],
   "dossiers": [
    "HGB_1_066_035"
@@ -168977,8 +168975,7 @@
    "Gebrüdere"
   ],
   "kin": [
-   "f",
-   "sp"
+   "f"
   ],
   "dossiers": [
    "HGB_1_091_028",
