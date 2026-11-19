@@ -30,6 +30,8 @@ import unicodedata
 import collections
 from difflib import SequenceMatcher
 
+from link_hls import life_envelope, fits_life
+
 PERSONS = "persons_resolved.json"
 MAXLIFE = 80
 DEAD_GRACE = 15        # a new identity starting >this many yr after a death = different person
@@ -249,6 +251,7 @@ def main():
     gy1 = [m["y1"] for m in meta]
     gdead = [m["dead"] for m in meta]
     glk = [m["lk"] for m in meta]
+    genv = [life_envelope(p) for p in persons]    # known life of an HLS-linked person
 
     def find(x):
         while parent[x] != x:
@@ -277,7 +280,11 @@ def main():
             dead = min([d for d in (gdead[ra], gdead[rb]) if d is not None], default=None)
             if dead is not None and lo > dead + DEAD_GRACE:
                 return
+            # nothing joins an HLS-linked person from outside that person's life
+            if not fits_life(genv[ra] or genv[rb], lo, hi, dead):
+                return
         parent[ra] = rb
+        genv[rb] = genv[ra] or genv[rb]
         gy0[rb] = min(y0s) if y0s else gy1[rb]
         gy1[rb] = max(y1s) if y1s else gy1[rb]
         gdead[rb] = min([d for d in (gdead[ra], gdead[rb]) if d is not None], default=None)

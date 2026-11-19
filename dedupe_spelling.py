@@ -31,7 +31,8 @@ pass of the index observes:
   • the deceased constraint — nobody in the group is first mentioned more than
     15 years after the group's earliest "deceased" mention;
   • confirmed identities — two persons carrying different HLS/Wikidata links
-    never merge.
+    never merge, and nothing joins an HLS-linked person from outside that
+    person's known life (link_hls.fits_life).
 
 Pairs are applied strongest first (both sources, then more BLI owners), so when
 a chain of pairwise merges would break a guard, the best-supported links win.
@@ -55,6 +56,7 @@ import sys
 import tempfile
 
 from dedupe_corpus import link_key, merge_cluster
+from link_hls import life_envelope, fits_life
 
 csv.field_size_limit(10 ** 8)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -106,6 +108,7 @@ def cluster(persons, pairs):
     start_max = list(y0)                       # latest first mention in the group
     dead = [p.get("dead_year") for p in persons]
     lk = [link_key(p) for p in persons]
+    env = [life_envelope(p) for p in persons]
     refused = collections.Counter()
 
     def find(x):
@@ -133,7 +136,11 @@ def cluster(persons, pairs):
         if d and latest > d + DEAD_GRACE:
             refused["first mentioned long after a death"] += 1
             continue
+        if not fits_life(env[ra] or env[rb], lo, hi, d):
+            refused["outside the known life of an HLS-linked person"] += 1
+            continue
         parent[ra] = rb
+        env[rb] = env[ra] or env[rb]
         y0[rb], y1[rb] = lo, hi
         start_max[rb] = latest
         dead[rb] = d

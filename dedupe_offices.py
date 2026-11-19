@@ -26,6 +26,8 @@ from difflib import SequenceMatcher
 from dedupe_corpus import (koelner, given_seq, surname_raw, link_key,
                            merge_cluster, SequenceMatcher as _sm)
 
+from link_hls import life_envelope, fits_life
+
 PERSONS = "persons_resolved.json"
 MAXLIFE = 80
 
@@ -83,7 +85,8 @@ def main():
 
     # union-find tracking the merged span and the confirmed-identity key
     grp = {i: {"y0": (y(i) or [None])[0], "y1": (y(i) or [None, None])[1],
-               "lk": link_key(persons[i])} for i in members_all}
+               "lk": link_key(persons[i]), "env": life_envelope(persons[i]),
+               "dead": persons[i].get("dead_year")} for i in members_all}
 
     def try_union(a, b):
         ra, rb = find(a), find(b)
@@ -104,8 +107,14 @@ def main():
         sa, sb = surname_raw(persons[a]["n"]), surname_raw(persons[b]["n"])
         if sa != sb and SequenceMatcher(None, sa, sb).ratio() < 0.6:
             return
+        # nothing joins an HLS-linked person from outside that person's life
+        env = grp[ra]["env"] or grp[rb]["env"]
+        dead = min((d for d in (grp[ra]["dead"], grp[rb]["dead"]) if d), default=None)
+        if not fits_life(env, lo, hi, dead):
+            return
         parent[ra] = rb
-        grp[rb] = {"y0": lo, "y1": hi, "lk": grp[ra]["lk"] or grp[rb]["lk"]}
+        grp[rb] = {"y0": lo, "y1": hi, "lk": grp[ra]["lk"] or grp[rb]["lk"],
+                   "env": env, "dead": dead}
 
     for members in blocks.values():
         for k in range(1, len(members)):

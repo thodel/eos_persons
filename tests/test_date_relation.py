@@ -12,7 +12,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from link_hls import date_relation     # noqa: E402
+from link_hls import date_relation, life_envelope, fits_life     # noqa: E402
 import dedupe_persons as DP            # noqa: E402
 
 B, D = 1448, 1521
@@ -29,6 +29,8 @@ B, D = 1448, 1521
     (1530, 1534, None, "postmortem"),    # first mention shortly after death
     (1540, 1560, 1540, "postmortem"),    # first mention later, as deceased
     (1540, 1560, None, None),            # first mention later, as living
+    (1470, 1520, 1482, None),            # called deceased 39 years before the death
+    (1470, 1525, 1518, "overlap"),       # called deceased shortly before it: tolerated
 ])
 def test_the_whole_mention_span_has_to_fit_the_life(m0, m1, dead, expected):
     assert date_relation(m0, m1, dead, B, D)[0] == expected
@@ -72,3 +74,35 @@ def test_envelope_merges_entries_inside_it_only():
     assert (1470, 1560) in spans
     assert all(hi - lo <= 90 for lo, hi in spans)
     assert len(clusters) == 3
+
+
+# ── the guard every later dedupe pass asks ───────────────────────────────────
+
+def test_life_envelope_and_fit():
+    env = life_envelope({"wd": {"b": 1680, "d": 1762}})
+    assert env == (1670, 1822, 1762)
+    assert fits_life(env, 1700, 1760)
+    assert not fits_life(env, 1624, 1699)            # first mention 56 years before birth
+    assert not fits_life(env, 1700, 1830)            # beyond the post-mortem window
+    assert not fits_life(env, 1700, 1760, 1740)      # called deceased 22 years too early
+    assert fits_life(env, 1700, 1780, 1765)
+    assert life_envelope({"n": "nobody"}) is None
+    assert fits_life(None, 1400, 1700)               # no known life: nothing to check
+    assert life_envelope({"wd": {"d": 1530}}) == (1435, 1590, 1530)
+    assert life_envelope({"wd": {"b": 1492}}) == (1482, 1642, None)
+
+
+def test_no_dedupe_pass_adds_namesakes_from_outside_a_known_life():
+    import dedupe_spelling as DS
+    faesch = {"n": "Hanns Jacob Faesch", "v": [], "c": 5, "y": [1690, 1699], "dead_year": None,
+              "dos": [["D1", "x"]], "hls": {"id": "1"}, "wd": {"qid": "Q1", "b": 1680, "d": 1762}}
+    older = {"n": "Hans Jacob Fäsch", "v": [], "c": 9, "y": [1624, 1675], "dead_year": 1675,
+             "dos": [["D1", "y"]]}
+    row = {"_src": {"bli"}, "n_bli_actors": "1"}
+    sets, refused = DS.cluster([faesch, older], [(0, 1, row)])
+    assert not sets
+    assert refused["outside the known life of an HLS-linked person"] == 1
+    # a namesake inside the life does join
+    older["y"], older["dead_year"] = [1695, 1720], None
+    sets, _ = DS.cluster([faesch, older], [(0, 1, row)])
+    assert [sorted(s) for s in sets] == [[0, 1]]

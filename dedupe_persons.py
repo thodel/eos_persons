@@ -24,6 +24,8 @@ import unicodedata
 import collections
 from difflib import SequenceMatcher
 
+from link_hls import life_envelope, fits_life
+
 PERSONS = "persons_resolved.json"
 MAXLIFE = 85          # max span (yr) of one merged identity
 POSTMORTEM = 60       # mentions up to this many yr after death still count
@@ -161,11 +163,7 @@ def cluster_group(members):
 
     # Wikidata life envelope (birth..death + postmortem) pins the confirmed
     # person; mentions inside it merge even across a long span.
-    env = None
-    if b or d:
-        lo = (b - 10) if b else (d - 95)
-        hi = (d if d else b + 90) + POSTMORTEM
-        env = (lo, hi)
+    env = life_envelope({"wd": wd})
 
     clusters = []
     for bk in buckets:
@@ -178,7 +176,7 @@ def cluster_group(members):
             # envelope also holds mentions of a namesake, and merging on overlap
             # chained such entries into persons of 150 years and more
             inside = [p for p in items if p.get("y")
-                      and p["y"][0] >= env[0] and p["y"][1] <= env[1]]
+                      and fits_life(env, p["y"][0], p["y"][1], p.get("dead_year"))]
             outside = [p for p in items if p not in inside]
             if inside:
                 clusters.append(inside)

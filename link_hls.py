@@ -224,6 +224,39 @@ def load_hls(path, era_lo=1380, era_hi=1720):
 
 BEFORE_BIRTH = 5      # mentions this long before a known birth are tolerated
 ALIVE_AFTER_DEATH = 15  # … and mentions as living this long after a known death
+DEAD_BEFORE_DEATH = 5   # … and a "deceased" this long before a known death
+POSTMORTEM = 60         # post-mortem references reach this far
+
+
+def life_envelope(p):
+    """(lo, hi, death) for a person carrying Wikidata life dates, else None.
+
+    The years in which mentions of that person can lie: birth − 10 (death − 95
+    if the birth is unknown) to death + POSTMORTEM (birth + 90 + POSTMORTEM).
+    """
+    wd = p.get("wd") or {}
+    b, d = wd.get("b"), wd.get("d")
+    if not (b or d):
+        return None
+    return ((b - 10) if b else (d - 95), (d if d else b + 90) + POSTMORTEM, d)
+
+
+def fits_life(env, y0, y1, dead_year=None):
+    """Can mentions y0..y1, first called deceased in `dead_year`, belong to the
+    life `env` (from life_envelope)? True where nothing is known.
+
+    Every dedupe pass asks this before it merges into an HLS-linked person:
+    without it a later pass adds namesakes from outside the life, and the
+    biography ends up on a person first mentioned 56 years before the birth.
+    """
+    if env is None or y0 is None or y1 is None:
+        return True
+    lo, hi, d = env
+    if y0 < lo or y1 > hi:
+        return False
+    if d and dead_year and dead_year < d - DEAD_BEFORE_DEATH:
+        return False
+    return True
 
 
 def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3,
@@ -248,7 +281,9 @@ def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3,
         references are common in a property register);
       • if the cluster never calls the person deceased, its last mention is at
         most `alive_after` years after a known death (not after birth + 90
-        where the death is unknown).
+        where the death is unknown);
+      • the cluster does not call the person deceased more than
+        DEAD_BEFORE_DEATH years before a known death.
     """
     if m0 is None or m1 is None:
         return (None, None)
@@ -267,6 +302,9 @@ def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3,
         return (None, None)
     # never called deceased, yet mentioned long after the death
     if dead_year is None and m1 > (death + alive_after if death else d):
+        return (None, None)
+    # called deceased well before the known death → an older namesake died
+    if death and dead_year and dead_year < death - DEAD_BEFORE_DEATH:
         return (None, None)
     # life span and mention span intersect
     if m0 <= d + tol:
