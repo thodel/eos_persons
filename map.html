@@ -89,6 +89,8 @@
     .legend-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
     .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(0,0,0,.2); }
   </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Code+Pro:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/adressbuch.css">
 </head>
 <body>
 
@@ -112,6 +114,7 @@
     <a class="page-tab" href="hbls.html">HBLS</a>
     <a class="page-tab" href="identitaeten.html">Identitäten</a>
     <a class="page-tab" href="jahrrechnungen.html">Jahrrechnungen</a>
+    <a class="page-tab vs-link" href="https://thodel.github.io/vernetzte-schweiz/">Vernetzte Schweiz ↗</a>
   </nav>
 </div>
 
@@ -385,7 +388,7 @@ fetch('dossiers_geo.json')
     const want = new URLSearchParams(location.search).get('dossier') || decodeURIComponent(location.hash.slice(1));
     const f = want && allFeatures.find(x => x.id === want);
     if (f && f.lat && f.lon) {
-      map.setView([f.lat, f.lon], 19);
+      map.setView([f.lat, f.lon], 18);
       showDetail(f);
     }
   });

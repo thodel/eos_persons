@@ -1,0 +1,30 @@
+/* Stil der Adressbuch-Seiten (thodel/adressbuecher-*, Vernetzte Schweiz) für alle Seiten von eos_persons.
+   Wird nach dem <style>-Block jeder Seite geladen und überschreibt Farben, Schrift und Kopfleiste.
+   Die Kopfleiste behält ihre Höhe (56 px), weil mehrere Seiten ihre Höhe davon abziehen. */
+:root {
+  --bg: #f6f5f1; --surface: #ffffff; --paper: #ffffff; --border: #d9d7cf; --line: #d9d7cf;
+  --accent: #7a2e2e; --accent2: #9a4a44; --accent-soft: #f1e3e1;
+  --text: #1d2129; --fg: #1d2129; --muted: #5c6370;
+  --tag-bg: #f1e3e1; --tag-border: #e2c8c4;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-data: "Source Code Pro", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+body { font-family: var(--font-body) !important; background: var(--bg); color: var(--text); }
+input, select, button, textarea { font-family: var(--font-body); }
+code, pre, .mono { font-family: var(--font-data); }
+a { color: var(--accent); }
+
+/* Kopfleiste wie die Städteleiste der Adressbücher: dunkel, aktuelle Seite als helle Pille */
+#site-header { background: var(--fg) !important; color: var(--bg) !important; font-family: var(--font-body); }
+#site-title { opacity: 1 !important; font-weight: 700; letter-spacing: -0.01em; font-size: 0.95rem !important; }
+#logos img { opacity: .85; }
+#page-nav { align-items: center; gap: 2px; }
+.page-tab { height: auto !important; padding: 3px 10px !important; margin: 0 1px; border-radius: 999px; border-bottom: 0 !important;
+  color: var(--bg) !important; opacity: .8; font-size: 0.85rem !important; font-weight: 600; }
+.page-tab:hover, .page-tab:focus-visible { opacity: 1; text-decoration: underline; }
+.page-tab.active { background: var(--bg); color: var(--fg) !important; opacity: 1; font-weight: 700; text-decoration: none; }
+.page-tab.vs-link { margin-left: 8px; font-weight: 400; opacity: .75; }
+
+h1, h2, h3, h4 { font-family: var(--font-body); letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
