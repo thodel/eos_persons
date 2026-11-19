@@ -158,15 +158,18 @@ def mini(tmp_path_factory):
                _person("Hans Gut", [1610, 1610], [DOS])]
     (d / "persons_resolved.json").write_text(json.dumps(persons), encoding="utf-8")
     out = {k: str(d / v) for k, v in [("out", "link.csv"), ("findings", "findings.csv"),
-                                      ("report", "report.md"), ("docxw", "docxw.csv")]}
+                                      ("report", "report.md"), ("docxw", "docxw.csv"),
+                                      ("candidates", "candidates.csv")]}
     L.main(["--bli", str(d / "bli"), "--persons", str(d / "persons_resolved.json"),
             "--mentions", str(d / "persons.csv"), "--documents", str(d / "documents.csv"),
             "--street", str(d / "no_street_index.json"),
             "--out", out["out"], "--findings", out["findings"],
-            "--report", out["report"], "--docxw", out["docxw"]])
+            "--report", out["report"], "--docxw", out["docxw"],
+            "--candidates", out["candidates"]])
     read = lambda p: list(csv.DictReader(open(p, encoding="utf-8")))
     return {"link": {r["actor_id"]: r for r in read(out["out"])},
             "findings": read(out["findings"]), "docxw": read(out["docxw"]),
+            "candidates": read(out["candidates"]), "dir": d,
             "report": Path(out["report"]).read_text(encoding="utf-8")}
 
 
@@ -208,3 +211,10 @@ def test_findings_name_both_kinds_of_disagreement(mini):
 def test_report_is_written(mini):
     assert "## Findings by type" in mini["report"]
     assert "eos_split_spelling_variants" in mini["report"]
+
+
+def test_spelling_pair_is_written_as_a_dedupe_candidate(mini):
+    assert len(mini["candidates"]) == 1
+    c = mini["candidates"][0]
+    assert {c["a_key"], c["b_key"]} == {"Peter Dürring#1596-1596", "Peter Thüring#1602-1602"}
+    assert c["sources"] == "bli" and c["bli_actors"] == "actor_0"

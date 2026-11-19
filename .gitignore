@@ -282,3 +282,8 @@ hgb_street_persons.json
 documents.csv
 # local copy of DHBern/basler-liegenschaften-interaktiv data (link_bli_hgb.py --fetch)
 .bli_cache/
+
+# spelling-variant pairs and the clusters they form (tied to one state of the index;
+# regenerable via link_bli_hgb.py / dedupe_spelling.py)
+dedupe_spelling_candidates.csv
+dedupe_spelling_clusters.csv

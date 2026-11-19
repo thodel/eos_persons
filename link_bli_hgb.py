@@ -47,6 +47,11 @@ Outputs
     bli_doc_crosswalk.csv    BLI document id → current corpus id (re-issued only)
     bli_hgb_findings.csv     one row per discrepancy, typed and scored
     bli_hgb_report.md        counts and examples per finding type
+    dedupe_spelling_candidates.csv
+                             pairs of city-wide persons that a BLI owner or a
+                             street-level person holds as one and whose names
+                             differ only in spelling — input of dedupe_spelling.py
+                             (gitignored: tied to one state of the index)
 
     python3 link_bli_hgb.py                       # sibling checkout or .bli_cache/
     python3 link_bli_hgb.py --bli /path/to/basler-liegenschaften-interaktiv
@@ -287,8 +292,9 @@ def name_relation(a, b):
     """How two person names relate, tolerant of HTR noise.
 
     spelling          same number of given names, each ≥0.75 similar after
-                      canonicalisation (Hanns=Hans=Johann), surnames phonetically
-                      equal, ≥0.6 similar or equal up to a genitive/dative ending
+                      canonicalisation (Hanns=Hans=Johann); surnames ≥0.6 similar,
+                      ≥0.5 similar and phonetically equal, or equal up to a
+                      genitive/dative ending
     bare_name         one side is a single token found in the other
     given_name_count  surnames agree, one side has a given name more
                       (Hans / Hans Heinrich — often two different men)
@@ -296,15 +302,19 @@ def name_relation(a, b):
     given_differs     surnames agree, given names do not
     different         nothing in common
     """
-    ta = [canon(t) for t in name_tokens(a)]
-    tb = [canon(t) for t in name_tokens(b)]
+    # dedupe_corpus.norm drops ß; spell it out so Großmann stays 'grossmann'
+    ta = [canon(t) for t in name_tokens(a.replace("ß", "ss"))]
+    tb = [canon(t) for t in name_tokens(b.replace("ß", "ss"))]
     if not ta or not tb:
         return "different"
     if len(ta) == 1 or len(tb) == 1:
         s, l = (ta, tb) if len(ta) == 1 else (tb, ta)
         return "bare_name" if any(_ratio(s[0], t) >= 0.75 for t in l) else "different"
     ga, gb, sa, sb = ta[:-1], tb[:-1], ta[-1], tb[-1]
-    sur_ok = (_ratio(sa, sb) >= 0.6 or koelner(sa) == koelner(sb)
+    # Kölner codes alone are too coarse (Großmann = Kronen = 4766): as in
+    # dedupe_corpus they only count together with similar raw surnames
+    sim = _ratio(sa, sb)
+    sur_ok = (sim >= 0.6 or (sim >= 0.5 and koelner(sa) == koelner(sb))
               or sa.rstrip("sn") == sb.rstrip("sn"))
     giv_same = len(ga) == len(gb) and all(_ratio(x, y) >= 0.75 for x, y in zip(ga, gb))
     if giv_same and sur_ok:
@@ -344,6 +354,8 @@ def main(argv=None):
     ap.add_argument("--findings", default=os.path.join(HERE, "bli_hgb_findings.csv"))
     ap.add_argument("--report", default=os.path.join(HERE, "bli_hgb_report.md"))
     ap.add_argument("--docxw", default=os.path.join(HERE, "bli_doc_crosswalk.csv"))
+    ap.add_argument("--candidates", default=os.path.join(HERE, "dedupe_spelling_candidates.csv"),
+                    help="spelling-variant pairs of city-wide persons, input of dedupe_spelling.py")
     args = ap.parse_args(argv)
 
     S = collections.OrderedDict()          # numbers for the report
@@ -549,6 +561,7 @@ def main(argv=None):
 
     n_act = collections.Counter()
     merge_pairs = collections.Counter()
+    pair_src = collections.defaultdict(lambda: {"bli": set(), "street": set(), "where": set()})
     for aid, L in link.items():
         if L["level"] != "doc":
             continue
@@ -593,7 +606,10 @@ def main(argv=None):
         n_act[kind] += 1
         if rel == "spelling":
             for i in idx[1:]:
-                merge_pairs[tuple(sorted((idx[0], i)))] += 1
+                pr = tuple(sorted((idx[0], i)))
+                merge_pairs[pr] += 1
+                pair_src[pr]["bli"].add(aid)
+                pair_src[pr]["where"].update(m["dossier"] for m in ms)
         finding(kind, side, sev, where(L), f"{aid} {L['a']['n']}", who,
                 f"owner documents {min(years)}–{max(years)}; BLI variants: "
                 + "; ".join(L["names"][:8]))
@@ -723,7 +739,10 @@ def main(argv=None):
             if rel == "spelling" and fits:
                 kind, sev = "eos_city_index_splits_a_street_person", 3
                 for x in idx[1:]:
-                    street_pairs.add(tuple(sorted((idx[0], x))))
+                    pr = tuple(sorted((idx[0], x)))
+                    street_pairs.add(pr)
+                    pair_src[pr]["street"].add(r["id"])
+                    pair_src[pr]["where"].add(r["street_id"])
             else:
                 kind, sev = "eos_street_and_city_index_disagree", 1
             n_n[kind] += 1
@@ -818,6 +837,19 @@ def main(argv=None):
     S["BLI-internal"] = dict(b)
 
     # ── 5. write ──
+    # Pairs are given by position in persons_resolved.json plus the person key,
+    # so dedupe_spelling.py can refuse a file that no longer fits the index.
+    with open(args.candidates, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["a_idx", "a_key", "b_idx", "b_key", "sources", "n_bli_actors",
+                    "bli_actors", "street_persons", "where"])
+        for (a_, b_), src in sorted(pair_src.items()):
+            w.writerow([a_, pkey(P[a_]), b_, pkey(P[b_]),
+                        "+".join(k for k in ("bli", "street") if src[k]),
+                        len(src["bli"]), "|".join(sorted(src["bli"], key=num)[:6]),
+                        "|".join(sorted(src["street"])[:6]),
+                        "|".join(sorted(src["where"])[:6])])
+
     cols = ["actor_id", "name", "n_variants", "dossiers", "dossier_source", "n_owner_docs",
             "link_level", "n_mentions", "shared_name_in_dossier", "n_persons", "persons",
             "n_street_persons", "street_persons", "bli_death_year", "bli_occ"]
@@ -855,6 +887,7 @@ def main(argv=None):
     print(f"→ {args.out}: {len(link)} named person actors "
           f"({lv['doc']} doc-level, {lv['dossier']} dossier-level, {lv['none']} unlinked)",
           file=sys.stderr)
+    print(f"→ {args.candidates}: {len(pair_src)} spelling-variant pairs", file=sys.stderr)
     print(f"→ {args.findings}: {len(F)} findings", file=sys.stderr)
     for k, c in kinds.most_common():
         print(f"    {c:6d}  {k}", file=sys.stderr)
