@@ -222,12 +222,33 @@ def load_hls(path, era_lo=1380, era_hi=1720):
 
 # ── Date plausibility ────────────────────────────────────────────────────────
 
-def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3):
+BEFORE_BIRTH = 5      # mentions this long before a known birth are tolerated
+ALIVE_AFTER_DEATH = 15  # … and mentions as living this long after a known death
+
+
+def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3,
+                  before=BEFORE_BIRTH, alive_after=ALIVE_AFTER_DEATH):
     """Classify the temporal relation between an HGB mention span [m0,m1]
-    (with optional HGB dead_year) and an HLS life span [birth,death].
+    (with optional HGB dead_year, the first year the person is called
+    deceased) and a life span [birth,death].
 
     Returns (relation, gap) or (None, _) if implausible.
       relation ∈ {"overlap", "postmortem"}.
+
+    The whole mention span has to fit the life, not merely touch it: an HGB
+    person is a cluster of mentions, and a cluster that begins before the birth
+    or runs on as living after the death holds an older or a younger namesake
+    as well. Linking it would hand the biography to all of them — and
+    dedupe_persons.py then merges everything that carries the link (Hans Müller
+    1417–1604 for a man who lived 1448–1521).
+
+      • first mention not more than `before` years before a known birth
+        (`tol` years before one estimated as death − 90);
+      • last mention within `grace` years after the death (post-mortem
+        references are common in a property register);
+      • if the cluster never calls the person deceased, its last mention is at
+        most `alive_after` years after a known death (not after birth + 90
+        where the death is unknown).
     """
     if m0 is None or m1 is None:
         return (None, None)
@@ -238,18 +259,20 @@ def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3):
     if b is None or d is None:
         return (None, None)
 
-    # mentioned entirely before plausible birth → not the same person
-    if m1 < b - tol:
+    # mentioned before birth → the cluster holds an older namesake
+    if m0 < b - (before if birth is not None else tol):
+        return (None, None)
+    # mentioned beyond the post-mortem window → it holds a younger one
+    if m1 > d + grace:
+        return (None, None)
+    # never called deceased, yet mentioned long after the death
+    if dead_year is None and m1 > (death + alive_after if death else d):
         return (None, None)
     # life span and mention span intersect
-    if m0 <= d + tol and m1 >= b - tol:
+    if m0 <= d + tol:
         return ("overlap", 0)
-    # mentions begin after death → post-mortem reference (allowed within grace)
-    if m0 > d:
-        gap = m0 - d
-        if gap <= grace:
-            return ("postmortem", gap)
-    return (None, None)
+    # mentions begin after death → post-mortem reference (within grace, see above)
+    return ("postmortem", m0 - d)
 
 
 # ── Matching ─────────────────────────────────────────────────────────────────

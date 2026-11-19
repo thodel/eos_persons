@@ -10,6 +10,7 @@ import re
 import json
 from collections import defaultdict
 from difflib import SequenceMatcher
+from functools import lru_cache
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 INPUT_CSV   = "persons.csv"
@@ -125,11 +126,72 @@ def token_sim(t1: str, t2: str) -> bool:
     return SequenceMatcher(None, t1, t2).ratio() >= 0.82
 
 
+@lru_cache(maxsize=None)
+def _expanded(name: str) -> tuple:
+    return tuple(expand(t) for t in clean_tokens(name))
+
+
 def tokens_subset(a: str, b: str) -> bool:
     """True if every expanded token of a has a fuzzy match in expanded tokens of b."""
-    ta = [expand(t) for t in clean_tokens(a)]
-    tb = [expand(t) for t in clean_tokens(b)]
+    ta, tb = _expanded(a), _expanded(b)
     return len(ta) >= 1 and all(any(token_sim(t, p) for p in tb) for t in ta)
+
+
+# ── Time: who can be one person ───────────────────────────────────────────────
+LIFESPAN = 80     # mentions of one person span at most this many years
+# A bare given name ("Elsin", "Ennelin") says little. Measured against the owner
+# actors of Basler Liegenschaften Interaktiv, which resolves such names through
+# husbands and heirs: two consecutive mentions of the same bare name in one
+# dossier are the same owner in 86 % of cases when 0–4 years apart, 65 % at
+# 10–14, 46 % at 15–19, 21 % at 30–34 and never from 50 years on. From 15 years
+# of silence on a new person is the better guess. Full names stay one owner
+# (97 % or more) up to 40 years of silence, so they only obey the lifespan.
+BARE_GAP = 15
+
+
+def time_runs(rows, cap=LIFESPAN, gap=None, year=lambda r: r["year"]):
+    """Cut rows (any order) into chronological runs that can be one person.
+
+    A new run starts when a mention lies more than `cap` years after the run's
+    first, or — if `gap` is given — `gap` or more years after the previous one.
+    Undated rows (year 0/None) form a run of their own.
+
+    This replaces fixed bins (year // 80), which tore a person apart at 1440,
+    1520, 1600 and 1680 and kept two namesakes 79 years apart together.
+    """
+    dated = sorted((r for r in rows if year(r)), key=year)
+    runs = [[r for r in rows if not year(r)]] if any(not year(r) for r in rows) else []
+    cur, start, prev = [], None, None
+    for r in dated:
+        y = year(r)
+        if cur and (y - start > cap or (gap is not None and y - prev >= gap)):
+            runs.append(cur)
+            cur = []
+        if not cur:
+            start = y
+        cur.append(r)
+        prev = y
+    if cur:
+        runs.append(cur)
+    return runs
+
+
+def death_split(rows, year=lambda r: r["year"], dead=lambda r: r["dead"]):
+    """Split a run where living mentions follow the first 'deceased' mention.
+
+    Returns [rows] or [early, late]: `late` holds the living mentions after the
+    earliest deceased one — a later bearer of the name; every deceased mention
+    stays with `early`. Each row lands in exactly one part.
+    """
+    dead_years = [year(r) for r in rows if dead(r) and year(r)]
+    if not dead_years:
+        return [rows]
+    d = min(dead_years)
+    late = [r for r in rows if not dead(r) and year(r) and year(r) > d]
+    if not late:
+        return [rows]
+    late_ids = {id(r) for r in late}
+    return [[r for r in rows if id(r) not in late_ids], late]
 
 
 # ── Union-Find ────────────────────────────────────────────────────────────────
@@ -161,9 +223,7 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
     for dossier, grp in df.groupby("dossierid"):
         # Build name → year-range map for this dossier
         name_years: dict[str, list[int]] = {}
-        for _, row in grp.iterrows():
-            nm = row.get("name")
-            yr = row.get("year")
+        for nm, yr in zip(grp["name"], grp["year"]):
             if pd.notna(nm) and pd.notna(yr):
                 name_years.setdefault(nm, []).append(int(yr))
 
@@ -177,24 +237,17 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
                 ay = name_years.get(a, [])
                 by = name_years.get(b, [])
                 all_y = ay + by
-                if all_y and max(all_y) - min(all_y) > 80:
+                if all_y and max(all_y) - min(all_y) > LIFESPAN:
                     continue
                 uf.union((dossier, a), (dossier, b))
 
-    # Step 2: collect per-dossier clusters
-    # Node is (dossierid, name, year_bin) so same name in the same dossier but
-    # >80 years apart becomes a different cluster automatically.
-    LIFESPAN = 80
-    dossier_clusters: dict[tuple, list[dict]] = defaultdict(list)
-    for _, row in df.iterrows():
-        yr = int(row["year"]) if pd.notna(row.get("year")) else 0
-        year_bin = yr // LIFESPAN
-        base_node = (row["dossierid"], row["name"])
-        # map the base UF node to the binned node so merged partial names
-        # still land in the correct bin
-        root = uf.find(base_node)
-        binned = (root, year_bin)
-        dossier_clusters[binned].append(row.to_dict())
+    # Step 2: collect the mentions of each merged name per dossier
+    by_root: dict[tuple, list[dict]] = defaultdict(list)
+    for r in df.to_dict("records"):
+        r["_year"] = int(r["year"]) if pd.notna(r.get("year")) else 0
+        v = r.get("is_deceased")
+        r["_dead"] = v == 1 or v == 1.0 or str(v) == "1.0"
+        by_root[uf.find((r["dossierid"], r["name"]))].append(r)
 
     # Step 3: pick canonical name per cluster (most tokens, fewest abbrevs)
     def pick_canonical(names: list[str]) -> str:
@@ -204,104 +257,51 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
             return (len(toks) - abbr, len(n))
         return max(names, key=score)
 
-    per_dossier: list[dict] = []
-    for root, rows in dossier_clusters.items():
-        names = list({r["name"] for r in rows})
+    def collect(rows, col, drop=()):
+        out = set()
+        for r in rows:
+            if isinstance(r.get(col), str):
+                for x in r[col].split("|"):
+                    x = x.strip()
+                    if x and x not in drop:
+                        out.add(x)
+        return sorted(out)
+
+    def summarise(root, rows):
+        names = sorted({r["name"] for r in rows})
         canon = pick_canonical(names)
-        occs = set()
-        for r in rows:
-            if isinstance(r.get("occupation_norm"), str):
-                for o in r["occupation_norm"].split("|"):
-                    o = o.strip()
-                    if o and o != "unk":
-                        occs.add(o)
-        titles = set()
-        for r in rows:
-            if isinstance(r.get("title"), str):
-                for t in r["title"].split("|"):
-                    t = t.strip()
-                    if t:
-                        titles.add(t)
-        fam = set()
-        for r in rows:
-            if isinstance(r.get("family_relation"), str):
-                for f in r["family_relation"].split("|"):
-                    f = f.strip()
-                    if f:
-                        fam.add(f)
-        locs = set()
-        for r in rows:
-            if isinstance(r.get("location"), str):
-                for l in r["location"].split("|"):
-                    l = l.strip()
-                    if l:
-                        locs.add(l)
-        orgs = set()
-        for r in rows:
-            if isinstance(r.get("org_affiliation"), str):
-                for o in r["org_affiliation"].split("|"):
-                    o = o.strip()
-                    if o:
-                        orgs.add(o)
-        years = [int(r["year"]) for r in rows if pd.notna(r.get("year"))]
-
-        def is_dead(r):
-            v = r.get("is_deceased")
-            return v == 1 or v == 1.0 or str(v) == "1.0"
-
-        dead_years = [int(r["year"]) for r in rows
-                      if pd.notna(r.get("year")) and is_dead(r)]
-        live_years = [int(r["year"]) for r in rows
-                      if pd.notna(r.get("year")) and not is_dead(r)]
-
-        # Earliest year a deceased marker appears = upper bound on death year.
-        # The person was already dead at (or before) this document.
-        dead_year = min(dead_years) if dead_years else None
-
-        per_dossier.append({
+        years = [r["_year"] for r in rows if r["_year"]]
+        dead_years = [r["_year"] for r in rows if r["_year"] and r["_dead"]]
+        return {
             "canonical": canon,
-            "variants": sorted(names),
-            "dossier": root[0],
+            "variants": names,
+            "dossier": root,              # (dossier id, merged name)
             "mentions": len(rows),
             "years": [min(years), max(years)] if years else [0, 0],
-            "occ": sorted(occs),   # norm only — occupation_text dropped
-            "title": sorted(titles),
-            "fam": sorted(fam),
-            "loc": sorted(locs),
-            "org": sorted(orgs),
-            "dead_year": dead_year,   # earliest year marked deceased (None if never)
-            "live_years": live_years, # years with live (non-deceased) mentions
+            "occ": collect(rows, "occupation_norm", drop=("unk",)),
+            "title": collect(rows, "title"),
+            "fam": collect(rows, "family_relation"),
+            "loc": collect(rows, "location"),
+            "org": collect(rows, "org_affiliation"),
+            # earliest year a deceased marker appears = upper bound on death year
+            "dead_year": min(dead_years) if dead_years else None,
+            "live_years": [r["_year"] for r in rows if r["_year"] and not r["_dead"]],
             "ckey": canonical_key(canon),
-        })
+        }
 
-    # Step 3b: split any per-dossier cluster where live mentions appear after
-    # the earliest deceased mention (those rows belong to a later generation).
-    split_dossier: list[dict] = []
-    for p in per_dossier:
-        if p["dead_year"] is None or not p["live_years"]:
-            split_dossier.append(p)
-            continue
-        late_live = [y for y in p["live_years"] if y > p["dead_year"]]
-        if not late_live:
-            split_dossier.append(p)
-            continue
-        # Build a "later person" entry from the late live mentions
-        # (keep all fields the same except years and dead_year)
-        early_live = [y for y in p["live_years"] if y <= p["dead_year"]]
-        p_early = dict(p)
-        p_early["live_years"] = early_live
-        all_early = (early_live or []) + [p["dead_year"]]
-        p_early["years"] = [min(all_early), max(all_early)]
-        split_dossier.append(p_early)
-
-        p_late = dict(p)
-        p_late["dead_year"] = None
-        p_late["live_years"] = late_live
-        p_late["years"] = [min(late_live), max(late_live)]
-        p_late["ckey"] = p["ckey"]   # same canonical key, will be re-grouped
-        split_dossier.append(p_late)
-
-    per_dossier = split_dossier
+    # Steps 2b/3b: cut each cluster into runs that can be one person — one
+    # lifespan; for a bare given name also no generation of silence — and split
+    # a run where living mentions follow the first deceased one. Every mention
+    # ends up in exactly one entry.
+    per_dossier: list[dict] = []
+    for root, rows in by_root.items():
+        canon = pick_canonical(sorted({r["name"] for r in rows}))
+        bare = len(canonical_key(canon).split()) < 2
+        for run in time_runs(rows, LIFESPAN, BARE_GAP if bare else None,
+                             year=lambda r: r["_year"]):
+            for part in death_split(run, year=lambda r: r["_year"],
+                                    dead=lambda r: r["_dead"]):
+                per_dossier.append(summarise(root, part))
 
     # Sort per_dossier chronologically so that deceased entries (which mark the
     # death year upper bound) are always processed AFTER earlier live entries.
@@ -377,7 +377,7 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
             "n": canon,
             "v": all_names,
             "c": mentions,
-            "d": len(dossiers),
+            "d": len({d[0] for d in dossiers}),   # distinct dossier ids
             "y": [min(all_years), max(all_years)] if all_years else [0, 0],
             "dead_year": dead_year_out,  # earliest year mentioned as deceased
             "occ": occs,
@@ -385,7 +385,7 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
             "fam": fams,
             "loc": locs,
             "org": orgs,
-            "dos": dossiers[:30],
+            "dos": dossiers,                      # every (dossier, name) pair
         })
 
     persons.sort(key=lambda p: -p["c"])

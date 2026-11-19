@@ -9,9 +9,10 @@ era. Within each such group we merge entries that
 
   • share the same canonical given-name sequence (Hans=Johann=Hanns, Jakob …),
     so father "Hans" and son "Johann Jakob" stay distinct, and
-  • fall within one lifespan (≤ MAXLIFE years; bounded by the Wikidata
-    birth/death envelope when known) — so same-name grandfather/grandson in
-    one article split into generations.
+  • fall within one lifespan (≤ MAXLIFE years; where Wikidata gives the life
+    dates, inside birth − 10 … death + 60 instead — link_hls.py only links
+    entries whose whole mention span fits that life) — so same-name
+    grandfather/grandson in one article split into generations.
 
 This implements the rule: a notable person (e.g. a Bürgermeister) that
 Wikidata records once for an epoch absorbs all same-name variants of that
@@ -163,18 +164,21 @@ def cluster_group(members):
     env = None
     if b or d:
         lo = (b - 10) if b else (d - 95)
-        hi = (d + POSTMORTEM) if d else (b + 90)
+        hi = (d if d else b + 90) + POSTMORTEM
         env = (lo, hi)
 
     clusters = []
     for bk in buckets:
         items = sorted(bk["items"], key=lambda x: (x.get("y") or [9999])[0])
         # if this bucket is the QID person's given name and we have an envelope,
-        # everything overlapping the lifespan is one identity (strict merge)
+        # everything inside the lifespan (plus post-mortem window) is one identity
         if env and given_match(bk["gs"], given_seq(next(
                 (p["hls"]["t"] for p in members if p.get("hls", {}).get("t")), ""))):
+            # inside, not merely overlapping: an entry that reaches beyond the
+            # envelope also holds mentions of a namesake, and merging on overlap
+            # chained such entries into persons of 150 years and more
             inside = [p for p in items if p.get("y")
-                      and p["y"][0] <= env[1] and p["y"][1] >= env[0]]
+                      and p["y"][0] >= env[0] and p["y"][1] <= env[1]]
             outside = [p for p in items if p not in inside]
             if inside:
                 clusters.append(inside)
