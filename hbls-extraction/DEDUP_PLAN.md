@@ -113,6 +113,18 @@ HGB members pointed at `name#year` keys that deduplication had since merged
 away and resolved to no record; now all 682 resolve, and the identities carry
 more dossiers (2,087 against 1,930).
 
+*After the life-span fixes (2026-11, second rebuild):* `link_hls.date_relation`
+now links an HGB cluster only if its whole mention span fits the life, and
+every dedupe pass keeps HLS-linked persons inside it (`link_hls.fits_life`).
+The HGB↔HLS candidates fall from 4,940 to 3,253 and the confident links from
+2,193 to 1,651, but what is linked holds: TRIM_HGB, which used to detach 201
+out-of-span HGB records from 148 clusters, finds 35 in 30. Edges unioned —
+7,003 frozen authority, 658 HGB↔HLS, 130 HBLS↔HGB, 533 HGB↔GND. 3,631 merged
+persons (3,449 merged / 182 review), 3,382 with a GND id, 525 attested in the
+HGB, 70 spanning all three corpora; every HGB member resolves to a record.
+`date_relation` is shared with `link_hbls_hgb.py`, so the HBLS↔HGB pass obeys
+the same rule (342 HBLS persons matched, 137 unambiguous).
+
 ### Stage 3 — Build identity clusters  *(done — `../build_identity_clusters.py`)*
 Model every accepted link as an edge in a graph whose nodes are
 `(corpus, local_id)` **plus the shared authority ids** (`gnd:<id>`, `wd:<qid>`),

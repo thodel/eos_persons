@@ -15,8 +15,12 @@ they are one:
           come from (DHBern/basler-liegenschaften-interaktiv, read-only)
   street  a person of the street-level index (build_hgb_street_persons.py):
           same canonical given names, phonetically equal surname, one street
+  dossier the index itself: both persons carry the very same full name variant
+          in one dossier in the same years — one of them got the variant in
+          another dossier, so the two are known to be called alike — and
+          neither is first mentioned after the other is called deceased
 
-link_bli_hgb.py writes every pair of city-wide persons that one of them unites
+link_bli_hgb.py writes every pair of city-wide persons that one of these unites
 and whose names stand in a pure spelling relation (link_bli_hgb.name_relation
 == "spelling": same number of given names, each ≥0.75 similar after
 canonicalisation, surnames phonetically equal or ≥0.6 similar) to
@@ -27,7 +31,8 @@ pass of the index observes:
   • the deceased constraint — nobody in the group is first mentioned more than
     15 years after the group's earliest "deceased" mention;
   • confirmed identities — two persons carrying different HLS/Wikidata links
-    never merge.
+    never merge, and nothing joins an HLS-linked person from outside that
+    person's known life (link_hls.fits_life).
 
 Pairs are applied strongest first (both sources, then more BLI owners), so when
 a chain of pairwise merges would break a guard, the best-supported links win.
@@ -35,7 +40,7 @@ a chain of pairwise merges would break a guard, the best-supported links win.
     python3 link_bli_hgb.py                # writes the candidates for the current index
     python3 dedupe_spelling.py             # dry run + dedupe_spelling_clusters.csv
     python3 dedupe_spelling.py --apply     # write persons_resolved.json
-    python3 dedupe_spelling.py --sources bli   # one source only
+    python3 dedupe_spelling.py --sources bli   # one source only (bli, street, dossier)
 
 The candidates are tied to one state of persons_resolved.json (positions plus
 person keys); a file that no longer fits is refused. After --apply, re-run
@@ -51,6 +56,7 @@ import sys
 import tempfile
 
 from dedupe_corpus import link_key, merge_cluster
+from link_hls import life_envelope, fits_life
 
 csv.field_size_limit(10 ** 8)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -85,7 +91,7 @@ def load_candidates(path, persons, sources):
 
 
 def strength(row):
-    """Order of application: both sources first, then the number of BLI owners."""
+    """Order of application: more sources first, then the number of BLI owners."""
     return (len(row["_src"]), int(row["n_bli_actors"] or 0))
 
 
@@ -102,6 +108,7 @@ def cluster(persons, pairs):
     start_max = list(y0)                       # latest first mention in the group
     dead = [p.get("dead_year") for p in persons]
     lk = [link_key(p) for p in persons]
+    env = [life_envelope(p) for p in persons]
     refused = collections.Counter()
 
     def find(x):
@@ -129,7 +136,11 @@ def cluster(persons, pairs):
         if d and latest > d + DEAD_GRACE:
             refused["first mentioned long after a death"] += 1
             continue
+        if not fits_life(env[ra] or env[rb], lo, hi, d):
+            refused["outside the known life of an HLS-linked person"] += 1
+            continue
         parent[ra] = rb
+        env[rb] = env[ra] or env[rb]
         y0[rb], y1[rb] = lo, hi
         start_max[rb] = latest
         dead[rb] = d
@@ -147,12 +158,12 @@ def main(argv=None):
     ap.add_argument("--persons", default=PERSONS)
     ap.add_argument("--candidates", default=CANDIDATES)
     ap.add_argument("--csv", default=CLUSTERS)
-    ap.add_argument("--sources", default="bli,street",
-                    help="which evidence to apply: bli, street or both (default)")
+    ap.add_argument("--sources", default="bli,street,dossier",
+                    help="which evidence to apply: bli, street, dossier (default: all)")
     args = ap.parse_args(argv)
     sources = {s.strip() for s in args.sources.split(",") if s.strip()}
-    if not sources <= {"bli", "street"}:
-        sys.exit("--sources takes bli and/or street")
+    if not sources <= {"bli", "street", "dossier"}:
+        sys.exit("--sources takes bli, street and/or dossier")
     if not os.path.exists(args.candidates):
         sys.exit(f"{args.candidates} not found — run link_bli_hgb.py first")
 

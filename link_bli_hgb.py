@@ -48,10 +48,12 @@ Outputs
     bli_hgb_findings.csv     one row per discrepancy, typed and scored
     bli_hgb_report.md        counts and examples per finding type
     dedupe_spelling_candidates.csv
-                             pairs of city-wide persons that a BLI owner or a
-                             street-level person holds as one and whose names
-                             differ only in spelling — input of dedupe_spelling.py
-                             (gitignored: tied to one state of the index)
+                             pairs of city-wide persons whose names differ only
+                             in spelling and that a BLI owner or a street-level
+                             person holds as one, or that carry the same name
+                             variant in one dossier at the same time — input of
+                             dedupe_spelling.py (gitignored: tied to one state
+                             of the index)
 
     python3 link_bli_hgb.py                       # sibling checkout or .bli_cache/
     python3 link_bli_hgb.py --bli /path/to/basler-liegenschaften-interaktiv
@@ -561,7 +563,8 @@ def main(argv=None):
 
     n_act = collections.Counter()
     merge_pairs = collections.Counter()
-    pair_src = collections.defaultdict(lambda: {"bli": set(), "street": set(), "where": set()})
+    pair_src = collections.defaultdict(lambda: {"bli": set(), "street": set(),
+                                                "dossier": set(), "where": set()})
     for aid, L in link.items():
         if L["level"] != "doc":
             continue
@@ -780,31 +783,67 @@ def main(argv=None):
     trunc = [p for p in persons if p.get("d", 0) > len({e[0] if isinstance(e, list) else e
                                                          for e in p.get("dos", [])})]
     S["eos: persons whose dossier list is shorter than their dossier count"] = len(trunc)
-    n_long = 0
+    n_long = n_long_ok = 0
     for i, p in enumerate(persons):
         y = p.get("y") or [0, 0]
         if y[1] - y[0] <= LIFESPAN:
             continue
-        n_long += 1
         acts = {x for dd in per_person.get(i, {}).values() for x in dd}
         hls = p.get("hls") or {}
         wd = p.get("wd") or {}
-        finding("eos_person_spans_more_than_a_lifespan", "eos", 3, "", 
+        # a known life plus the post-mortem window may exceed 80 years
+        # (dedupe_persons: birth − 10 … death + 60); anything beyond is an error
+        b_, d_ = wd.get("b"), wd.get("d")
+        inside = bool(b_ or d_) and y[0] >= ((b_ - 10) if b_ else (d_ - 95)) \
+            and y[1] <= (d_ if d_ else b_ + 90) + 60
+        if inside:
+            n_long_ok += 1
+        else:
+            n_long += 1
+        finding("eos_long_span_within_a_known_life" if inside
+                else "eos_person_spans_more_than_a_lifespan", "eos", 1 if inside else 3, "",
                 f"{len(acts)} BLI owner actors in {len(per_person.get(i, {}))} dossiers",
                 pkey(p),
                 f"{y[1] - y[0]} years, {p.get('c')} mentions; HLS: {hls.get('t', '–')} "
                 f"({wd.get('b', '?')}–{wd.get('d', '?')})")
     S["eos: persons whose mentions span more than 80 years"] = n_long
+    S["  besides those inside a known life incl. post-mortem window"] = n_long_ok
+    for dd, keys_ in by_dossier.items():         # look every mention up once
+        for k, ms in keys_.items():
+            for y in {m["year"] for m in ms}:
+                CI.resolve(dd, k, y)
     amb = collections.defaultdict(set)
+    amb_full = collections.defaultdict(set)      # … through a name of two tokens or more
     for (dossier, key, year), (i, st, cands) in CI.cache.items():
         if st == "ambiguous":
             amb[tuple(sorted(cands))].add(dossier)
+            if len(key.split()) >= 2:
+                amb_full[tuple(sorted(cands))].add(dossier)
+    n_amb_pairs = 0
     for cands, ds in amb.items():
         rel = group_relation([[P[i]["n"]] for i in cands])
         finding("eos_same_name_same_dossier_two_persons", "eos", 3 if rel == "spelling" else 2,
                 "|".join(sorted(ds)[:4]), "", " | ".join(pkey(P[i]) for i in cands),
                 f"both carry the same name variant in the dossier in the same years ({rel})")
+        # A third source of merge candidates, from the index alone: the shared
+        # variant is a full name and the canonical names are spelling variants.
+        # Not if one is first mentioned after the other is called deceased —
+        # that pair is a death split build_data made on purpose.
+        if cands not in amb_full:
+            continue
+        for x, a_ in enumerate(cands):
+            for b_ in cands[x + 1:]:
+                pa, pb = P[a_], P[b_]
+                if name_relation(pa["n"], pb["n"]) != "spelling":
+                    continue
+                if (pa.get("dead_year") and pb["y"][0] > pa["dead_year"]) or \
+                   (pb.get("dead_year") and pa["y"][0] > pb["dead_year"]):
+                    continue
+                pair_src[(a_, b_)]["dossier"].update(amb_full[cands])
+                pair_src[(a_, b_)]["where"].update(amb_full[cands])
+                n_amb_pairs += 1
     S["eos: person groups sharing a name variant in one dossier at the same time"] = len(amb)
+    S["  of which pairs offered to dedupe_spelling.py (full name, spelling relation)"] = n_amb_pairs
 
     # 4g. BLI-internal oddities (reported, never changed here)
     b = collections.Counter()
@@ -845,7 +884,7 @@ def main(argv=None):
                     "bli_actors", "street_persons", "where"])
         for (a_, b_), src in sorted(pair_src.items()):
             w.writerow([a_, pkey(P[a_]), b_, pkey(P[b_]),
-                        "+".join(k for k in ("bli", "street") if src[k]),
+                        "+".join(k for k in ("bli", "street", "dossier") if src[k]),
                         len(src["bli"]), "|".join(sorted(src["bli"], key=num)[:6]),
                         "|".join(sorted(src["street"])[:6]),
                         "|".join(sorted(src["where"])[:6])])
@@ -903,11 +942,15 @@ DESCR = {
         "The street-level index holds these as one person; the city-wide index as several, "
         "although the names are spelling variants and all mentions fit one lifespan.",
     "eos_same_name_same_dossier_two_persons":
-        "Two eos persons carry the very same name variant in the same dossier in the same years.",
+        "Two eos persons carry the very same name variant in the same dossier in the same years. "
+        "dedupe_spelling.py merges those with a full shared name and a spelling relation; what "
+        "remains are bare names, differing given names, death splits and guard refusals.",
     "eos_person_spans_more_than_a_lifespan":
-        "An eos person whose mentions run over more than 80 years. All are HLS-linked: "
-        "dedupe_persons.py merges every same-named entry whose span overlaps the Wikidata "
-        "life envelope, however far that entry reaches beyond it.",
+        "An eos person whose mentions run over more than 80 years and beyond any known life.",
+    "eos_long_span_within_a_known_life":
+        "An HLS-linked person with mentions over more than 80 years, all inside the known "
+        "life plus the post-mortem window (birth − 10 … death + 60): later mentions call "
+        "the person deceased or follow within 15 years of the death.",
     "eos_merges_across_a_death":
         "eos has one person where BLI has an owner recorded as dead and, more than 15 years "
         "later, another owner of the same name on the same property.",

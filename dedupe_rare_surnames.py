@@ -25,6 +25,8 @@ from difflib import SequenceMatcher
 
 from dedupe_corpus import (koelner, given_seq, surname_raw, link_key, merge_cluster)
 
+from link_hls import life_envelope, fits_life
+
 PERSONS = "persons_resolved.json"
 MAXLIFE = 80
 RARE = 6          # phonetic-surname bearers at or below this are "rare"
@@ -58,7 +60,8 @@ def main():
     parent = {i: i for i in kp_of}
     grp = {i: {"y0": (persons[i].get("y") or [None])[0],
                "y1": (persons[i].get("y") or [None, None])[1],
-               "lk": link_key(persons[i])} for i in kp_of}
+               "lk": link_key(persons[i]), "env": life_envelope(persons[i]),
+               "dead": persons[i].get("dead_year")} for i in kp_of}
 
     def find(x):
         while parent[x] != x:
@@ -80,8 +83,14 @@ def main():
         sa, sb = surn_of[a], surn_of[b]
         if sa != sb and SequenceMatcher(None, sa, sb).ratio() < 0.7:
             return
+        # nothing joins an HLS-linked person from outside that person's life
+        env = grp[ra]["env"] or grp[rb]["env"]
+        dead = min((d for d in (grp[ra]["dead"], grp[rb]["dead"]) if d), default=None)
+        if not fits_life(env, lo, hi, dead):
+            return
         parent[ra] = rb
-        grp[rb] = {"y0": lo, "y1": hi, "lk": grp[ra]["lk"] or grp[rb]["lk"]}
+        grp[rb] = {"y0": lo, "y1": hi, "lk": grp[ra]["lk"] or grp[rb]["lk"],
+                   "env": env, "dead": dead}
 
     n_pairs = 0
     for (kp, gs), idxs in blocks.items():

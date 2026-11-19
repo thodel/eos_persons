@@ -127,3 +127,13 @@ def test_sources_can_be_restricted(files):
     sets, _ = DS.main(["--persons", str(pj), "--candidates", str(cand),
                        "--csv", str(tmp / "c.csv"), "--sources", "bli"])
     assert sets == []
+
+
+def test_the_index_s_own_evidence_is_a_source(files):
+    P, pj, cand, write, tmp = files
+    write([[0, "Marx Harder#1561-1573", 1, "Marx Harders#1573-1585", "dossier", 0, "", "", "D1"]])
+    sets, _ = DS.main(["--persons", str(pj), "--candidates", str(cand), "--csv", str(tmp / "c.csv")])
+    assert [sorted(s) for s in sets] == [[0, 1]]
+    sets, _ = DS.main(["--persons", str(pj), "--candidates", str(cand),
+                       "--csv", str(tmp / "c.csv"), "--sources", "bli,street"])
+    assert sets == []

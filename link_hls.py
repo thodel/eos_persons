@@ -222,12 +222,68 @@ def load_hls(path, era_lo=1380, era_hi=1720):
 
 # ── Date plausibility ────────────────────────────────────────────────────────
 
-def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3):
+BEFORE_BIRTH = 5      # mentions this long before a known birth are tolerated
+ALIVE_AFTER_DEATH = 15  # … and mentions as living this long after a known death
+DEAD_BEFORE_DEATH = 5   # … and a "deceased" this long before a known death
+POSTMORTEM = 60         # post-mortem references reach this far
+
+
+def life_envelope(p):
+    """(lo, hi, death) for a person carrying Wikidata life dates, else None.
+
+    The years in which mentions of that person can lie: birth − 10 (death − 95
+    if the birth is unknown) to death + POSTMORTEM (birth + 90 + POSTMORTEM).
+    """
+    wd = p.get("wd") or {}
+    b, d = wd.get("b"), wd.get("d")
+    if not (b or d):
+        return None
+    return ((b - 10) if b else (d - 95), (d if d else b + 90) + POSTMORTEM, d)
+
+
+def fits_life(env, y0, y1, dead_year=None):
+    """Can mentions y0..y1, first called deceased in `dead_year`, belong to the
+    life `env` (from life_envelope)? True where nothing is known.
+
+    Every dedupe pass asks this before it merges into an HLS-linked person:
+    without it a later pass adds namesakes from outside the life, and the
+    biography ends up on a person first mentioned 56 years before the birth.
+    """
+    if env is None or y0 is None or y1 is None:
+        return True
+    lo, hi, d = env
+    if y0 < lo or y1 > hi:
+        return False
+    if d and dead_year and dead_year < d - DEAD_BEFORE_DEATH:
+        return False
+    return True
+
+
+def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3,
+                  before=BEFORE_BIRTH, alive_after=ALIVE_AFTER_DEATH):
     """Classify the temporal relation between an HGB mention span [m0,m1]
-    (with optional HGB dead_year) and an HLS life span [birth,death].
+    (with optional HGB dead_year, the first year the person is called
+    deceased) and a life span [birth,death].
 
     Returns (relation, gap) or (None, _) if implausible.
       relation ∈ {"overlap", "postmortem"}.
+
+    The whole mention span has to fit the life, not merely touch it: an HGB
+    person is a cluster of mentions, and a cluster that begins before the birth
+    or runs on as living after the death holds an older or a younger namesake
+    as well. Linking it would hand the biography to all of them — and
+    dedupe_persons.py then merges everything that carries the link (Hans Müller
+    1417–1604 for a man who lived 1448–1521).
+
+      • first mention not more than `before` years before a known birth
+        (`tol` years before one estimated as death − 90);
+      • last mention within `grace` years after the death (post-mortem
+        references are common in a property register);
+      • if the cluster never calls the person deceased, its last mention is at
+        most `alive_after` years after a known death (not after birth + 90
+        where the death is unknown);
+      • the cluster does not call the person deceased more than
+        DEAD_BEFORE_DEATH years before a known death.
     """
     if m0 is None or m1 is None:
         return (None, None)
@@ -238,18 +294,23 @@ def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3):
     if b is None or d is None:
         return (None, None)
 
-    # mentioned entirely before plausible birth → not the same person
-    if m1 < b - tol:
+    # mentioned before birth → the cluster holds an older namesake
+    if m0 < b - (before if birth is not None else tol):
+        return (None, None)
+    # mentioned beyond the post-mortem window → it holds a younger one
+    if m1 > d + grace:
+        return (None, None)
+    # never called deceased, yet mentioned long after the death
+    if dead_year is None and m1 > (death + alive_after if death else d):
+        return (None, None)
+    # called deceased well before the known death → an older namesake died
+    if death and dead_year and dead_year < death - DEAD_BEFORE_DEATH:
         return (None, None)
     # life span and mention span intersect
-    if m0 <= d + tol and m1 >= b - tol:
+    if m0 <= d + tol:
         return ("overlap", 0)
-    # mentions begin after death → post-mortem reference (allowed within grace)
-    if m0 > d:
-        gap = m0 - d
-        if gap <= grace:
-            return ("postmortem", gap)
-    return (None, None)
+    # mentions begin after death → post-mortem reference (within grace, see above)
+    return ("postmortem", m0 - d)
 
 
 # ── Matching ─────────────────────────────────────────────────────────────────

@@ -18,8 +18,10 @@ same rules the corpus-wide index uses, scoped to the street:
   1. within a dossier, a name that is an unambiguous token-subset of exactly
      one other name in that dossier is the same person ("Hans Gysler" ⊂
      "Hans Heinrich Gysler"), 80-year cap          (build_data.tokens_subset)
-  2. dossier clusters are binned into 80-year lifespans and split where live
-     mentions follow a deceased mention            (build_data, step 2/3b)
+  2. dossier clusters are cut into runs of at most one lifespan (a bare given
+     name only near the fuller name it is attached to, or without 15 years of
+     silence) and split where live mentions follow a deceased mention
+                                          (build_data.person_runs, death_split)
   3. across the dossiers of ONE street, clusters with the same canonical
      key (≥2 tokens, abbreviations expanded) merge under the lifespan cap
      and the deceased constraint                   (build_data, step 4)
@@ -56,7 +58,7 @@ import sys
 import xml.etree.ElementTree as ET
 from difflib import SequenceMatcher
 
-from build_data import clean_tokens, canonical_key, tokens_subset, UF
+from build_data import clean_tokens, canonical_key, tokens_subset, person_runs, UF
 from dedupe_corpus import koelner, given_seq, surname_raw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -173,7 +175,7 @@ def _dead_ok(entries, p):
 
 
 def dossier_clusters(mentions):
-    """Steps 1–2: subset-union inside each dossier, 80-year bins, death split."""
+    """Steps 1–2: subset-union inside each dossier, lifespan runs, death split."""
     uf = UF()
     by_dossier = collections.defaultdict(list)
     for m in mentions:
@@ -192,12 +194,18 @@ def dossier_clusters(mentions):
             if ys and max(ys) - min(ys) > LIFESPAN:
                 continue
             uf.union((dossier, a), (dossier, supersets[0]))
-    binned = collections.defaultdict(list)
+    # the same time rule as build_data: runs of at most one lifespan; a bare
+    # given name only near the fuller name it is attached to, or without a
+    # generation of silence (build_data.person_runs)
+    by_root = collections.defaultdict(list)
     for m in mentions:
-        root = uf.find((m["dossier"], m["name"]))
-        binned[(root, (m["year"] or 0) // LIFESPAN)].append(m)
+        by_root[uf.find((m["dossier"], m["name"]))].append(m)
+    runs = []
+    for root, rows in by_root.items():
+        for run in person_runs(rows):
+            runs.append((root, run))
     out = []
-    for (root, _), rows in binned.items():
+    for root, rows in runs:
         names = sorted({r["name"] for r in rows})
         years = [r["year"] for r in rows if r["year"]]
         dead_years = [r["year"] for r in rows if r["year"] and r["dead"]]
