@@ -24,7 +24,8 @@ import csv
 import json
 
 # reuse the battle-tested name normalisation from the HGB→HLS linker
-from link_hls import norm_token, given_key, given_ratio, ratio, year_of, hls_url, default_hls
+from link_hls import (norm_token, given_key, given_ratio, ratio, year_of, hls_url,
+                      default_hls, bio_years, load_alt_dates)
 
 csv.field_size_limit(10_000_000)
 
@@ -35,6 +36,7 @@ YEAR_TOL_LOOSE = 9  # both birth & death within this also counts
 def load_hls_bios(path):
     """All HLS biography articles with at least one parsed life year."""
     bios = []
+    alt = load_alt_dates()
     with open(path, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("category") != "bio":
@@ -43,8 +45,7 @@ def load_hls_bios(path):
             first = (row.get("bio.first_name") or "").strip()
             if not fam:
                 continue
-            b = year_of(row.get("bio.birth_date"))
-            d = year_of(row.get("bio.death_date"))
+            b, d = bio_years(row, alt)
             if b is None and d is None:
                 continue
             bios.append({

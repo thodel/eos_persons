@@ -59,20 +59,24 @@ module, but is no longer the reference.
 | 1 | `extract_persons.py` | `persons.csv` (one row per named person reference: name, year, dossier, occupation text/norm/OhdAB, title, family relation, location, affiliation, deceased marker, event roles, page image URL — gitignored, regenerable), `documents.csv` (one row per register card with its page images, gitignored) and `dossiers.csv` (one row per property: coordinates, address, type, street, history, doc count, years, sources) |
 | 2 | `build_data.py` | `persons_resolved.json` (dossier-scoped identity resolution → person index for `index.html`), `guild_data.json` |
 | 3 | `build_families.py` | `families_graph.json`, `families_index.json` (kinship edges from the `family` / inheritance event groups) |
-| 4 | `link_hls.py` → `apply_hls_links.py` | `link_candidates_hls.csv` → `hls` field on persons and tree nodes |
+| 4 | `link_hls.py` → `apply_hls_links.py` | `link_candidates_hls.csv` → `hls` field on persons and tree nodes; only biographies tied to Basel are candidates (see "HLS data") |
 | 5 | `enrich_wikidata.py`, `link_wikidata_kin.py` | `wd` (QID, dates, GND, kin) and `kin` cross-references |
 | 6 | `dedupe_persons.py`, `dedupe_corpus.py --apply`, `dedupe_offices.py --apply`, `dedupe_rare_surnames.py --apply` | deduplicated `persons_resolved.json` |
 | 6b | `link_bli_hgb.py` → `dedupe_spelling.py --apply`, repeated until the dry run merges nothing | spelling variants merged on the evidence of BLI owners, the street-level index and shared name variants (see below) |
-| 7 | `build_families.py`, `apply_hls_links.py`, `link_wikidata_kin.py`, `link_hls_families.py` | family data refreshed from the deduplicated index |
+| 7 | `build_families.py`, `extract_genealogy.py`, `extract_spouses.py`, `link_wikidata_kin.py`, `link_hls_families.py` | family data from the deduplicated index; parents and spouses read from the HLS article texts (private export only) |
 | 8 | `build_roles.py`, `build_movements.py`, `build_flowfield.py`, `build_prices.py`, `build_dossiers_geo.py` | `roles_data.json`, `movements.csv`, `flowfield.json`, `prices.json`, `dossiers_geo.json` |
-| 9 | `link_hbls_hgb.py --all`, `build_identity_clusters.py`, `build_merged_persons.py`, `make_persons_web.py` | cross-corpus identities (`merged_persons.json`, `persons_web.json`; see `hbls-extraction/DEDUP_PLAN.md`) |
+| 9 | `link_hls.py` (on the deduplicated index), `link_hbls_hls.py` (private inputs only), `link_hbls_hgb.py --all`, `build_identity_clusters.py`, `build_merged_persons.py`, `make_persons_web.py` | cross-corpus identities (`merged_persons.json`, `persons_web.json`; see `hbls-extraction/DEDUP_PLAN.md`) |
 
 Figures of the current build (street corpus 0.3.0): 238,957 person mentions in
-75,447 documents → 152,250 resolved names → 137,454 persons after the name-based
-dedupe passes → **127,044 persons** after `dedupe_spelling.py`;
-614 carry an HLS/Wikidata link (1,651 confident links before dedupe, from 3,253
-candidates); 3,694 geolocated dossiers; 14,930 persons with movement between
-≥2 properties; 3,631 cross-corpus identities (525 attested in the register).
+75,447 documents → 152,250 resolved names → 137,612 persons after the name-based
+dedupe passes → **127,132 persons** after `dedupe_spelling.py`;
+309 carry an HLS link, to 253 biographies (1,025 confident links before dedupe,
+from 1,709 candidates), 209 of them with parents or spouses read from the article
+text; 3,694 geolocated dossiers; 14,917 persons with movement between
+≥2 properties; 3,488 cross-corpus identities (326 attested in the register).
+The HLS and identity figures are those of the run with the private HLS export
+(2026-11); they are lower than before because namesakes from other cantons are
+no longer linked, see "HLS data".
 
 ### Cross-check against *Basler Liegenschaften 1400–1700 Interaktiv*
 
@@ -94,7 +98,7 @@ python3 link_bli_hgb.py               # BLI from a sibling checkout, $BLI_DIR or
 |---|---|
 | `link_bli_hgb.csv` | one row per named BLI person actor (124,890): dossier, owner documents, the eos persons and street persons it resolves to |
 | `bli_doc_crosswalk.csv` | 1,864 register cards that the corpus re-issued under a new id (page order corrected), matched by their page images |
-| `bli_hgb_findings.csv` | the discrepancies, typed, with the side the error most likely sits on (18,911 at the first comparison, 9,878 now) |
+| `bli_hgb_findings.csv` | the discrepancies, typed, with the side the error most likely sits on (18,911 at the first comparison, 9,760 now) |
 | `dedupe_spelling_candidates.csv` | pairs of city-wide persons whose names differ only in spelling and that a BLI owner or a street-level person holds as one, or that carry the same name variant in one dossier at the same time (gitignored: tied to one state of the index) |
 | `bli_hgb_report.md` | counts, a description and examples per finding type |
 
@@ -115,14 +119,14 @@ brackets are those of the first comparison, on the index of 136,470 persons.
   of the index — one lifespan of 80 years, nobody joins more than 15 years
   after the group's earliest death, different HLS/Wikidata identities never
   merge, nothing joins an HLS-linked person from outside that person's known
-  life. On the current build: 137,454 → **127,044 persons**; 664 pairs stay
+  life. On the current build: 137,612 → **127,132 persons**; 598 pairs stay
   apart because a guard refuses them.
 - **Same name, same dossier, same years, two persons** [1,107 groups]. *Fixed
   where the evidence is clean:* the pair is a third source for
   `dedupe_spelling.py` when the shared variant is a full name, the canonical
   names are spelling variants and neither person is first mentioned after the
-  other is called deceased. 681 groups remain: bare names, differing given
-  names, death splits, and 245 pairs a guard refuses.
+  other is called deceased. 650 groups remain: bare names, differing given
+  names, death splits, and 200 pairs a guard refuses.
 - **Persons spanning more than a lifespan** [62, all HLS-linked, up to 187
   years]. *Fixed:* `link_hls.date_relation` only links a cluster whose whole
   mention span fits the life (not before birth − 5, not beyond death + 60, not
@@ -130,9 +134,12 @@ brackets are those of the first comparison, on the index of 136,470 persons.
   than 5 years before it), `dedupe_persons.py` takes what lies inside the life
   envelope instead of everything overlapping it, and every later pass asks
   `link_hls.fits_life` before merging into an HLS-linked person. No person
-  exceeds 80 years outside a known life any more; 15 do inside one, through
-  post-mortem mentions. The stricter rule costs links: 1,651 confident ones
-  instead of 2,193, on 449 HLS articles instead of 472.
+  exceeds 80 years outside a known life any more; 5 do inside one, through
+  post-mortem mentions. The life is that of the HLS article the link was
+  judged against (`link_hls.life_dates`; the link carries its dates), not a
+  mix with Wikidata, which rounds an unknown birth to the century. The
+  stricter rule cost links: 1,651 confident ones instead of 2,193 on that
+  build.
 - **Bare given names merged across generations inside a dossier** [34 pure
   bare names, 30 attached to a fuller name]. *Fixed:* `build_data.person_runs`
   replaces the fixed 80-year bins. A bare name starts a new person after 15
@@ -167,33 +174,67 @@ shows the stages (`extract data links dedupe spelling families identities srbas
 report`), `./rebuild.sh links` starts at a stage, `./rebuild.sh links dedupe`
 runs a range.
 
-### HLS data without the private export
+### HLS data
 
-The HLS metadata export (`hls_articles.csv`) that the linkers were written
-against is not redistributable. `build_hls_table.py` rebuilds the columns the
-linkers use from Wikidata (every HLS biography carries the HLS id as property
-P902) into `hls_bios_wikidata.csv` (tracked: 25,157 biographies, 23,877 with
-life dates, 22,846 with a GND id). `link_hls.default_hls()` returns the private
-export when present and this table otherwise, so the link stage runs from public
-data. The export is looked for in `$HLS_ARTICLES`, then in
-`private_inputs/hls_articles.csv` (gitignored — it must not be committed). Caveat: the given name is taken from the Wikidata label, which for 339 of the
-472 linked articles is a single token ("Johannes Wettstein") where the export's
-`bio.first_name` may carry the full form; since the matcher only compares the
-common prefix of the given names, such an article can absorb register persons
-that differ in their second given name (105 of the 472 linked articles collect
-more than one given-name sequence). Re-run `link_hls.py` with the private export
-to tighten this. Two more things the table does not have: the article text — so
-the text-mining passes `extract_genealogy.py`, `extract_spouses.py` need the real
-export — and the family articles, for which `link_hls_families.py` falls back to
-`hls_family_links.csv`, the surname → HLS family article links accepted on an
-earlier run.
+`link_hls.py` reads the HLS metadata export (`hls_articles.csv`: names, life
+dates and article text of every biography). The export is not redistributable;
+it is looked for in `$HLS_ARTICLES`, then in `private_inputs/hls_articles.csv`
+(gitignored — it must not be committed). The current build was made with it.
+Three things the first run with the article texts brought up, and what
+`link_hls.py` does about them:
+
+- **Namesakes from other cantons.** The HLS covers all of Switzerland, the
+  register one town; by name and dates *Hans Müller, of Zug* fits a Basel Hans
+  Müller as well as a Basler does. 224 of the 458 biographies linked on the
+  first run did not mention Basel at all. A biography is now a candidate only
+  when its text ties the person to the town (`link_hls.basel_relation`: born
+  or died there, citizen, an office, a move there, or Basel named three times
+  and more — 567 of the 5,627 biographies of the period; a further 539 mention
+  Basel only in passing, e.g. as a place of study). `--any-place` keeps the
+  rest, the column `hls_basel` tells them apart.
+- **Biographies of one given name.** The matcher compares given names on their
+  common prefix, so that a clerk's "Hans Faesch" still finds Johann Rudolf
+  Faesch. Applied the other way round this let an article headed *Johannes
+  Müller* collect Hans Georg, Hans Jakob and Hans Rudolf Müller. A register
+  person who carries more given names than the article is no longer a
+  candidate (`link_hls.article_given_ratio`). Biographies that collect
+  conflicting given names: 3 of 253, all spelling noise (it was 105 of 472).
+- **Life dates of the export.** 1,009 rows carry birth and death in reverse
+  order (Adam Petri: "born 1527, died 1454") and never fitted anybody — among
+  them Thomas and Felix Platter and Johannes Froben; where the birth is
+  uncertain the export gives both alternatives and no death (Hans Jakob Plepp,
+  "1557/60"), and for Hans Holbein the Younger it has 1547–1548.
+  `link_hls.bio_years` orders the pair and takes Wikidata's life where the
+  export's two dates lie less than 15 years apart.
+
+With the texts at hand `extract_genealogy.py` and `extract_spouses.py` read
+parents and spouses from the articles (203 fathers, 98 mothers, 131 spouses for
+209 persons) and `link_hls_families.py` links the family articles afresh (403
+surname families).
+
+**Without the export** the link stage runs from public data:
+`build_hls_table.py` rebuilds the columns the linkers use from Wikidata (every
+HLS biography carries the HLS id as property P902) into `hls_bios_wikidata.csv`
+(tracked: 25,157 biographies, 23,877 with life dates, 22,846 with a GND id), and
+`link_hls.default_hls()` falls back to it. What the texts decided is kept in two
+small tracked tables written on the run with the export: `hls_basel.csv` (HLS id
+→ strong / weak / none, no article text) and `hls_family_links.csv` (surname →
+family article). The text-mining passes skip themselves. A run from the public
+tables differs in detail — Wikidata's dates and name forms are not the
+export's, and 296 biographies of the period that the export does not hold have
+no Basel class and stay candidates — but arrives at nearly the same identities
+(3,461 against 3,488; 3,395 groups identical).
 
 Likewise `hbls-extraction/rebuild_hbls_persons.py` recovers the link-ready HBLS
 person records from the tracked `hbls_web.json` when the PDF-derived
 `hbls_persons.json` is absent, and `freeze_authority_edges.py` writes the
 HBLS/HLS/GND/Wikidata side of the identity clusters out of `merged_persons.json`
 (`authority_edges.csv`) so that a rebuild of the land-register persons keeps
-the lexicon-and-authority identities and only re-attaches the HGB records.
+the lexicon-and-authority identities and only re-attaches the HGB records. With
+the private inputs in place — the PDF-derived `hbls_persons.json` /
+`hbls_articles.json` and the GND tables `link_hbls_gnd*.csv` — `rebuild.sh`
+runs Stage 1 (`link_hbls_hls.py`) and builds the identities from the real
+candidate tables instead of the frozen groups.
 
 ### Correlation analysis pipeline
 

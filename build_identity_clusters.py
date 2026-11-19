@@ -11,10 +11,13 @@ the GND linking, and treats each connected component as one real person.
   edges (only confident links are unioned — see the gates below):
     frozen     authority_edges.csv               HBLS/HLS/GND/WD groups kept
                                                  from the previous run
-                                                 (freeze_authority_edges.py)
+                                                 (freeze_authority_edges.py);
+                                                 only where the HBLS tables
+                                                 below are absent
     HBLS↔HLS   link_hbls_hls_candidates.csv      score≥.9, unambiguous
     HGB ↔HLS   link_candidates_hls.csv           score≥.85, unambiguous, overlap
-    HBLS↔HGB   link_hbls_hgb_candidates.csv      score≥.8, unambiguous, overlap
+    HBLS↔HGB   link_hbls_hgb_candidates.csv      score≥.8, unambiguous, overlap,
+                                                 HBLS person connected to Basel
     HBLS↔GND   link_hbls_gnd.csv                 date_check == ok  (+ its HLS/WD)
     HBLS↔GND   link_hbls_gnd_lobid_candidates    score≥.85, unambiguous
     HGB ↔GND   persons_resolved.json (wd.gnd/qid)
@@ -107,8 +110,13 @@ stats = defaultdict(int)
 #    freeze_authority_edges.py from the previous merged_persons.json). These
 #    carry the HBLS↔HLS↔GND↔Wikidata identities whose candidate CSVs cannot be
 #    regenerated here; the HGB records are attached afresh below.
+# They stand in for the Stage 1 / GND candidate tables and must not be mixed
+# with them: where link_hbls_hls_candidates.csv is present, the real tables
+# below are used and the frozen groups are skipped.
 _groups = defaultdict(list)
-for r in rd("authority_edges.csv"):
+_frozen = [] if os.path.exists(os.path.join(HERE, "link_hbls_hls_candidates.csv")) \
+    else rd("authority_edges.csv")
+for r in _frozen:
     c = r["corpus"]
     if c == "hbls":
         n = hbls_node(r["node"][5:], r["name"])
@@ -149,9 +157,11 @@ for r in rd("link_candidates_hls.csv"):
         union(g, h); stats["hgb_hls"] += 1
 
 # 3) HBLS ↔ HGB (direct)
+#    … only for HBLS persons connected to Basel (link_hbls_hgb.basel_connection):
+#    elsewhere a match on name and dates is a namesake from another canton
 for r in rd("link_hbls_hgb_candidates.csv"):
     if (r["n_candidates"] == "1" and r["date_relation"] == "overlap"
-            and float(r["score"]) >= 0.8):
+            and float(r["score"]) >= 0.8 and r.get("hbls_basel")):
         a = hbls_node(r["hbls_id"], r["hbls_name"])
         g = node(hgb_key(r["hgb_name"], r["hgb_year_min"]), "hgb", r["hgb_name"],
                  span=(to_int(r["hgb_year_min"]), to_int(r["hgb_year_max"])))

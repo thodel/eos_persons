@@ -21,7 +21,10 @@
 # basler-liegenschaften-interaktiv (or .bli_cache/, see link_bli_hgb.py --fetch).
 # With the private HLS export ($HLS_ARTICLES or private_inputs/hls_articles.csv)
 # the HLS steps use it and the text-mining steps run; without it they fall back
-# to hls_bios_wikidata.csv / hls_family_links.csv and skip the mining.
+# to hls_bios_wikidata.csv / hls_basel.csv / hls_family_links.csv and skip the
+# mining. With the PDF-derived hbls-extraction/hbls_persons.json as well, the
+# identities are built from the real candidate tables (Stage 1 is recomputed)
+# instead of the frozen authority_edges.csv. See README, "HLS data".
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -85,6 +88,14 @@ stage_identities() {
     (cd hbls-extraction && step python3 rebuild_hbls_persons.py)
     git checkout -q -- hbls-extraction/hbls_id_map.csv   # the map belongs to authority_edges.csv
   fi
+  # Stage 1 (HBLS↔HLS) needs the private export and the original HBLS persons
+  # (ids hbls:<volume>:<n>); with them — and the GND tables link_hbls_gnd.csv /
+  # link_hbls_gnd_lobid_candidates.csv, if present — Stage 3 uses the real
+  # candidate tables instead of the frozen authority_edges.csv.
+  if python3 -c "from link_hls import private_hls; raise SystemExit(0 if private_hls() else 1)" \
+     && python3 -c "import json; raise SystemExit(0 if json.load(open('hbls-extraction/hbls_persons.json'))[0]['id'].count(':') == 2 else 1)"; then
+    step python3 link_hbls_hls.py
+  fi
   step python3 link_hbls_hgb.py --all
   [ -f hbls-extraction/gnd_enrichment.json ] || step python3 gnd_enrich.py --no-publications
   step python3 build_identity_clusters.py
@@ -108,7 +119,7 @@ stage_report() {
 if [ "${1:-}" = "--list" ]; then
   for s in "${STAGES[@]}"; do
     echo "$s:"
-    declare -f "stage_$s" | grep -o 'python3 [^;)]*' | sed 's/^/    /'
+    declare -f "stage_$s" | grep -o 'python3 [^;)]*' | grep -v 'python3 -c' | sed 's/^/    /'
   done
   exit 0
 fi

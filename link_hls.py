@@ -133,6 +133,22 @@ def given_ratio(a, b):
     return ratio(" ".join(ta[:k]), " ".join(tb[:k]))
 
 
+def article_given_ratio(register, article):
+    """`given_ratio` of a register person against an HLS article — 0 where the
+    register knows *more* given names than the article.
+
+    The prefix rule forgives a missing middle name on either side. That is
+    right for the register, whose clerks shorten ("Hans Faesch" for Johann
+    Rudolf Faesch), but not for the lexicon: an article headed *Johannes
+    Müller* is about a man of one given name, and Hans Georg, Hans Jakob and
+    Hans Rudolf Müller are other people. Before this rule one such article
+    collected five different double names.
+    """
+    if len((register or "").split()) > len((article or "").split()):
+        return 0.0
+    return given_ratio(register, article)
+
+
 def split_name(name):
     """Return (given, surname) from a full name string, particles stripped.
 
@@ -196,21 +212,148 @@ def hls_url(article_id, version=None):
     return f"https://hls-dhs-dss.ch/de/articles/{article_id}/"
 
 
+# ── Life dates of a biography ────────────────────────────────────────────────
+#
+# The two date columns of the HLS tables are not always a birth and a death:
+#
+#   • 1,009 rows of the export carry them in reverse order (Adam Petri:
+#     "born 1527-11-15, died 1454") — such a biography never fitted anybody;
+#   • where the birth is uncertain the export gives both alternatives and no
+#     death (Hans Jakob Plepp "1557/60" → 1557–1560, Ludwig Senfl 1489–1491),
+#     and for Hans Holbein the Younger it has 1547–1548;
+#   • Wikidata rounds an unknown birth to the century ("1500-01-01", died 1487).
+#
+# bio_years() puts this right as far as the tables allow.
+
+MIN_LIFE = 15            # fewer years between the two dates are not a life
+WIKIDATA_TABLE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              "hls_bios_wikidata.csv")
+
+
+def load_alt_dates(path=WIKIDATA_TABLE):
+    """{HLS id: (birth, death)} from the Wikidata table — a second opinion for
+    the export's implausible pairs."""
+    if not os.path.exists(path):
+        return {}
+    out = {}
+    with open(path, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            out[r["id"]] = _ordered(r.get("bio.birth_date"), r.get("bio.death_date"))
+    return out
+
+
+def _ordered(birth, death):
+    b, d = year_of(birth), year_of(death)
+    if b and d and b > d:
+        if re.search(r"00-01-01$", birth or ""):
+            b = None                 # a century, not a year: birth unknown
+        else:
+            b, d = d, b              # the export's reverse order
+    return b, d
+
+
+def bio_years(row, alt=None):
+    """(birth, death) of one row of an HLS table, see above. `alt` is
+    load_alt_dates(): where the row's own dates lie less than MIN_LIFE years
+    apart and Wikidata knows a whole life, that is taken."""
+    b, d = _ordered(row.get("bio.birth_date"), row.get("bio.death_date"))
+    if b and d and d - b < MIN_LIFE and alt:
+        ab, ad = alt.get(row.get("id"), (None, None))
+        if ab and ad and ad - ab >= MIN_LIFE:
+            b, d = ab, ad
+    return b, d
+
+
+# ── Does the biography belong to Basel? ──────────────────────────────────────
+#
+# The HLS covers all of Switzerland, the register one town. A Hans Müller of
+# Zug and a Hans Meyer of Fribourg fit Basel namesakes by name and dates just
+# as well as a Basler does — on the first run with the article texts, 224 of
+# the 458 linked articles did not mention Basel at all. So an article is only
+# a candidate when its text ties the person to the town:
+#
+#   strong  born or died in Basel, citizen "von Basel", an office, a chair, a
+#           house or a move there — or Basel named three times and more
+#   weak    Basel is mentioned, but only in passing (studies, a mediation
+#           between Basel and Solothurn, the Council of Basel …)
+#   none    no mention
+#
+# The class is read from `content_text` of the private export. Without the
+# export it comes from hls_basel.csv, the classes of the last run with it
+# (written by this script — ids and classes only, no article text).
+
+BASEL_TABLE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "hls_basel.csv")
+_BASEL = re.compile(r"\b(?:Klein|Gross)?[Bb]as(?:el|ler|lerin|lern|els)\b|\bBâle\b")
+_NOT_THE_TOWN = re.compile(r"^(?:Bf|Bischof\w*|Bischöf\w*|Fürstbf|Fürstbischof\w*|"
+                           r"Fürstbischöf\w*|Bistum\w*|Diözese|Hochstift\w*|Offizial\w*)\.?$")
+_BASEL_ORIGIN = re.compile(r"(\S+) (?:von|zu) Basel\b")
+_BASEL_STRONG = [
+    # vital line: "12.3.1500 Basel, 4.5.1560 Basel" (not "1522 in Basel")
+    re.compile(r"\b\d{4}(?:/\d{2,4})? (?:\(\?\) )?(?:wohl |vermutlich |wahrscheinlich )?"
+               r"(?:Klein)?[Bb]asel\b"),
+    # an institution of the town the person belongs to
+    re.compile(r"\bBasler (?:Bürgerrecht|Rat(?:s|es)?\b|Kleinrat|Grossrat|Zunft\b|"
+               r"Domkapitel|Domherr|Münster|Pädagogium|Universität|Dienstadel|"
+               r"Achtburger|Geschlecht|Familie)"),
+    # living or working there
+    re.compile(r"\b(?:Bürger\w*|Burger\w*|Burgrecht|Hintersass\w*|Professor|Prof\.|Pfarrer|"
+               r"Domherr|Kaplan|Chorherr|Ratsherr|Rat|Zunft\w*|Zünftig|niedergelassen|"
+               r"Niederlassung|übersiedelte|zog|kam|Rückkehr|zurück|wohnhaft|wohnte|lebte|"
+               r"wirkte|starb|liess sich|tätig|Tätigkeit|Schaffner|Werkstatt|Offizin|"
+               r"Druckerei|Haus|Hof|Wohnsitz)\b[^.;]{0,40}?\b(?:in|nach|zu) Basel\b"),
+]
+
+
+def _basel_origin(text):
+    """Citizenship or origin — "von Basel", "Bürger von Basel" — but not the
+    bishop: "Bf. von Basel" names the prince-bishopric, not the town."""
+    return any(not _NOT_THE_TOWN.match(m.group(1)) for m in _BASEL_ORIGIN.finditer(text))
+
+
+def basel_relation(text):
+    """'strong' | 'weak' | 'none' — how an HLS article ties its person to Basel
+    ('' for an empty text: unknown)."""
+    text = " ".join((text or "").split())
+    if not text:
+        return ""
+    n = len(_BASEL.findall(text))
+    if not n:
+        return "none"
+    if n >= 3 or _basel_origin(text) or any(rx.search(text) for rx in _BASEL_STRONG):
+        return "strong"
+    return "weak"
+
+
+def load_basel_table(path=BASEL_TABLE):
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return {r["hls_id"]: r["basel"] for r in csv.DictReader(f)}
+
+
 # ── Load HLS biographies in the HGB era ──────────────────────────────────────
 
-def load_hls(path, era_lo=1380, era_hi=1720):
-    """Return list of bio dicts with parsed years, blocked by surname initial."""
+def load_hls(path, era_lo=1380, era_hi=1720, classes=None):
+    """Return list of bio dicts with parsed years, blocked by surname initial.
+
+    `classes`, if given, collects {id: basel_relation} for every biography that
+    comes with a text — also those outside the era, whose dates another table
+    may give differently."""
     bios = []
+    known = load_basel_table()
+    alt = load_alt_dates()
     with open(path, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("category") != "bio":
                 continue
+            basel = basel_relation(row.get("content_text"))
+            if classes is not None and basel:
+                classes[row.get("id")] = basel
             fam = (row.get("bio.family_name") or "").strip()
             first = (row.get("bio.first_name") or "").strip()
             if not fam and not first:
                 continue
-            b = year_of(row.get("bio.birth_date"))
-            d = year_of(row.get("bio.death_date"))
+            b, d = bio_years(row, alt)
             # estimate the missing bound so the era filter still works
             lo = b if b else (d - 90 if d else None)
             hi = d if d else (b + 90 if b else None)
@@ -228,6 +371,8 @@ def load_hls(path, era_lo=1380, era_hi=1720):
                 "given_n": given, "surname_n": surname,
                 "birth": b, "death": d,
                 "lex": (row.get("lexical_class") or "").strip("[]'\""),
+                # from the text where there is one, else from the last run with texts
+                "basel": basel or known.get(row.get("id"), ""),
             })
     return bios
 
@@ -240,14 +385,25 @@ DEAD_BEFORE_DEATH = 5   # … and a "deceased" this long before a known death
 POSTMORTEM = 60         # post-mortem references reach this far
 
 
+def life_dates(p):
+    """(birth, death) of an HLS-linked person: the dates of the HLS article the
+    link was judged against (apply_hls_links.py keeps them on the link), else
+    those of Wikidata. One source for both — Wikidata rounds an unknown birth
+    to the century, and mixing "born 1500" with the article's "died 1487"
+    describes nobody."""
+    wd, hls = p.get("wd") or {}, p.get("hls") or {}
+    if hls.get("b") or hls.get("d"):
+        return hls.get("b"), hls.get("d")
+    return wd.get("b"), wd.get("d")
+
+
 def life_envelope(p):
-    """(lo, hi, death) for a person carrying Wikidata life dates, else None.
+    """(lo, hi, death) for a person with known life dates, else None.
 
     The years in which mentions of that person can lie: birth − 10 (death − 95
     if the birth is unknown) to death + POSTMORTEM (birth + 90 + POSTMORTEM).
     """
-    wd = p.get("wd") or {}
-    b, d = wd.get("b"), wd.get("d")
+    b, d = life_dates(p)
     if not (b or d):
         return None
     return ((b - 10) if b else (d - 95), (d if d else b + 90) + POSTMORTEM, d)
@@ -335,6 +491,9 @@ def main():
     ap.add_argument("--surname-min", type=float, default=0.82)
     ap.add_argument("--given-min", type=float, default=0.74)
     ap.add_argument("--postmortem-grace", type=int, default=60)
+    ap.add_argument("--any-place", action="store_true",
+                    help="also keep articles that do not tie their person to Basel "
+                         "(see basel_relation); the column hls_basel tells them apart")
     ap.add_argument("--given-mode", choices=("prefix", "first"), default="prefix",
                     help="'first' restores the old first-given-token-only rule, "
                          "for A/B measurement against the current prefix rule")
@@ -344,7 +503,21 @@ def main():
     GIVEN_MODE = args.given_mode
 
     print("Loading HLS biographies …")
-    bios = load_hls(args.hls)
+    classes = {}
+    bios = load_hls(args.hls, classes=classes)
+    n_era = len(bios)
+    by_basel = collections.Counter(b["basel"] or "unknown" for b in bios)
+    if classes:
+        # the texts are at hand: keep their classes for runs without the export
+        with open(BASEL_TABLE, "w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(["hls_id", "basel"])
+            w.writerows(sorted(classes.items()))
+        print(f"  wrote {BASEL_TABLE} ({len(classes)} biographies)")
+    if not args.any_place:
+        bios = [b for b in bios if b["basel"] in ("strong", "")]
+    print(f"  Basel relation of the {n_era} bios in the era: {dict(by_basel)}"
+          f" → {len(bios)} kept")
     by_initial = collections.defaultdict(list)
     for bio in bios:
         if bio["surname_n"]:
@@ -380,7 +553,7 @@ def main():
             sr = ratio(surname, bio["surname_n"])
             if sr < args.surname_min:
                 continue
-            gr = given_ratio(given, bio["given_n"]) if bio["given_n"] else 0.0
+            gr = article_given_ratio(given, bio["given_n"]) if bio["given_n"] else 0.0
             if gr < args.given_min:
                 continue
             rel, gap = date_relation(m0, m1, dead, bio["birth"], bio["death"],
@@ -396,7 +569,7 @@ def main():
                 "hls_id": bio["id"], "hls_title": bio["title"],
                 "hls_first": bio["first"], "hls_family": bio["family"],
                 "hls_birth": bio["birth"] or "", "hls_death": bio["death"] or "",
-                "hls_lexical_class": bio["lex"],
+                "hls_lexical_class": bio["lex"], "hls_basel": bio["basel"],
                 "surname_score": round(sr, 3), "given_score": round(gr, 3),
                 "date_relation": rel, "date_gap": gap,
                 "score": score,
@@ -415,7 +588,7 @@ def main():
     cols = ["score", "date_relation", "date_gap", "surname_score", "given_score",
             "hgb_name", "hgb_year_min", "hgb_year_max", "hgb_dead_year",
             "hgb_mentions", "hls_id", "hls_title", "hls_first", "hls_family",
-            "hls_birth", "hls_death", "hls_lexical_class",
+            "hls_birth", "hls_death", "hls_lexical_class", "hls_basel",
             "n_candidates_for_person", "rank", "hls_version", "hls_url"]
     with open(args.out, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=cols)

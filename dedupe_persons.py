@@ -147,9 +147,8 @@ def merge_cluster(members, hls_title):
 
 def cluster_group(members):
     """Split an HLS-id group into identity clusters (same given name + epoch)."""
-    # life envelope from Wikidata, if present
-    wd = next((p["wd"] for p in members if p.get("wd")), {})
-    b, d = wd.get("b"), wd.get("d")
+    # life envelope from Wikidata or, failing that, from the HLS article
+    dated = next((p for p in members if life_envelope(p)), {})
 
     # group by canonical given-name sequence (fuzzy)
     buckets = []
@@ -162,9 +161,9 @@ def cluster_group(members):
         if not placed:
             buckets.append({"gs": gs, "items": [p]})
 
-    # Wikidata life envelope (birth..death + postmortem) pins the confirmed
+    # the life envelope (birth..death + postmortem) pins the confirmed
     # person; mentions inside it merge even across a long span.
-    env = life_envelope({"wd": wd})
+    env = life_envelope(dated)
 
     clusters = []
     for bk in buckets:
