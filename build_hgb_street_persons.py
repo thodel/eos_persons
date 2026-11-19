@@ -19,8 +19,9 @@ same rules the corpus-wide index uses, scoped to the street:
      one other name in that dossier is the same person ("Hans Gysler" ⊂
      "Hans Heinrich Gysler"), 80-year cap          (build_data.tokens_subset)
   2. dossier clusters are cut into runs of at most one lifespan (a bare given
-     name also at 15 years of silence) and split where live mentions follow a
-     deceased mention                     (build_data.time_runs, death_split)
+     name only near the fuller name it is attached to, or without 15 years of
+     silence) and split where live mentions follow a deceased mention
+                                          (build_data.person_runs, death_split)
   3. across the dossiers of ONE street, clusters with the same canonical
      key (≥2 tokens, abbreviations expanded) merge under the lifespan cap
      and the deceased constraint                   (build_data, step 4)
@@ -57,7 +58,7 @@ import sys
 import xml.etree.ElementTree as ET
 from difflib import SequenceMatcher
 
-from build_data import clean_tokens, canonical_key, tokens_subset, time_runs, BARE_GAP, UF
+from build_data import clean_tokens, canonical_key, tokens_subset, person_runs, UF
 from dedupe_corpus import koelner, given_seq, surname_raw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -193,16 +194,15 @@ def dossier_clusters(mentions):
             if ys and max(ys) - min(ys) > LIFESPAN:
                 continue
             uf.union((dossier, a), (dossier, supersets[0]))
-    # the same time rule as build_data: runs of at most one lifespan, and for a
-    # bare given name no generation of silence (build_data.time_runs / BARE_GAP)
+    # the same time rule as build_data: runs of at most one lifespan; a bare
+    # given name only near the fuller name it is attached to, or without a
+    # generation of silence (build_data.person_runs)
     by_root = collections.defaultdict(list)
     for m in mentions:
         by_root[uf.find((m["dossier"], m["name"]))].append(m)
     runs = []
     for root, rows in by_root.items():
-        canon = _pick_canonical(sorted({r["name"] for r in rows}))
-        bare = len(canonical_key(canon).split()) < 2
-        for run in time_runs(rows, LIFESPAN, BARE_GAP if bare else None):
+        for run in person_runs(rows):
             runs.append((root, run))
     out = []
     for root, rows in runs:

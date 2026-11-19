@@ -103,10 +103,36 @@ def test_full_names_only_obey_the_lifespan():
     assert len(P) == 1 and P[0]["y"] == [1605, 1665]
 
 
-def test_a_bare_name_attached_to_a_full_name_follows_the_full_name():
-    # 'Hans' is the one fuller 'Hans Meyer' of the dossier: no bare-name gap
-    P = resolve(("Hans Meyer", 1500, "D1"), ("Hans", 1530, "D1"))
-    assert len(P) == 1 and P[0]["c"] == 2
+def test_a_bare_name_joins_the_fuller_name_only_when_close_in_time():
+    # 'Hans' next to the one 'Hans Meyer' of the dossier: the same man …
+    P = resolve(("Hans Meyer", 1500, "D1"), ("Hans", 1510, "D1"))
+    assert len(P) == 1 and P[0]["c"] == 2 and P[0]["y"] == [1500, 1510]
+    # … but not 'Anna' 1515 for 'Clor Anna' 1594 (the old bins split these by
+    # accident; they must stay apart on purpose)
+    P = resolve(("Clor Anna", 1594, "D1"), ("Anna", 1515, "D1"))
+    assert sorted((p["n"], p["y"]) for p in P) == [("Anna", [1515, 1515]), ("Clor Anna", [1594, 1594])]
+
+
+def test_only_the_bare_mentions_near_the_fuller_name_are_attached():
+    P = resolve(("Hans Meyer", 1500, "D1"), ("Hans Meyer", 1505, "D1"),
+                ("Hans Meyer", 1570, "D1"), ("Hans", 1572, "D1"), ("Hans", 1535, "D1"))
+    got = sorted((p["n"], p["y"], p["c"]) for p in P)
+    assert got == [("Hans", [1535, 1535], 1), ("Hans Meyer", [1500, 1572], 4)]
+
+
+def test_person_runs_attaches_to_the_nearest_run():
+    rows = [{"name": "Hans Meyer", "year": y, "dead": False} for y in (1500, 1505, 1610)] + \
+           [{"name": "Hans", "year": y, "dead": False} for y in (1612, 1560)]
+    runs = sorted(sorted(r["year"] for r in run) for run in B.person_runs(rows))
+    assert runs == [[1500, 1505], [1560], [1610, 1612]]
+
+
+def test_person_runs_keeps_a_run_within_a_lifespan():
+    rows = [{"name": "Hans Meyer", "year": 1500, "dead": False},
+            {"name": "Hans Meyer", "year": 1578, "dead": False},
+            {"name": "Hans", "year": 1590, "dead": False}]     # 12 years after 1578, but 90 after 1500
+    runs = B.person_runs(rows)
+    assert sorted(len(r) for r in runs) == [1, 2]
 
 
 def test_person_at_a_former_bin_border_is_one():

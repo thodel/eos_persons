@@ -176,6 +176,48 @@ def time_runs(rows, cap=LIFESPAN, gap=None, year=lambda r: r["year"]):
     return runs
 
 
+def person_runs(rows, year=lambda r: r["year"], name=lambda r: r["name"]):
+    """Cut the mentions of one merged name of a dossier into persons in time.
+
+    Mentions under a full name (two tokens or more) form runs of at most one
+    lifespan. A mention under a bare given name — the cluster's own name, or
+    one attached to the single fuller name of the dossier ('Anna' to 'Clor
+    Anna') — only belongs to a run if it lies less than BARE_GAP years from one
+    of that run's full-name mentions and keeps the run within a lifespan;
+    otherwise the bare mentions form runs of their own, cut at every silence of
+    BARE_GAP years.
+    """
+    def bare(r):
+        return len(canonical_key(name(r)).split()) < 2
+    full = [r for r in rows if not bare(r)]
+    loose = [r for r in rows if bare(r)]
+    if not full:
+        return time_runs(loose, LIFESPAN, BARE_GAP, year)
+    runs = time_runs(full, LIFESPAN, None, year)
+    if not loose:
+        return runs
+    anchors = [[year(x) for x in run if year(x)] for run in runs]
+    span = [[min(a), max(a)] if a else None for a in anchors]
+    rest = []
+    for r in sorted(loose, key=lambda r: year(r) or 0):
+        y, best = year(r), None
+        if y:
+            for k, a in enumerate(anchors):
+                if not a:
+                    continue
+                dist = min(abs(y - v) for v in a)
+                if dist < BARE_GAP and max(span[k][1], y) - min(span[k][0], y) <= LIFESPAN \
+                        and (best is None or dist < best[0]):
+                    best = (dist, k)
+        if best is None:
+            rest.append(r)
+        else:
+            k = best[1]
+            runs[k].append(r)
+            span[k] = [min(span[k][0], y), max(span[k][1], y)]
+    return runs + time_runs(rest, LIFESPAN, BARE_GAP, year)
+
+
 def death_split(rows, year=lambda r: r["year"], dead=lambda r: r["dead"]):
     """Split a run where living mentions follow the first 'deceased' mention.
 
@@ -290,15 +332,13 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
         }
 
     # Steps 2b/3b: cut each cluster into runs that can be one person — one
-    # lifespan; for a bare given name also no generation of silence — and split
-    # a run where living mentions follow the first deceased one. Every mention
-    # ends up in exactly one entry.
+    # lifespan; a bare given name only near the fuller name it is attached to,
+    # or without a generation of silence (person_runs) — and split a run where
+    # living mentions follow the first deceased one. Every mention ends up in
+    # exactly one entry.
     per_dossier: list[dict] = []
     for root, rows in by_root.items():
-        canon = pick_canonical(sorted({r["name"] for r in rows}))
-        bare = len(canonical_key(canon).split()) < 2
-        for run in time_runs(rows, LIFESPAN, BARE_GAP if bare else None,
-                             year=lambda r: r["_year"]):
+        for run in person_runs(rows, year=lambda r: r["_year"]):
             for part in death_split(run, year=lambda r: r["_year"],
                                     dead=lambda r: r["_dead"]):
                 per_dossier.append(summarise(root, part))

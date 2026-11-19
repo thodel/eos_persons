@@ -106,3 +106,11 @@ def test_no_dedupe_pass_adds_namesakes_from_outside_a_known_life():
     older["y"], older["dead_year"] = [1695, 1720], None
     sets, _ = DS.cluster([faesch, older], [(0, 1, row)])
     assert [sorted(s) for s in sets] == [[0, 1]]
+
+
+def test_merged_person_counts_dossiers_not_name_pairs():
+    a = entry("Hans Müller", [1470, 1500], c=3)
+    b = entry("Hanns Müller", [1505, 1520])
+    b["dos"] = [["D1", "Hanns Müller"], ["D2", "Hanns Müller"]]
+    m = DP.merge_cluster([a, b], "Johann Müller")
+    assert len(m["dos"]) == 3 and m["d"] == 2 and m["c"] == 4

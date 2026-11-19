@@ -126,7 +126,8 @@ def merge_cluster(members, hls_title):
     m["n"] = base["n"]
     m["v"] = variants
     m["c"] = c
-    m["d"] = len(dos)
+    # distinct dossiers, not (dossier, name) pairs
+    m["d"] = len({e[0] if isinstance(e, list) else e for e in dos})
     m["y"] = [min(ys0), max(ys1)] if ys0 else base.get("y")
     m["dead_year"] = min(deads) if deads else None
     for k, v in (("occ", occ), ("tit", tit), ("fam", fam),
