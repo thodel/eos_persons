@@ -69,9 +69,9 @@ module, but is no longer the reference.
 
 Figures of the current build (street corpus 0.3.0): 238,957 person mentions in
 75,447 documents → 152,250 resolved names → 137,454 persons after the name-based
-dedupe passes → **127,089 persons** after `dedupe_spelling.py`;
+dedupe passes → **127,044 persons** after `dedupe_spelling.py`;
 614 carry an HLS/Wikidata link (1,651 confident links before dedupe, from 3,253
-candidates); 3,694 geolocated dossiers; 14,934 persons with movement between
+candidates); 3,694 geolocated dossiers; 14,930 persons with movement between
 ≥2 properties; 3,631 cross-corpus identities (525 attested in the register).
 
 ### Cross-check against *Basler Liegenschaften 1400–1700 Interaktiv*
@@ -115,14 +115,14 @@ brackets are those of the first comparison, on the index of 136,470 persons.
   of the index — one lifespan of 80 years, nobody joins more than 15 years
   after the group's earliest death, different HLS/Wikidata identities never
   merge, nothing joins an HLS-linked person from outside that person's known
-  life. On the current build: 137,454 → **127,089 persons** in five rounds; 690
-  pairs stay apart because a guard refuses them.
+  life. On the current build: 137,454 → **127,044 persons**; 664 pairs stay
+  apart because a guard refuses them.
 - **Same name, same dossier, same years, two persons** [1,107 groups]. *Fixed
   where the evidence is clean:* the pair is a third source for
   `dedupe_spelling.py` when the shared variant is a full name, the canonical
   names are spelling variants and neither person is first mentioned after the
-  other is called deceased. 676 groups remain: bare names, differing given
-  names, death splits, and 241 pairs a guard refuses.
+  other is called deceased. 681 groups remain: bare names, differing given
+  names, death splits, and 245 pairs a guard refuses.
 - **Persons spanning more than a lifespan** [62, all HLS-linked, up to 187
   years]. *Fixed:* `link_hls.date_relation` only links a cluster whose whole
   mention span fits the life (not before birth − 5, not beyond death + 60, not

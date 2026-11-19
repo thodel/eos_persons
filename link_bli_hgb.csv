@@ -4527,7 +4527,7 @@ actor_6549,Rötin,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Rötin#1533-1533,1,HG
 actor_6551,Lienhart Ryssysen,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Lienhart Ryssysen#1536-1536,1,HGB_1_002#2940,,schmied
 actor_6552,Elspeth,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Elspeth#1536-1536,1,HGB_1_002#2941,,
 actor_6554,Angnesa u. Anner,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Angnesa u . Anner#1536-1536,1,HGB_1_002#2942,,
-actor_6555,Hansen Peters,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Hanns Petter#1514-1571,1,HGB_1_002#2943,,messerschmied
+actor_6555,Hansen Peters,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Hanns Petter#1500-1571,1,HGB_1_002#2943,,messerschmied
 actor_6557,Rotten,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Rotten#1536-1536,1,HGB_1_002#2945,1536,
 actor_6558,Jachens Keller,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Jachens Keller#1531-1545,1,HGB_1_002#2965,,
 actor_6561,Clausli,1,HGB_1_002_122,id_block,0,dossier,1,0,1,Clausli#1538-1538,1,HGB_1_002#2969,,
@@ -6952,7 +6952,7 @@ actor_10190,Jörg aucelburg,1,HGB_1_010_030,documents,1,doc,1,0,1,Jörg aucelbur
 actor_10193,Hanns Blattner,1,HGB_1_010_030,id_block,0,dossier,1,0,1,Hanns Plattner#1457-1480,1,HGB_1_010#1199,,ppst
 actor_10194,Hanns Gernlers,1,HGB_1_010_030,id_block,0,dossier,1,0,1,Hans Gernlers#1476-1545,1,HGB_1_010#1252,,
 actor_10196,Cappellanus Sandt Anne,1,HGB_1_010_030,id_block,0,dossier,1,0,1,Cappellanus Sandt Anne#1477-1477,1,HGB_1_010#1259,,
-actor_10197,Johannes Swob,9,HGB_1_010_030,documents,4,doc,7,0,3,Hans Schwab#1449-1526 | Hans Schwob .#1434-1487 | Hans Swob#1411-1487,1,HGB_1_010#1260,,Assisins|kaplan
+actor_10197,Johannes Swob,9,HGB_1_010_030,documents,4,doc,7,0,2,Hans Schwab#1449-1526 | Hans Schwob .#1411-1487,1,HGB_1_010#1260,,Assisins|kaplan
 actor_10198,Rudolff Scherrer,1,HGB_1_010_030,documents,1,doc,1,0,1,"Rudolf , Scherer#1461-1478",1,HGB_1_010#1303,,kaplan
 actor_10200,Ulin Zosß,1,HGB_1_010_030,id_block,0,dossier,1,0,1,Ulin Zoss#1478-1536,1,HGB_1_010#1433,,
 actor_10203,Samuel Hösch,1,HGB_1_010_030,id_block,0,dossier,3,1,2,Samuel Hösch#1500-1569 | Samuel Hösch#1597-1597,2,HGB_1_010#1716|HGB_1_010#3753,,zinsmeister
@@ -8209,7 +8209,7 @@ actor_11991,Heinrichen Glaser,1,HGB_1_010_062,id_block,0,dossier,1,0,1,Heinrich 
 actor_11995,Anna Negelin,1,HGB_1_010_062,documents,1,doc,1,0,1,Anna Negelin#1525-1548,1,HGB_1_010#2202,,
 actor_11997,Conrat Müllers,1,HGB_1_010_062,id_block,0,dossier,1,0,1,Conrat Müllers#1525-1525,1,HGB_1_010#2197,1525,
 actor_11999,Rudolff Nussbaum,1,HGB_1_010_062,id_block,0,dossier,1,0,1,Rudolff Nussbaum#1529-1531,1,HGB_1_010#2307,,amtmann
-actor_12000,Hans Peter,2,HGB_1_010_062,id_block,0,dossier,2,0,1,Hanns Petter#1514-1571,1,HGB_1_010#2363,,messerschmied
+actor_12000,Hans Peter,2,HGB_1_010_062,id_block,0,dossier,2,0,1,Hanns Petter#1500-1571,1,HGB_1_010#2363,,messerschmied
 actor_12001,Lucia Maler,1,HGB_1_010_062,documents,1,doc,1,0,1,Lucia Maler#1531-1531,1,HGB_1_010#2364,,
 actor_12003,Claus Bertschi,1,HGB_1_010_062,documents,1,doc,1,0,1,Elsbeth die Claus Bertschi#1543-1553,1,HGB_1_010#2660,,
 actor_12004,Elsbeth die Claus Bertschi,1,HGB_1_010_062,documents,1,doc,1,0,1,Elsbeth die Claus Bertschi#1543-1553,1,HGB_1_010#2660,,
@@ -9582,7 +9582,7 @@ actor_13930,Gabriel Frey,1,HGB_1_010_110,documents,1,doc,1,0,1,Gabriel Frey#1549
 actor_13931,Hanns Georg Kleindienst,1,HGB_1_010_110,documents,1,doc,1,0,1,Hanns Georg Kleindienst#1622-1698,1,HGB_1_010#4157,,
 actor_13932,Peter Thüring,1,HGB_1_010_110,id_block,0,dossier,1,0,1,Peter Theüring#1602-1679,1,HGB_1_010#4083,,papierer
 actor_13934,Laurentz Richarts,1,HGB_1_010_110,id_block,0,dossier,1,0,1,Laurentz Richarts#1622-1622,1,HGB_1_010#4148,1622,
-actor_13935,Albrecht Roht,2,HGB_1_010_110,documents,2,doc,2,0,2,Albrecht Roth#1606-1684 | albrecht Roht#1632-1692,1,HGB_1_010#4419,,handelsmann
+actor_13935,Albrecht Roht,2,HGB_1_010_110,documents,2,doc,2,0,2,Albrecht Roth#1606-1684 | albrecht Roht#1618-1692,1,HGB_1_010#4419,,handelsmann
 actor_13937,Hans Jacob Schreiber,1,HGB_1_010_110,documents,1,doc,1,0,1,Hans Jacob Schreiber#1636-1639,1,HGB_1_010#4420,,
 actor_13942,Anthoni Burger,2,HGB_1_010_110,id_block,0,dossier,2,0,1,Anthon Burgers#1636-1639,1,HGB_1_010#4415,1639,
 actor_13943,Allten fraw Gückerin,1,HGB_1_010_110,id_block,0,dossier,1,0,1,Allten fraw Gückerin#1636-1636,1,HGB_1_010#4421,,
@@ -10785,7 +10785,7 @@ actor_15699,Hanns Jacob Eckhstein,1,HGB_1_010_137,id_block,0,dossier,1,0,1,Hanns
 actor_15701,Ludwig Gernler,2,HGB_1_010_137,documents,2,doc,2,0,1,Ludwig Gernler#1603-1677,2,HGB_1_010#4133|HGB_1_010#4367,,notar|oberschreiber
 actor_15702,Judith Mügin,1,HGB_1_010_137,documents,1,doc,1,0,1,Judith Mügin#1632-1632,1,HGB_1_010#4366,,
 actor_15703,Blasi Belitzaris,1,HGB_1_010_137,id_block,0,dossier,1,0,1,Blasi Belitzaris#1632-1632,1,HGB_1_010#4353,1632,
-actor_15704,Friederich Eglinger,2,HGB_1_010_137,documents,2,doc,2,0,1,Friederich Eglinger#1638-1666,1,HGB_1_010#4745,,apotheker
+actor_15704,Friederich Eglinger,2,HGB_1_010_137,documents,2,doc,2,0,1,Friederich Eglinger#1637-1666,1,HGB_1_010#4745,,apotheker
 actor_15705,Johann Jacob Gernler,2,HGB_1_010_137,documents,5,doc,6,0,1,Johann Jacob Gernler#1657-1671,1,HGB_1_010#4746,,Pfarherr|Verkinder gässl Worts|Verkündigers göttlichen Worths|pfarrer|verkünder des göttlichen worts
 actor_15707,Eglingern,1,HGB_1_010_137,documents,1,doc,1,0,1,Eglingern#1657-1657,1,HGB_1_010#4747,,
 actor_15708,Jacob Schweitzer,1,HGB_1_010_137,id_block,0,dossier,1,0,1,Jacob Schweitzer#1648-1661,1,HGB_1_010#4608,,
@@ -14204,7 +14204,7 @@ actor_20925,Freyen,1,HGB_1_024_013,documents,2,doc,2,0,1,Freyen#1614-1615,1,HGB_
 actor_20926,Jaraben Henriepentii,1,HGB_1_024_013,id_block,0,dossier,1,0,1,Jaraben Henriepentii#1615-1615,1,HGB_1_024#2394,,
 actor_20928,Rudolph Merian,1,HGB_1_024_013,id_block,0,dossier,1,0,1,Rudolph Merian#1575-1652,1,HGB_1_024#2395,,rat
 actor_20929,Lienhardt Braunen,1,HGB_1_024_013,id_block,0,dossier,1,0,1,Leonhardt Brun#1594-1661,1,HGB_1_024#2396,,wollfärber
-actor_20930,Heinrich Schmid,1,HGB_1_024_013,documents,1,doc,1,0,1,Heinrich Schmid#1625-1625,1,HGB_1_024#1669,,
+actor_20930,Heinrich Schmid,1,HGB_1_024_013,documents,1,doc,1,0,1,Heinrich Schmid#1549-1625,1,HGB_1_024#1669,,
 actor_20931,Conrad Benckher,1,HGB_1_024_013,documents,1,doc,1,0,1,Conrad Benckher#1625-1625,1,HGB_1_024#2455,,
 actor_20933,Hanns Caspar Teyels,1,HGB_1_024_013,id_range,0,dossier,1,0,1,Hanns Caspar Teyels#1625-1625,1,HGB_1_024#2453,1625,
 actor_20934,Geörg Groppen,1,HGB_1_024_013,id_range,0,dossier,1,0,1,Georg Gropp#1592-1654,1,HGB_1_024#2456,,
@@ -14763,7 +14763,7 @@ actor_21780,Lienhardt Däsinger,1,HGB_1_024_045,documents,1,doc,1,0,1,Lienhardt 
 actor_21781,Hannß Heinrich Schwartz,3,HGB_1_024_045,documents,2,doc,3,0,2,Hannß Heinrich Schwartz#1642-1679 | Heinrich Schwartz#1656-1695,2,HGB_1_024#2604|HGB_1_024#2698,,küfer
 actor_21782,Thoman Bischoff,2,HGB_1_024_045,documents,1,doc,1,0,1,Thomas Bischoff#1637-1697,1,HGB_1_024#2526,,hutmacher
 actor_21783,Laurentz Schöckhen,2,HGB_1_024_045,id_block,0,dossier,2,0,2,Laurentz Schockh#1697-1697 | Laurentz Schöckhen#1671-1671,2,HGB_1_024#2812|HGB_1_024#2996,,schneider
-actor_21784,Albrecht. Rost,4,HGB_1_024_045,documents,3,doc,3,0,3,Albrecht . Rost#1679-1679 | Albrecht kost#1686-1686 | albrecht Roht#1632-1692,3,HGB_1_024#2850|HGB_1_024#2851|HGB_1_024#2909,,wollweber
+actor_21784,Albrecht. Rost,4,HGB_1_024_045,documents,3,doc,3,0,3,Albrecht . Rost#1679-1679 | Albrecht kost#1686-1686 | albrecht Roht#1618-1692,3,HGB_1_024#2850|HGB_1_024#2851|HGB_1_024#2909,,wollweber
 actor_21785,Johann Rudolff Burckhardt,4,HGB_1_024_045,documents,3,doc,3,0,1,Hanns Rudolph Burckhard#1616-1698,1,HGB_1_024#2931,,Eltern
 actor_21786,Leonhardt Schöckh,1,HGB_1_024_045,id_block,0,dossier,1,0,1,Leonhardt Schöckh#1690-1690,1,HGB_1_024#2932,,schneider
 actor_21787,Niclaus von Mechell,2,HGB_1_024_045,documents,3,doc,3,0,1,Niclaus von Mechell#1694-1697,1,HGB_1_024#2989,,Hoßen|Hösen|hosenstricker
@@ -14970,7 +14970,7 @@ actor_22069,Martin Mande,1,HGB_1_024_051,id_block,0,dossier,1,0,1,Martin Mande#1
 actor_22070,Friedrich Bischoff,1,HGB_1_024_051,id_block,0,dossier,4,1,2,Friedrich Bischoff#1692-1698 | Friedrich Bischoff#1480-1480,2,HGB_1_024#2961|HGB_1_024#794,,
 actor_22071,alten Schenchin,1,HGB_1_024_051,id_block,0,dossier,1,0,1,alten Schenchin#1486-1486,0,,,schlossern
 actor_22072,Rudolffen Schencken,8,HGB_1_024_051,documents,5,doc,5,0,1,Rudolff Schenck#1510-1548,1,HGB_1_024#1192,,krämer|schlosser
-actor_22073,Heinrich Schmidt,1,HGB_1_024_051,id_block,0,dossier,7,1,2,Heinrich Schmidt#1486-1566 | Heinrich Schmidt#1570-1571,2,HGB_1_024#1669|HGB_1_024#866,,glaser
+actor_22073,Heinrich Schmidt,1,HGB_1_024_051,id_block,0,dossier,7,1,2,Heinrich Schmidt#1486-1566 | Heinrich Schmid#1549-1625,2,HGB_1_024#1669|HGB_1_024#866,,glaser
 actor_22074,Hans Schenckhen,3,HGB_1_024_051,documents,4,doc,4,0,1,Hans Schenck#1500-1579,2,HGB_1_024#1023|HGB_1_024#1099,,
 actor_22075,Hans Schencken mutter,1,HGB_1_024_051,id_block,0,dossier,1,0,1,Hans Schencken mutter#1505-1505,1,HGB_1_024#1137,,schlosser
 actor_22077,Bartholome Brieffer,1,HGB_1_024_051,id_block,0,dossier,1,0,1,Bartholome Brieffer#1510-1530,1,HGB_1_024#1232,,
@@ -14981,7 +14981,7 @@ actor_22083,Jacob Grienagel,5,HGB_1_024_051,documents,8,doc,8,0,2,Jacob Grienage
 actor_22084,Jacob Kuttennower,3,HGB_1_024_051,documents,4,doc,4,0,1,Jacob Kuttenower#1547-1549,1,HGB_1_024#1644,,tischmacher
 actor_22085,Jenowe Störckhin,2,HGB_1_024_051,documents,2,doc,2,0,1,Jenowe Störckhin#1548-1548,2,HGB_1_024#1655|HGB_1_024#1656,,
 actor_22088,Mergelin Dampfrion,1,HGB_1_024_051,id_block,0,dossier,1,0,1,Mergelin Dampfrion#1548-1548,1,HGB_1_024#1657,,
-actor_22089,Heinrich Schmitt,7,HGB_1_024_051,documents,10,doc,11,0,4,Heinrich Schmidt#1486-1566 | Heinrich Schmid#1549-1590 | Heinrich . Schmidts#1571-1573 | Heinrich Schmidt#1570-1571,4,HGB_1_024#1669|HGB_1_024#866|HGB_1_024#1810|HGB_1_024#1864,1573,glaser
+actor_22089,Heinrich Schmitt,7,HGB_1_024_051,documents,10,doc,11,0,2,Heinrich Schmidt#1486-1566 | Heinrich Schmid#1549-1625,4,HGB_1_024#1669|HGB_1_024#866|HGB_1_024#1810|HGB_1_024#1864,1573,glaser
 actor_22092,Jacharias Fickher,7,HGB_1_024_051,documents,8,doc,8,0,6,Zachariae Fickhers#1578-1592 | Zacharias Licker#1550-1578 | Fracharius Fickhers#1579-1579 | Jacharias Fickher#1581-1581 | Jacharyas Füker#1587-1587 | Jacheryas Fickher#1590-1590,6,HGB_1_024#1672|HGB_1_024#1920|HGB_1_024#1935|HGB_1_024#1957|HGB_1_024#2020|HGB_1_024#2096,,glaser
 actor_22095,Firkher,1,HGB_1_024_051,id_block,0,dossier,1,0,1,Firkher#1573-1573,1,HGB_1_024#1876,,
 actor_22096,Zacharias,1,HGB_1_024_051,id_block,0,dossier,1,0,1,Zacharias#1573-1573,1,HGB_1_024#1877,,
@@ -15049,7 +15049,7 @@ actor_22186,Matheus Jsenmann,1,HGB_1_024_052,id_block,0,dossier,1,0,1,Matheus Js
 actor_22187,Gerthruta Fritschins,1,HGB_1_024_052,id_block,0,dossier,1,0,1,Gerthruta Fritschins#1652-1652,1,HGB_1_024#2667,,
 actor_22188,Remies Faesch,1,HGB_1_024_052,documents,1,doc,1,0,1,Remies Faesch#1656-1656,1,HGB_1_024#2689,,schaffner
 actor_22190,Heinrich Götzen,2,HGB_1_024_052,documents,1,doc,1,0,1,Heinrich Götz#1668-1696,1,HGB_1_024#2771,1682,lederbereiter
-actor_22191,Albrecht Roth,1,HGB_1_024_052,documents,3,doc,3,0,1,albrecht Roht#1632-1692,1,HGB_1_024#2851,,
+actor_22191,Albrecht Roth,1,HGB_1_024_052,documents,3,doc,3,0,1,albrecht Roht#1618-1692,1,HGB_1_024#2851,,
 actor_22192,rin,1,HGB_1_024_052,id_block,0,dossier,1,0,1,rin#1680-1680,0,,,
 actor_22194,Jacob Roth,1,HGB_1_024_052,documents,2,doc,2,0,1,Jacob Roht#1641-1688,1,HGB_1_024#2882,,Stuckh|glockengiesser|rotgiesser
 actor_22196,Jacob Gibola,2,HGB_1_024_052,id_block,0,dossier,3,0,1,Jacob Gibola#1655-1686,1,HGB_1_024#2763,1682,kürschner
@@ -15784,7 +15784,7 @@ actor_23240,zem Rosen,1,HGB_1_024_101,id_range,0,dossier,1,0,1,zem Rosen#1423-14
 actor_23241,Vogelerin hs,1,HGB_1_024_101,id_range,0,dossier,1,0,1,Vogelerin hs#1436-1436,1,HGB_1_024#261,,
 actor_23242,Hans Stub,1,HGB_1_024_101,documents,1,doc,1,0,1,Hans Stub#1523-1528,1,HGB_1_024#1382,,gerber
 actor_23243,Barbara,1,HGB_1_024_101,documents,1,doc,1,0,1,Barbara#1528-1528,1,HGB_1_024#1383,,
-actor_23244,Hansen Peter,2,HGB_1_024_101,documents,2,doc,2,0,1,Hanns Petter#1514-1571,1,HGB_1_024#1384,,weber
+actor_23244,Hansen Peter,2,HGB_1_024_101,documents,2,doc,2,0,1,Hanns Petter#1500-1571,1,HGB_1_024#1384,,weber
 actor_23245,Mergeli,1,HGB_1_024_101,documents,2,doc,2,0,1,Mergeli#1528-1531,1,HGB_1_024#1385,,
 actor_23251,Petter Ryffen,6,HGB_1_024_101,documents,2,doc,5,0,1,Petter Ryff#1504-1580,2,HGB_1_024#1430|HGB_1_024#1431,1531,amtmann
 actor_23253,Christiana,1,HGB_1_024_101,documents,1,doc,1,0,1,Christiana#1531-1531,1,HGB_1_024#1460,,
@@ -18751,7 +18751,7 @@ actor_27528,Stephann Fellitzare,1,HGB_1_028_071,id_block,0,dossier,1,0,1,Stephan
 actor_27529,Hanns Buodolff Obermeigern,7,HGB_1_028_071,id_block,0,dossier,7,0,4,Hanns Rudolph Obermeyer#1567-1628 | Hanns Buodolff Obermeigern#1596-1596 | Hans Rudolp Obermeyern#1617-1617 | Rudolff Obermeyers#1602-1602,4,HGB_1_028#1787|HGB_1_028#1832|HGB_1_028#1856|HGB_1_028#2031,,
 actor_27531,Isac Liechtenhan,1,HGB_1_028_071,id_block,0,dossier,1,0,1,Isac Liechtenhan#1596-1646,1,HGB_1_028#1829,,
 actor_27533,Stephani Bellezari,2,HGB_1_028_071,id_block,0,dossier,3,0,2,Stephani Bellezari#1596-1596 | Stephan Bellegare#1596-1596,2,HGB_1_028#1822|HGB_1_028#1824,1596,
-actor_27536,Peter Punders,1,HGB_1_028_071,id_block,0,dossier,1,0,1,Peter Punders#1596-1596,1,HGB_1_028#1623,1596,
+actor_27536,Peter Punders,1,HGB_1_028_071,id_block,0,dossier,1,0,1,Peter Bunders#1596-1596,1,HGB_1_028#1623,1596,
 actor_27538,Christof Danon,3,HGB_1_028_071,documents,2,doc,2,0,1,Christof Danon#1589-1596,2,HGB_1_028#1831|HGB_1_028#1833,1601,
 actor_27540,Marx,1,HGB_1_028_071,id_block,0,dossier,1,0,1,Marx#1601-1601,0,,,
 actor_27541,Emanuel,1,HGB_1_028_071,id_block,0,dossier,1,0,1,Emanuel#1601-1601,1,HGB_1_028#1849,,
@@ -20376,7 +20376,7 @@ actor_30009,Walther,1,HGB_1_050_042,documents,1,doc,1,0,1,Walther#1410-1410,1,HG
 actor_30010,Jecki,1,HGB_1_050_042,documents,1,doc,1,0,1,Jecki#1410-1410,1,HGB_1_050#94,,
 actor_30011,Joh Mantz,1,HGB_1_050_042,documents,1,doc,1,0,1,Johannes Mantz#1408-1425,1,HGB_1_050#95,,hospital
 actor_30012,Metzerlin,1,HGB_1_050_042,id_block,0,dossier,1,0,1,Metzerlin#1436-1436,1,HGB_1_050#322,,
-actor_30013,Martin Huber,1,HGB_1_050_042,id_block,0,dossier,6,1,2,Martin Huber#1436-1512 | Martin Huber#1518-1521,2,HGB_1_050#323|HGB_1_050#1627,,
+actor_30013,Martin Huber,1,HGB_1_050_042,id_block,0,dossier,6,1,2,Martin Hüber#1512-1541 | Martin Huber#1436-1512,2,HGB_1_050#323|HGB_1_050#1627,,
 actor_30014,Valtin Odemer,1,HGB_1_050_042,id_block,0,dossier,1,0,1,Valtin Odemer#1436-1436,1,HGB_1_050#324,,kürschner
 actor_30015,Metzeller,1,HGB_1_050_042,documents,1,doc,1,0,1,Metzeller#1458-1458,1,HGB_1_050#687,,
 actor_30016,Jung Metzeller,1,HGB_1_050_042,documents,1,doc,1,0,1,Jung Metzeller#1477-1477,1,HGB_1_050#1006,,
@@ -20404,7 +20404,7 @@ actor_30044,Ursub,1,HGB_1_050_042,id_block,0,dossier,1,0,1,Ursub#1491-1491,1,HGB
 actor_30048,Bertholden Solder,1,HGB_1_050_042,id_block,0,dossier,1,0,1,Bertholden Solder#1491-1491,1,HGB_1_050#1253,,
 actor_30049,Adelheit,1,HGB_1_050_042,id_block,0,dossier,1,0,1,Adelheitten#1491-1491,1,HGB_1_050#1254,,
 actor_30051,Adelheitten,1,HGB_1_050_042,id_block,0,dossier,1,0,1,Adelheitten#1491-1491,1,HGB_1_050#1254,,
-actor_30052,Marthin Huber,3,HGB_1_050_042,documents,6,doc,6,0,4,Martin Huber#1436-1512 | Martin Huber#1518-1521 | Marthin Huber#1541-1541 | Martin Hüber#1512-1525,3,HGB_1_050#323|HGB_1_050#1627|HGB_1_050#1914,,koch|wirt
+actor_30052,Marthin Huber,3,HGB_1_050_042,documents,6,doc,6,0,2,Martin Hüber#1512-1541 | Martin Huber#1436-1512,3,HGB_1_050#323|HGB_1_050#1627|HGB_1_050#1914,,koch|wirt
 actor_30053,Anna,1,HGB_1_050_042,documents,2,doc,2,0,1,Anna#1512-1512,1,HGB_1_050#1545,,
 actor_30054,Schuler,1,HGB_1_050_042,id_block,0,dossier,1,0,1,Schuler#1512-1512,1,HGB_1_050#1546,,
 actor_30055,Amerbach,1,HGB_1_050_042,id_block,0,none,0,0,0,,0,,,
@@ -24127,7 +24127,7 @@ actor_35339,Theodor Scherb,2,HGB_1_056_012,documents,2,doc,3,0,1,Theodor Scherb#
 actor_35341,Hanns Rudolph Fäeschen,3,HGB_1_056_012,id_block,0,dossier,3,0,3,Hanns Rudolf Faesch#1610-1690 | Hanns Rudolph Faesch#1598-1674 | Johann Rudolph Fäschen#1620-1697,2,HGB_1_056#1220|HGB_1_056#1196,,
 actor_35342,Joseph Gürtler,1,HGB_1_056_012,id_block,0,dossier,2,0,1,Joseph . Gürtler#1627-1697,1,HGB_1_056#1221,,
 actor_35343,Theobald Lautenburg,1,HGB_1_056_012,documents,1,doc,1,0,1,Theobald Lautenburg#1628-1628,1,HGB_1_056#1224,,notar
-actor_35344,Hanns Jacob Fäschen,2,HGB_1_056_012,id_block,0,dossier,2,0,2,Hanns Jacob Faesch#1624-1699 | Hanns Jacob Fäschen#1680-1685,2,HGB_1_056#1265|HGB_1_056#1381,1685,Stattgerichts Beysitzer
+actor_35344,Hanns Jacob Fäschen,2,HGB_1_056_012,id_block,0,dossier,2,0,2,Hanns Jacob Faesch#1624-1699 | Hanns Jacob Faeschen#1680-1685,2,HGB_1_056#1265|HGB_1_056#1381,1685,Stattgerichts Beysitzer
 actor_35346,Jacoben selbsten,1,HGB_1_056_012,id_block,0,dossier,1,0,1,Jacoben selbsten#1660-1660,1,HGB_1_056#1285,,
 actor_35347,Zacharia Gnawern,1,HGB_1_056_012,id_block,0,dossier,1,0,1,Zacharia Gnawern#1660-1660,1,HGB_1_056#1286,,schneider
 actor_35349,Haac Fäschen,1,HGB_1_056_012,documents,1,doc,1,0,1,Haac Fäschen#1685-1685,1,HGB_1_056#1383,,
@@ -25383,7 +25383,7 @@ actor_37203,Claudi Krämer,1,HGB_1_058_026,id_block,0,dossier,1,0,1,Claudi Kräm
 actor_37205,Jsaac Schönaweren,5,HGB_1_058_026,id_block,0,dossier,5,0,4,Isaac Schönawer#1673-1685 | Jacob Schönauer#1649-1684 | Jsaac Schönawern#1648-1660 | Jsac Schöwander#1692-1692,4,HGB_1_058#8553|HGB_1_058#8062|HGB_1_058#8270|HGB_1_058#8820,,handelsmann
 actor_37207,Schönawer,1,HGB_1_058_026,id_block,0,dossier,1,0,1,Schönawer#1648-1648,1,HGB_1_058#8064,,
 actor_37209,Frantz Tatzin,1,HGB_1_058_026,documents,1,doc,1,0,1,Frantz Tatzin#1673-1673,1,HGB_1_058#8551,,handelsmann
-actor_37210,Emanuel König,1,HGB_1_058_026,documents,1,doc,1,0,1,Emanuel König#1673-1684,1,HGB_1_058#7966,1684,
+actor_37210,Emanuel König,1,HGB_1_058_026,documents,1,doc,1,0,1,Emanuel Thönig#1642-1684,1,HGB_1_058#7966,1684,
 actor_37211,Johann König,2,HGB_1_058_026,documents,1,doc,1,0,1,Hanns Ludwig König#1673-1695,1,HGB_1_058#8552,1684,
 actor_37214,Sebastian Socin,1,HGB_1_058_026,documents,1,doc,1,0,1,Sebastian Socin#1670-1685,1,HGB_1_058#8280,,landvogt|obervogt|vogt
 actor_37216,Johann Ludwig König,2,HGB_1_058_026,id_block,0,dossier,3,1,1,Hanns Ludwig König#1673-1695,1,HGB_1_058#8552,,Füngere|buchhändler
@@ -26565,7 +26565,7 @@ actor_38938,Welshan,1,HGB_1_058_050,id_block,0,dossier,1,0,1,Welshaußen dosterm
 actor_38940,Halers,1,HGB_1_058_050,id_block,0,dossier,1,0,1,Halers#1532-1532,1,HGB_1_058#5022,1533,
 actor_38941,Hans Wernher Haller,1,HGB_1_058_050,documents,1,doc,1,0,1,Hans Wernher Haller#1531-1535,1,HGB_1_058#5144,,
 actor_38942,Elysabeth Lynderi,1,HGB_1_058_050,documents,1,doc,1,0,1,Elysabeth Lynderi#1535-1535,1,HGB_1_058#5146,,
-actor_38945,Heinrich Eglin,1,HGB_1_058_050,id_block,0,dossier,1,0,1,Heinrich Eglin#1485-1537,1,HGB_1_058#5049,,schneider
+actor_38945,Heinrich Eglin,1,HGB_1_058_050,id_block,0,dossier,1,0,1,Heinrich Eglin#1485-1542,1,HGB_1_058#5049,,schneider
 actor_38947,Hans Meiger,1,HGB_1_058_050,documents,1,doc,1,0,1,Hans Meiger#1559-1566,1,HGB_1_058#5737,,
 actor_38949,Thomas Güerin,3,HGB_1_058_050,documents,1,doc,2,0,2,Tham Göring#1584-1584 | Thoman Gerings#1584-1588,2,HGB_1_058#6431|HGB_1_058#6432,1588,
 actor_38950,Thoman Huerm,1,HGB_1_058_050,documents,1,doc,1,0,1,Thoman Huerm#1581-1581,1,HGB_1_058#6329,,
@@ -26596,7 +26596,7 @@ actor_38992,Margret,1,HGB_1_058_052,documents,1,doc,2,0,1,Margret#1471-1471,1,HG
 actor_38993,Heinrich Bomlis,1,HGB_1_058_052,id_block,0,dossier,1,0,1,Heinrich Bömlis#1450-1471,1,HGB_1_058#2019,,
 actor_38995,Stephan Richental,2,HGB_1_058_052,id_block,0,dossier,2,0,2,Steffan Richentals#1496-1496 | Stephan Richental#1417-1496,2,HGB_1_058#3725|HGB_1_058#582,,
 actor_38996,Angnes zem Angen,1,HGB_1_058_052,id_block,0,dossier,1,0,1,Angnese zem Angen#1439-1496,1,HGB_1_058#1445,,
-actor_38997,Heinrich. Ecklin,6,HGB_1_058_052,documents,2,doc,3,0,3,Heinrich Clein#1496-1532 | Heinrich Ecklins#1533-1542 | Heinrich Eglin#1485-1537,3,HGB_1_058#3723|HGB_1_058#5041|HGB_1_058#5049,1542,schneider|tischmacher
+actor_38997,Heinrich. Ecklin,6,HGB_1_058_052,documents,2,doc,3,0,1,Heinrich Eglin#1485-1542,3,HGB_1_058#3723|HGB_1_058#5041|HGB_1_058#5049,1542,schneider|tischmacher
 actor_38998,Cunrat,1,HGB_1_058_052,documents,1,doc,1,0,1,Cunrat#1530-1530,1,HGB_1_058#4933,,kübler
 actor_39000,Ennelin,1,HGB_1_058_052,documents,1,doc,1,0,1,Ennelin#1497-1497,1,HGB_1_058#3749,,
 actor_39001,Agnes,1,HGB_1_058_052,documents,1,doc,1,0,1,Agnes#1500-1500,1,HGB_1_058#3830,,
@@ -26726,8 +26726,8 @@ actor_39183,Caspar Ruch,1,HGB_1_058_055,id_block,0,dossier,1,0,1,Caspar Ruch#148
 actor_39184,Vyten Fischmachers,1,HGB_1_058_055,documents,1,doc,1,0,1,Vyten Fischmachers#1491-1491,1,HGB_1_058#3533,,
 actor_39186,Bernhard Schneider,1,HGB_1_058_055,id_block,0,dossier,3,1,2,Bernhard Schneider#1491-1491 | Bernhard Schneider#1640-1654,2,HGB_1_058#3534|HGB_1_058#7887,,kürschner
 actor_39187,Cunraten Lutenbach,4,HGB_1_058_055,documents,3,doc,3,0,2,Cunrat Lutenbach#1529-1545 | Cunratt Futenbach#1542-1542,3,HGB_1_058#2600|HGB_1_058#5332|HGB_1_058#5440,,küfer
-actor_39188,Heinrich Eglin,1,HGB_1_058_055,id_block,0,dossier,1,0,1,Heinrich Eglin#1485-1537,1,HGB_1_058#5049,,schneider
-actor_39190,Heinrichs,1,HGB_1_058_055,id_block,0,dossier,1,0,1,Heinrich Eglin#1485-1537,1,HGB_1_058#5049,,
+actor_39188,Heinrich Eglin,1,HGB_1_058_055,id_block,0,dossier,1,0,1,Heinrich Eglin#1485-1542,1,HGB_1_058#5049,,schneider
+actor_39190,Heinrichs,1,HGB_1_058_055,id_block,0,dossier,1,0,1,Heinrich Eglin#1485-1542,1,HGB_1_058#5049,,
 actor_39191,Cunradt Rastetter,3,HGB_1_058_055,documents,1,doc,1,0,1,Cunrad Rastetter#1561-1561,1,HGB_1_058#5778,1572,küfer
 actor_39192,Hans Rotteler,1,HGB_1_058_055,id_block,0,dossier,1,0,1,Hans Rotteler#1533-1533,1,HGB_1_058#5052,,schuhmacher
 actor_39194,Jsaac Grasser,2,HGB_1_058_055,documents,2,doc,2,0,2,Jsaac Grasser#1572-1575 | Jsar Grasers#1574-1574,2,HGB_1_058#6043|HGB_1_058#6093,1574,tischmacher
@@ -27320,7 +27320,7 @@ actor_40073,Eechiel Falckheisen,2,HGB_1_058_065,documents,1,doc,1,0,1,Eechiel Fa
 actor_40074,Ludwig König,3,HGB_1_058_065,documents,3,doc,3,0,1,Ludwig König#1606-1682,1,HGB_1_058#6954,,
 actor_40075,Jacob Muoßpach,6,HGB_1_058_065,documents,5,doc,7,0,3,Jacob Mospach#1634-1693 | Jacob Muoßpach#1680-1680 | St . Joh . Jacob Muspachs#1676-1690,3,HGB_1_058#7925|HGB_1_058#8622|HGB_1_058#8682,1690,oberschreiber|prediger|spitalmeister
 actor_40076,zum Käupfer,1,HGB_1_058_065,id_block,0,dossier,1,0,1,zum Käupfer#1641-1641,0,,,
-actor_40077,Emanuel König,1,HGB_1_058_065,documents,1,doc,1,0,1,Emanuel König#1643-1643,1,HGB_1_058#7966,,
+actor_40077,Emanuel König,1,HGB_1_058_065,documents,1,doc,1,0,1,Emanuel Thönig#1642-1684,1,HGB_1_058#7966,,
 actor_40079,homanuel Obermeyer,4,HGB_1_058_065,documents,3,doc,5,0,2,Emanuel Obermeyers#1661-1695 | Samuel Obermeyer#1638-1695,2,HGB_1_058#8288|HGB_1_058#8903,1706,Kauffhaußbe . dienter
 actor_40080,Rudolff Märkht,1,HGB_1_058_065,documents,1,doc,1,0,1,Rudolff Märkht#1661-1661,1,HGB_1_058#8316,,hausbedienter
 actor_40081,Ripplerin,1,HGB_1_058_065,id_block,0,dossier,1,0,1,Ripplerin#1661-1661,1,HGB_1_058#8317,,
@@ -29096,7 +29096,7 @@ actor_42700,Abrat ham Legrand,2,HGB_1_058_110,documents,5,doc,5,0,2,Abraham Legr
 actor_42701,Ludwig Jselin,1,HGB_1_058_110,id_block,0,dossier,1,0,1,Ludwig Jselin#1673-1687,1,HGB_1_058#8560,,
 actor_42703,Hans Jacob Faeschen,3,HGB_1_058_110,id_block,0,dossier,3,0,3,Hanns Jacob Faeschen#1657-1685 | Jacob Faesch#1632-1684 | Jacob Faeschen#1661-1693,3,HGB_1_058#8125|HGB_1_058#8231|HGB_1_058#8561,,
 actor_42704,Hanns Jacob Schönauer,2,HGB_1_058_110,documents,2,doc,2,0,1,Hanns Jacob Schönauer#1673-1674,1,HGB_1_058#8562,,
-actor_42705,Emanuel Ronig,2,HGB_1_058_110|HGB_1_058_111,id_range,0,dossier,5,1,4,Emanuel König#1652-1692 | Emanuel König#1455-1455 | Emanuel Ronig#1673-1673 | Emanuel Thönig#1642-1648,3,HGB_1_058#7966|HGB_1_058#2235|HGB_1_058#8563,,
+actor_42705,Emanuel Ronig,2,HGB_1_058_110|HGB_1_058_111,id_range,0,dossier,5,1,4,Emanuel König#1652-1692 | Emanuel König#1455-1455 | Emanuel Ronig#1673-1673 | Emanuel Thönig#1642-1684,3,HGB_1_058#7966|HGB_1_058#2235|HGB_1_058#8563,,
 actor_42706,Hanns Heinrich Dässlin,3,HGB_1_058_110,id_range,0,dossier,3,0,1,Hanns Heinrich Däslin#1633-1677,1,HGB_1_058#8564,,Stattgerichts Beysitzern
 actor_42707,Wangen,1,HGB_1_058_111,documents,1,doc,1,0,1,Wangen#1429-1429,1,HGB_1_058#1135,,
 actor_42708,Jacob von Hagen,1,HGB_1_058_111,documents,1,doc,1,0,1,Jacob von Hagen#1429-1429,1,HGB_1_058#1136,,meier
@@ -29137,7 +29137,7 @@ actor_42758,Agnesen,2,HGB_1_058_111,documents,4,doc,4,0,2,Agnes#1455-1457 | Agne
 actor_42759,presencie chori Bas. u. Ofen,1,HGB_1_058_111,id_block,0,dossier,1,0,1,presencie chori Bas . u . Ofen#1455-1455,1,HGB_1_058#2246,,
 actor_42761,nacharias Friess,1,HGB_1_058_111,id_block,0,dossier,1,0,1,nacharias Friess#1455-1455,1,HGB_1_058#2247,,
 actor_42762,Burckhart Lotz,1,HGB_1_058_111,id_block,0,dossier,2,1,2,Burckhart Lotz#1455-1455 | Burkhart Lotz#1583-1637,2,HGB_1_058#2234|HGB_1_058#6622,,Metzgerjetz
-actor_42763,Emanuel König,1,HGB_1_058_111,id_block,0,dossier,2,1,2,Emanuel König#1455-1455 | Emanuel Thönig#1642-1648,2,HGB_1_058#2235|HGB_1_058#7966,,
+actor_42763,Emanuel König,1,HGB_1_058_111,id_block,0,dossier,2,1,2,Emanuel König#1455-1455 | Emanuel Thönig#1642-1684,2,HGB_1_058#2235|HGB_1_058#7966,,
 actor_42764,Matheus Lotz,1,HGB_1_058_111,id_block,0,dossier,4,1,2,Matheus Lotz#1589-1663 | Matheus Lotz#1455-1455,2,HGB_1_058#6754|HGB_1_058#2248,,
 actor_42766,Clausen berzer,2,HGB_1_058_111,documents,4,doc,4,0,2,Claus Berger#1457-1485 | Clausen berzer#1457-1457,2,HGB_1_058#2356|HGB_1_058#2354,,kübler
 actor_42767,Magdalene,1,HGB_1_058_111,documents,1,doc,1,0,1,Magdalenen#1457-1457,1,HGB_1_058#2355,,
@@ -29178,7 +29178,7 @@ actor_42814,Wilhelm Thurnysen,1,HGB_1_058_111,id_block,0,dossier,1,0,1,Wilhelm T
 actor_42819,Jacob Heinrich Petri,1,HGB_1_058_111,documents,1,doc,1,0,1,Jacob Heinrich Petri#1600-1675,1,HGB_1_058#6807,,
 actor_42825,Ludtoyg Rünig,1,HGB_1_058_111,documents,1,doc,1,0,1,Ludtoyg Rünig#1603-1603,1,HGB_1_058#6888,,
 actor_42826,Ludtwyg Küng,3,HGB_1_058_111,documents,3,doc,3,0,1,Ludwig König#1606-1682,2,HGB_1_058#6954|HGB_1_058#6977,,
-actor_42827,Emanuel Thönig,2,HGB_1_058_111,documents,2,doc,2,0,1,Emanuel Thönig#1642-1648,2,HGB_1_058#7958|HGB_1_058#7966,,
+actor_42827,Emanuel Thönig,2,HGB_1_058_111,documents,2,doc,2,0,1,Emanuel Thönig#1642-1684,2,HGB_1_058#7958|HGB_1_058#7966,,
 actor_42828,Greda Tricklin,1,HGB_1_058_112,documents,1,doc,1,0,1,Greda Tricklin#1411-1411,1,HGB_1_058#405,,
 actor_42829,Jakob Tricklis,1,HGB_1_058_112,id_block,0,dossier,1,0,1,Jakob Tricklis#1411-1411,1,HGB_1_058#383,1411,wechsler
 actor_42831,Heinrich Messerers,1,HGB_1_058_112,id_block,0,dossier,1,0,1,Heinrich Messerers#1406-1427,1,HGB_1_058#243,,Kürseners
@@ -30085,7 +30085,7 @@ actor_44089,Philipp Rorich,3,HGB_1_058_139,documents,2,doc,2,0,1,Philipp Rorich#
 actor_44090,Abraham Wilhelm Buess,1,HGB_1_058_139,documents,1,doc,1,0,1,Abraham Wilhelm Buess#1638-1640,1,HGB_1_058#7864,,
 actor_44091,Mathis Schwingdenhammer,1,HGB_1_058_139,documents,1,doc,1,0,1,"Mathis , Schwingdenhammer#1622-1664",1,HGB_1_058#7894,,hufschmied
 actor_44092,Jacob Schreiber,1,HGB_1_058_139,id_range,0,dossier,1,0,1,Schreiber Jacob#1610-1650,1,HGB_1_058#7897,,
-actor_44093,friderich Eglingern,1,HGB_1_058_139,id_range,0,dossier,1,0,1,friderich Eglingern#1637-1640,1,HGB_1_058#7898,,apotheker
+actor_44093,friderich Eglingern,1,HGB_1_058_139,id_range,0,dossier,1,0,1,Friederich Eglinger#1637-1666,1,HGB_1_058#7898,,apotheker
 actor_44094,Greda Bamerlin,1,HGB_1_058_140,id_range,0,dossier,1,0,1,Greda Bamerlin#1400-1400,1,HGB_1_058#29,,
 actor_44095,Johannes haler,1,HGB_1_058_140,id_range,0,dossier,1,0,1,Johannes haler#1400-1400,1,HGB_1_058#30,,
 actor_44096,Greda,1,HGB_1_058_140,id_range,0,dossier,1,0,1,Greda Bamerlin#1400-1400,1,HGB_1_058#29,,
@@ -30668,7 +30668,7 @@ actor_44949,Lucas Gäkhart,1,HGB_1_058_157,documents,1,doc,1,0,1,Lucas Gäkhart#
 actor_44950,David Steigern,3,HGB_1_058_157,documents,4,doc,4,0,1,David Steigern#1635-1664,1,HGB_1_058#7822,,handelsmann
 actor_44952,Thobias Fleitters,1,HGB_1_058_157,id_block,0,dossier,1,0,1,Thobias Fleitters#1635-1635,1,HGB_1_058#7790,1636,
 actor_44953,Valeria Burkhartin,1,HGB_1_058_157,id_block,0,dossier,1,0,1,Valeria Burkhartin#1647-1647,1,HGB_1_058#8046,,
-actor_44954,Jacob Brandmüllern,3,HGB_1_058_157,documents,4,doc,4,0,3,Jacob Brandmüller#1594-1674 | Jacob Brandmüllern#1647-1675 | Jacob Brandtmüller#1677-1677,2,HGB_1_058#8163|HGB_1_058#8047,,S .|professor
+actor_44954,Jacob Brandmüllern,3,HGB_1_058_157,documents,4,doc,4,0,2,Jacob Brandmüller#1594-1674 | Jacob Brandmüllern#1647-1677,2,HGB_1_058#8163|HGB_1_058#8047,,S .|professor
 actor_44955,Andres Steiger,1,HGB_1_058_157,id_block,0,dossier,2,0,1,Andres Steiger#1664-1664,1,HGB_1_058#8446,,
 actor_44957,Peter Sarasin,3,HGB_1_058_157,id_block,0,dossier,5,0,3,Peter Sarasins#1664-1664 | Parrasin#1694-1694 | Peter Sarasin#1694-1694,3,HGB_1_058#8437|HGB_1_058#8882|HGB_1_058#8889,1664,
 actor_44960,Johannes Herwagen,3,HGB_1_058_157,documents,3,doc,3,0,1,Johann Herrwagen#1626-1698,1,HGB_1_058#7763,,Spierer|handelsmann|spezierer
@@ -30739,7 +30739,7 @@ actor_45056,Johann Stähelin,2,HGB_1_058_162,id_block,0,dossier,4,0,2,Johann St�
 actor_45058,Theodor Langen,3,HGB_1_058_162,id_block,0,dossier,4,0,2,Theodor Langen#1662-1668 | Theodor Lang#1668-1668,2,HGB_1_058#8374|HGB_1_058#8471,1668,barbier
 actor_45060,Pfarrhen Götz,1,HGB_1_058_162,id_block,0,dossier,1,0,1,Pfarrhen Götz#1662-1663,1,HGB_1_058#8397,,
 actor_45063,Stähelinschen,1,HGB_1_058_162,id_block,0,dossier,1,0,1,Stähelinschen#1662-1662,1,HGB_1_058#8398,1662,
-actor_45064,Friederich Eglinger,1,HGB_1_058_162,documents,1,doc,1,0,1,Friederich Eglinger#1638-1666,1,HGB_1_058#8432,,apotheker
+actor_45064,Friederich Eglinger,1,HGB_1_058_162,documents,1,doc,1,0,1,Friederich Eglinger#1637-1666,1,HGB_1_058#8432,,apotheker
 actor_45065,Jacob Götz,1,HGB_1_058_162,id_block,0,dossier,1,0,1,Jacob Götz#1663-1663,1,HGB_1_058#8433,,Pfarrhen .
 actor_45067,Rudolff Stahelin,1,HGB_1_058_162,id_block,0,dossier,1,0,1,Rudolff Stahelin#1663-1663,1,HGB_1_058#8434,,
 actor_45069,Hanns Jacob Stähelin,1,HGB_1_058_162,id_block,0,dossier,1,0,1,Johann Jacob Stehelin#1629-1679,1,HGB_1_058#8435,,
@@ -32404,7 +32404,7 @@ actor_47501,Lienhardt Grieben,1,HGB_1_058_203,id_block,0,dossier,1,0,1,Lienhardt
 actor_47502,Michel Rutners,1,HGB_1_058_203,id_block,0,dossier,1,0,1,Michel Rütners#1525-1535,1,HGB_1_058#4713,,
 actor_47503,Heinrichs von Therstein,1,HGB_1_058_203,id_block,0,dossier,1,0,1,Heinrichen von Thierstein#1449-1526,1,HGB_1_058#1910,,
 actor_47504,Felix Wilenman,1,HGB_1_058_203,documents,1,doc,1,0,1,Felix Wilenman#1529-1529,1,HGB_1_058#4914,,schneider
-actor_47505,Heinrich Clein,1,HGB_1_058_203,id_block,0,dossier,1,0,1,Heinrich Clein#1496-1532,1,HGB_1_058#3723,,schuhmacher
+actor_47505,Heinrich Clein,1,HGB_1_058_203,id_block,0,dossier,1,0,1,Heinrich Eglin#1485-1542,1,HGB_1_058#3723,,schuhmacher
 actor_47506,Oswald Rütners,1,HGB_1_058_203,id_block,0,dossier,1,0,1,Oswald Rütners#1532-1532,1,HGB_1_058#5040,,
 actor_47508,Ambrosius Dorn,1,HGB_1_058_203,documents,1,doc,1,0,1,Ambrosius Dorn#1534-1552,1,HGB_1_058#5119,,tischmacher
 actor_47509,Margreth,1,HGB_1_058_203,documents,1,doc,1,0,1,Margreth#1534-1534,1,HGB_1_058#5118,,
@@ -33883,7 +33883,7 @@ actor_49596,Andres von Spyr,1,HGB_1_063_033,documents,2,doc,2,0,1,Andres von Spy
 actor_49597,Theodor Zossen,4,HGB_1_063_033,documents,3,doc,4,0,1,Theodor Zoss#1571-1621,2,HGB_1_063#4407|HGB_1_063#4510,1617,gerber|gremper
 actor_49598,Joder Jossen,1,HGB_1_063_033,id_block,0,dossier,1,0,1,Joder Jossen#1577-1577,1,HGB_1_063#4513,,
 actor_49599,Jonas Henck,1,HGB_1_063_033,id_block,0,dossier,1,0,1,Jonas Henck#1577-1577,1,HGB_1_063#4514,,
-actor_49600,Cossmann Ertzberger,5,HGB_1_063_033,documents,4,doc,5,0,3,Cosman Ertzbergers#1543-1621 | Cofmann Ertzberger#1581-1654 | Cosmann Ertzberger#1577-1602,4,HGB_1_063#4849|HGB_1_063#4515|HGB_1_063#4517|HGB_1_063#4585,1613,herbergmeister|rat|rotgerber
+actor_49600,Cossmann Ertzberger,5,HGB_1_063_033,documents,4,doc,5,0,2,Cosman Ertzbergers#1543-1621 | Cofmann Ertzberger#1577-1654,4,HGB_1_063#4849|HGB_1_063#4515|HGB_1_063#4517|HGB_1_063#4585,1613,herbergmeister|rat|rotgerber
 actor_49601,Kungoldt Racklerin,1,HGB_1_063_033,documents,1,doc,1,0,1,Kungoldt Racklerin#1577-1577,1,HGB_1_063#4516,,
 actor_49602,Era Freuwlerin,1,HGB_1_063_033,id_block,0,dossier,1,0,1,Era Freuwlerin#1577-1577,1,HGB_1_063#4512,,
 actor_49603,Jael Steckin,1,HGB_1_063_033,id_block,0,dossier,1,0,1,Jael Steckin#1572-1577,1,HGB_1_063#4433,,
@@ -35794,7 +35794,7 @@ actor_52270,Bryden,1,HGB_1_063_074,id_block,0,dossier,1,0,1,Bryden#1442-1442,1,H
 actor_52272,Henman zem Wind,1,HGB_1_063_074,id_block,0,dossier,1,0,1,Henman zem Wind#1421-1450,1,HGB_1_063#1219,,
 actor_52273,Hans Stehelin,3,HGB_1_063_074,id_block,0,dossier,3,0,2,Hans Stechelins#1500-1504 | Hanns Stehelins#1481-1523,2,HGB_1_063#2816|HGB_1_063#3466,1504,gewandmann
 actor_52274,Uly Rössler,1,HGB_1_063_074,id_block,0,dossier,1,0,1,Uly Rössler#1500-1500,1,HGB_1_063#2868,,
-actor_52275,Petter Hans Jungerman,1,HGB_1_063_074,id_block,0,dossier,1,0,1,peter Hans Jungermann#1500-1543,1,HGB_1_063#2869,,
+actor_52275,Petter Hans Jungerman,1,HGB_1_063_074,id_block,0,dossier,1,0,1,Hanns Petter#1500-1571,1,HGB_1_063#2869,,
 actor_52276,Theronimus,1,HGB_1_063_074,documents,1,doc,1,0,1,Theronimus#1504-1504,1,HGB_1_063#2947,,
 actor_52277,Heinrich Stechelin,1,HGB_1_063_074,documents,1,doc,1,0,1,Heinrich Stechelin#1504-1580,1,HGB_1_063#2948,1504,
 actor_52278,Clara,1,HGB_1_063_074,documents,1,doc,1,0,1,Clara#1504-1504,1,HGB_1_063#2949,,
@@ -36211,7 +36211,7 @@ actor_52849,Melchior Gugger,1,HGB_1_063_082,id_block,0,dossier,1,0,1,Melchior Gu
 actor_52850,Maria Conettin,1,HGB_1_063_082,id_block,0,dossier,1,0,1,Maria Conettin#1643-1643,1,HGB_1_063#5813,,
 actor_52851,Jacob Frischman,1,HGB_1_063_082,id_block,0,dossier,1,0,1,Jacob Frischman#1643-1643,1,HGB_1_063#5814,,
 actor_52853,Lux Bunilers,1,HGB_1_063_082,id_block,0,dossier,1,0,1,Lux Bunilers#1643-1643,1,HGB_1_063#5815,,
-actor_52856,Jacob Brandmüllern,2,HGB_1_063_082,documents,1,doc,1,0,1,Jacob Brandmüllern#1647-1675,1,HGB_1_063#5973,,professor
+actor_52856,Jacob Brandmüllern,2,HGB_1_063_082,documents,1,doc,1,0,1,Jacob Brandmüllern#1647-1677,1,HGB_1_063#5973,,professor
 actor_52857,Dr Brandt müllers,1,HGB_1_063_082,id_block,0,dossier,1,0,1,Dr Brandt müllers#1658-1658,1,HGB_1_063#5975,,
 actor_52858,Thierus,1,HGB_1_063_082,id_block,0,dossier,1,0,1,Thierus#1658-1658,1,HGB_1_063#5976,,
 actor_52864,Philipp Dienast,1,HGB_1_063_082,documents,2,doc,2,0,1,Philipp Dienast#1672-1694,1,HGB_1_063#6147,,handelsmann
@@ -36730,7 +36730,7 @@ actor_53657,Barbara Bettinger,1,HGB_1_063_089,documents,2,doc,2,0,1,Barbara Bett
 actor_53659,Wynbranden spatin,1,HGB_1_063_089,id_block,0,dossier,1,0,1,Wynbranden spatin#1541-1541,1,HGB_1_063#3901,,
 actor_53660,Jacob Basten,2,HGB_1_063_089,id_block,0,dossier,2,0,1,Jacob Bart#1515-1551,1,HGB_1_063#3774,,
 actor_53665,Gergen Oltinger,3,HGB_1_063_089,documents,3,doc,5,0,2,Jerg Olltinger#1543-1589 | Gergen Oltinger#1556-1556,2,HGB_1_063#3951|HGB_1_063#4136,,schmied
-actor_53668,Hannß Heissler,14,HGB_1_063_089,documents,8,doc,14,0,3,Hans Hüsler#1521-1600 | Hanns Heüsler#1568-1640 | Hannß Hyßler#1589-1612,4,HGB_1_063#4124|HGB_1_063#4691|HGB_1_063#4690|HGB_1_063#4859,1607,Seyler|schuhmacher|seiler
+actor_53668,Hannß Heissler,14,HGB_1_063_089,documents,8,doc,14,0,2,Hans Hüsler#1521-1600 | Hanns Heüsler#1568-1640,4,HGB_1_063#4124|HGB_1_063#4691|HGB_1_063#4690|HGB_1_063#4859,1607,Seyler|schuhmacher|seiler
 actor_53670,Chrischon Grienysen,3,HGB_1_063_089,documents,1,doc,1,0,1,Chrischon Grienysen#1556-1568,1,HGB_1_063#4137,,
 actor_53674,Niclaus Dürren,1,HGB_1_063_089,id_block,0,dossier,1,0,1,Claus Dürren#1536-1606,1,HGB_1_063#4029,,
 actor_53675,Augustin Treittyn,1,HGB_1_063_089,id_block,0,dossier,1,0,1,Augustin Treittyn#1568-1568,1,HGB_1_063#4361,,reyen
@@ -37268,7 +37268,7 @@ actor_54472,Niclausen Gerber,3,HGB_1_063_107,id_block,0,dossier,2,0,2,Niclaus Ge
 actor_54474,Cuonradt. Gysst,10,HGB_1_063_107,documents,7,doc,7,0,5,Conrad Zsist#1600-1608 | Conrad Züsten#1617-1617 | Cunrad Fust#1614-1614 | Cunrad Just#1609-1609 | Cuoradt Zysst#1608-1608,5,HGB_1_063#4860|HGB_1_063#4987|HGB_1_063#5025|HGB_1_063#5343|HGB_1_063#5383,,glaser
 actor_54475,E. E. Zunft zu Gerwern,1,HGB_1_063_107,id_block,0,dossier,1,0,1,E . E . Zunft zu Gerwern#1602-1668,1,HGB_1_063#4898,,
 actor_54477,Theodor dess,1,HGB_1_063_107,id_block,0,dossier,1,0,1,Theodor dess#1602-1602,1,HGB_1_063#4899,,
-actor_54478,Cosmann Ertzberger,1,HGB_1_063_107,id_block,0,dossier,1,0,1,Cosmann Ertzberger#1577-1602,1,HGB_1_063#4515,,
+actor_54478,Cosmann Ertzberger,1,HGB_1_063_107,id_block,0,dossier,1,0,1,Cofmann Ertzberger#1577-1654,1,HGB_1_063#4515,,
 actor_54482,Johann Koler Stein,1,HGB_1_063_107,id_block,0,dossier,1,0,1,Johann Koler Stein#1608-1608,1,HGB_1_063#4986,,bruchschneider
 actor_54483,Koler,1,HGB_1_063_107,documents,1,doc,1,0,1,Koler#1608-1608,0,,,
 actor_54484,Ulrich Lorentz,1,HGB_1_063_107,id_block,0,dossier,1,0,1,Lorentz Ulrich#1530-1608,1,HGB_1_063#4018,,glaser
@@ -37302,7 +37302,7 @@ actor_54520,Sebastian Wursteisen,1,HGB_1_063_107,id_block,0,dossier,1,0,1,Sebast
 actor_54521,Jacob Gempen,1,HGB_1_063_107,documents,1,doc,1,0,1,Jacob Gempen#1638-1638,1,HGB_1_063#5705,,
 actor_54522,Hanns Rudolph Häusler,4,HGB_1_063_107,documents,4,doc,4,0,1,Hanns Rudolph Häusler#1646-1659,2,HGB_1_063#5982|HGB_1_063#5839,,
 actor_54523,Hanns Geörg Weybert,4,HGB_1_063_107,documents,2,doc,2,0,2,Hanns Geörg Weybert#1659-1659 | Hans Vög Wibert#1654-1654,2,HGB_1_063#5924|HGB_1_063#5985,1663,wollweber
-actor_54524,Friederich Eglinger,2,HGB_1_063_107,id_block,0,dossier,3,0,1,Friederich Eglinger#1638-1666,1,HGB_1_063#5981,,apotheker
+actor_54524,Friederich Eglinger,2,HGB_1_063_107,id_block,0,dossier,3,0,1,Friederich Eglinger#1637-1666,1,HGB_1_063#5981,,apotheker
 actor_54526,Reinhardt Karger,2,HGB_1_063_107,id_block,0,dossier,3,0,1,Reinhard Kargers#1610-1659,1,HGB_1_063#5041,1659,
 actor_54527,Frantz Rumpfen,2,HGB_1_063_107,id_block,0,dossier,5,0,1,Frantz Rumpfen#1659-1670,1,HGB_1_063#5983,,barbier
 actor_54528,Eglingern,1,HGB_1_063_107,id_block,0,dossier,1,0,1,Eglingern#1659-1659,1,HGB_1_063#5984,,
@@ -37555,7 +37555,7 @@ actor_54896,Hanns Ulrich Götz,3,HGB_1_063_112,documents,2,doc,2,0,1,Hanns Ulric
 actor_54898,Melchior In vof,1,HGB_1_063_112,id_range,0,dossier,1,0,1,Melchior In vof#1687-1687,1,HGB_1_063#6283,1687,
 actor_54899,Emanuel Bauler,1,HGB_1_063_112|HGB_1_063_113,id_range,0,dossier,5,1,1,Emanuel . Bauler#1672-1698,1,HGB_1_063#6150,,hosenlismer|hosenstricker
 actor_54900,Johanna Wybertin,1,HGB_1_063_112,id_range,0,dossier,1,0,1,Johanna Wybertin#1697-1698,1,HGB_1_063#6424,,
-actor_54901,Melchior Jmhoofs,1,HGB_1_063_112,id_range,0,dossier,1,0,1,Melchior Jmhoofs#1697-1697,1,HGB_1_063#5996,1700,
+actor_54901,Melchior Jmhoofs,1,HGB_1_063_112,id_range,0,dossier,1,0,1,Melchior Jnhooffs#1692-1697,1,HGB_1_063#5996,1700,
 actor_54904,Hall,1,HGB_1_063_113,documents,1,doc,1,0,1,von Hall#1400-1460,1,HGB_1_063#57,,
 actor_54906,Greten von Wile,1,HGB_1_063_113,id_block,0,dossier,1,0,1,Greten von Wile#1400-1400,1,HGB_1_063#56,,
 actor_54909,swestren zu der,1,HGB_1_063_113,id_block,0,none,0,0,0,,0,,,
@@ -38745,7 +38745,7 @@ actor_56594,Lutzburger Hrch,1,HGB_1_064_022,id_block,0,dossier,1,0,1,Lutzburger 
 actor_56595,Adelheit Gschwindt,1,HGB_1_064_022,documents,1,doc,1,0,1,Adelheit Gschwindt#1598-1598,1,HGB_1_064#1387,,
 actor_56596,Georg Scheffer,1,HGB_1_064_022,id_range,0,dossier,1,0,1,Georg Scheffer#1598-1598,1,HGB_1_064#1388,,
 actor_56597,Hans Brendel,2,HGB_1_064_022,id_range,0,dossier,2,0,2,Hannsen Brendels#1598-1598 | Hansen Brendel#1596-1598,2,HGB_1_064#1373|HGB_1_064#1389,,weissgerber
-actor_56598,Cosmann Ertzberger,1,HGB_1_064_022,id_range,0,dossier,1,0,1,Cosmann Ertzberger#1577-1602,1,HGB_1_064#1390,,
+actor_56598,Cosmann Ertzberger,1,HGB_1_064_022,id_range,0,dossier,1,0,1,Cofmann Ertzberger#1577-1654,1,HGB_1_064#1390,,
 actor_56600,Matthiae Scharten,1,HGB_1_064_022,id_range,0,dossier,1,0,1,Matthiae Scharten#1598-1598,1,HGB_1_064#1384,1598,metzger
 actor_56601,Jos Bürsten,1,HGB_1_064_022,id_range,0,dossier,1,0,1,Jos Bürsten#1581-1598,1,HGB_1_064#1391,,rat
 actor_56602,Joann Anderstorffer,1,HGB_1_064_022,id_range,0,dossier,1,0,1,Joann Anderstorffer#1660-1660,1,HGB_1_064#1645,,schreiner
@@ -39382,7 +39382,7 @@ actor_57505,Jacoben Ryf,2,HGB_1_064_033,documents,3,doc,3,0,1,Jacoben Ryf#1530-1
 actor_57506,Elspetha,2,HGB_1_064_033,documents,2,doc,2,0,1,Elspetha#1519-1531,1,HGB_1_064#796,,
 actor_57508,Anthoni Schmid,1,HGB_1_064_033,id_block,0,dossier,1,0,1,Anthoni Schmid#1479-1559,1,HGB_1_064#924,,gerber
 actor_57509,Frydli Ryder,1,HGB_1_064_033,id_block,0,dossier,1,0,1,Frydli Ryder#1531-1531,1,HGB_1_064#925,,weber
-actor_57513,Hannß Wernhartt,12,HGB_1_064_033,documents,4,doc,6,0,3,Hans Wernher#1520-1596 | Hans Wernher#1545-1606 | Hans Wernherrn#1581-1581,3,HGB_1_064#1029|HGB_1_064#1046|HGB_1_064#1282,1581,metzger
+actor_57513,Hannß Wernhartt,12,HGB_1_064_033,documents,4,doc,6,0,2,Hans Wernher#1520-1596 | Hans Wernher#1545-1606,3,HGB_1_064#1029|HGB_1_064#1046|HGB_1_064#1282,1581,metzger
 actor_57514,Anna,1,HGB_1_064_033,documents,1,doc,2,0,1,Anna#1546-1546,1,HGB_1_064#1032,,
 actor_57515,Rubannt,1,HGB_1_064_033,documents,1,doc,1,0,1,Rubannt#1546-1546,1,HGB_1_064#1033,,
 actor_57516,Hanns,1,HGB_1_064_033,id_block,0,dossier,1,0,1,Hanns#1546-1546,1,HGB_1_064#1034,,
@@ -45153,7 +45153,7 @@ actor_65604,Peter Kündig,1,HGB_1_078_027,id_block,0,dossier,1,0,1,Peter Kündig
 actor_65605,Jsaac Fäsch,1,HGB_1_078_027,id_block,0,dossier,1,0,1,Jsaac Fäsch#1640-1700,1,HGB_1_078#2702,,Statt Gerichts Besitzer
 actor_65606,Fäschen,1,HGB_1_078_027,documents,1,doc,1,0,1,Jsaac Fäsch#1640-1700,1,HGB_1_078#2702,,
 actor_65608,Karlin Rohrer,2,HGB_1_078_027,id_range,0,dossier,2,0,2,Carlin Rohrer#1700-1700 | Karlin Rohrer#1700-1700,2,HGB_1_078#2703|HGB_1_078#2705,,rebmann
-actor_65609,Leonhard Schardt,1,HGB_1_078_027,id_range,0,dossier,1,0,1,Leonhard Schardt#1640-1700,1,HGB_1_078#2290,,metzger
+actor_65609,Leonhard Schardt,1,HGB_1_078_027,id_range,0,dossier,1,0,1,Leonhardt Schardt#1640-1700,1,HGB_1_078#2290,,metzger
 actor_65610,Gred Rebstogkin,2,HGB_1_078_028,documents,2,doc,2,0,1,Gred Rebstogkin#1423-1424,1,HGB_1_078#166,,
 actor_65611,Hans,1,HGB_1_078_028,id_block,0,dossier,2,1,1,Hans#1423-1424,1,HGB_1_078#167,,
 actor_65612,zembermans,1,HGB_1_078_028,id_block,0,dossier,1,0,1,zembermans#1423-1423,1,HGB_1_078#168,,
@@ -45748,7 +45748,7 @@ actor_66428,Leonhard Schard,1,HGB_1_078_045,id_block,0,dossier,1,0,1,Leonhard Sc
 actor_66429,Conradt Ottendorf,1,HGB_1_078_045,id_block,0,dossier,1,0,1,Conradt Ottendorff#1601-1678,1,HGB_1_078#1912,,
 actor_66432,Hanns Weiss,1,HGB_1_078_045,id_block,0,dossier,1,0,1,Hanns Weiss#1622-1622,1,HGB_1_078#2151,,
 actor_66433,Mattheus Stickh,2,HGB_1_078_045,documents,2,doc,2,0,1,Matheß Stecken#1628-1643,2,HGB_1_078#2024|HGB_1_078#2279,,
-actor_66434,Daniel Gassen,3,HGB_1_078_045,documents,2,doc,3,0,3,Daniel Gassen#1641-1695 | Daniel Gaß#1601-1655 | Daniel Gaßen#1655-1688,3,HGB_1_078#1910|HGB_1_078#2303|HGB_1_078#2359,1658,gremper|wirt
+actor_66434,Daniel Gassen,3,HGB_1_078_045,documents,2,doc,3,0,2,Daniel Gassen#1641-1695 | Daniel Gaß#1601-1655,3,HGB_1_078#1910|HGB_1_078#2303|HGB_1_078#2359,1658,gremper|wirt
 actor_66437,Christoph Hänickhs,1,HGB_1_078_045,id_block,0,dossier,1,0,1,Christoph Hänickhs#1643-1643,1,HGB_1_078#2316,1643,
 actor_66439,Leonhardt Schardten,2,HGB_1_078_045,documents,2,doc,3,0,1,Leonhard Schartt#1601-1678,1,HGB_1_078#1911,1699,meier|metzger
 actor_66442,Hauss Conradt Ottendorff,3,HGB_1_078_045,documents,2,doc,2,0,1,Conrad Hannß Ottendorff#1673-1688,1,HGB_1_078#2534,,Engelwürth
@@ -45819,7 +45819,7 @@ actor_66529,von Garts,1,HGB_1_078_047,documents,1,doc,1,0,1,von Garts#1611-1611,
 actor_66530,Frantz Brannschweiler,1,HGB_1_078_047,id_block,0,dossier,1,0,1,Frantz Brunschweiler#1593-1659,1,HGB_1_078#2087,,schaffner
 actor_66534,Matthis Steck,1,HGB_1_078_047,id_block,0,dossier,1,0,1,Matthis Steck#1638-1638,1,HGB_1_078#2278,,
 actor_66536,Daniel Gassen,4,HGB_1_078_047,documents,2,doc,3,0,1,Daniel Gaß#1601-1655,3,HGB_1_078#1910|HGB_1_078#2303|HGB_1_078#2370,1657,
-actor_66537,Leonhardt Schartt,9,HGB_1_078_047,documents,7,doc,9,0,4,Leonhard Schartt#1601-1678 | Leonhardt Schardt#1662-1692 | Lienhart Schart#1668-1692 | Leonhard Schardt#1640-1700,5,HGB_1_078#1911|HGB_1_078#2431|HGB_1_078#2503|HGB_1_078#2290|HGB_1_078#2574,1692,metzger
+actor_66537,Leonhardt Schartt,9,HGB_1_078_047,documents,7,doc,9,0,2,Leonhardt Schardt#1640-1700 | Leonhard Schartt#1601-1678,5,HGB_1_078#1911|HGB_1_078#2431|HGB_1_078#2503|HGB_1_078#2290|HGB_1_078#2574,1692,metzger
 actor_66539,Henrich von Gooth,2,HGB_1_078_047,documents,1,doc,1,0,1,Heinrich von Gart#1611-1691,1,HGB_1_078#2083,,
 actor_66541,Jacob Engels,1,HGB_1_078_047,id_range,0,dossier,1,1,1,Jacob Engels#1691-1691,1,HGB_1_078#2642,1691,
 actor_66542,Werlin von Muspach,1,HGB_1_078_047,id_range,0,dossier,1,0,1,Werlin von Muspach#1691-1691,1,HGB_1_078#2644,,
@@ -45896,7 +45896,7 @@ actor_66641,Daniel Jselin,2,HGB_1_078_049,id_block,0,dossier,2,0,1,Daniel Jselin
 actor_66642,Peter Schardten,1,HGB_1_078_049,id_block,0,dossier,2,0,1,Peter Schart#1638-1676,1,HGB_1_078#2372,,metzger
 actor_66643,Emanuel Scholer,2,HGB_1_078_049,documents,2,doc,2,0,2,Emanuch Scholer#1662-1662 | Emanuel Scholer#1655-1699,2,HGB_1_078#2373|HGB_1_078#2428,,kantengiesser
 actor_66644,Hanns Heinrich Huel,2,HGB_1_078_049,id_block,0,dossier,2,0,1,Hanns Heinrich Humel#1632-1693,1,HGB_1_078#2430,,
-actor_66646,Leonhardt Schardten,3,HGB_1_078_049,id_block,0,dossier,4,0,3,Leonhard Schardten#1670-1691 | Leonhardt Schardt#1662-1692 | Leonhardt Schardten#1610-1670,3,HGB_1_078#2509|HGB_1_078#2431|HGB_1_078#2516,1691,metzger
+actor_66646,Leonhardt Schardten,3,HGB_1_078_049,id_block,0,dossier,4,0,3,Leonhard Schardten#1670-1691 | Leonhardt Schardt#1640-1700 | Leonhardt Schardten#1610-1670,3,HGB_1_078#2509|HGB_1_078#2431|HGB_1_078#2516,1691,metzger
 actor_66647,Johannes Wolleb,2,HGB_1_078_049,documents,1,doc,1,0,1,Johannes Wolleb#1667-1670,1,HGB_1_078#2466,,Mediae Doctor|Medienal Doctor
 actor_66649,Lienhardt Gerttlin,5,HGB_1_078_049,documents,1,doc,1,0,1,Lienhardt Ertlin#1672-1672,1,HGB_1_078#2527,,schreiner|tischmacher
 actor_66650,Erttlin geschrieben,1,HGB_1_078_049,id_block,0,dossier,1,0,1,Erttlin geschrieben#1667-1667,1,HGB_1_078#2468,,
@@ -47397,7 +47397,7 @@ actor_68741,Bryden,1,HGB_1_085_009,documents,1,doc,1,0,1,Bryden#1509-1509,1,HGB_
 actor_68744,Elsin Hansen Stehelin,1,HGB_1_085_009,id_block,0,dossier,1,0,1,Elsin Hansen Stehelin#1509-1509,1,HGB_1_085#1106,,
 actor_68746,Ulrich Bossler,1,HGB_1_085_009,id_block,0,dossier,1,0,1,Ulrich Bossler#1510-1510,1,HGB_1_085#1116,,
 actor_68747,Peter Löffler,2,HGB_1_085_009,documents,1,doc,1,0,1,Petter Leffel#1516-1563,1,HGB_1_085#1166,,kaufhausschreiber
-actor_68748,Peter Hans Jungermann,3,HGB_1_085_009,documents,2,doc,2,0,1,peter Hans Jungermann#1500-1543,1,HGB_1_085#1347,,kramer
+actor_68748,Peter Hans Jungermann,3,HGB_1_085_009,documents,2,doc,2,0,1,Hanns Petter#1500-1571,1,HGB_1_085#1347,,kramer
 actor_68749,Bryda Einfeldig,1,HGB_1_085_009,documents,1,doc,1,0,1,Bryda Einfeltig#1516-1534,1,HGB_1_085#1167,,
 actor_68750,Küngolt David,2,HGB_1_085_009,documents,2,doc,2,0,1,Küngolt David#1534-1534,2,HGB_1_085#1382|HGB_1_085#1384,,
 actor_68753,Kurgermann,1,HGB_1_085_009,id_block,0,dossier,1,0,1,Kurgermann#1534-1534,1,HGB_1_085#1383,,
@@ -49252,7 +49252,7 @@ actor_71332,Jacob Widmer,1,HGB_1_085_057,documents,1,doc,1,0,1,Jacob Widmer#1637
 actor_71333,Frantzen Braunen,1,HGB_1_085_057,id_block,0,dossier,1,0,1,Frantzen Braunen#1637-1637,1,HGB_1_085#2102,,
 actor_71334,Frantz Wildeisen,1,HGB_1_085_057,id_block,0,dossier,1,0,1,Frantz Wildeisen#1637-1637,1,HGB_1_085#2103,,
 actor_71335,Jacob Werenfels,1,HGB_1_085_057,id_block,0,dossier,1,0,1,Jacob Werenfels#1571-1637,1,HGB_1_085#2104,,pfarrer
-actor_71341,Friderich Eglinger,1,HGB_1_085_057,id_block,0,dossier,1,0,1,Friederich Eglinger#1638-1666,1,HGB_1_085#2219,,Beysitzer|apotheker
+actor_71341,Friderich Eglinger,1,HGB_1_085_057,id_block,0,dossier,1,0,1,Friederich Eglinger#1637-1666,1,HGB_1_085#2219,,Beysitzer|apotheker
 actor_71343,Cuhrosina Mangoltin,1,HGB_1_085_057,id_block,0,dossier,1,0,1,Cuhrosina Mangoltin#1666-1666,1,HGB_1_085#2220,,
 actor_71344,Johann Gedeon Widmer,5,HGB_1_085_057,id_block,0,dossier,8,1,3,Gedeon Widmer#1614-1676 | Johann Gedeon Widmer#1676-1678 | Gedeon Widmers#1662-1666,3,HGB_1_085#1963|HGB_1_085#2266|HGB_1_085#2217,1666,barbier
 actor_71345,Heinrich Salathe,1,HGB_1_085_057,id_block,0,dossier,1,0,1,Heinrich Salathe#1666-1696,1,HGB_1_085#2221,,schuhmacher
@@ -54587,7 +54587,7 @@ actor_78621,Johann Rudolf Farch,1,HGB_1_095_008,id_block,0,dossier,1,0,1,Johann 
 actor_78622,Johann Wrgant,1,HGB_1_095_008,id_block,0,dossier,1,0,1,Johann Wrgant#1657-1657,1,HGB_1_095#332,,gremper
 actor_78623,Christoph Roten,1,HGB_1_095_008,id_block,0,dossier,1,0,1,Christoph Roten#1638-1657,1,HGB_1_095#333,,schuhmacher
 actor_78624,Faschen,1,HGB_1_095_008,id_block,0,dossier,1,0,1,Faschen#1657-1657,1,HGB_1_095#334,,
-actor_78626,Hanns Jacob Faeschen,1,HGB_1_095_008,id_block,0,dossier,2,0,1,Hanns Jacob Faeschen#1680-1680,1,HGB_1_095#381,1680,Stattgerichts Beysitzers
+actor_78626,Hanns Jacob Faeschen,1,HGB_1_095_008,id_block,0,dossier,2,0,1,Hanns Jacob Faeschen#1680-1685,1,HGB_1_095#381,1680,Stattgerichts Beysitzers
 actor_78627,Daniel Burckhis Keller,2,HGB_1_095_008,id_block,0,dossier,2,0,2,Daniel Burckhi#1679-1680 | Daniel Burckhis Keller#1680-1680,2,HGB_1_095#379|HGB_1_095#388,,barbier
 actor_78629,Sebastian Beckhen,1,HGB_1_095_008,id_block,0,dossier,1,0,1,Sebastian Beckhen#1679-1690,1,HGB_1_095#364,1680,Stattnachtmeisters
 actor_78632,Einmanuel Mackh ler,3,HGB_1_095_008,documents,3,doc,3,0,2,Emanuel Mackhler#1664-1697 | Einmanuel Mackh ler#1690-1690,2,HGB_1_095#407|HGB_1_095#418,,Ehevogtlicherweiss|schreiner
@@ -55999,7 +55999,7 @@ actor_80714,Verena,1,HGB_1_103_016,documents,1,doc,1,0,1,Verena#1505-1505,1,HGB_
 actor_80715,Thiepolten Rederstorff,1,HGB_1_103_016,id_block,0,dossier,1,0,1,Thiepolten Rederstorff#1505-1505,1,HGB_1_103#239,,weber
 actor_80717,Johannes Gerung,1,HGB_1_103_016,id_block,0,dossier,1,0,1,Johannes Gering#1502-1528,1,HGB_1_103#243,,spitalschreiber
 actor_80718,Margareth,1,HGB_1_103_016,id_block,0,dossier,1,0,1,Margareth#1507-1507,1,HGB_1_103#246,,
-actor_80720,Hanns Sperrer,4,HGB_1_103_016,documents,5,doc,5,0,2,Hanns Petter#1514-1571 | Hanns Sperrer#1457-1534,2,HGB_1_103#256|HGB_1_103#250,,weber
+actor_80720,Hanns Sperrer,4,HGB_1_103_016,documents,5,doc,5,0,2,Hanns Petter#1500-1571 | Hanns Sperrer#1457-1534,2,HGB_1_103#256|HGB_1_103#250,,weber
 actor_80721,Margreth,1,HGB_1_103_016,documents,2,doc,3,0,1,Margreth#1514-1517,1,HGB_1_103#257,,
 actor_80723,Margreth,1,HGB_1_103_016,id_block,0,dossier,3,1,1,Margreth#1514-1517,1,HGB_1_103#257,,
 actor_80725,Hanns Ulrich Heberlin,3,HGB_1_103_016,documents,4,doc,4,0,1,Hans Ulrich Heberling#1517-1541,2,HGB_1_103#262|HGB_1_103#285,,weber
@@ -57837,7 +57837,7 @@ actor_83452,Hanns Heinrich Falckhner,1,HGB_1_112_010,id_block,0,dossier,1,0,1,Ha
 actor_83454,Michel Fux,4,HGB_1_112_010,documents,2,doc,2,0,1,Michael Fuchs#1612-1691,2,HGB_1_112#856|HGB_1_112#935,,küfer
 actor_83455,Abraham Kindermann,3,HGB_1_112_010,documents,2,doc,2,0,1,Abraham hindermann#1641-1699,2,HGB_1_112#862|HGB_1_112#936,,schwarzfärber
 actor_83456,Martin Mende,1,HGB_1_112_010,id_block,0,dossier,1,1,1,Martin . Mende#1612-1684,1,HGB_1_112#902,,schwarzfärber
-actor_83457,Albrecht Roht,2,HGB_1_112_010,documents,1,doc,1,0,1,albrecht Roht#1632-1692,1,HGB_1_112#919,,wollweber
+actor_83457,Albrecht Roht,2,HGB_1_112_010,documents,1,doc,1,0,1,albrecht Roht#1618-1692,1,HGB_1_112#919,,wollweber
 actor_83458,vonichaus Fuchs,1,HGB_1_112_010,documents,1,doc,1,0,1,vonichaus Fuchs#1684-1684,1,HGB_1_112#920,,küfer
 actor_83459,Friderich Bischoff,3,HGB_1_112_010,id_range,0,dossier,3,0,2,Friederich Bischoff#1672-1700 | Friedrich Bischoff#1692-1698,3,HGB_1_112#937|HGB_1_112#952|HGB_1_112#957,,schwarzfärber
 actor_83460,Hanns Ulrich Hindenlang,1,HGB_1_112_010,id_range,0,dossier,1,0,1,Hanns Ulrich Hindenlang#1692-1692,1,HGB_1_112#938,,färber
@@ -58036,7 +58036,7 @@ actor_83733,Joh. Conr Grunauer,1,HGB_1_112_019,id_block,0,dossier,1,0,1,Joh . Co
 actor_83734,Ludw Grunauer Spi,1,HGB_1_112_019,id_block,0,dossier,1,0,1,Ludw Grunauer Spi#1599-1599,1,HGB_1_112#699,,
 actor_83735,Einbassers,1,HGB_1_112_019,id_block,0,dossier,1,0,1,Einbassers#1601-1601,1,HGB_1_112#708,,
 actor_83736,Einlas. sers,1,HGB_1_112_019,id_block,0,dossier,1,0,1,Einlas . sers#1621-1621,1,HGB_1_112#782,,
-actor_83738,Hans Ullrich Spürgi,5,HGB_1_112_019,documents,2,doc,3,0,3,Hanns Ulrich Spürgin#1599-1679 | Hans Ullrich Spürgi#1656-1692 | Hanß Ulrich Spurgin#1679-1690,3,HGB_1_112#692|HGB_1_112#853|HGB_1_112#911,1690,metzger
+actor_83738,Hans Ullrich Spürgi,5,HGB_1_112_019,documents,2,doc,3,0,2,Hans Ullrich Spürgi#1656-1692 | Hanns Ulrich Spürgin#1599-1679,3,HGB_1_112#692|HGB_1_112#853|HGB_1_112#911,1690,metzger
 actor_83739,Hans Salus,2,HGB_1_112_019,id_block,0,dossier,2,0,2,Hanns Salis#1616-1656 | Hanß Salis#1679-1679,2,HGB_1_112#759|HGB_1_112#910,,bettelvogt
 actor_83742,Einlassers,1,HGB_1_112_019,id_block,0,dossier,1,0,1,Einlassers#1681-1681,1,HGB_1_112#918,,
 actor_83743,Sebastian Beckh,1,HGB_1_112_019,documents,1,doc,1,0,1,Sebastian Beckh#1692-1694,1,HGB_1_112#945,,schneider
@@ -64909,7 +64909,7 @@ actor_93622,Hannß Guotten,4,HGB_1_131_007,documents,2,doc,2,0,1,Hannss Guth#163
 actor_93624,Hieronimus Guthen,5,HGB_1_131_007,documents,4,doc,5,0,1,Hieronimuss Guth#1643-1681,3,HGB_1_131#602|HGB_1_131#627|HGB_1_131#630,1661,
 actor_93628,Joh. Jacob Uebelin,1,HGB_1_131_007,documents,1,doc,1,0,1,Hans Jacob Ubelin#1633-1696,1,HGB_1_131#588,,
 actor_93629,Jacob Im Hoff,2,HGB_1_131_007,documents,1,doc,1,0,1,Jacob Im Hoff#1687-1692,1,HGB_1_131#673,,drucker
-actor_93630,Hansen Herten,4,HGB_1_131_008,documents,4,doc,4,0,3,Hanns Hirten#1449-1529 | Hans Hirt#1412-1439 | Hansen Herten#1438-1452,3,HGB_1_131#105|HGB_1_131#55|HGB_1_131#61,,Tegken|schindeldecker|schindler
+actor_93630,Hansen Herten,4,HGB_1_131_008,documents,4,doc,4,0,2,Hanns Hirten#1449-1529 | Hans Hirt#1412-1452,3,HGB_1_131#105|HGB_1_131#55|HGB_1_131#61,,Tegken|schindeldecker|schindler
 actor_93631,Adelheid,1,HGB_1_131_008,documents,1,doc,1,0,1,Adelheid#1438-1438,1,HGB_1_131#62,,
 actor_93633,Heintz Brung,1,HGB_1_131_008,documents,1,doc,1,0,1,Heintz Brung#1438-1438,1,HGB_1_131#63,,müller
 actor_93635,Conrat zem Hoft,1,HGB_1_131_008,id_block,0,dossier,1,0,1,Conrat zem Hoft#1422-1438,1,HGB_1_131#64,,
@@ -65009,7 +65009,7 @@ actor_93777,Heintzi Brugen,1,HGB_1_131_012,documents,1,doc,1,0,1,Heintzi Brugen#
 actor_93778,Hammerschmitten,1,HGB_1_131_012,documents,1,doc,1,0,1,Hammerschmitten#1438-1438,1,HGB_1_131#73,,
 actor_93780,Peterhörlin,1,HGB_1_131_012,documents,1,doc,1,0,1,Peterhörlin#1438-1438,1,HGB_1_131#74,,ewidig
 actor_93783,Henezman Brung,2,HGB_1_131_012,id_block,0,dossier,2,0,1,Hemezman Brung#1438-1440,1,HGB_1_131#75,,
-actor_93784,Hans Hirt,1,HGB_1_131_012,id_block,0,dossier,1,0,1,Hans Hirt#1412-1439,1,HGB_1_131#61,,no_occ
+actor_93784,Hans Hirt,1,HGB_1_131_012,id_block,0,dossier,1,0,1,Hans Hirt#1412-1452,1,HGB_1_131#61,,no_occ
 actor_93785,Heinzin brutzzin,1,HGB_1_131_012,documents,1,doc,1,0,1,Heinzin brutzzin#1439-1439,1,HGB_1_131#79,,müller
 actor_93786,Heusslin Zech,1,HGB_1_131_012,documents,1,doc,1,0,1,Heusslin Zech#1439-1439,1,HGB_1_131#80,,müller
 actor_93787,Hemia Claren,1,HGB_1_131_012,documents,1,doc,1,0,1,Hemia Claren#1440-1440,1,HGB_1_131#84,,
@@ -67357,7 +67357,7 @@ actor_97422,Leonhardt Felbern,1,HGB_1_136_031,documents,1,doc,1,0,1,Sara von Spe
 actor_97423,Hieronymus Burckhardt,4,HGB_1_136_031,documents,2,doc,3,0,1,Hieronymus Burckhardt#1611-1688,2,HGB_1_136#1371|HGB_1_136#1366,,Besitzer|Obristen Zunftmeistern|Stattge - vichts Beysitzers|Stattgerichts Beysitzer|besitzer
 actor_97425,Hieronimo Mentelin,2,HGB_1_136_031,documents,1,doc,1,0,1,Hieronimo Mentelin#1660-1661,1,HGB_1_136#1367,1662,oberster zunftmeister
 actor_97426,Augustin Schnellen,1,HGB_1_136_031,id_block,0,dossier,5,0,1,Augustin Schnellen#1642-1696,1,HGB_1_136#1331,1692,
-actor_97427,Alb. recht Rothen,3,HGB_1_136_031,id_block,0,dossier,5,0,3,Albrecht Rothen#1618-1692 | Alb . recht Rothen#1661-1661 | albrecht Roht#1632-1692,3,HGB_1_136#1368|HGB_1_136#1369|HGB_1_136#1387,,fuhrmann
+actor_97427,Alb. recht Rothen,3,HGB_1_136_031,id_block,0,dossier,5,0,2,albrecht Roht#1618-1692 | Alb . recht Rothen#1661-1661,3,HGB_1_136#1368|HGB_1_136#1369|HGB_1_136#1387,,fuhrmann
 actor_97430,Burckhardt,1,HGB_1_136_031,id_block,0,dossier,1,0,1,Burckhardt#1661-1661,1,HGB_1_136#1370,,
 actor_97431,Johann Würtzen,5,HGB_1_136_031,documents,2,doc,2,0,2,Johan Wurtz#1661-1661 | Johann Würtzen#1608-1670,2,HGB_1_136#1372|HGB_1_136#1375,1692,Burgers|Speigreren|handelsmann|spezierer
 actor_97432,Sara Kargerin,2,HGB_1_136_031,documents,2,doc,2,0,2,Rheinhart#1692-1692 | Sara Kargerin#1661-1661,2,HGB_1_136#1373|HGB_1_136#1438,,Wierzen|heurgeren
@@ -68580,7 +68580,7 @@ actor_99124,Haus Jacob Mayses,3,HGB_1_137_040,id_range,0,dossier,3,0,2,Jacob Mos
 actor_99125,Jsaac Widmer,1,HGB_1_137_040,id_range,0,dossier,1,0,1,Jsaac Widmer#1676-1676,1,HGB_1_137#2704,,
 actor_99126,Semanuel Roth,2,HGB_1_137_041,documents,1,doc,1,0,1,Emanuel Roth#1687-1697,1,HGB_1_137#2765,,knopfmacher
 actor_99127,Catharina Götzen,1,HGB_1_137_041,id_block,0,dossier,1,0,1,Catharina Götzen#1687-1687,1,HGB_1_137#2763,,
-actor_99128,Albrecht Rothen,1,HGB_1_137_041,id_block,0,dossier,1,0,1,Albrecht Rothen#1618-1692,1,HGB_1_137#2757,1687,Stattgerichts Beysitzer
+actor_99128,Albrecht Rothen,1,HGB_1_137_041,id_block,0,dossier,1,0,1,albrecht Roht#1618-1692,1,HGB_1_137#2757,1687,Stattgerichts Beysitzer
 actor_99129,Hanns Rudolf Mentzingers,1,HGB_1_137_041,documents,1,doc,1,0,1,Hanns Rudolf Mentzingers#1687-1687,1,HGB_1_137#2764,,
 actor_99130,Herrmann Fridmann,1,HGB_1_137_041,id_range,0,dossier,1,0,1,Herrmann Fridmann#1697-1697,1,HGB_1_137#2817,,
 actor_99132,Angnesen Rösslin,3,HGB_1_137_042,documents,3,doc,3,0,1,Angnesen Rösslin#1437-1437,1,HGB_1_137#356,,
@@ -68865,7 +68865,7 @@ actor_99489,Jacob Beckhen,2,HGB_1_137_051,id_block,0,dossier,21,1,4,Jacob Beckh#
 actor_99490,Hans Georg Beckh,1,HGB_1_137_051,id_block,0,dossier,2,1,2,Hanns Georg Beckh#1689-1695 | Hans Georg Beckh#1507-1507,2,HGB_1_137#1036|HGB_1_137#2784,,
 actor_99493,Lienhart Lützelman,1,HGB_1_137_051,documents,1,doc,1,0,1,Lienhart Lützelman#1507-1579,1,HGB_1_137#1038,,
 actor_99494,Hansen Lützelman,1,HGB_1_137_051,documents,1,doc,1,0,1,Hansen Lützelman#1507-1507,1,HGB_1_137#1039,,
-actor_99495,Dietterich Kreyer,4,HGB_1_137_051,id_block,0,dossier,7,1,4,Dietrich Kreyer#1507-1587 | Dietterich Kreyer#1542-1604 | Dietrich Kreyer#1589-1589 | Dietterich Kreyen#1550-1550,4,HGB_1_137#1040|HGB_1_137#1445|HGB_1_137#1516|HGB_1_137#1969,,schlosser
+actor_99495,Dietterich Kreyer,4,HGB_1_137_051,id_block,0,dossier,7,1,3,Dietrich Kräger#1542-1608 | Dietrich Kreyer#1507-1587 | Dietterich Kreyen#1550-1550,4,HGB_1_137#1040|HGB_1_137#1445|HGB_1_137#1516|HGB_1_137#1969,,schlosser
 actor_99497,Banwarts,1,HGB_1_137_051,id_block,0,dossier,3,1,2,Banwarts#1511-1511 | Banwarts#1478-1478,2,HGB_1_137#1102|HGB_1_137#747,,
 actor_99498,Jacoben Kreyer,6,HGB_1_137_051,documents,4,doc,5,0,4,Jacob Kreyer#1569-1587 | Jacob Kreiger#1542-1550 | Jacoben Kargers#1563-1563 | Jacoben Kreyer#1580-1580,4,HGB_1_137#1673|HGB_1_137#1442|HGB_1_137#1600|HGB_1_137#1879,1582,schlosser
 actor_99499,Dorothea,1,HGB_1_137_051,documents,1,doc,1,0,1,Dorothea#1542-1542,1,HGB_1_137#1443,,
@@ -68874,7 +68874,7 @@ actor_99501,Wolff Falcken,1,HGB_1_137_051,id_block,0,dossier,1,0,1,Wolff Valckhe
 actor_99503,Gregoris von Kilch,1,HGB_1_137_051,id_block,0,dossier,1,0,1,Gregoris von Kilch#1563-1563,1,HGB_1_137#1599,,
 actor_99505,Narrenbachers,2,HGB_1_137_051,id_block,0,dossier,4,0,2,Narrenbachers#1604-1611 | Narenbachers#1569-1569,2,HGB_1_137#2102|HGB_1_137#1681,,
 actor_99507,Cristoffel Wust,1,HGB_1_137_051,id_block,0,dossier,1,0,1,Cristoffel Wüest#1579-1580,1,HGB_1_137#1878,,schaffner
-actor_99509,Dietterich Kreyer,7,HGB_1_137_051,documents,6,doc,9,0,7,Dietrich Kreyer#1507-1587 | Dietrich Kräger#1587-1608 | Detterich Kreyer#1604-1604 | Dietrich Kreyer#1589-1589 | Dietrich Kreyers#1608-1608 | Dietterich Kreyer#1542-1604 | Diettrich Kreuer#1589-1589,7,HGB_1_137#1040|HGB_1_137#1925|HGB_1_137#1445|HGB_1_137#1969|HGB_1_137#1970|HGB_1_137#2103|HGB_1_137#2146,1608,schlosser
+actor_99509,Dietterich Kreyer,7,HGB_1_137_051,documents,6,doc,9,0,1,Dietrich Kräger#1542-1608,7,HGB_1_137#1040|HGB_1_137#1925|HGB_1_137#1445|HGB_1_137#1969|HGB_1_137#1970|HGB_1_137#2103|HGB_1_137#2146,1608,schlosser
 actor_99510,Bernhard Oser,1,HGB_1_137_051,id_block,0,dossier,1,0,1,Bernhard Oser#1562-1615,1,HGB_1_137#2070,,Unterschreiber
 actor_99511,Dietrich Kreyerdes Schlossers,1,HGB_1_137_051,documents,1,doc,1,0,1,Dietrich Kreyerdes Schlossers#1601-1601,1,HGB_1_137#2071,,
 actor_99512,Carle Cadus,1,HGB_1_137_051,id_block,0,dossier,1,0,1,Carle Cadus#1601-1601,1,HGB_1_137#2072,,armbruster
@@ -69239,7 +69239,7 @@ actor_100039,Werner Solers,1,HGB_1_137_060,id_block,0,dossier,1,0,1,Werner Soler
 actor_100040,Laurentz Lauterburger,2,HGB_1_137_060,id_block,0,dossier,3,0,1,Laurentz Lanterburger#1653-1657,1,HGB_1_137#2480,,notar
 actor_100042,Christoph Ringler,2,HGB_1_137_060,documents,4,doc,4,0,1,Christoph Ringler#1628-1657,2,HGB_1_137#2516|HGB_1_137#2481,,gewessner
 actor_100044,Ha - niel Ryfen,4,HGB_1_137_060,id_block,0,dossier,5,0,3,Daniel Ryffen#1594-1660 | Daniel Reyff#1642-1657 | Ha - niel Ryfen#1653-1653,3,HGB_1_137#2450|HGB_1_137#2415|HGB_1_137#2482,,
-actor_100045,Jacob Brandtmüllern,3,HGB_1_137_060,id_block,0,dossier,6,0,2,Jacob Brandmüllern#1647-1675 | Jacob Brandmüller#1594-1674,2,HGB_1_137#2483|HGB_1_137#2465,,Rechten Doctorem
+actor_100045,Jacob Brandtmüllern,3,HGB_1_137_060,id_block,0,dossier,6,0,2,Jacob Brandmüllern#1647-1677 | Jacob Brandmüller#1594-1674,2,HGB_1_137#2483|HGB_1_137#2465,,Rechten Doctorem
 actor_100046,General Reinhald,1,HGB_1_137_060,id_block,0,dossier,1,0,1,General Reinhald#1657-1657,1,HGB_1_137#2515,,
 actor_100048,H. von Rosen,1,HGB_1_137_060,id_block,0,dossier,1,0,1,Reinholdt von Rosenet .#1657-1657,1,HGB_1_137#2517,,
 actor_100049,Reinholdt von Rosenet.,2,HGB_1_137_060,documents,2,doc,2,0,1,Reinholdt von Rosenet .#1657-1657,2,HGB_1_137#2517|HGB_1_137#2518,,König .
@@ -70346,7 +70346,7 @@ actor_101655,alte Vögten von Weyll,2,HGB_1_145_012,documents,1,doc,1,0,1,alte V
 actor_101657,alte Vögtenen,2,HGB_1_145_012,documents,1,doc,1,0,1,alti Vogtene#1655-1656,1,HGB_1_145#847,,
 actor_101658,Cons,1,HGB_1_145_012,id_block,0,dossier,1,0,1,Cons#1655-1655,1,HGB_1_145#848,,
 actor_101659,Jacob Gretter,2,HGB_1_145_012,documents,4,doc,4,0,2,Jacob Gretter#1632-1665 | Jacob Gröth#1660-1660,2,HGB_1_145#849|HGB_1_145#867,,wagner
-actor_101660,Bernhardt Siegerist,3,HGB_1_145_012,documents,4,doc,4,0,3,Bernhard Siegrist#1608-1663 | Bernhardt Siegerist#1655-1655 | Bernhart Sigerist#1658-1658,3,HGB_1_145#859|HGB_1_145#850|HGB_1_145#861,,schiffmann
+actor_101660,Bernhardt Siegerist,3,HGB_1_145_012,documents,4,doc,4,0,2,Bernhard Siegrist#1608-1663 | Bernhardt Siegerist#1655-1658,3,HGB_1_145#859|HGB_1_145#850|HGB_1_145#861,,schiffmann
 actor_101661,Ursulageb. Ritterin,1,HGB_1_145_012,documents,1,doc,1,0,1,Ursulageb . Ritterin#1658-1658,1,HGB_1_145#862,,
 actor_101662,Georg Müller,2,HGB_1_145_012,id_block,0,dossier,3,0,1,Geörg Müller#1600-1687,1,HGB_1_145#742,,küfer
 actor_101664,Johan Meyer,1,HGB_1_145_012,id_block,0,dossier,1,0,1,Johan Meyer#1658-1659,1,HGB_1_145#863,,schneider
@@ -76828,7 +76828,7 @@ actor_110790,Jacoben Hercker,2,HGB_1_154_021,documents,1,doc,1,0,1,Jacoben Herck
 actor_110791,Annen,1,HGB_1_154_021,documents,1,doc,1,0,1,Annen#1524-1524,1,HGB_1_154#1540,,
 actor_110792,Rudolffen Sapper,3,HGB_1_154_021,id_block,0,dossier,4,0,2,Rudolff Supper#1522-1567 | Rudolffen Sapper#1537-1537,2,HGB_1_154#1541|HGB_1_154#1697,,
 actor_110793,Hanns Winbrenner,3,HGB_1_154_021,documents,3,doc,3,0,1,Hanns Winbrenner#1527-1534,1,HGB_1_154#1569,,
-actor_110794,Hanns Franckh,6,HGB_1_154_021,documents,3,doc,3,0,3,Hanns Franck#1468-1541 | Hanns Franckh#1561-1561 | Hanß Franzkh#1561-1561,2,HGB_1_154#1501|HGB_1_154#1956,,rebmann|weinbrenner
+actor_110794,Hanns Franckh,6,HGB_1_154_021,documents,3,doc,3,0,2,Hanß Franzkh#1561-1561 | Hanns Franck#1468-1541,2,HGB_1_154#1501|HGB_1_154#1956,,rebmann|weinbrenner
 actor_110795,Jacob Burgundier,5,HGB_1_154_021,documents,9,doc,10,0,3,Jacob Burgundt#1588-1629 | Jacob Burgunder#1601-1621 | Jacob Burgund#1537-1537,3,HGB_1_154#2163|HGB_1_154#1698|HGB_1_154#2214,,schmied
 actor_110796,Kuoblocherin,1,HGB_1_154_021,id_block,0,dossier,1,0,1,Kuoblocherin#1541-1541,1,HGB_1_154#1764,,
 actor_110797,Agtli Vischer,1,HGB_1_154_021,documents,1,doc,1,0,1,Agtli Vischer#1561-1561,1,HGB_1_154#1957,,
@@ -77835,7 +77835,7 @@ actor_112185,Rüdin Steinhower,2,HGB_1_154_056,documents,1,doc,1,0,1,Rud Steinho
 actor_112186,Eneli,1,HGB_1_154_056,documents,1,doc,1,0,1,Eneli#1433-1433,1,HGB_1_154#622,,
 actor_112187,Hansen Swaben,1,HGB_1_154_056,documents,1,doc,1,0,1,Hansen Swaben#1433-1433,1,HGB_1_154#623,,
 actor_112189,Ulin Romers,1,HGB_1_154_056,id_block,0,dossier,1,0,1,Ulin Romers#1433-1433,1,HGB_1_154#624,,
-actor_112191,Hans Schwob,1,HGB_1_154_056,documents,1,doc,1,0,1,Hans Schwob .#1434-1487,1,HGB_1_154#644,,rebmann
+actor_112191,Hans Schwob,1,HGB_1_154_056,documents,1,doc,1,0,1,Hans Schwob .#1411-1487,1,HGB_1_154#644,,rebmann
 actor_112196,Sweblin,1,HGB_1_154_056,documents,1,doc,1,0,1,sweblins#1498-1498,1,HGB_1_154#1269,,
 actor_112197,hingkend Rust,1,HGB_1_154_056,documents,1,doc,1,0,1,hingkend Rust#1498-1498,1,HGB_1_154#1266,1498,
 actor_112199,heinrich Weyel,1,HGB_1_154_056,id_block,0,dossier,1,0,1,Heinrich Weyael#1450-1498,1,HGB_1_154#822,,brotbäcker
@@ -79211,7 +79211,7 @@ actor_114202,Peter,1,HGB_1_155_011,id_range,0,dossier,1,0,1,Peter Wertenmanner#1
 actor_114203,Clewi Groß man,1,HGB_1_155_012,documents,1,doc,1,0,1,Clewi Groß man#1412-1412,1,HGB_1_155#55,,
 actor_114204,Lenner,1,HGB_1_155_012,id_block,0,dossier,1,0,1,Lenner#1412-1412,1,HGB_1_155#56,,
 actor_114205,Ulli Meder,1,HGB_1_155_012,id_block,0,dossier,1,0,1,Ulli Meder#1412-1412,1,HGB_1_155#57,,
-actor_114206,Hans Hirt,2,HGB_1_155_012,documents,1,doc,2,0,2,Bürgk li#1423-1423 | Hans Hirt#1412-1439,2,HGB_1_155#171|HGB_1_155#58,,
+actor_114206,Hans Hirt,2,HGB_1_155_012,documents,1,doc,2,0,2,Bürgk li#1423-1423 | Hans Hirt#1412-1452,2,HGB_1_155#171|HGB_1_155#58,,
 actor_114207,Heitzman Messerer,1,HGB_1_155_012,id_block,0,dossier,1,0,1,Heitzman Messerer#1411-1412,1,HGB_1_155#59,,
 actor_114209,Sur lina,1,HGB_1_155_012,id_block,0,dossier,1,0,1,Sur lina#1412-1412,1,HGB_1_155#60,,
 actor_114210,Summan zem Rosen,1,HGB_1_155_012,id_block,0,dossier,1,0,1,Summan zem Rosen#1412-1412,1,HGB_1_155#53,1412,
@@ -85461,7 +85461,7 @@ actor_123429,Benedichus Meiger,1,HGB_1_161_027,documents,1,doc,1,0,1,Benedichus 
 actor_123430,felix Hurins,2,HGB_1_161_027,id_block,0,dossier,2,0,1,felix Hurins#1495-1541,1,HGB_1_161#510,1541,
 actor_123431,Melbers,1,HGB_1_161_027,id_block,0,dossier,1,0,1,Melbers#1495-1495,1,HGB_1_161#511,,
 actor_123434,Elspeth Lienhart,1,HGB_1_161_027,id_block,0,dossier,1,0,1,Elspeth Lienhart#1525-1525,1,HGB_1_161#615,,
-actor_123436,Martin Hüber,1,HGB_1_161_027,id_block,0,dossier,1,0,1,Martin Hüber#1512-1525,1,HGB_1_161#616,,wirt
+actor_123436,Martin Hüber,1,HGB_1_161_027,id_block,0,dossier,1,0,1,Martin Hüber#1512-1541,1,HGB_1_161#616,,wirt
 actor_123438,Anna,1,HGB_1_161_027,id_block,0,dossier,2,1,2,Anna#1525-1525 | Anna#1541-1541,2,HGB_1_161#617|HGB_1_161#688,,
 actor_123439,Hansen Thiber,1,HGB_1_161_027,id_block,0,dossier,1,0,1,Hansen Thiber#1525-1525,1,HGB_1_161#613,1525,
 actor_123440,Phillman Schmöller,1,HGB_1_161_027,documents,1,doc,1,0,1,Phillman Schmöller#1541-1541,1,HGB_1_161#689,,
@@ -85733,7 +85733,7 @@ actor_123835,Michael Spell,1,HGB_1_161_039,id_block,0,dossier,1,0,1,Michael Spel
 actor_123836,Reissendern Wolf oder Lewengruben,1,HGB_1_161_039,id_block,0,dossier,1,0,1,Reissendern Wolf oder Lewengruben#1587-1587,0,,,
 actor_123837,Lienhart Müller,1,HGB_1_161_039,id_block,0,dossier,1,0,1,Lienhart Müller#1587-1587,1,HGB_1_161#860,,Reichen
 actor_123842,reichen von Landtseron,1,HGB_1_161_039,documents,1,doc,1,0,1,reichen von Landtseron#1580-1642,0,,,
-actor_123845,Rudolffen Tietelsperg,12,HGB_1_161_040,documents,7,doc,8,0,7,Rudolff dietlisperg#1418-1454 | Rudi Fidelsperger#1418-1418 | Rudi Tüdelsperger#1418-1418 | Rudolf Fieslisperg#1447-1447 | Rudolf Judelsperg#1418-1418 | Rudolf dielsperg#1447-1447 | Rudolff Ludelsperg#1418-1418,7,HGB_1_161#64|HGB_1_161#240|HGB_1_161#245|HGB_1_161#74|HGB_1_161#83|HGB_1_161#86|HGB_1_161#90,1454,notar|schreiber|stettschriber
+actor_123845,Rudolffen Tietelsperg,12,HGB_1_161_040,documents,7,doc,8,0,1,Rudolff dietlisperg#1418-1454,7,HGB_1_161#64|HGB_1_161#240|HGB_1_161#245|HGB_1_161#74|HGB_1_161#83|HGB_1_161#86|HGB_1_161#90,1454,notar|schreiber|stettschriber
 actor_123846,Wernlin Grünen. fels,2,HGB_1_161_040,id_block,0,dossier,2,0,2,"Werlin , Gumenfels#1418-1418 | Wernlin Grünen . fels#1426-1426",2,HGB_1_161#126|HGB_1_161#80,,
 actor_123847,Henmann Grünenfels,2,HGB_1_161_040,documents,2,doc,2,0,1,herman Grünenfels#1418-1426,2,HGB_1_161#127|HGB_1_161#66,,
 actor_123849,Andreas Ospernell,2,HGB_1_161_040,id_block,0,dossier,2,0,1,Andres Ospernell#1418-1451,1,HGB_1_161#81,,
@@ -85792,7 +85792,7 @@ actor_123910,Becky,1,HGB_1_161_040,id_block,0,dossier,1,0,1,Becky#1631-1631,1,HG
 actor_123912,Caspar Battieren,1,HGB_1_161_040,id_block,0,dossier,1,0,1,Caspar Battieren#1625-1663,1,HGB_1_161#1097,,
 actor_123913,Reichensteinischen,1,HGB_1_161_040,id_block,0,dossier,1,0,1,Reichensteinischen#1632-1632,0,,,
 actor_123915,se Da Burckhardt,1,HGB_1_161_040,id_block,0,dossier,1,0,1,se Da Burckhardt#1632-1632,1,HGB_1_161#1098,,
-actor_123916,albrecht Roht,1,HGB_1_161_040,id_block,0,dossier,1,0,1,albrecht Roht#1632-1692,1,HGB_1_161#1099,,
+actor_123916,albrecht Roht,1,HGB_1_161_040,id_block,0,dossier,1,0,1,albrecht Roht#1618-1692,1,HGB_1_161#1099,,
 actor_123917,Hans Rudolf Heussleren,1,HGB_1_161_040,id_block,0,dossier,1,0,1,Hans Rudolf Heussleren#1632-1632,1,HGB_1_161#1100,,
 actor_123918,Reichen von Reichenstein,1,HGB_1_161_040,id_block,0,dossier,3,1,1,Reichen von Reichenstein#1637-1695,1,HGB_1_161#1104,,
 actor_123919,Lux Burckhardt,2,HGB_1_161_040,documents,1,doc,1,0,1,Luca Burckhards#1695-1695,1,HGB_1_161#1275,,Professorn|professor
@@ -88919,7 +88919,7 @@ actor_128603,Jacob Strosser,1,HGB_1_173_008,id_block,0,dossier,1,0,1,Jacob Stros
 actor_128605,Onofin Merians,1,HGB_1_173_008,id_block,0,dossier,1,0,1,Onofin Merians#1630-1630,1,HGB_1_173#571,1630,
 actor_128606,Hanns Säckhlein,4,HGB_1_173_008,id_block,0,dossier,4,0,3,Hanns Jäckhlin#1558-1638 | Hanns Säckhlin#1629-1659 | Hanss Säckhlin#1609-1630,3,HGB_1_173#584|HGB_1_173#565|HGB_1_173#573,,Aberseiter|Ueberreiter|einspänniger|söldner
 actor_128607,Hause Hagenbach,1,HGB_1_173_008,id_block,0,dossier,1,0,1,Hause Hagenbach#1630-1630,1,HGB_1_173#574,,
-actor_128608,Friederich Eglingeren,4,HGB_1_173_008,documents,3,doc,3,0,3,Friederich Eglinger#1638-1666 | Friederich Eglingern#1558-1638 | friderich Eglingern#1637-1640,3,HGB_1_173#582|HGB_1_173#593|HGB_1_173#597,,apotheker
+actor_128608,Friederich Eglingeren,4,HGB_1_173_008,documents,3,doc,3,0,2,Friederich Eglinger#1637-1666 | Friederich Eglingern#1558-1638,3,HGB_1_173#582|HGB_1_173#593|HGB_1_173#597,,apotheker
 actor_128609,Philipp Mörich,3,HGB_1_173_008,id_block,0,dossier,3,0,3,Philip Rörich#1638-1638 | Philipp Mörich#1637-1657 | Philipp Rouch#1638-1638,3,HGB_1_173#583|HGB_1_173#592|HGB_1_173#598,,schuhmacher
 actor_128610,Magdalena,1,HGB_1_173_008,documents,1,doc,1,0,1,Magdalena#1638-1638,1,HGB_1_173#586,,
 actor_128611,Anna Fischacherin,2,HGB_1_173_008,documents,2,doc,2,0,1,Anna Fischacherin#1638-1638,2,HGB_1_173#587|HGB_1_173#596,,
@@ -89108,7 +89108,7 @@ actor_128862,Jacob Merode,1,HGB_1_173_011,id_block,0,dossier,1,0,1,Jacob Meride#
 actor_128863,J. Langmesser,1,HGB_1_173_011,id_block,0,dossier,1,0,1,Rudolff Langmessler#1592-1668,1,HGB_1_173#473,,wirt
 actor_128865,Mathis Müller,1,HGB_1_173_011,documents,3,doc,3,0,1,Mathis Müller#1601-1621,1,HGB_1_173#481,,
 actor_128866,Hanns Jacob Meyenrokh,6,HGB_1_173_011,id_block,0,dossier,7,0,5,Hanns Jacob Meyenrokh#1621-1650 | Hanns Jacob Meyer rockhs#1650-1650 | Hans Jacob Meyenrocks#1641-1641 | Jacoben Meyenrockh#1650-1650 | Jacoben Meyenrockhs#1650-1650,5,HGB_1_173#547|HGB_1_173#599|HGB_1_173#614|HGB_1_173#615|HGB_1_173#616,1623,notar
-actor_128868,Friederich Eglinger,3,HGB_1_173_011,documents,3,doc,3,0,1,Friederich Eglinger#1638-1666,1,HGB_1_173#600,,apotheker
+actor_128868,Friederich Eglinger,3,HGB_1_173_011,documents,3,doc,3,0,1,Friederich Eglinger#1637-1666,1,HGB_1_173#600,,apotheker
 actor_128869,Samuel von Brunn,2,HGB_1_173_011,id_block,0,dossier,2,0,1,Samuels von Brunn#1650-1693,1,HGB_1_173#617,,pfarrer
 actor_128870,Hans Geiggis,2,HGB_1_173_011,id_block,0,dossier,2,0,1,Hanns Geigis#1617-1650,1,HGB_1_173#618,,einspänniger
 actor_128871,Hans Georg König,1,HGB_1_173_011,id_block,0,dossier,1,0,1,Hans Görg König#1632-1687,1,HGB_1_173#619,,
@@ -92937,7 +92937,7 @@ actor_134348,Heinzen Roggenspergers,1,HGB_1_181_029,documents,1,doc,1,0,1,Heinze
 actor_134350,Linhart Glügenspiss,1,HGB_1_181_029,documents,1,doc,1,0,1,Linhart Glügenspiss#1508-1508,1,HGB_1_181#601,,schlosser
 actor_134351,Lienhart Glügenspiss,2,HGB_1_181_030,documents,2,doc,2,0,1,Lienhart Gluenspiss#1507-1539,2,HGB_1_181#617|HGB_1_181#623,,schlosser
 actor_134352,Cossman Ertzberger,3,HGB_1_181_030,documents,1,doc,1,0,1,Cosmas Ertzberg#1512-1512,1,HGB_1_181#619,,Kaufhurschriber|kaufhausschreiber
-actor_134353,Hansen Peter,3,HGB_1_181_030,documents,3,doc,3,0,3,Hanns Petter#1514-1571 | Peter Hanns#1442-1512 | peter Hans Jungermann#1500-1543,1,HGB_1_181#622,,messerschmied
+actor_134353,Hansen Peter,3,HGB_1_181_030,documents,3,doc,3,0,2,Hanns Petter#1500-1571 | Peter Hanns#1442-1512,1,HGB_1_181#622,,messerschmied
 actor_134354,Elsin,1,HGB_1_181_030,documents,2,doc,2,0,1,Elsin#1512-1512,1,HGB_1_181#621,,
 actor_134360,Clara,1,HGB_1_181_030,id_block,0,dossier,1,0,1,Clara#1512-1512,1,HGB_1_181#624,,
 actor_134362,Hansen Morhuser,2,HGB_1_181_030,documents,1,doc,1,0,1,Hans Morhuser#1526-1571,1,HGB_1_181#680,,plattharnischer
@@ -92950,7 +92950,7 @@ actor_134368,Mathis Locherer,1,HGB_1_181_030,documents,1,doc,1,0,1,Mathis Locher
 actor_134369,Anna,1,HGB_1_181_030,documents,1,doc,1,0,1,Anna#1543-1543,1,HGB_1_181#785,,
 actor_134370,Andresen Bletz,1,HGB_1_181_030,documents,1,doc,1,0,1,Andresen Bletz#1532-1554,1,HGB_1_181#786,,gremper
 actor_134371,Othilin Fygeli,1,HGB_1_181_030,documents,1,doc,1,0,1,Othilin Fygeli#1543-1543,1,HGB_1_181#787,,
-actor_134372,Peter Hansen Jungerman,1,HGB_1_181_030,id_block,0,dossier,1,0,1,peter Hans Jungermann#1500-1543,1,HGB_1_181#620,,kramer
+actor_134372,Peter Hansen Jungerman,1,HGB_1_181_030,id_block,0,dossier,1,0,1,Hanns Petter#1500-1571,1,HGB_1_181#620,,kramer
 actor_134374,Joder Grimen,1,HGB_1_181_030,id_block,0,dossier,1,0,1,Joder Grimen#1556-1556,1,HGB_1_181#844,1556,sattler
 actor_134375,Joder Holtzer,1,HGB_1_181_030,id_block,0,dossier,1,0,1,Joder Holtzer#1556-1556,1,HGB_1_181#858,,
 actor_134376,Andres Spörli,1,HGB_1_181_030,id_block,0,dossier,1,0,1,Andres Spörlin#1556-1588,1,HGB_1_181#859,,
@@ -93179,7 +93179,7 @@ actor_134658,Maus,1,HGB_1_181_036,id_block,0,dossier,1,0,1,Maus#1494-1494,1,HGB_
 actor_134660,Margreth,1,HGB_1_181_036,documents,1,doc,1,0,1,Margreth#1496-1496,1,HGB_1_181#534,,
 actor_134671,Ulrich Thanner,2,HGB_1_181_036,documents,2,doc,2,0,1,Ulrich Sanner#1493-1506,2,HGB_1_181#588|HGB_1_181#590,,schaffner
 actor_134673,Adolf Rüsch,1,HGB_1_181_036,documents,1,doc,1,0,1,Adolf Rüsch#1504-1508,1,HGB_1_181#589,,chorherr|schaffner
-actor_134677,Hansen Peter,1,HGB_1_181_036,id_block,0,dossier,1,0,1,Hanns Petter#1514-1571,1,HGB_1_181#622,,messerschmied
+actor_134677,Hansen Peter,1,HGB_1_181_036,id_block,0,dossier,1,0,1,Hanns Petter#1500-1571,1,HGB_1_181#622,,messerschmied
 actor_134679,Conrad Spet,2,HGB_1_181_036,documents,1,doc,1,0,1,Conrad Spet#1511-1522,1,HGB_1_181#644,,Commenthal|Conventhal|schaffner
 actor_134680,Conrat brenner,1,HGB_1_181_036,documents,1,doc,1,0,1,Conrat brenner#1522-1522,1,HGB_1_181#646,,Convental|schaffner
 actor_134681,siner Essl.,1,HGB_1_181_036,id_block,0,dossier,1,0,1,siner Essl .#1522-1522,1,HGB_1_181#648,,
@@ -94770,7 +94770,7 @@ actor_136948,Stoffel Pfaffen,1,HGB_1_184_027,id_block,0,dossier,2,0,1,Stoffel Pf
 actor_136949,Rudolph Merian,2,HGB_1_184_027,id_block,0,dossier,2,0,2,Rudolff Merian#1560-1629 | Rudolph Merian#1575-1652,1,HGB_1_184#2559,,
 actor_136950,Georg Crappen,1,HGB_1_184_027,id_block,0,dossier,1,0,1,Georg Crappen#1623-1623,1,HGB_1_184#2560,,
 actor_136952,Joachin Rollen,2,HGB_1_184_027,id_block,0,dossier,2,0,2,Joachin Rollen#1623-1623 | Joachin Ulen#1617-1628,2,HGB_1_184#2561|HGB_1_184#2615,1623,glaser
-actor_136953,Cossmann Ertzberger,4,HGB_1_184_027,documents,4,doc,4,0,1,Cofmann Ertzberger#1581-1654,3,HGB_1_184#2581|HGB_1_184#1895|HGB_1_184#2625,,schneider
+actor_136953,Cossmann Ertzberger,4,HGB_1_184_027,documents,4,doc,4,0,1,Cofmann Ertzberger#1577-1654,3,HGB_1_184#2581|HGB_1_184#1895|HGB_1_184#2625,,schneider
 actor_136954,Reinhardt,1,HGB_1_184_027,documents,1,doc,1,0,1,Reinhardt#1628-1628,1,HGB_1_184#2616,,stubenknecht
 actor_136956,Rudolph Staff,1,HGB_1_184_027,id_block,0,dossier,1,0,1,Rudolph Staff#1628-1628,1,HGB_1_184#2617,,lederbereiter
 actor_136957,Hans Ertzberger,1,HGB_1_184_027,id_block,0,dossier,1,0,1,Hans Ertzberger#1604-1639,1,HGB_1_184#2618,,
@@ -95278,7 +95278,7 @@ actor_137658,Hanns Schörendorft,1,HGB_1_184_035,id_block,0,dossier,1,0,1,Hanns 
 actor_137659,Marthini Kempter,2,HGB_1_184_035,documents,2,doc,2,0,1,Marthini Kempter#1580-1604,1,HGB_1_184#2064,,lautenmacher
 actor_137660,Erhart Erklins,1,HGB_1_184_035,documents,1,doc,1,0,1,Erhart Erklins#1593-1593,1,HGB_1_184#2176,,
 actor_137661,Heinrich Steblin,3,HGB_1_184_035,documents,1,doc,1,0,1,Heinrich Reuwlin#1604-1643,1,HGB_1_184#2293,,
-actor_137663,Johannes Brandtmüller,4,HGB_1_184_035,id_block,0,dossier,8,0,3,Johann Brandmüller#1613-1691 | Johann Brandmüller#1646-1695 | Johannes Brandtmüllers#1623-1643,2,HGB_1_184#2523|HGB_1_184#2555,1645,schneider|stadtkäufer
+actor_137663,Johannes Brandtmüller,4,HGB_1_184_035,id_block,0,dossier,8,0,3,Johann Brandmüller#1613-1691 | Johann Brandmüller#1646-1695 | Johann Brandmüller#1568-1647,2,HGB_1_184#2523|HGB_1_184#2555,1645,schneider|stadtkäufer
 actor_137664,Gregorius Brandtmüller,3,HGB_1_184_035,documents,6,doc,7,0,1,Gregorius . Brandtmüller#1600-1680,1,HGB_1_184#2738,,derGoldtschmidt|goldschmied
 actor_137666,Nielaus Schärrers,1,HGB_1_184_035,id_block,0,dossier,1,0,1,Nielaus Schärrers#1650-1650,1,HGB_1_184#2780,1671,
 actor_137667,Ruprecht Schärer,1,HGB_1_184_035,id_block,0,dossier,1,0,1,Ruprecht Schärer#1650-1650,1,HGB_1_184#2784,,schuhmacher
@@ -95289,7 +95289,7 @@ actor_137673,Johannes Hisshäusslin,1,HGB_1_184_035,id_range,0,dossier,1,0,1,Joh
 actor_137675,Peter Branden,1,HGB_1_184_035,id_range,0,dossier,1,0,1,Peter Branden#1680-1680,1,HGB_1_184#3053,1681,
 actor_137676,Heinrich Reüwlin,3,HGB_1_184_036,documents,1,doc,1,0,1,Heinrich Reuwlin#1604-1643,1,HGB_1_184#2293,,
 actor_137677,Martin Kempter,1,HGB_1_184_036,id_block,0,dossier,1,0,1,Martin Kempter#1599-1613,1,HGB_1_184#2486,,
-actor_137678,Johannes Brandmüller,5,HGB_1_184_036,documents,4,doc,5,0,3,Johann Brandmüller#1613-1691 | Johann Brandmüller#1568-1647 | Johannes Brandtmüllers#1623-1643,3,HGB_1_184#2487|HGB_1_184#2523|HGB_1_184#2555,1643,schneider
+actor_137678,Johannes Brandmüller,5,HGB_1_184_036,documents,4,doc,5,0,2,Johann Brandmüller#1613-1691 | Johann Brandmüller#1568-1647,3,HGB_1_184#2487|HGB_1_184#2523|HGB_1_184#2555,1643,schneider
 actor_137682,Heinrich Reblins,1,HGB_1_184_037,id_range,0,dossier,1,0,1,Heinrich Reblins#1618-1618,1,HGB_1_184#2516,1618,
 actor_137683,Johann Brandtmüller,2,HGB_1_184_037,documents,1,doc,1,0,1,Johann Brandtmüller#1618-1662,1,HGB_1_184#2523,,schneider|stadtkäufer
 actor_137684,Conrad Lützelmann,3,HGB_1_184_037,id_block,0,dossier,3,0,3,Conrad Lützelmanns#1618-1654 | Conrad Lüzelmanns#1631-1631 | Conraden Lüzelmanns#1631-1631,3,HGB_1_184#2524|HGB_1_184#2648|HGB_1_184#2650,,schuhmacher
@@ -96523,7 +96523,7 @@ actor_139411,Hanns Ulrich Sulger,2,HGB_1_189_012,documents,2,doc,2,0,1,Hans Ulri
 actor_139413,Michael David,2,HGB_1_189_012,id_block,0,dossier,2,0,1,Michael Davidts#1686-1692,1,HGB_1_189#1777,1686,
 actor_139415,Achilles Wertenmann,1,HGB_1_189_012,id_block,0,dossier,1,0,1,Achilles Wertenmann#1607-1686,1,HGB_1_189#1699,,
 actor_139416,Frantz Bischoff,2,HGB_1_189_012,id_block,0,dossier,3,0,1,Frantz Bischoff#1687-1688,1,HGB_1_189#1780,,Bewohner
-actor_139417,Leonhard Schardt,1,HGB_1_189_012,documents,1,doc,1,0,1,Leonhard Schardt#1640-1700,1,HGB_1_189#1796,,metzger
+actor_139417,Leonhard Schardt,1,HGB_1_189_012,documents,1,doc,1,0,1,Leonhardt Schardt#1640-1700,1,HGB_1_189#1796,,metzger
 actor_139420,Annen Ach,1,HGB_1_189_013,id_range,0,dossier,1,0,1,Annen Ach#1400-1400,1,HGB_1_189#1,,
 actor_139421,Broglin,1,HGB_1_189_013,id_range,0,dossier,1,0,1,Broglin#1400-1400,1,HGB_1_189#2,,knecht
 actor_139422,Felperg,1,HGB_1_189_013,id_range,0,dossier,1,0,1,Clewis von Felsperg#1400-1422,1,HGB_1_189#3,,
@@ -98633,7 +98633,7 @@ actor_142409,Anna Lebküechern,1,HGB_1_190_030,id_block,0,dossier,1,0,1,Anna Leb
 actor_142413,Lienhardt Schönenberger,2,HGB_1_190_030,documents,2,doc,2,0,1,Lienhardt Schönenberger#1569-1600,1,HGB_1_190#916,1600,goldschmied
 actor_142415,Jacob N.,1,HGB_1_190_030,documents,1,doc,1,0,1,Jacob N .#1600-1600,1,HGB_1_190#930,,münzmeister
 actor_142416,Jsaac Widmer,2,HGB_1_190_030,id_block,0,dossier,3,0,2,Jsaac Widmer#1570-1611 | Jsach Widmer#1563-1630,2,HGB_1_190#931|HGB_1_190#1116,,
-actor_142417,Jerg Albrecht Rott,4,HGB_1_190_030,documents,4,doc,4,0,3,Jerg Albrecht Rott#1600-1610 | Albrecht Roth#1606-1684 | Albrecht Rothen#1618-1692,3,HGB_1_190#932|HGB_1_190#1041|HGB_1_190#1049,,fischkäufer
+actor_142417,Jerg Albrecht Rott,4,HGB_1_190_030,documents,4,doc,4,0,3,Jerg Albrecht Rott#1600-1610 | Albrecht Roth#1606-1684 | albrecht Roht#1618-1692,3,HGB_1_190#932|HGB_1_190#1041|HGB_1_190#1049,,fischkäufer
 actor_142418,Barthlome Genath,1,HGB_1_190_030,documents,1,doc,1,0,1,Barthlome Genath#1618-1618,1,HGB_1_190#1048,,amtmann
 actor_142419,Friederich Gesen,1,HGB_1_190_030,documents,1,doc,1,0,1,Friederich Gesen#1618-1618,1,HGB_1_190#1050,,notar
 actor_142421,Friderich Langmessler,2,HGB_1_190_030,documents,2,doc,2,0,1,Friderich Langmessler#1663-1670,1,HGB_1_190#1253,,Seyler|seiler
@@ -99350,7 +99350,7 @@ actor_143408,Sebastian Wursteisen,1,HGB_1_194_018,id_block,0,dossier,1,0,1,Sebas
 actor_143409,Jacob Schweitzer,1,HGB_1_194_018,documents,1,doc,1,0,1,Jacob Schweitzer#1638-1638,1,HGB_1_194#4950,,gremper
 actor_143410,Jacob Felber,1,HGB_1_194_018,documents,1,doc,1,0,1,Jacob Felber#1681-1681,1,HGB_1_194#5595,,
 actor_143411,Leonhard Beckhen,4,HGB_1_194_018,documents,2,doc,2,0,1,Leonhardt Beckh#1681-1697,1,HGB_1_194#5596,,handelsmann
-actor_143412,Albrecht Roht,2,HGB_1_194_018,id_block,0,dossier,3,0,2,albrecht Roht#1632-1692 | Albrecht Roth#1606-1684,1,HGB_1_194#4979,,wollweber
+actor_143412,Albrecht Roht,2,HGB_1_194_018,id_block,0,dossier,3,0,2,albrecht Roht#1618-1692 | Albrecht Roth#1606-1684,1,HGB_1_194#4979,,wollweber
 actor_143413,Jacob Trobennis,1,HGB_1_194_018,id_block,0,dossier,1,0,1,Jacob Frobennins#1638-1681,1,HGB_1_194#5198,,
 actor_143414,Emanuel Frobenns,2,HGB_1_194_018,id_block,0,dossier,2,0,1,Emanuel Frobenins#1624-1692,1,HGB_1_194#5610,,schaffner
 actor_143417,Caspar Krueg,1,HGB_1_194_018,documents,1,doc,1,0,1,Caspar Krueg#1697-1697,1,HGB_1_194#5796,,handelsmann
@@ -99441,7 +99441,7 @@ actor_143538,Perommo erfelin,1,HGB_1_194_021,id_block,0,dossier,1,0,1,Perommo er
 actor_143541,Andres Sigerist,1,HGB_1_194_021,documents,1,doc,1,0,1,Andres Sigrist#1585-1663,1,HGB_1_194#4274,,
 actor_143545,Matthei Rappels,1,HGB_1_194_021,documents,1,doc,1,0,1,Matthei Rappels#1639-1639,1,HGB_1_194#4974,,
 actor_143546,Anna Gegen,1,HGB_1_194_021,documents,1,doc,1,0,1,Anna Gegen#1639-1639,0,,,
-actor_143548,Albrecht Rothen,4,HGB_1_194_021,documents,5,doc,7,0,3,Albrecht Roth#1606-1684 | albrecht Roht#1632-1692 | Albrecht Rothen#1618-1692,2,HGB_1_194#4979|HGB_1_194#4973,1691,handelsmann|tuchmann|wollweber
+actor_143548,Albrecht Rothen,4,HGB_1_194_021,documents,5,doc,7,0,2,albrecht Roht#1618-1692 | Albrecht Roth#1606-1684,2,HGB_1_194#4979|HGB_1_194#4973,1691,handelsmann|tuchmann|wollweber
 actor_143551,Obristen Pfarrherin von fürann Knaben,1,HGB_1_194_021,id_block,0,dossier,1,0,1,Obristen Pfarrherin von fürann Knaben#1639-1639,1,HGB_1_194#4976,,
 actor_143555,Anthoni Burgers,1,HGB_1_194_021,id_block,0,dossier,1,0,1,Anthoni Burgers#1639-1639,1,HGB_1_194#4967,1639,
 actor_143556,Hieronymo Burckhardten,1,HGB_1_194_021,id_block,0,dossier,1,0,1,Hieronymo Burckhardten#1639-1639,1,HGB_1_194#4978,,
@@ -99555,7 +99555,7 @@ actor_143712,Veronica Ryhinerin,3,HGB_1_194_022,id_block,0,dossier,3,0,1,Veronic
 actor_143713,Hanss Rudolph Hertzogs,2,HGB_1_194_022,id_block,0,dossier,2,0,2,Hanns Rudolph Hertzogs#1645-1647 | Hanss Rudolph Hertzogs#1645-1645,2,HGB_1_194#5099|HGB_1_194#5101,1645,Steinen Schaffner|Steinenschafners
 actor_143715,Margreth Fürfelderin,4,HGB_1_194_022,documents,2,doc,3,0,2,Margreth Fürfelderin#1645-1648 | Ryhinerin#1645-1645,2,HGB_1_194#5093|HGB_1_194#5100,1645,
 actor_143718,Christoph Burckhardts,1,HGB_1_194_022,id_block,0,dossier,2,0,1,Christoph Burckhardts#1647-1647,1,HGB_1_194#5134,1647,
-actor_143719,Albrecht Rothen,2,HGB_1_194_022,id_block,0,dossier,5,0,2,Albrecht Rothen#1618-1692 | Alberg Rothen#1647-1647,2,HGB_1_194#4973|HGB_1_194#5137,,
+actor_143719,Albrecht Rothen,2,HGB_1_194_022,id_block,0,dossier,5,0,2,albrecht Roht#1618-1692 | Alberg Rothen#1647-1647,2,HGB_1_194#4973|HGB_1_194#5137,,
 actor_143720,Soley,1,HGB_1_194_022,documents,1,doc,1,0,1,Soley#1647-1647,1,HGB_1_194#5138,,
 actor_143721,Barbara Spirin,2,HGB_1_194_022,documents,2,doc,2,0,1,Barbara Spirin#1648-1659,1,HGB_1_194#5149,,
 actor_143723,Hanns Speirer,1,HGB_1_194_022,documents,2,doc,2,0,1,Hanns Speirer#1655-1661,1,HGB_1_194#5218,,Weinsigler
@@ -105607,7 +105607,7 @@ actor_152402,Onophris Känder,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Onophris 
 actor_152404,Jacob Rüedins,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Jacob Rüedins#1661-1661,1,HGB_1_197#3187,1629,
 actor_152405,Martin Märide,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Martin Märide#1661-1661,1,HGB_1_197#3203,,schwarzfärber
 actor_152406,Emanuel Vest,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Emanuel Vest#1640-1693,1,HGB_1_197#3204,,metzger
-actor_152407,Leonhard Schardt,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Leonhard Schardt#1640-1700,1,HGB_1_197#3205,,
+actor_152407,Leonhard Schardt,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Leonhardt Schardt#1640-1700,1,HGB_1_197#3205,,
 actor_152408,Jacob Otten,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Jacob Otten#1661-1661,1,HGB_1_197#3206,,Allern
 actor_152409,Ru - dolph Vest,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Ru - dolph Vest#1661-1661,1,HGB_1_197#3207,,metzger
 actor_152411,Jacob Bad,1,HGB_1_197_066,id_block,0,dossier,1,0,1,Jacob Bad#1661-1661,1,HGB_1_197#3208,,metzger
@@ -107718,7 +107718,7 @@ actor_155374,Adelberg Weitnauer,1,HGB_1_203_009,documents,1,doc,1,0,1,Adelberg W
 actor_155375,Anna Maria Stoschin,1,HGB_1_203_009,documents,1,doc,1,0,1,Anna Maria Stoschin#1644-1644,1,HGB_1_203#1029,,
 actor_155376,Friederich Roch,2,HGB_1_203_009,documents,1,doc,1,0,1,Friederich Roch#1644-1644,1,HGB_1_203#1030,,gewandhändler
 actor_155377,Sargarethen Russingerin,1,HGB_1_203_009,documents,1,doc,1,0,1,Sargarethen Russingerin#1644-1644,1,HGB_1_203#1031,,
-actor_155378,Hieterich Forckhardt,2,HGB_1_203_009,id_block,0,dossier,2,0,2,Dietrich Forckhardt#1646-1692 | Hieterich Forckhardt#1644-1644,2,HGB_1_203#1032|HGB_1_203#1054,,krämer
+actor_155378,Hieterich Forckhardt,2,HGB_1_203_009,id_block,0,dossier,2,0,2,Dietrich Forckhardt#1637-1692 | Hieterich Forckhardt#1644-1644,2,HGB_1_203#1032|HGB_1_203#1054,,krämer
 actor_155380,Joh. Scher,1,HGB_1_203_009,id_block,0,dossier,1,0,1,Joh . Scher#1644-1644,1,HGB_1_203#1033,,
 actor_155381,Pfisterer Stochmeyer,1,HGB_1_203_009,id_block,0,dossier,1,0,1,Pfisterer Stochmeyer#1644-1644,1,HGB_1_203#1034,,
 actor_155382,Johannes,1,HGB_1_203_009,documents,1,doc,1,0,1,Johannes#1692-1692,1,HGB_1_203#1141,,
@@ -107761,7 +107761,7 @@ actor_155434,Rudolph die Burckharten,1,HGB_1_203_010,documents,1,doc,1,0,1,Rudol
 actor_155435,Feodor Hanß Ruodolff,1,HGB_1_203_010,documents,1,doc,1,0,1,Feodor Hanß Ruodolff#1602-1602,1,HGB_1_203#850,,
 actor_155436,Daniel Burckhardtin,7,HGB_1_203_010,id_block,0,dossier,11,0,4,Daniel Burckhardt#1589-1668 | Daniel Burckhardts#1610-1648 | Daniel Burkharten#1602-1637 | Damel . Burckhardts#1624-1624,4,HGB_1_203#847|HGB_1_203#851|HGB_1_203#987|HGB_1_203#944,1602,
 actor_155439,Susanna Ryffin,1,HGB_1_203_010,id_block,0,dossier,1,0,1,Susanna Ryffin#1638-1638,1,HGB_1_203#991,1637,
-actor_155440,Dietrich Furckhardten,7,HGB_1_203_010,documents,6,doc,6,0,4,Dietrich Forckardt#1680-1693 | Dietrich Forckhardt#1646-1692 | Dietrich Furckhardten#1638-1638 | iterich Burckhardten#1637-1637,3,HGB_1_203#1054|HGB_1_203#988|HGB_1_203#992,,handelsmann
+actor_155440,Dietrich Furckhardten,7,HGB_1_203_010,documents,6,doc,6,0,2,Dietrich Forckhardt#1637-1692 | Dietrich Forckardt#1680-1693,3,HGB_1_203#1054|HGB_1_203#988|HGB_1_203#992,,handelsmann
 actor_155441,Sebastian Güntzern,2,HGB_1_203_010,id_block,0,dossier,2,0,1,Sebastian Güntzern#1628-1639,1,HGB_1_203#989,,Stattgerichts
 actor_155442,Peter Storckhen,1,HGB_1_203_010,id_block,0,dossier,2,0,1,Peter Storckhen#1637-1688,1,HGB_1_203#990,,
 actor_155444,Christof Burckhardt,1,HGB_1_203_010,id_block,0,dossier,1,0,1,Christoph Burckhardt#1621-1699,1,HGB_1_203#993,,
@@ -107831,7 +107831,7 @@ actor_155530,Georgen Lützelmann,1,HGB_1_203_011,id_block,0,dossier,1,0,1,George
 actor_155532,Sebastian Büntzer,1,HGB_1_203_011,documents,1,doc,1,0,1,Sebastian Büntzer#1611-1611,1,HGB_1_203#919,,
 actor_155533,Jacob Burckhardtern,1,HGB_1_203_011,id_range,0,dossier,1,0,1,Jacob Burckhardtern#1611-1611,1,HGB_1_203#920,,
 actor_155534,Hans Georg Ochs,1,HGB_1_203_011,id_range,0,dossier,1,1,1,Hanns Georg Ochs#1670-1688,1,HGB_1_203#1101,,
-actor_155535,Dietrich Forcart,1,HGB_1_203_011,id_range,0,dossier,1,0,1,Dietrich Forckhardt#1646-1692,1,HGB_1_203#1054,,
+actor_155535,Dietrich Forcart,1,HGB_1_203_011,id_range,0,dossier,1,0,1,Dietrich Forckhardt#1637-1692,1,HGB_1_203#1054,,
 actor_155538,num Tribockin,1,HGB_1_203_012,id_range,0,dossier,1,0,1,num Tribockin#1423-1423,1,HGB_1_203#162,,
 actor_155539,Hannsen Zschachen,3,HGB_1_203_012,documents,2,doc,2,0,1,Hannsen Zschachen#1460-1460,1,HGB_1_203#328,,wechsler
 actor_155540,Kathrinen zum Rosen,1,HGB_1_203_012,id_block,0,dossier,1,0,1,Kathrinen zum Rosen#1434-1434,1,HGB_1_203#191,,
@@ -108540,7 +108540,7 @@ actor_156622,Hanß Heinrich Werenfels,2,HGB_1_203_032,id_block,0,dossier,2,0,2,H
 actor_156623,ThenNicolaus Werenfels,5,HGB_1_203_032,documents,3,doc,4,0,3,Nicolaus Werenfels#1605-1641 | Nic . laus Werenfels#1644-1644 | Niclaus Werenfels#1640-1644,3,HGB_1_203#1024|HGB_1_203#1018|HGB_1_203#1038,,spezierer
 actor_156624,zum kleinen Pfanwen,1,HGB_1_203_032,id_block,0,dossier,1,0,1,zum kleinen Pfanwen#1641-1641,1,HGB_1_203#1019,1647,
 actor_156626,Anthoni Burger,6,HGB_1_203_032,documents,4,doc,6,0,2,Anthoni Bürger#1644-1688 | Andoner Burger#1641-1647,2,HGB_1_203#1027|HGB_1_203#1025,1688,handelsmann|spezierer
-actor_156627,Friederich Eglinger,3,HGB_1_203_032,documents,3,doc,3,0,1,Friederich Eglinger#1638-1666,2,HGB_1_203#1035|HGB_1_203#1039,,apotheker
+actor_156627,Friederich Eglinger,3,HGB_1_203_032,documents,3,doc,3,0,1,Friederich Eglinger#1637-1666,2,HGB_1_203#1035|HGB_1_203#1039,,apotheker
 actor_156628,Hanns Heinrich,2,HGB_1_203_032,id_block,0,dossier,3,0,2,Hanns Heinrich#1644-1644 | Hanss Heinrich#1644-1644,2,HGB_1_203#1036|HGB_1_203#1037,,
 actor_156629,Theodor Burkhard,1,HGB_1_203_032,documents,1,doc,1,0,1,Theodor Burkhart#1626-1693,1,HGB_1_203#1002,,Seutschordens
 actor_156630,Cristoff Johann Kindweylers,1,HGB_1_203_032,id_block,0,dossier,1,0,1,Cristoff Johann Kindweylers#1663-1663,1,HGB_1_203#1093,,
@@ -111397,7 +111397,7 @@ actor_160683,Anna Mergckly,1,HGB_1_214_026,id_block,0,dossier,1,0,1,Anna Mergckl
 actor_160685,Jacoben Zweybruckhers,1,HGB_1_214_026,id_block,0,dossier,2,0,1,Jacoben Zweybruckhers#1548-1620,1,HGB_1_214#1170,,weber
 actor_160687,Cattherina Löwenbergerin,1,HGB_1_214_026,documents,1,doc,1,0,1,Cattherina Löwenbergerin#1551-1551,1,HGB_1_214#1180,,
 actor_160689,Hieronimus Sprenger,1,HGB_1_214_026,documents,1,doc,1,0,1,Hieronimus Sprenger#1690-1690,1,HGB_1_214#1885,,leinenweber
-actor_160690,Andreas Gessler,3,HGB_1_214_026,documents,2,doc,3,0,3,Andreas Gessler#1692-1693 | Andreas Gesslers#1692-1692 | Andress Gessler#1610-1690,3,HGB_1_214#1886|HGB_1_214#1898|HGB_1_214#1899,1711,leinenweber
+actor_160690,Andreas Gessler,3,HGB_1_214_026,documents,2,doc,3,0,2,Andreas Gessler#1692-1693 | Andress Gessler#1610-1690,3,HGB_1_214#1886|HGB_1_214#1898|HGB_1_214#1899,1711,leinenweber
 actor_160691,hieronimus Linder,3,HGB_1_214_026,documents,1,doc,1,0,1,Hieronimus Linder#1623-1692,1,HGB_1_214#1603,1711,bleicher
 actor_160692,Anthoni Rümelin,1,HGB_1_214_026,id_block,0,dossier,1,0,1,Anthoni Rimmelin#1667-1693,1,HGB_1_214#1887,,rebmann
 actor_160695,Cuntz Tanner,1,HGB_1_214_027,documents,1,doc,1,0,1,Cuntz Tanner#1419-1419,1,HGB_1_214#112,,
@@ -111416,7 +111416,7 @@ actor_160710,Rümans,1,HGB_1_214_027,documents,1,doc,1,0,1,Rumans#1447-1447,1,HG
 actor_160715,Rumans,1,HGB_1_214_027,documents,1,doc,1,0,1,Rumans#1447-1447,1,HGB_1_214#386,,
 actor_160718,Conrat Huglin,1,HGB_1_214_027,documents,2,doc,2,0,1,Conrat Huglin#1444-1523,1,HGB_1_214#651,,kämmerer
 actor_160720,Clausen von Friessen,2,HGB_1_214_027,documents,1,doc,1,0,1,Clausen von Friessen#1485-1485,1,HGB_1_214#652,,
-actor_160721,Heinrichen Egen,4,HGB_1_214_027,documents,1,doc,1,0,1,Heinrich Eglin#1485-1537,1,HGB_1_214#653,,metzger|weber
+actor_160721,Heinrichen Egen,4,HGB_1_214_027,documents,1,doc,1,0,1,Heinrich Eglin#1485-1542,1,HGB_1_214#653,,metzger|weber
 actor_160722,Steckingers,2,HGB_1_214_027,id_block,0,dossier,2,0,1,Steckingers#1485-1485,1,HGB_1_214#654,,
 actor_160724,Teckingers,1,HGB_1_214_027,id_block,0,dossier,1,0,1,Teckingers#1485-1485,1,HGB_1_214#655,,
 actor_160725,Ennelin,1,HGB_1_214_027,documents,1,doc,1,0,1,Ennelin#1485-1485,1,HGB_1_214#656,,
@@ -112735,7 +112735,7 @@ actor_162596,Julouff,1,HGB_1_214_084,id_range,0,dossier,1,0,1,Julouff#1519-1519,
 actor_162597,Hans Kuttinger,1,HGB_1_215_012,documents,1,doc,1,0,1,Hans Kuttinger#1438-1438,1,HGB_1_215#400,,
 actor_162598,Clausen Kuttingers,1,HGB_1_215_012,documents,1,doc,1,0,1,Clausen Kuttingers#1438-1438,1,HGB_1_215#401,,
 actor_162599,sebetzen,1,HGB_1_215_012,id_block,0,dossier,1,0,1,sebetzen#1438-1438,1,HGB_1_215#398,1438,
-actor_162600,Hansen Herten,3,HGB_1_215_012,documents,1,doc,1,0,1,Hansen Herten#1438-1452,1,HGB_1_215#402,1441,brotbäcker
+actor_162600,Hansen Herten,3,HGB_1_215_012,documents,1,doc,1,0,1,Hans Hirt#1412-1452,1,HGB_1_215#402,1441,brotbäcker
 actor_162601,Michel Gebruggs,1,HGB_1_215_012,id_block,0,dossier,1,0,1,Michel Gebruggs#1438-1438,1,HGB_1_215#403,,besetzer
 actor_162605,Peter Huswirt,4,HGB_1_215_012,id_block,0,dossier,3,0,3,Peter Herten#1441-1441 | Peter Hirt#1441-1441 | Peter Husswirt#1423-1471,3,HGB_1_215#466|HGB_1_215#468|HGB_1_215#472,,
 actor_162606,Ennelin Hirtin,2,HGB_1_215_012,documents,2,doc,2,0,1,Ennelin Herten#1441-1441,1,HGB_1_215#467,,
@@ -114468,11 +114468,11 @@ actor_165090,Balthasar Langbon,2,HGB_1_215_059,documents,2,doc,2,0,1,Balthasar L
 actor_165091,Ursula,2,HGB_1_215_059,documents,2,doc,2,0,2,Ursul#1514-1514 | Ursula#1516-1516,2,HGB_1_215#1631|HGB_1_215#1665,,
 actor_165092,Mausen Peter,1,HGB_1_215_059,id_block,0,dossier,1,0,1,Mausen Peter#1514-1514,1,HGB_1_215#1632,,
 actor_165093,Barbara Langbon,1,HGB_1_215_059,id_block,0,dossier,1,0,1,Barbara Langbon#1514-1514,1,HGB_1_215#1633,,
-actor_165095,Hannsen Peter,6,HGB_1_215_059,documents,8,doc,8,0,2,Hanns Petter#1514-1571 | Hannsen Peter#1564-1564,3,HGB_1_215#1666|HGB_1_215#2380|HGB_1_215#2383,,schürlezweber|weber
+actor_165095,Hannsen Peter,6,HGB_1_215_059,documents,8,doc,8,0,2,Hanns Petter#1500-1571 | Hannsen Peter#1564-1564,3,HGB_1_215#1666|HGB_1_215#2380|HGB_1_215#2383,,schürlezweber|weber
 actor_165096,Margretha,1,HGB_1_215_059,documents,1,doc,1,0,1,Margretha#1516-1516,1,HGB_1_215#1667,,
 actor_165097,Burckhart Rederstorfs,1,HGB_1_215_059,id_block,0,dossier,1,0,1,Burckhart Rederstorfs#1516-1520,1,HGB_1_215#1668,,
 actor_165100,Jacob Kocher,1,HGB_1_215_059,id_block,0,dossier,1,0,1,Jacob Kocher#1534-1542,1,HGB_1_215#1941,,weinbrenner
-actor_165101,Peter Hanns,3,HGB_1_215_059,documents,2,doc,3,0,1,Hanns Petter#1514-1571,2,HGB_1_215#1942|HGB_1_215#1666,,Wyßwäber2|weber
+actor_165101,Peter Hanns,3,HGB_1_215_059,documents,2,doc,3,0,1,Hanns Petter#1500-1571,2,HGB_1_215#1942|HGB_1_215#1666,,Wyßwäber2|weber
 actor_165104,Bartlin Stechelin,1,HGB_1_215_059,id_block,0,dossier,1,0,1,Bartlin Stechelin#1564-1564,1,HGB_1_215#2379,,Schaffner u .
 actor_165106,Hanns Heinrich Schweitzer,4,HGB_1_215_059,id_block,0,dossier,4,0,3,Hanns Heinrich Schweitzer#1612-1612 | Heinrichen Scheltner#1564-1564 | Heinrichen Scheltners#1564-1564,3,HGB_1_215#3102|HGB_1_215#2381|HGB_1_215#2384,,
 actor_165107,Hans Esslinger,2,HGB_1_215_059,id_block,0,dossier,2,0,1,Hanns Esslingers#1552-1600,1,HGB_1_215#2382,,
@@ -114588,7 +114588,7 @@ actor_165256,Jost Steyger,1,HGB_1_215_060,documents,1,doc,1,0,1,Jost Steyger#154
 actor_165257,Barbara,1,HGB_1_215_060,documents,1,doc,1,0,1,Barbara#1542-1542,1,HGB_1_215#2019,,
 actor_165258,Ballthasar Schelltner,2,HGB_1_215_060,documents,1,doc,1,0,1,Ballthasar Schelltner#1542-1557,1,HGB_1_215#2020,,weber
 actor_165259,Franz Beren,1,HGB_1_215_060,id_block,0,dossier,1,0,1,Franz Beren#1508-1542,1,HGB_1_215#2021,,
-actor_165260,Petter Hansenn,3,HGB_1_215_060,id_block,0,dossier,3,0,2,Hanns Petter#1514-1571 | Peter Hansen#1518-1546,2,HGB_1_215#1942|HGB_1_215#2090,,weber
+actor_165260,Petter Hansenn,3,HGB_1_215_060,id_block,0,dossier,3,0,2,Hanns Petter#1500-1571 | Peter Hansen#1518-1546,2,HGB_1_215#1942|HGB_1_215#2090,,weber
 actor_165261,Hans Scheltnern,2,HGB_1_215_060,id_block,0,dossier,2,0,1,Hans Scheltnern#1546-1546,1,HGB_1_215#2089,,
 actor_165263,Hanns Arnolden,2,HGB_1_215_060,id_block,0,dossier,2,0,2,Hanns Arnolden#1625-1625 | Hansen Arnolds#1625-1625,2,HGB_1_215#3164|HGB_1_215#3165,1625,Seidenstreichers|seidenstricker
 actor_165264,Arnolden,1,HGB_1_215_060,documents,1,doc,1,0,1,Hanns Arnolden#1625-1625,1,HGB_1_215#3164,,
@@ -117558,7 +117558,7 @@ actor_169443,Niclaus Bischoff,1,HGB_1_218_017,documents,2,doc,2,0,1,Niclaus Bisc
 actor_169445,Staltzen,1,HGB_1_218_017,id_block,0,dossier,1,0,1,Staltzen#1612-1612,1,HGB_1_218#1006,1612,
 actor_169446,Jeremias Faesch,2,HGB_1_218_017,documents,1,doc,1,0,1,Jeremias Faesch#1580-1650,1,HGB_1_218#1052,1648,
 actor_169448,Febrigefügt,1,HGB_1_218_017,id_block,0,dossier,1,0,1,Febrigefügt#1633-1633,1,HGB_1_218#1068,,gewesenerhandvogt
-actor_169452,Reinigins Faesch,6,HGB_1_218_017,documents,5,doc,5,0,4,Reinigins Faesch#1577-1653 | Benigins Fäsch#1662-1662 | Renigins Faesch#1659-1692 | Renizins Faesch#1662-1662,4,HGB_1_218#1080|HGB_1_218#1162|HGB_1_218#1196|HGB_1_218#1202,,sigrist|weinmann|weinschenk
+actor_169452,Reinigins Faesch,6,HGB_1_218_017,documents,5,doc,5,0,2,Renigins Faesch#1659-1692 | Reinigins Faesch#1577-1653,4,HGB_1_218#1080|HGB_1_218#1162|HGB_1_218#1196|HGB_1_218#1202,,sigrist|weinmann|weinschenk
 actor_169454,Rude,1,HGB_1_218_017,id_block,0,dossier,1,0,1,Rude#1659-1659,1,HGB_1_218#1164,,
 actor_169455,. Gyssendorfer,1,HGB_1_218_017,documents,1,doc,1,0,1,. Gyssendorfer#1659-1659,1,HGB_1_218#1163,,
 actor_169456,Eysendorfers,1,HGB_1_218_017,id_block,0,dossier,1,0,1,Eysendorfers#1659-1659,1,HGB_1_218#1165,,
@@ -118583,11 +118583,11 @@ actor_170909,Heinrich Scheltner,1,HGB_1_220_024,id_block,0,dossier,1,0,1,heinric
 actor_170910,Aben,1,HGB_1_220_024,id_block,0,dossier,1,0,1,Aben#1493-1493,1,HGB_1_220#25,,
 actor_170912,Hanss Jselin,1,HGB_1_220_024,id_block,0,dossier,1,0,1,Hanss Jselin#1493-1493,1,HGB_1_220#26,,
 actor_170913,Claterstragnesen,1,HGB_1_220_024,id_block,0,dossier,1,0,1,Claterstragnesen#1493-1493,1,HGB_1_220#27,,
-actor_170917,Petter Hans,1,HGB_1_220_024,documents,2,doc,2,0,1,Hanns Petter#1514-1571,1,HGB_1_220#33,,weber
+actor_170917,Petter Hans,1,HGB_1_220_024,documents,2,doc,2,0,1,Hanns Petter#1500-1571,1,HGB_1_220#33,,weber
 actor_170918,Barbara Christiana Hansen,1,HGB_1_220_024,documents,1,doc,1,0,1,Barbara Christiana Hansen#1520-1520,1,HGB_1_220#35,,
 actor_170919,Peterman,1,HGB_1_220_024,documents,1,doc,1,0,1,Peterman#1520-1520,1,HGB_1_220#36,,
 actor_170920,Heman Lang. Clater bons,1,HGB_1_220_024,id_block,0,dossier,1,0,1,Heman Lang . Clater bons#1520-1520,1,HGB_1_220#34,1520,weber
-actor_170921,Hansen Peter,2,HGB_1_220_024,documents,2,doc,2,0,1,Hanns Petter#1514-1571,2,HGB_1_220#33|HGB_1_220#37,,weber
+actor_170921,Hansen Peter,2,HGB_1_220_024,documents,2,doc,2,0,1,Hanns Petter#1500-1571,2,HGB_1_220#33|HGB_1_220#37,,weber
 actor_170922,Margretha,1,HGB_1_220_024,documents,1,doc,1,0,1,Margretha#1520-1520,1,HGB_1_220#38,,
 actor_170925,Ursula,1,HGB_1_220_024,documents,1,doc,1,0,1,Ursula#1561-1561,1,HGB_1_220#51,,
 actor_170926,Peter Heberlin,1,HGB_1_220_024,documents,1,doc,1,0,1,Peter Heberlin#1561-1561,1,HGB_1_220#52,,schürlezweber
@@ -119841,7 +119841,7 @@ actor_172842,Wylhelm Waldnern,1,HGB_1_223_030,id_block,0,dossier,1,0,1,Wylhelm W
 actor_172843,Hans Schaffhuser,2,HGB_1_223_030,id_block,0,dossier,3,0,2,Haus#1520-1520 | Hanns Schaffhuser#1496-1520,2,HGB_1_223#266|HGB_1_223#265,,wirt
 actor_172845,Edilmann zu Oberwyler,1,HGB_1_223_030,id_block,0,dossier,1,0,1,Edilmann zu Oberwyler#1520-1520,1,HGB_1_223#267,,
 actor_172846,Basilius Emanuel Herold,1,HGB_1_223_030,id_block,0,dossier,1,0,1,Basilius Emanuel Heroldt#1565-1577,1,HGB_1_223#487,,oberschreiber
-actor_172848,Hanns Peter,1,HGB_1_223_030,documents,1,doc,1,0,1,Hanns Petter#1514-1571,1,HGB_1_223#488,,weber
+actor_172848,Hanns Peter,1,HGB_1_223_030,documents,1,doc,1,0,1,Hanns Petter#1500-1571,1,HGB_1_223#488,,weber
 actor_172849,Catharina Weberin,1,HGB_1_223_030,documents,1,doc,1,0,1,Catharina Weberin#1570-1570,1,HGB_1_223#489,,
 actor_172850,Ottmar Geermüller,1,HGB_1_223_030,documents,1,doc,1,0,1,Ottmar Geermüller#1583-1583,1,HGB_1_223#540,,
 actor_172851,Christen Brägell,7,HGB_1_223_030,documents,3,doc,4,0,2,Christen Brägel#1576-1644 | Christen Brägels#1624-1631,3,HGB_1_223#547|HGB_1_223#615|HGB_1_223#690,1631,
@@ -122065,7 +122065,7 @@ actor_175972,Götzman Röten,4,HGB_1_227_031,id_block,0,dossier,4,0,2,"Gotzman ,
 actor_175973,Ulli Eberhart,1,HGB_1_227_031,documents,2,doc,2,0,1,Ulli Eberhart#1411-1413,1,HGB_1_227#135,,hofmann
 actor_175974,Heinrich Herfrich,1,HGB_1_227_031,documents,1,doc,1,0,1,Heinrich Herfrich#1411-1411,1,HGB_1_227#136,,
 actor_175975,Canß radin,1,HGB_1_227_031,id_block,0,dossier,1,0,1,Canß radin#1411-1411,1,HGB_1_227#137,,
-actor_175976,Hans Swob,1,HGB_1_227_031,documents,1,doc,1,0,1,Hans Swob#1411-1487,1,HGB_1_227#139,,messerschmied
+actor_175976,Hans Swob,1,HGB_1_227_031,documents,1,doc,1,0,1,Hans Schwob .#1411-1487,1,HGB_1_227#139,,messerschmied
 actor_175977,Lüke ) Helfenberg,1,HGB_1_227_031,id_block,0,dossier,1,0,1,Lüke ) Helfenberg#1411-1411,1,HGB_1_227#140,,
 actor_175980,Peter Meder,1,HGB_1_227_031,documents,1,doc,1,0,1,Peter Meder#1411-1470,1,HGB_1_227#143,,messerschmied
 actor_175981,Clor,1,HGB_1_227_031,documents,1,doc,1,0,1,Clor#1413-1413,1,HGB_1_227#162,,

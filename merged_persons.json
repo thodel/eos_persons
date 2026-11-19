@@ -8382,10 +8382,10 @@
   "cluster_id": "gnd:104241330",
   "status": "review",
   "conflicts": [
-   "multi_wd",
-   "multi_gnd",
-   "multi_hbls",
    "multi_hls",
+   "multi_gnd",
+   "multi_wd",
+   "multi_hbls",
    "name_disagreement"
   ],
   "auto_resolved": [],
@@ -9826,10 +9826,10 @@
   "cluster_id": "gnd:1020554177",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hbls",
-   "multi_hls"
+   "multi_wd",
+   "multi_hbls"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12123,9 +12123,9 @@
   "cluster_id": "gnd:1044611049",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12244,9 +12244,9 @@
   "cluster_id": "gnd:1051586453",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12358,9 +12358,9 @@
   "cluster_id": "gnd:1066278571",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12571,9 +12571,9 @@
   "cluster_id": "gnd:1074370708",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12666,9 +12666,9 @@
   "cluster_id": "gnd:1053992130",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12773,9 +12773,9 @@
   "cluster_id": "gnd:1054162387",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12872,9 +12872,9 @@
   "cluster_id": "gnd:1080837809",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -12967,9 +12967,9 @@
   "cluster_id": "gnd:1045595756",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -13079,9 +13079,9 @@
   "cluster_id": "gnd:105239681X",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -13197,9 +13197,9 @@
   "cluster_id": "gnd:117374199",
   "status": "review",
   "conflicts": [
-   "multi_wd",
-   "multi_gnd",
    "multi_hls",
+   "multi_gnd",
+   "multi_wd",
    "name_disagreement"
   ],
   "auto_resolved": [],
@@ -13424,9 +13424,9 @@
   "cluster_id": "gnd:1017073961",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -13523,9 +13523,9 @@
   "cluster_id": "gnd:1053582080",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
@@ -13635,9 +13635,9 @@
   "cluster_id": "gnd:103752361X",
   "status": "review",
   "conflicts": [
-   "multi_wd",
+   "multi_hls",
    "multi_gnd",
-   "multi_hls"
+   "multi_wd"
   ],
   "auto_resolved": [],
   "corpora": [
