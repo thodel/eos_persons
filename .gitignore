@@ -277,3 +277,8 @@ review_worksheet.csv
 srbas-extraction/tei/
 srbas-extraction/srbas_entries.jsonl
 hgb_street_persons.json
+
+# document table of the street corpus (regenerable via extract_persons.py)
+documents.csv
+# local copy of DHBern/basler-liegenschaften-interaktiv data (link_bli_hgb.py --fetch)
+.bli_cache/
