@@ -282,7 +282,7 @@ carrying a `sources[]` array back to every contributing corpus. Built by
 
 ### Land-register persons
 
-One row per **deduplicated name in the register** (~137,000), with spelling
+One row per **deduplicated name in the register** (~126,000), with spelling
 variants and aggregated mention/dossier counts. Breadth over the HGB, where the
 identity tools above are depth on the people resolvable across corpora. Loaded
 by `build_identities.py --persons ../persons_resolved.json`.
