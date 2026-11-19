@@ -342,6 +342,7 @@ function showDetail(f) {
 
   document.getElementById('detail').innerHTML = `
     <h2>${f.id}</h2>
+    ${f.address ? `<div class="meta"><strong>${f.address}</strong></div>` : ''}
     <div class="meta">
       <strong>Years:</strong> ${years}<br>
       <strong>Documents:</strong> ${f.n_docs}<br>
@@ -380,6 +381,13 @@ fetch('dossiers_geo.json')
     document.getElementById('stats').textContent =
       `${allFeatures.length.toLocaleString()} properties loaded`;
     renderMarkers();
+    // Deep link: map.html?dossier=HGB_1_001_005 (or #HGB_1_001_005) centres on that property and opens it
+    const want = new URLSearchParams(location.search).get('dossier') || decodeURIComponent(location.hash.slice(1));
+    const f = want && allFeatures.find(x => x.id === want);
+    if (f && f.lat && f.lon) {
+      map.setView([f.lat, f.lon], 19);
+      showDetail(f);
+    }
   });
 </script>
 </body>
