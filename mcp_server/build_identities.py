@@ -19,7 +19,7 @@ Two tables, answering two different questions:
 
   hgb_persons  one row per *deduplicated HGB name cluster* — every person the
                land register mentions, with name variants and aggregated
-               mention/dossier counts. ~126k rows, but only 0.6% carry any
+               mention/dossier counts. ~127k rows, but only 0.5% carry any
                authority link. This is breadth over the register; `identities`
                is depth on the people who could be resolved across corpora.
 

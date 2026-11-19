@@ -245,8 +245,8 @@ docker run --rm -v /data/hgb:/data hgb-mcp python -c \
   "import db; db.set_db_path('/data/hgb.db'); print(db.identity_stats())"
 ```
 
-Expected right now (after `dedupe_spelling.py`, 2026-11): 3,581 identities,
-3,348 with a GND id, 60 in all three corpora. `build_identities.py` drops and rebuilds only `identities` and
+Expected right now (rebuild of 2026-11): 3,631 identities, 3,382 with a GND id,
+70 in all three corpora. `build_identities.py` drops and rebuilds only `identities` and
 `fts_identities`, so re-running it is safe and never touches the HGB tables.
 
 ## Available tools
@@ -282,7 +282,7 @@ carrying a `sources[]` array back to every contributing corpus. Built by
 
 ### Land-register persons
 
-One row per **deduplicated name in the register** (~126,000), with spelling
+One row per **deduplicated name in the register** (~127,000), with spelling
 variants and aggregated mention/dossier counts. Breadth over the HGB, where the
 identity tools above are depth on the people resolvable across corpora. Loaded
 by `build_identities.py --persons ../persons_resolved.json`.
@@ -300,9 +300,9 @@ Three levels of granularity, easily confused — pick by the question asked:
 | Who appears in the land register? | `search_hgb_persons` (register persons) |
 | Who was this person, across all our sources? | `search_identities` (resolved people) |
 
-Current contents: **3,581** resolved people — 3,348 with a GND id, 1,837 with a
-Wikidata QID, 2,619 with occupations, 622 with recorded works, 456 attested in
-the HGB land register, 60 in all three corpora (188 flagged for review).
+Current contents: **3,631** resolved people — 3,382 with a GND id, 1,869 with a
+Wikidata QID, 2,655 with occupations, 622 with recorded works, 525 attested in
+the HGB land register, 70 in all three corpora (182 flagged for review).
 
 If the identity tables have not been built, these tools return an explanatory
 error rather than failing; the HGB tools are unaffected.
