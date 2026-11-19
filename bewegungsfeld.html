@@ -142,8 +142,8 @@ L.tileLayer.wms('https://wms.geo.bs.ch/', {
   layers: 'HP_Situationsplan_Basel_1862', format: 'image/png', transparent: true,
   attribution: 'Geodaten Kanton Basel-Stadt', maxZoom: 20, opacity: 0.85,
 }).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap, © CARTO', maxZoom: 20, opacity: 0.3, zIndex: 0,
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap-Mitwirkende', maxZoom: 19, opacity: 0.3, zIndex: 0,
 }).addTo(map);
 
 const svg = document.getElementById('arrows');
