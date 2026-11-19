@@ -608,11 +608,14 @@ def main(argv=None):
         }[rel]
         n_act[kind] += 1
         if rel == "spelling":
-            for i in idx[1:]:
-                pr = tuple(sorted((idx[0], i)))
-                merge_pairs[pr] += 1
-                pair_src[pr]["bli"].add(aid)
-                pair_src[pr]["where"].update(m["dossier"] for m in ms)
+            # every pair, not a star around the most frequent person: which
+            # pairs a guard lets through must not depend on who is the hub
+            for x, i in enumerate(idx):
+                for j in idx[x + 1:]:
+                    pr = tuple(sorted((i, j)))
+                    merge_pairs[pr] += 1
+                    pair_src[pr]["bli"].add(aid)
+                    pair_src[pr]["where"].update(m["dossier"] for m in ms)
         finding(kind, side, sev, where(L), f"{aid} {L['a']['n']}", who,
                 f"owner documents {min(years)}–{max(years)}; BLI variants: "
                 + "; ".join(L["names"][:8]))
@@ -741,11 +744,12 @@ def main(argv=None):
             fits = max(ys) - min(ys) <= LIFESPAN
             if rel == "spelling" and fits:
                 kind, sev = "eos_city_index_splits_a_street_person", 3
-                for x in idx[1:]:
-                    pr = tuple(sorted((idx[0], x)))
-                    street_pairs.add(pr)
-                    pair_src[pr]["street"].add(r["id"])
-                    pair_src[pr]["where"].add(r["street_id"])
+                for x, i in enumerate(idx):
+                    for j in idx[x + 1:]:
+                        pr = tuple(sorted((i, j)))
+                        street_pairs.add(pr)
+                        pair_src[pr]["street"].add(r["id"])
+                        pair_src[pr]["where"].add(r["street_id"])
             else:
                 kind, sev = "eos_street_and_city_index_disagree", 1
             n_n[kind] += 1
