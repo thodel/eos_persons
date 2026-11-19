@@ -139,7 +139,10 @@ def mini(tmp_path_factory):
             w.writerow([did, DOS, "HGB_1_001", y, "Gerichtsarchiv", 0, 1, pages])
     mentions = [("d1_20260528", "Peter Dürring", 1596), ("d1_20260528", "Claus Roth", 1596),
                 ("d2_20260528", "Peter Thüring", 1602), ("d3_20260528", "Elsin", 1440),
-                ("d4_20260528", "Elsin", 1500), ("d5new_20260615", "Hans Gut", 1610)]
+                ("d4_20260528", "Elsin", 1500), ("d5new_20260615", "Hans Gut", 1610),
+                # the index's own evidence: 'Marti Streiff' is a person here and,
+                # from another dossier, a variant of 'Martin Streiff' who is here too
+                ("d1_20260528", "Martin Streiff", 1596), ("d2_20260528", "Marti Streiff", 1602)]
     cols = ["doc_id", "dossierid", "street_id", "year", "source", "checked_by_gpt",
             "span_id", "name", "alias", "numerus", "specificity", "confidence",
             "occupation_text", "occupation_norm", "occupation_ohdab", "title",
@@ -155,7 +158,10 @@ def mini(tmp_path_factory):
                _person("Peter Thüring", [1602, 1602], [DOS]),
                _person("Elsin", [1440, 1500], [DOS], c=2),
                _person("Claus Roth", [1596, 1596], [DOS]),
-               _person("Hans Gut", [1610, 1610], [DOS])]
+               _person("Hans Gut", [1610, 1610], [DOS]),
+               {**_person("Martin Streiff", [1596, 1602], [DOS], c=3),
+                "v": ["Martin Streiff", "Marti Streiff"]},
+               _person("Marti Streiff", [1602, 1602], [DOS])]
     (d / "persons_resolved.json").write_text(json.dumps(persons), encoding="utf-8")
     out = {k: str(d / v) for k, v in [("out", "link.csv"), ("findings", "findings.csv"),
                                       ("report", "report.md"), ("docxw", "docxw.csv"),
@@ -213,8 +219,13 @@ def test_report_is_written(mini):
     assert "eos_split_spelling_variants" in mini["report"]
 
 
-def test_spelling_pair_is_written_as_a_dedupe_candidate(mini):
-    assert len(mini["candidates"]) == 1
-    c = mini["candidates"][0]
+def test_spelling_pairs_are_written_as_dedupe_candidates(mini):
+    by_src = {c["sources"]: c for c in mini["candidates"]}
+    assert set(by_src) == {"bli", "dossier"}
+    c = by_src["bli"]
     assert {c["a_key"], c["b_key"]} == {"Peter Dürring#1596-1596", "Peter Thüring#1602-1602"}
-    assert c["sources"] == "bli" and c["bli_actors"] == "actor_0"
+    assert c["bli_actors"] == "actor_0"
+    # no BLI actor and no street index needed for this one
+    c = by_src["dossier"]
+    assert {c["a_key"], c["b_key"]} == {"Martin Streiff#1596-1602", "Marti Streiff#1602-1602"}
+    assert c["where"] == DOS
