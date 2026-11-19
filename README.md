@@ -72,7 +72,7 @@ Figures of the current build (street corpus 0.3.0): 238,957 person mentions in
 dedupe passes → **126,365 persons** after `dedupe_spelling.py`;
 706 carry an HLS/Wikidata link (2,193 confident links before dedupe, from 4,940
 candidates); 3,694 geolocated dossiers; 15,078 persons with movement between
-≥2 properties; 3,631 cross-corpus identities (516 attested in the register).
+≥2 properties; 3,581 cross-corpus identities (456 attested in the register).
 
 ### Cross-check against *Basler Liegenschaften 1400–1700 Interaktiv*
 
