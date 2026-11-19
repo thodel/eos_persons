@@ -102,6 +102,17 @@ tri-corpus identities is the price of the HBLS id recovery: 2,078 of the 3,445
 old HBLS ids could be mapped onto `hbls_web.json` members, the rest stay as
 authority-only nodes named from GND.
 
+*After `../dedupe_spelling.py` (2026-11):* the HGB↔HLS candidates were
+recomputed on the merged index (126,365 persons) instead of being carried over
+from the index before deduplication. Edges unioned — 7,003 frozen authority,
+699 HGB↔HLS, 126 HBLS↔HGB, 609 HGB↔GND; TRIM_HGB detached 201 HGB records from
+148 clusters. 3,581 merged persons (3,393 merged / 188 review), 3,348 with a
+GND id, 456 attested in the HGB, 60 spanning all three corpora. The HGB figures
+are lower than before but now real: in the previous build 1,194 of the 1,891
+HGB members pointed at `name#year` keys that deduplication had since merged
+away and resolved to no record; now all 682 resolve, and the identities carry
+more dossiers (2,087 against 1,930).
+
 ### Stage 3 — Build identity clusters  *(done — `../build_identity_clusters.py`)*
 Model every accepted link as an edge in a graph whose nodes are
 `(corpus, local_id)` **plus the shared authority ids** (`gnd:<id>`, `wd:<qid>`),

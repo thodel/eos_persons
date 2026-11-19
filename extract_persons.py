@@ -4,13 +4,17 @@ extract_persons.py — the person *name list* of the HGB corpus, one row per men
 
 Reads the street-split BeNASch XML published in
 DHBern/economies-of-space-automatically-annotated-data (via hgb_corpus.py) and
-writes two tables:
+writes three tables:
 
   persons.csv    one row per named person reference — the raw input of
                  build_data.py (→ persons_resolved.json), build_movements.py …
   dossiers.csv   one row per dossier (property) with LV95 point, address, type,
                  street, document count and year range — the geo backbone for
                  dossiers_geo.json, movements and the Preiskarte.
+  documents.csv  one row per document: id, dossier, year, source, page image
+                 URLs — the key table for joining other editions of the same
+                 register cards (link_bli_hgb.py matches re-issued documents
+                 by their page images). Gitignored, regenerable.
 
 A *named person reference* is a span with element="reference" class="per"
 whose own subtree (not descending into nested references) carries a
@@ -47,6 +51,7 @@ import hgb_corpus
 
 PERSONS_OUT = "persons.csv"
 DOSSIERS_OUT = "dossiers.csv"
+DOCUMENTS_OUT = "documents.csv"
 
 PERSON_COLS = [
     "doc_id", "dossierid", "street_id", "year", "source", "checked_by_gpt",
@@ -55,6 +60,8 @@ PERSON_COLS = [
     "title", "family_relation", "location", "org_affiliation",
     "is_deceased", "roles", "page_url",
 ]
+DOCUMENT_COLS = ["doc_id", "dossierid", "street_id", "year", "source",
+                 "checked_by_gpt", "n_persons", "page_urls"]
 DOSSIER_COLS = [
     "dossierid", "street_id", "street_name", "address", "dossiertype",
     "location", "variant_names", "valid_from", "valid_to",
@@ -169,6 +176,7 @@ def main():
     ap.add_argument("--street-dir", default=None)
     ap.add_argument("--out", default=PERSONS_OUT)
     ap.add_argument("--dossiers", default=DOSSIERS_OUT)
+    ap.add_argument("--documents", default=DOCUMENTS_OUT)
     ap.add_argument("--limit-files", type=int, default=0)
     args = ap.parse_args()
 
@@ -179,14 +187,25 @@ def main():
 
     n_docs = n_rows = 0
     doss = {}                     # dossier → running doc stats
-    with open(args.out, "w", newline="", encoding="utf-8") as f:
+    with open(args.out, "w", newline="", encoding="utf-8") as f, \
+         open(args.documents, "w", newline="", encoding="utf-8") as fd:
         w = csv.DictWriter(f, fieldnames=PERSON_COLS)
         w.writeheader()
+        wd = csv.DictWriter(fd, fieldnames=DOCUMENT_COLS)
+        wd.writeheader()
         for doc, meta in hgb_corpus.iter_documents(files=files):
             n_docs += 1
             rows = person_rows(doc, meta)
             w.writerows(rows)
             n_rows += len(rows)
+            wd.writerow({
+                "doc_id": meta["doc_id"], "dossierid": meta["dossier_id"],
+                "street_id": meta["street_id"], "year": meta["year"],
+                "source": meta["source"],
+                "checked_by_gpt": 1 if meta["checked_by_gpt"] else 0,
+                "n_persons": len(rows),
+                "page_urls": "|".join(u for _, u in meta["pages"]),
+            })
             did = meta["dossier_id"]
             if did:
                 ds = doss.setdefault(did, {
@@ -230,6 +249,7 @@ def main():
     n_loc = sum(1 for d in doss.values() if d.get("location"))
     print(f"→ {args.out}: {n_rows:,} person mentions from {n_docs:,} documents",
           file=sys.stderr)
+    print(f"→ {args.documents}: {n_docs:,} documents", file=sys.stderr)
     print(f"→ {args.dossiers}: {len(doss):,} dossiers ({n_loc:,} with coordinates)",
           file=sys.stderr)
 

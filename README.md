@@ -56,21 +56,95 @@ module, but is no longer the reference.
 
 | step | script | output |
 |---|---|---|
-| 1 | `extract_persons.py` | `persons.csv` (one row per named person reference: name, year, dossier, occupation text/norm/OhdAB, title, family relation, location, affiliation, deceased marker, event roles, page image URL — gitignored, regenerable) and `dossiers.csv` (one row per property: coordinates, address, type, street, history, doc count, years, sources) |
+| 1 | `extract_persons.py` | `persons.csv` (one row per named person reference: name, year, dossier, occupation text/norm/OhdAB, title, family relation, location, affiliation, deceased marker, event roles, page image URL — gitignored, regenerable), `documents.csv` (one row per register card with its page images, gitignored) and `dossiers.csv` (one row per property: coordinates, address, type, street, history, doc count, years, sources) |
 | 2 | `build_data.py` | `persons_resolved.json` (dossier-scoped identity resolution → person index for `index.html`), `guild_data.json` |
 | 3 | `build_families.py` | `families_graph.json`, `families_index.json` (kinship edges from the `family` / inheritance event groups) |
 | 4 | `link_hls.py` → `apply_hls_links.py` | `link_candidates_hls.csv` → `hls` field on persons and tree nodes |
 | 5 | `enrich_wikidata.py`, `link_wikidata_kin.py` | `wd` (QID, dates, GND, kin) and `kin` cross-references |
 | 6 | `dedupe_persons.py`, `dedupe_corpus.py --apply`, `dedupe_offices.py --apply`, `dedupe_rare_surnames.py --apply` | deduplicated `persons_resolved.json` |
+| 6b | `link_bli_hgb.py` → `dedupe_spelling.py --apply`, repeated until the dry run merges nothing | spelling variants merged on the evidence of BLI owners and the street-level index (see below) |
 | 7 | `build_families.py`, `apply_hls_links.py`, `link_wikidata_kin.py`, `link_hls_families.py` | family data refreshed from the deduplicated index |
 | 8 | `build_roles.py`, `build_movements.py`, `build_flowfield.py`, `build_prices.py`, `build_dossiers_geo.py` | `roles_data.json`, `movements.csv`, `flowfield.json`, `prices.json`, `dossiers_geo.json` |
 | 9 | `link_hbls_hgb.py --all`, `build_identity_clusters.py`, `build_merged_persons.py`, `make_persons_web.py` | cross-corpus identities (`merged_persons.json`, `persons_web.json`; see `hbls-extraction/DEDUP_PLAN.md`) |
 
 Figures of the current build (street corpus 0.3.0): 238,957 person mentions in
-75,447 documents → 153,170 resolved names → **136,470 persons** after dedupe;
-713 carry an HLS/Wikidata link (2,193 confident links before dedupe, from 4,940
-candidates); 3,694 geolocated dossiers; 15,082 persons with movement between
-≥2 properties; 3,631 cross-corpus identities (516 attested in the register).
+75,447 documents → 153,170 resolved names → 136,470 persons after the name-based
+dedupe passes → **126,365 persons** after `dedupe_spelling.py`;
+706 carry an HLS/Wikidata link (2,193 confident links before dedupe, from 4,940
+candidates); 3,694 geolocated dossiers; 15,078 persons with movement between
+≥2 properties; 3,581 cross-corpus identities (456 attested in the register).
+
+### Cross-check against *Basler Liegenschaften 1400–1700 Interaktiv*
+
+[Basler Liegenschaften Interaktiv](https://dhbern.github.io/basler-liegenschaften-interaktiv/)
+(BLI, repository DHBern/basler-liegenschaften-interaktiv) builds the ownership
+history of every property from the same register cards and resolves its 179,982
+actors per property and its neighbours. `link_bli_hgb.py` joins that actor list
+with the two eos lists — the city-wide `persons_resolved.json` and the
+street-level `hgb_street_persons.json` — and reports where the three
+resolutions contradict each other. BLI is only read; nothing is written there.
+
+```bash
+python3 extract_persons.py            # persons.csv, documents.csv
+python3 build_hgb_street_persons.py   # hgb_street_persons.json (optional)
+python3 link_bli_hgb.py               # BLI from a sibling checkout, $BLI_DIR or --fetch
+```
+
+| file | content |
+|---|---|
+| `link_bli_hgb.csv` | one row per named BLI person actor (124,890): dossier, owner documents, the eos persons and street persons it resolves to |
+| `bli_doc_crosswalk.csv` | 1,864 register cards that the corpus re-issued under a new id (page order corrected), matched by their page images |
+| `bli_hgb_findings.csv` | the discrepancies, typed, with the side the error most likely sits on (18,911 before `dedupe_spelling.py`, 10,661 after) |
+| `dedupe_spelling_candidates.csv` | pairs of city-wide persons that a BLI owner or a street-level person holds as one and whose names differ only in spelling (gitignored: tied to one state of the index) |
+| `bli_hgb_report.md` | counts, a description and examples per finding type |
+
+The join is exact rather than fuzzy: an owner actor carries its documents, so its
+name variants are looked up among the eos mentions of those very documents
+(99.5 % of 91,897 owner references are found there); actors without documents
+are placed through BLI's id order, which follows the dossiers. 99.7 % of the
+named person actors are linked.
+
+What the comparison showed on the index as the name-based passes left it
+(136,470 persons), and what has been done about it:
+
+- **The city-wide index was under-merged at the spelling level.** 5,461 BLI
+  owners were two or more eos persons whose names differ only by spelling or HTR
+  noise (*Emanuel Schönauwer / Schönawer / Schönauer* on one property in the same
+  years) — 6,902 person pairs; the street-level index independently held 3,430
+  persons that the city-wide index split. **Applied:** `dedupe_spelling.py`
+  merges these pairs under the guards of the index (one lifespan of 80 years,
+  nobody joins more than 15 years after the group's earliest death, different
+  HLS/Wikidata identities never merge): 10,105 duplicates in three rounds,
+  **136,470 → 126,365 persons**. 551 pairs stay apart because a guard refuses
+  them. 98 % of the merged clusters are spelling variants pair by pair; the rest
+  are chains whose ends differ by more than one HTR slip (*Feucht – Fücht –
+  Teucht – Teuchten*).
+- **Still open — same name, same dossier, same years, two persons:** 1,107
+  groups of eos persons share the very same name variant in one dossier at the
+  same time (*Marti Streiff 1514–1567 / Martin Streiff 1500–1543*). They are
+  reported, not merged.
+- **Still open — 62 eos persons span more than 80 years**, all HLS-linked
+  (*Hans Müller 1417–1604*): `dedupe_persons.py` merges every same-named entry
+  whose span overlaps the Wikidata life envelope, however far the entry reaches
+  beyond it.
+- **Still open — bare given names merged across generations inside a dossier**
+  (*Elsin 1440–1508*): 116 cases where BLI has owners decades apart or separated
+  by a recorded death.
+- **Still open — bookkeeping in `build_data.py`:** the death split (step 3b)
+  copies the mention count to both halves (Σ `c` = 241,083 for 238,957
+  mentions), and `dos` is cut at 30 dossiers before deduplication.
+- **On the BLI side:** it is built from the earlier corpus release (1,864 cards
+  with the old page order, 174 cards and 19 dossiers missing), 53 owner actors
+  run over more than a lifespan or past a recorded death, 494 corpus dossiers
+  with 3,337 documents appear only as "Ghost Record", and 322 placeholder actors
+  are named "None of …".
+
+After a rebuild of the index, run the pair until it is stable:
+
+```bash
+python3 link_bli_hgb.py && python3 dedupe_spelling.py            # dry run
+python3 dedupe_spelling.py --apply && python3 link_bli_hgb.py    # repeat while clusters > 0
+```
 
 ### HLS data without the private export
 
