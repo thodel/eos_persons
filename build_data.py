@@ -12,6 +12,8 @@ from collections import defaultdict
 from difflib import SequenceMatcher
 from functools import lru_cache
 
+from lifedates import PAST_ROLES, STRONG_ROLES
+
 # ── Config ─────────────────────────────────────────────────────────────────────
 INPUT_CSV   = "persons.csv"
 OUT_PERSONS = "persons_resolved.json"
@@ -285,51 +287,8 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
 
     # Step 2: collect the mentions of each merged name per dossier
     by_root: dict[tuple, list[dict]] = defaultdict(list)
-    for r in df.to_dict("records"):
-        r["_year"] = int(r["year"]) if pd.notna(r.get("year")) else 0
-        v = r.get("is_deceased")
-        r["_dead"] = v == 1 or v == 1.0 or str(v) == "1.0"
+    for r in prepare_rows(df):
         by_root[uf.find((r["dossierid"], r["name"]))].append(r)
-
-    # Step 3: pick canonical name per cluster (most tokens, fewest abbrevs)
-    def pick_canonical(names: list[str]) -> str:
-        def score(n):
-            toks = clean_tokens(n)
-            abbr = sum(1 for t in toks if t.endswith(".") or len(t) <= 2)
-            return (len(toks) - abbr, len(n))
-        return max(names, key=score)
-
-    def collect(rows, col, drop=()):
-        out = set()
-        for r in rows:
-            if isinstance(r.get(col), str):
-                for x in r[col].split("|"):
-                    x = x.strip()
-                    if x and x not in drop:
-                        out.add(x)
-        return sorted(out)
-
-    def summarise(root, rows):
-        names = sorted({r["name"] for r in rows})
-        canon = pick_canonical(names)
-        years = [r["_year"] for r in rows if r["_year"]]
-        dead_years = [r["_year"] for r in rows if r["_year"] and r["_dead"]]
-        return {
-            "canonical": canon,
-            "variants": names,
-            "dossier": root,              # (dossier id, merged name)
-            "mentions": len(rows),
-            "years": [min(years), max(years)] if years else [0, 0],
-            "occ": collect(rows, "occupation_norm", drop=("unk",)),
-            "title": collect(rows, "title"),
-            "fam": collect(rows, "family_relation"),
-            "loc": collect(rows, "location"),
-            "org": collect(rows, "org_affiliation"),
-            # earliest year a deceased marker appears = upper bound on death year
-            "dead_year": min(dead_years) if dead_years else None,
-            "live_years": [r["_year"] for r in rows if r["_year"] and not r["_dead"]],
-            "ckey": canonical_key(canon),
-        }
 
     # Steps 2b/3b: cut each cluster into runs that can be one person — one
     # lifespan; a bare given name only near the fuller name it is attached to,
@@ -399,38 +358,170 @@ def build_persons_resolved(df: pd.DataFrame) -> list[dict]:
             _uid += 1
 
     # Step 5: build final person entities
-    persons = []
-    for ckey, entries in cross.items():
-        all_names = sorted({n for e in entries for n in e["variants"]})
-        canon = pick_canonical([e["canonical"] for e in entries])
-        occs  = sorted({o for e in entries for o in e["occ"]})
-        titles = sorted({t for e in entries for t in e["title"]})
-        fams  = sorted({f for e in entries for f in e["fam"]})
-        locs  = sorted({l for e in entries for l in e["loc"]})
-        orgs  = sorted({o for e in entries for o in e["org"]})
-        dossiers = sorted({e["dossier"] for e in entries})
-        all_years = [y for e in entries for y in e["years"] if y > 0]
-        mentions = sum(e["mentions"] for e in entries)
-        dead_years_all = [e["dead_year"] for e in entries if e["dead_year"] is not None]
-        dead_year_out = min(dead_years_all) if dead_years_all else None
-        persons.append({
-            "n": canon,
-            "v": all_names,
-            "c": mentions,
-            "d": len({d[0] for d in dossiers}),   # distinct dossier ids
-            "y": [min(all_years), max(all_years)] if all_years else [0, 0],
-            "dead_year": dead_year_out,  # earliest year mentioned as deceased
-            "occ": occs,
-            "tit": titles,
-            "fam": fams,
-            "loc": locs,
-            "org": orgs,
-            "dos": dossiers,                      # every (dossier, name) pair
-        })
-
+    persons = [assemble(entries) for entries in cross.values()]
     persons.sort(key=lambda p: -p["c"])
     print(f"  → {len(persons):,} resolved persons from {len(df):,} mentions")
     return persons
+
+
+# ── from mentions to a person ────────────────────────────────────────────────
+#
+# A person is assembled from *entries*: the mentions one name has in one
+# dossier within one run (`summarise`). `assemble` adds the entries up. Both are
+# module-level because a person can be taken apart again: when an HLS link shows
+# that part of the mentions lie outside the life of the person linked
+# (lifedates.partition), apply_hls_links.py re-summarises the two halves from
+# the mentions. For that every person carries `_rows` — per entry the dossier
+# root and the row numbers of its mentions in persons.csv — which main() moves
+# into the sidecar file persons_rows.json before the index is written.
+
+def prepare_rows(df):
+    """The mentions of persons.csv as dicts with the flags the resolution and
+    the life check read: _i (row number), _year, _dead (marked "selig"),
+    _strong (a party to the transaction, see lifedates.STRONG_ROLES, and not
+    marked deceased) and _past (named in a role of the past, PAST_ROLES)."""
+    rows = df.to_dict("records")
+    for i, r in enumerate(rows):
+        r["_i"] = i
+        r["_year"] = int(r["year"]) if pd.notna(r.get("year")) else 0
+        v = r.get("is_deceased")
+        r["_dead"] = v == 1 or v == 1.0 or str(v) == "1.0"
+        roles = r.get("roles")
+        roles = set(roles.split("|")) if isinstance(roles, str) else set()
+        r["_strong"] = not r["_dead"] and not STRONG_ROLES.isdisjoint(roles)
+        r["_past"] = not PAST_ROLES.isdisjoint(roles)
+    return rows
+
+
+def pick_canonical(names: list[str]) -> str:
+    """The fullest name: most tokens, fewest abbreviations."""
+    def score(n):
+        toks = clean_tokens(n)
+        abbr = sum(1 for t in toks if t.endswith(".") or len(t) <= 2)
+        return (len(toks) - abbr, len(n))
+    return max(names, key=score)
+
+
+def collect(rows, col, drop=()):
+    out = set()
+    for r in rows:
+        if isinstance(r.get(col), str):
+            for x in r[col].split("|"):
+                x = x.strip()
+                if x and x not in drop:
+                    out.add(x)
+    return sorted(out)
+
+
+def summarise(root, rows):
+    """One entry: the mentions of one (dossier, merged name) in one run."""
+    names = sorted({r["name"] for r in rows})
+    canon = pick_canonical(names)
+    years = [r["_year"] for r in rows if r["_year"]]
+    dead_years = [r["_year"] for r in rows if r["_year"] and r["_dead"]]
+    act_years = [r["_year"] for r in rows if r["_year"] and r["_strong"]]
+    return {
+        "canonical": canon,
+        "variants": names,
+        "dossier": root,              # (dossier id, merged name)
+        "mentions": len(rows),
+        "years": [min(years), max(years)] if years else [0, 0],
+        "occ": collect(rows, "occupation_norm", drop=("unk",)),
+        "title": collect(rows, "title"),
+        "fam": collect(rows, "family_relation"),
+        "loc": collect(rows, "location"),
+        "org": collect(rows, "org_affiliation"),
+        # earliest year a deceased marker appears = upper bound on death year
+        "dead_year": min(dead_years) if dead_years else None,
+        "live_years": [r["_year"] for r in rows if r["_year"] and not r["_dead"]],
+        # first and last year as a party to a transaction
+        "act": [min(act_years), max(act_years)] if act_years else None,
+        # last year named as living: not "selig", not in a role of the past
+        "last_live": max((r["_year"] for r in rows
+                          if r["_year"] and not r["_dead"] and not r["_past"]), default=None),
+        "ckey": canonical_key(canon),
+        "rows": [r["_i"] for r in rows],
+    }
+
+
+def assemble(entries):
+    """One person from its entries."""
+    dossiers = sorted({e["dossier"] for e in entries})
+    all_years = [y for e in entries for y in e["years"] if y > 0]
+    dead_years_all = [e["dead_year"] for e in entries if e["dead_year"] is not None]
+    acts = [y for e in entries if e["act"] for y in e["act"]]
+    person = {
+        "n": pick_canonical([e["canonical"] for e in entries]),
+        "v": sorted({n for e in entries for n in e["variants"]}),
+        "c": sum(e["mentions"] for e in entries),
+        "d": len({d[0] for d in dossiers}),   # distinct dossier ids
+        "y": [min(all_years), max(all_years)] if all_years else [0, 0],
+        "dead_year": min(dead_years_all) if dead_years_all else None,  # earliest "deceased"
+        "occ": sorted({o for e in entries for o in e["occ"]}),
+        "tit": sorted({t for e in entries for t in e["title"]}),
+        "fam": sorted({f for e in entries for f in e["fam"]}),
+        "loc": sorted({l for e in entries for l in e["loc"]}),
+        "org": sorted({o for e in entries for o in e["org"]}),
+        "dos": dossiers,                      # every (dossier, name) pair
+    }
+    if acts:
+        person["a"] = [min(acts), max(acts)]  # first and last year as a party
+    # last year named as living, where that is not the last mention (0: never —
+    # the later mentions call the person deceased or name a role of the past)
+    last_live = max((e["last_live"] for e in entries if e["last_live"]), default=0)
+    if last_live != person["y"][1]:
+        person["ly"] = last_live
+    person["_rows"] = [[list(e["dossier"]), e["rows"]] for e in entries]
+    return person
+
+
+def split_person(person_rows, rows, label):
+    """Take a person apart by its mentions.
+
+    `person_rows` is the person's `_rows` (entries of [root, row numbers]),
+    `rows` the prepared mentions by row number, `label(row)` names the part a
+    mention belongs to. Returns {part: person}; every entry is cut along the
+    parts, so each mention lands in exactly one person.
+    """
+    parts = defaultdict(list)
+    for root, idx in person_rows:
+        cut = defaultdict(list)
+        for i in idx:
+            cut[label(rows[i])].append(rows[i])
+        for part, rs in cut.items():
+            parts[part].append(summarise(tuple(root), rs))
+    return {part: assemble(entries) for part, entries in parts.items()}
+
+
+OUT_ROWS = "persons_rows.json"
+
+
+def pkey(p):
+    y = p.get("y") or [0, 0]
+    return f"{p['n']}#{y[0]}-{y[1]}#{p.get('c', 0)}"
+
+
+def write_index(persons, path=OUT_PERSONS, rows_path=OUT_ROWS):
+    """Write the index and, beside it, the sidecar with every person's mentions
+    (`_rows` is taken out of the index: it is working data, not site data)."""
+    side = {"keys": [pkey(p) for p in persons],
+            "rows": [p.pop("_rows") for p in persons]}
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(persons, f, ensure_ascii=False, separators=(",", ":"))
+    with open(rows_path, "w", encoding="utf-8") as f:
+        json.dump(side, f, separators=(",", ":"))
+
+
+def read_rows(persons, rows_path=OUT_ROWS):
+    """The sidecar's mention lists if it belongs to this state of the index,
+    else None (after the dedupe passes it no longer does)."""
+    try:
+        side = json.load(open(rows_path, encoding="utf-8"))
+    except FileNotFoundError:
+        return None
+    if side["keys"] != [pkey(p) for p in persons]:
+        return None
+    return side["rows"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -502,8 +593,7 @@ if __name__ == "__main__":
     df = pd.read_csv(INPUT_CSV)
 
     persons = build_persons_resolved(df)
-    with open(OUT_PERSONS, "w", encoding="utf-8") as f:
-        json.dump(persons, f, ensure_ascii=False, separators=(",", ":"))
+    write_index(persons)
     print(f"Saved {OUT_PERSONS} ({len(persons):,} persons, "
           f"{len(json.dumps(persons, ensure_ascii=False).encode())/1e6:.1f} MB)")
 

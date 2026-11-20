@@ -160,6 +160,27 @@ HGB, 34 spanning all three corpora; all 451 HGB members resolve to a record.
 a run without the private inputs arrives at 3,461 identities, 3,395 of them
 with the same authority members.
 
+*Life dates checked mention by mention (2026-11, fourth rebuild):* the
+HGB↔HLS link no longer judges a register person by its first and last year
+with tolerances, but every mention against the life the HLS header (with its
+qualifiers) and Wikidata's year-precise dates give (`../lifedates.py`; top-level
+README, "Life dates"). 141 raw register persons were split at the bounds of the
+life; the candidates on the deduplicated index have to fit as a whole
+(`lifedates.fits`: first and last year, first "deceased", years as a party to a
+transaction, last year named as living). Stage 3 applies the same test to its
+clusters instead of the first-mention span test of TRIM_HGB: an HGB record that
+none of the cluster's HLS lives can hold is detached (4 records — they had come
+in over HBLS links, whose dates are looser), and so is an HBLS record born at
+another time than the HLS person when the cluster also holds an HBLS record
+that agrees with the HLS (15 — fathers, sons and cousins pulled in over a
+shared authority id; a lone HBLS record is left alone, its first year is often
+a year of office). Edges unioned — 1,708 HBLS↔HLS, 372 HGB↔HLS, 114 HBLS↔HGB,
+1,518 + 1,618 HBLS↔GND, 241 HGB↔GND. 3,502 identities (3,357 merged / 145
+review), 3,233 with a GND id, 338 attested in the HGB, 33 spanning all three
+corpora. `authority_edges.csv` / `hbls_id_map.csv` are frozen from this result;
+without the private inputs the same stage arrives at 3,458 identities, 3,398 of
+them with the same authority members.
+
 ### Stage 3 — Build identity clusters  *(done — `../build_identity_clusters.py`)*
 Model every accepted link as an edge in a graph whose nodes are
 `(corpus, local_id)` **plus the shared authority ids** (`gnd:<id>`, `wd:<qid>`),

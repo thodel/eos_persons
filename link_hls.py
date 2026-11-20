@@ -29,6 +29,8 @@ import unicodedata
 import collections
 from difflib import SequenceMatcher
 
+import lifedates
+
 csv.field_size_limit(10_000_000)
 
 # The HLS metadata export is private; when it is absent the linkers fall back
@@ -325,10 +327,29 @@ def basel_relation(text):
 
 
 def load_basel_table(path=BASEL_TABLE):
+    """{HLS id: (basel class, kind of birth date, kind of death date)} — what
+    the last run with the article texts read from them."""
     if not os.path.exists(path):
         return {}
     with open(path, encoding="utf-8") as f:
-        return {r["hls_id"]: r["basel"] for r in csv.DictReader(f)}
+        return {r["hls_id"]: (r["basel"], r.get("b_kind") or None, r.get("d_kind") or None)
+                for r in csv.DictReader(f)}
+
+
+WIKIDATA_DATES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              "hls_wikidata_dates.csv")
+
+
+def load_wikidata_years(path=WIKIDATA_DATES):
+    """{HLS id: ([birth years], [death years])} — Wikidata's dates given to the
+    year or better (fetch_wikidata_dates.py), the second opinion on a life."""
+    out = collections.defaultdict(lambda: ([], []))
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if int(r["precision"]) >= 9:
+                    out[r["hls_id"]][0 if r["prop"] == "b" else 1].append(int(r["year"]))
+    return out
 
 
 # ── Load HLS biographies in the HGB era ──────────────────────────────────────
@@ -336,24 +357,32 @@ def load_basel_table(path=BASEL_TABLE):
 def load_hls(path, era_lo=1380, era_hi=1720, classes=None):
     """Return list of bio dicts with parsed years, blocked by surname initial.
 
-    `classes`, if given, collects {id: basel_relation} for every biography that
-    comes with a text — also those outside the era, whose dates another table
-    may give differently."""
+    `classes`, if given, collects {id: (basel_relation, kind of birth date,
+    kind of death date)} for every biography that comes with a text — also
+    those outside the era, whose dates another table may give differently.
+    Each bio carries its `life` (lifedates.bounds) from the article's dates,
+    their qualifiers and Wikidata's year-precise dates."""
     bios = []
     known = load_basel_table()
     alt = load_alt_dates()
+    wd_years = load_wikidata_years()
     with open(path, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("category") != "bio":
                 continue
-            basel = basel_relation(row.get("content_text"))
-            if classes is not None and basel:
-                classes[row.get("id")] = basel
+            text = row.get("content_text")
+            basel = basel_relation(text)
+            b, d = bio_years(row, alt)
+            if basel:
+                kb, kd = lifedates.date_kinds(text, b, d)
+                if classes is not None:
+                    classes[row.get("id")] = (basel, kb or "", kd or "")
+            else:
+                basel, kb, kd = known.get(row.get("id"), ("", None, None))
             fam = (row.get("bio.family_name") or "").strip()
             first = (row.get("bio.first_name") or "").strip()
             if not fam and not first:
                 continue
-            b, d = bio_years(row, alt)
             # estimate the missing bound so the era filter still works
             lo = b if b else (d - 90 if d else None)
             hi = d if d else (b + 90 if b else None)
@@ -363,16 +392,19 @@ def load_hls(path, era_lo=1380, era_hi=1720, classes=None):
                 continue
             surname = norm_token(fam.split()[-1]) if fam else ""
             given = given_key(first)
+            wb, wd = wd_years.get(row.get("id"), ((), ()))
+            life, how_b, how_d = lifedates.explain(b, kb, d, kd, wb, wd)
             bios.append({
                 "id": row.get("id"),
                 "version": (row.get("version") or "").strip(),
                 "title": row.get("title", "").strip(),
                 "first": first, "family": fam,
                 "given_n": given, "surname_n": surname,
-                "birth": b, "death": d,
+                "birth": b, "death": d, "birth_kind": kb, "death_kind": kd,
+                "wd_birth": wb, "wd_death": wd, "life": life, "life_how": (how_b, how_d),
                 "lex": (row.get("lexical_class") or "").strip("[]'\""),
                 # from the text where there is one, else from the last run with texts
-                "basel": basel or known.get(row.get("id"), ""),
+                "basel": basel,
             })
     return bios
 
@@ -398,20 +430,27 @@ def life_dates(p):
 
 
 def life_envelope(p):
-    """(lo, hi, death) for a person with known life dates, else None.
+    """The life (lifedates.Life) of an HLS-linked person, else None.
 
-    The years in which mentions of that person can lie: birth − 10 (death − 95
-    if the birth is unknown) to death + POSTMORTEM (birth + 90 + POSTMORTEM).
+    apply_hls_links.py keeps the bounds on the link — born between the first
+    two years, died between the last two; they come from the article's dates
+    with their qualifiers and from Wikidata (lifedates.bounds). A link without
+    them is read as exact dates.
     """
+    life = (p.get("hls") or {}).get("life")
+    if life:
+        return lifedates.Life(*life)
     b, d = life_dates(p)
     if not (b or d):
         return None
-    return ((b - 10) if b else (d - 95), (d if d else b + 90) + POSTMORTEM, d)
+    return lifedates.bounds(b, None, d, None)
 
 
-def fits_life(env, y0, y1, dead_year=None):
-    """Can mentions y0..y1, first called deceased in `dead_year`, belong to the
-    life `env` (from life_envelope)? True where nothing is known.
+def fits_life(env, y0, y1, dead_year=None, extra=None):
+    """Can mentions y0..y1 — first called deceased in `dead_year`; `extra` =
+    (years as a party to a transaction, last year named as living), see
+    lifedates.extra — belong to the life `env` (from life_envelope)? True
+    where nothing is known.
 
     Every dedupe pass asks this before it merges into an HLS-linked person:
     without it a later pass adds namesakes from outside the life, and the
@@ -419,12 +458,13 @@ def fits_life(env, y0, y1, dead_year=None):
     """
     if env is None or y0 is None or y1 is None:
         return True
-    lo, hi, d = env
-    if y0 < lo or y1 > hi:
-        return False
-    if d and dead_year and dead_year < d - DEAD_BEFORE_DEATH:
-        return False
-    return True
+    return lifedates.fits(env, y0, y1, dead_year, *(extra or (None, None)))
+
+
+def person_fits(env, p):
+    """`fits_life` for a person of the index."""
+    y = p.get("y") or [None, None]
+    return fits_life(env, y[0], y[1], p.get("dead_year"), lifedates.extra(p))
 
 
 def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3,
@@ -483,6 +523,20 @@ def date_relation(m0, m1, dead_year, birth, death, grace=60, tol=3,
 
 # ── Matching ─────────────────────────────────────────────────────────────────
 
+def person_mentions(persons):
+    """Per person the mentions [(year, called deceased, party)] — or None when
+    the mention lists of build_data.py do not belong to this index."""
+    import build_data                     # pandas: only needed here
+    side = build_data.read_rows(persons)
+    if side is None:
+        return None
+    import pandas as pd
+    rows = build_data.prepare_rows(pd.read_csv(build_data.INPUT_CSV))
+    return [[(rows[i]["_year"], rows[i]["_dead"], rows[i]["_strong"], rows[i]["_past"])
+             for _, idx in entries for i in idx if rows[i]["_year"]]
+            for entries in side]
+
+
 def main():
     ap = argparse.ArgumentParser(description="Link HGB persons to HLS biographies.")
     ap.add_argument("--persons", default="persons_resolved.json")
@@ -508,11 +562,11 @@ def main():
     n_era = len(bios)
     by_basel = collections.Counter(b["basel"] or "unknown" for b in bios)
     if classes:
-        # the texts are at hand: keep their classes for runs without the export
+        # the texts are at hand: keep what was read from them for runs without the export
         with open(BASEL_TABLE, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
-            w.writerow(["hls_id", "basel"])
-            w.writerows(sorted(classes.items()))
+            w.writerow(["hls_id", "basel", "b_kind", "d_kind"])
+            w.writerows((i,) + classes[i] for i in sorted(classes))
         print(f"  wrote {BASEL_TABLE} ({len(classes)} biographies)")
     if not args.any_place:
         bios = [b for b in bios if b["basel"] in ("strong", "")]
@@ -529,9 +583,18 @@ def main():
     persons = json.load(open(args.persons, encoding="utf-8"))
     print(f"  {len(persons)} resolved persons")
 
+    # On the raw index (build_data.py just wrote it) every person's mentions
+    # are at hand: the life is checked mention by mention, a biography is a
+    # candidate when part of the mentions fit, and apply_hls_links.py splits
+    # the person there. Later (after the dedupe passes) a person has to fit as
+    # a whole.
+    mentions = person_mentions(persons)
+    print("  mention-level life check" if mentions else
+          "  no mention lists for this index: persons are checked as a whole")
+
     rows_out = []
     n_checked = 0
-    for p in persons:
+    for pi, p in enumerate(persons):
         names = [p["n"]] + [v for v in p.get("v", []) if v != p["n"]]
         # use the canonical name for splitting; variants only widen given/surname
         given, surname = split_name(p["n"])
@@ -556,12 +619,36 @@ def main():
             gr = article_given_ratio(given, bio["given_n"]) if bio["given_n"] else 0.0
             if gr < args.given_min:
                 continue
-            rel, gap = date_relation(m0, m1, dead, bio["birth"], bio["death"],
-                                     grace=args.postmortem_grace)
-            if rel is None:
+            life = bio["life"]
+            if m1 < life.blo or m0 > life.dhi + lifedates.POSTMORTEM:
                 continue
+            if mentions:
+                ms = mentions[pi]
+                labels, kinds = lifedates.partition(life, ms)
+                fit = [m[0] for m, lab in zip(ms, labels) if lab == "F"]
+                if not fit:
+                    continue
+                n_early, n_late = labels.count("E"), labels.count("L")
+            else:
+                if not person_fits(life, p):
+                    continue
+                fit, kinds, n_early, n_late = [m0], {}, 0, 0
+            n_fit = len(fit) if mentions else p.get("c", 0)
+            share = n_fit / (n_fit + n_early + n_late)
+            first = min(fit)
+            rel = "overlap" if first <= life.dhi else "postmortem"
+            gap = max(0, first - life.dhi)
             score = round(0.6 * sr + 0.4 * gr - (0.0 if rel == "overlap" else 0.05), 3)
             best_for_person.append({
+                "hgb_idx": pi,
+                "n_fit": n_fit, "n_early": n_early, "n_late": n_late,
+                "conflicts": "|".join(f"{k}:{n}" for k, n in sorted(kinds.items())),
+                # among several biographies the one that holds more of the
+                # mentions comes first (a father and a son of one name)
+                "rank_score": round(score - 0.1 * (1 - share), 3),
+                "hls_birth_kind": bio["birth_kind"] or "",
+                "hls_death_kind": bio["death_kind"] or "",
+                "life": "|".join(map(str, life)),
                 "hgb_name": p["n"],
                 "hgb_year_min": m0, "hgb_year_max": m1,
                 "hgb_dead_year": dead if dead else "",
@@ -577,7 +664,7 @@ def main():
                 "hls_url": hls_url(bio["id"], bio["version"]),
             })
         # keep all candidates for this person, but flag ambiguity
-        best_for_person.sort(key=lambda r: -r["score"])
+        best_for_person.sort(key=lambda r: -r["rank_score"])
         for rank, cand in enumerate(best_for_person):
             cand["n_candidates_for_person"] = len(best_for_person)
             cand["rank"] = rank + 1
@@ -589,7 +676,9 @@ def main():
             "hgb_name", "hgb_year_min", "hgb_year_max", "hgb_dead_year",
             "hgb_mentions", "hls_id", "hls_title", "hls_first", "hls_family",
             "hls_birth", "hls_death", "hls_lexical_class", "hls_basel",
-            "n_candidates_for_person", "rank", "hls_version", "hls_url"]
+            "n_candidates_for_person", "rank", "hls_version", "hls_url",
+            "hgb_idx", "rank_score", "n_fit", "n_early", "n_late", "conflicts",
+            "hls_birth_kind", "hls_death_kind", "life"]
     with open(args.out, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=cols)
         w.writeheader()
@@ -602,6 +691,9 @@ def main():
     print(f"\n→ {len(rows_out)} candidate links "
           f"({n_persons_linked} distinct HGB persons)")
     print(f"   overlap: {n_overlap}, postmortem: {n_pm}, high-conf (≥0.90): {high}")
+    partial = sum(1 for r in rows_out if r["n_early"] or r["n_late"])
+    if mentions:
+        print(f"   {partial} of them hold only part of the person's mentions")
     print(f"   written to {args.out}")
     print("\nTop 15 candidates:")
     for r in rows_out[:15]:

@@ -74,6 +74,7 @@ from difflib import SequenceMatcher
 
 from dedupe_corpus import canon, koelner, name_tokens
 from link_hls import life_dates, life_envelope
+from lifedates import POSTMORTEM
 
 csv.field_size_limit(10 ** 8)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -799,7 +800,7 @@ def main(argv=None):
         # (dedupe_persons: birth − 10 … death + 60); anything beyond is an error
         env_ = life_envelope(p)
         b_, d_ = life_dates(p)
-        inside = env_ is not None and y[0] >= env_[0] and y[1] <= env_[1]
+        inside = env_ is not None and y[0] >= env_.blo and y[1] <= env_.dhi + POSTMORTEM
         if inside:
             n_long_ok += 1
         else:

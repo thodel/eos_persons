@@ -1,0 +1,251 @@
+hls_id,hls_title,hls_birth,birth_kind,wikidata_birth,birth,hls_death,death_kind,wikidata_death,death,born_from,born_to,died_from,died_to,persons,mentions,first_mention,last_mention,all_fit
+014759,Adalbert Salzmann,1475,range,,no_wikidata,1548,exact,,no_wikidata,1470,1480,1548,1548,1,39,1505,1554,yes
+021524,Adam Petri,1454,circa,1454,agree,1527,exact,1527,agree,1449,1459,1527,1527,1,15,1493,1529,yes
+042842,Adam von Bodenstein,1528,exact,1528,agree,1577,exact,1577,agree,1528,1528,1577,1577,3,8,1560,1593,yes
+019316,Adelberg Meyer zum Pfeil,1482,after,1474,wikidata_ignored,1548,exact,1548,agree,1482,1502,1548,1548,1,28,1498,1542,yes
+019183,Andreas Bischoff,1481,exact,1481,agree,1558,exact,1558,agree,1481,1481,1558,1558,1,23,1486,1550,yes
+019190,Andreas Burckhardt,1604,exact,1604,agree,1667,exact,1667,agree,1604,1604,1667,1667,1,41,1623,1692,yes
+019191,Andreas Burckhardt,1652,exact,1652,agree,1731,exact,1731,agree,1652,1652,1731,1731,1,29,1669,1700,yes
+041533,Andreas Cratander,1490,circa,1490,agree,1540,before,1540,wikidata_used,1485,1495,1539,1541,1,8,1526,1538,yes
+018704,Andreas Ryff,1550,exact,1550,agree,1603,exact,1603,agree,1550,1550,1603,1603,2,15,1565,1605,yes
+018344,Antoni Glaser,1505,first_mention,1482|1490,wikidata_used,1551,before,1551,wikidata_used,1477,1495,1550,1552,1,25,1510,1565,yes
+012762,Arnold Zum Luft,1453,circa,1453,agree,1517,exact,1517,agree,1448,1458,1517,1517,1,4,1500,1526,yes
+012925,Arnold von Rotberg,1394,circa,1394,agree,1458,exact,1458,agree,1389,1399,1458,1458,3,12,1411,1473,yes
+018398,Balthasar Han,1505,exact,1505,agree,1578,exact,1578,agree,1505,1505,1578,1578,1,29,1520,1605,yes
+019230,Balthasar Hiltprand,1486,exact,1486,agree,1538,exact,1538,agree,1486,1486,1538,1538,1,16,1511,1536,yes
+018350,Balthasar Hützschin,1430,circa,1430,agree,1481,range,,no_wikidata,1425,1435,1476,1486,1,21,1440,1483,yes
+048162,Balthasar Vögeli,1505,first_mention,,no_wikidata,1539,exact,,no_wikidata,1435,1491,1539,1539,1,1,1513,1513,yes
+015828,Basilius Amerbach der Jüngere,1533,exact,1533,agree,1591,exact,1591,agree,1533,1533,1591,1591,1,1,1566,1566,yes
+019285,Benedikt Socin,1594,exact,1594,agree,1664,exact,1664,agree,1594,1594,1664,1664,1,28,1601,1673,yes
+019186,Bernhard Brand,1525,exact,1525,agree,1594,exact,1594,agree,1525,1525,1594,1594,2,28,1540,1609,yes
+019251,Bernhard Meyer zum Pfeil,1488,exact,1488,agree,1558,exact,1558,agree,1488,1488,1558,1558,2,8,1518,1609,yes
+029168,Bernhard Richel,1472,first_mention,,no_wikidata,1482,exact,1482,agree,1402,1458,1482,1482,1,2,1478,1478,yes
+019278,Bernhard Schilling,1464,first_mention,,no_wikidata,1487,exact,,no_wikidata,1394,1450,1487,1487,2,5,1461,1474,yes
+019279,Bläsi Schölli,1518,first_mention,,no_wikidata,1569,exact,,no_wikidata,1448,1504,1569,1569,1,15,1520,1578,yes
+019188,Bonaventura von Brunn,1520,exact,1520,agree,1591,exact,1591,agree,1520,1520,1591,1591,1,11,1566,1622,yes
+015827,Bonifacius Amerbach,1495,exact,1495,agree,1562,exact,1562,agree,1495,1495,1562,1562,1,1,1555,1555,yes
+018506,Caspar Angelroth,1485,circa,1485,agree,1535,after,1511,wikidata_ignored,1480,1490,1535,1575,1,4,1516,1528,yes
+014280,Caspar Bauhin,1560,exact,1560,agree,1624,exact,1624,agree,1560,1560,1624,1624,1,20,1594,1638,yes
+018590,Caspar Koch,1470,exact,1470,agree,1525,exact,1525,agree,1470,1470,1525,1525,1,43,1489,1535,yes
+019245,Caspar Krug,1518,exact,1518,agree,1579,exact,,no_wikidata,1518,1518,1579,1579,1,8,1534,1578,yes
+018694,Christian Wurstisen,1544,exact,1544,agree,1588,exact,1588,agree,1544,1544,1588,1588,1,9,1582,1614,yes
+019192,Christoph Burckhardt,1631,exact,1631,agree,1705,exact,1705,agree,1631,1631,1705,1705,2,39,1638,1699,yes
+018743,Conrad Schnitt,1495,range,,no_wikidata,1541,circa,1541,agree,1490,1500,1536,1546,1,15,1498,1537,yes
+017485,Daniel Babenberg,1460,before,,no_wikidata,1517,exact,,no_wikidata,1430,1460,1517,1517,1,1,1480,1480,yes
+019880,Daniel Heintz der Ältere,1530,range,1530,agree,1596,exact,1596,agree,1525,1535,1596,1596,1,11,1560,1610,yes
+048490,Daniel Schwegler,1480,circa,,no_wikidata,1546,before,,no_wikidata,1475,1485,1536,1546,1,19,1510,1546,yes
+025292,Diebold Ryff,1516,exact,1516,agree,1586,exact,1547,disagree,1516,1516,1547,1586,1,1,1583,1583,yes
+019215,Dietrich Forcart,1685,exact,1685,agree,1740,exact,1740,agree,1685,1685,1740,1740,1,1,1693,1693,yes
+014771,Dorothea Schermann,1490,range,,no_wikidata,1537,exact,,no_wikidata,1485,1495,1537,1537,1,3,1536,1536,yes
+019229,Eberhard von Hiltalingen,1408,before,,no_wikidata,1450,after,,no_wikidata,1378,1408,1450,1490,1,2,1443,1444,yes
+019212,Emanuel Falkner,1674,exact,1674,agree,1760,exact,1760,agree,1674,1674,1760,1760,1,6,1676,1698,yes
+042053,Emanuel Hoffmann,1643,exact,1643,agree,1702,exact,1702,agree,1643,1643,1702,1702,1,9,1667,1700,yes
+026025,Emanuel König,1658,exact,1658,agree,1731,exact,1731,agree,1658,1658,1731,1731,1,21,1669,1692,yes
+048978,Emanuel Ryhiner,1543,exact,1543,agree,1582,exact,1582,agree,1543,1543,1582,1582,1,7,1574,1581,yes
+019311,Emanuel Socin,1628,exact,1628,agree,1717,exact,1717,agree,1628,1628,1717,1717,1,24,1657,1698,yes
+018712,Erhard von Appenweiler,1429,first_mention,,no_wikidata,1471,range,1472,agree,1359,1415,1466,1476,2,15,1426,1462,yes
+019231,Eucharius Holzach,1480,before,1480,wikidata_used,1521,exact,1521,agree,1475,1485,1521,1521,1,6,1497,1519,yes
+012203,Felix Platter,1536,exact,1536,agree,1614,exact,1614,agree,1536,1536,1614,1614,1,47,1571,1618,yes
+026098,Felix Platter,1605,exact,1605,agree,1671,exact,1671,agree,1605,1605,1671,1671,1,5,1638,1682,yes
+019189,Franz Robert Brunschweiler,1635,exact,1635,agree,1690,exact,1690,agree,1635,1635,1690,1690,2,21,1637,1698,yes
+025293,Fridolin Ryff,1488,circa,,no_wikidata,1554,exact,,no_wikidata,1483,1493,1554,1554,1,12,1500,1546,yes
+026063,Georg Friedrich Meyer,1645,exact,1645,agree,1693,exact,1693,agree,1645,1645,1693,1693,1,5,1676,1690,yes
+018365,Georg Thomas,1534,first_mention,,no_wikidata,1578,range,1578,agree,1464,1520,1573,1583,1,3,1561,1571,yes
+043586,Gregor Brandmüller,1661,exact,1661,agree,1691,exact,1691,agree,1661,1661,1691,1691,1,5,1672,1680,yes
+028615,Gédéon Sarasin,1573,exact,1573,agree,1636,exact,1636,agree,1573,1573,1636,1636,1,7,1628,1634,yes
+018516,Hans Balduff,1451,exact,,no_wikidata,1492,exact,1492,agree,1451,1451,1492,1492,1,1,1475,1475,yes
+019088,Hans Bock der Ältere,1550,circa,1550,agree,1624,exact,1624,agree,1545,1555,1624,1624,1,8,1585,1630,yes
+019170,Hans Bär,1484,before,,no_wikidata,1515,exact,1515,agree,1454,1484,1515,1515,2,46,1461,1531,yes
+019236,Hans Christoph Imhof,1600,exact,1600,agree,1658,exact,1658,agree,1600,1600,1658,1658,1,1,1650,1650,yes
+018789,Hans Dürr,1505,first_mention,1504,same_year,1528,last_mention,1511,wikidata_ignored,1435,1491,1528,1568,2,4,1516,1571,yes
+018571,Hans Franck,1505,first_mention,1485,wikidata_used,1522,exact,1522,agree,1480,1490,1522,1522,1,16,1503,1537,yes
+018291,Hans Fries,1465,circa,1465,agree,1523,last_mention,1520,wikidata_ignored,1460,1470,1523,1563,2,14,1461,1595,yes
+019216,Hans Gallizian,1472,exact,1472,agree,1524,exact,1524,agree,1472,1472,1524,1524,1,24,1487,1531,yes
+019325,Hans Gysin,1611,exact,,no_wikidata,1669,range,,no_wikidata,1611,1611,1664,1674,1,3,1664,1668,yes
+019299,Hans Heinrich Zaeslin,1620,exact,1620,agree,1698,exact,1698,agree,1620,1620,1698,1698,1,4,1625,1675,yes
+018309,Hans Herbst,1470,exact,1470,agree,1552,exact,1552,agree,1470,1470,1552,1552,1,11,1501,1535,yes
+018297,Hans Holbein der Jüngere,1497,range,1497,agree,1543,before,1543,wikidata_used,1492,1502,1542,1544,1,1,1531,1531,yes
+019131,Hans Hug Kluber,1535,range,1535,agree,1578,exact,1578,agree,1530,1540,1578,1578,3,5,1535,1575,yes
+019220,Hans Imer von Gilgenberg,1469,before,,no_wikidata,1533,exact,1533,agree,1439,1469,1533,1533,1,18,1463,1481,yes
+019306,Hans Jakob Zörnlin,1588,exact,1588,agree,1659,exact,1659,agree,1588,1588,1659,1659,1,1,1657,1657,yes
+019243,Hans Kilchmann,1470,before,,no_wikidata,1522,exact,,no_wikidata,1440,1470,1522,1522,1,6,1490,1521,yes
+019254,Hans Konrad Mosis,1645,exact,1645,agree,1691,exact,1691,agree,1645,1645,1691,1691,1,2,1665,1674,yes
+018604,Hans Mentzinger,1492,exact,1492,agree,1550,before,,no_wikidata,1492,1492,1540,1550,2,50,1500,1579,yes
+018349,Hans Nussdorf,1467,first_mention,1420,wikidata_used,1503,exact,1503,agree,1415,1425,1503,1503,1,3,1494,1503,yes
+019265,Hans Reich von Reichenstein,1395,exact,1395,agree,1448,exact,1448,agree,1395,1395,1448,1448,2,3,1436,1450,yes
+019271,Hans Rot,1431,first_mention,,no_wikidata,1452,exact,1452,agree,1361,1417,1452,1452,1,24,1418,1481,yes
+019233,Hans Rudolf Huber,1545,exact,1545,agree,1601,exact,1601,agree,1545,1545,1601,1601,2,10,1572,1614,yes
+018746,Hans Sperrer,1429,exact,,no_wikidata,1456,range,1456,agree,1429,1429,1451,1461,1,3,1450,1459,yes
+019294,Hans Sürlin,1394,first_mention,,no_wikidata,1455,exact,,no_wikidata,1324,1380,1455,1455,1,39,1421,1491,yes
+019296,Hans Trutmann,1476,first_mention,,no_wikidata,1522,exact,,no_wikidata,1406,1462,1522,1522,1,21,1428,1520,yes
+018787,Hans Tugi,1460,circa,1460,agree,1519,exact,1519,agree,1455,1465,1519,1519,1,8,1484,1520,yes
+019307,Hans Zscheckenbürlin,1408,first_mention,,no_wikidata,1477,exact,1477,agree,1338,1394,1477,1477,1,26,1449,1485,yes
+019214,Hans von Flachslanden,1412,exact,1412,agree,1476,exact,1476,agree,1412,1412,1476,1476,1,23,1420,1478,yes
+012855,Hartmann Münch von Münchenstein,1368,first_mention,1386,wikidata_ignored,1424,exact,1424,agree,1298,1354,1424,1424,1,1,1425,1425,yes
+028582,Heinrich Halbisen,1390,circa,1390,agree,1451,before,1451,wikidata_used,1385,1395,1450,1452,1,25,1403,1464,yes
+019239,Heinrich Iselin,1439,exact,1439,agree,1490,exact,1490,agree,1439,1439,1490,1490,1,1,1470,1470,yes
+026015,Heinrich Jeckelmann,1565,exact,1565,agree,1633,exact,1633,agree,1565,1565,1633,1633,1,2,1619,1628,yes
+026023,Heinrich Kisselbach,1600,exact,1600,agree,1673,exact,1673,agree,1600,1600,1673,1673,1,1,1653,1653,yes
+046019,Heinrich Lauterburg,1525,exact,1525,agree,1603,exact,1603,agree,1525,1525,1603,1603,1,13,1564,1581,yes
+019248,Heinrich Meltinger,1471,before,,no_wikidata,1531,exact,1531,agree,1441,1471,1531,1531,1,48,1500,1535,yes
+012195,Heinrich Pantaleon,1522,exact,1522,agree,1595,exact,1595,agree,1522,1522,1595,1595,1,7,1577,1588,yes
+041530,Heinrich Petri,1508,exact,1508,agree,1579,exact,1579,agree,1508,1508,1579,1579,1,34,1527,1588,yes
+014758,Heinrich Ryhiner,1490,circa,1490,agree,1553,exact,1553,agree,1485,1495,1553,1553,1,7,1525,1570,yes
+018778,Heinrich Schwitzer,1424,before,,no_wikidata,1465,before,,no_wikidata,1394,1424,1455,1465,1,5,1455,1477,yes
+019301,Heinrich Zeigler,1410,circa,1410,agree,1481,circa,1481,agree,1405,1415,1476,1486,1,21,1445,1490,yes
+012499,Heinrich von Beinheim,1398,circa,1395,agree,1460,exact,1460,agree,1393,1403,1460,1460,2,18,1439,1469,yes
+019314,Henman Offenburg,1379,exact,1379,agree,1459,exact,1454,disagree,1379,1379,1454,1459,4,45,1405,1460,yes
+025870,Hieronymus Burckhardt,1680,exact,1680,agree,1737,exact,1737,agree,1680,1680,1737,1737,2,5,1688,1699,yes
+041754,Hieronymus Froben,1501,exact,1501,agree,1563,exact,1563,agree,1501,1501,1563,1563,1,4,1526,1541,yes
+023973,Hieronymus Linder,1682,exact,1682,agree,1763,exact,1763,agree,1682,1682,1763,1763,1,8,1683,1700,yes
+019292,Hug Zer Sunnen,1398,first_mention,,no_wikidata,1426,exact,1426,agree,1328,1384,1426,1426,2,7,1400,1423,yes
+044572,Jacob Bertsche,1635,exact,1635,agree,1707,exact,1707,agree,1635,1635,1707,1707,1,18,1659,1696,yes
+012720,Jacob Hüglin,1400,circa,,no_wikidata,1484,exact,,no_wikidata,1395,1405,1484,1484,1,1,1412,1412,yes
+043590,Jakob Klauser,1520,range,1520,agree,1578,,1578,agree,1515,1525,1578,1578,1,2,1541,1543,yes
+044641,Jakob Kündig,1537,first_mention,1504,wikidata_used,1564,exact,1564,agree,1499,1509,1564,1564,1,5,1551,1564,yes
+019318,Jakob Meyer zum Hasen,1482,exact,1482,agree,1531,before,1531,wikidata_used,1482,1482,1530,1532,1,2,1532,1551,yes
+019317,Jakob Meyer zum Hirzen,1473,exact,1473,agree,1541,exact,1541,agree,1473,1473,1541,1541,1,25,1523,1576,yes
+019262,Jakob Oberried,1523,exact,1523,agree,1608,exact,1608,agree,1523,1523,1608,1608,1,7,1548,1601,yes
+019275,Jakob Rüdin,1501,circa,1501,agree,1573,exact,1573,agree,1496,1506,1573,1573,1,26,1521,1580,yes
+018373,Jakob Sarbach,1460,exact,,no_wikidata,1492,exact,1492,agree,1460,1460,1492,1492,2,32,1477,1500,yes
+018784,Jakob Steiner,1510,first_mention,,no_wikidata,1553,circa,1553,agree,1440,1496,1548,1558,1,15,1458,1553,yes
+025309,Jakob Zwinger,1569,exact,1569,agree,1610,exact,1610,agree,1569,1569,1610,1610,1,2,1603,1623,yes
+014150,Jakob von Hertenstein,1460,circa,1460,agree,1527,exact,1527,agree,1455,1465,1527,1527,1,7,1488,1508,yes
+019195,Johann Balthasar Burckhardt,1642,exact,1642,agree,1722,exact,1722,agree,1642,1642,1722,1722,2,14,1663,1699,yes
+021492,Johann Bergmann von Olpe,1455,range,1455,agree,1532,before,1532,wikidata_used,1450,1460,1531,1533,2,8,1496,1531,yes
+019196,Johann Bernhard Burckhardt,1645,exact,1645,agree,1740,exact,1740,agree,1645,1645,1740,1740,2,5,1687,1692,yes
+025840,Johann Caspar Bauhin,1606,exact,1606,agree,1685,exact,1685,agree,1606,1606,1685,1685,2,8,1637,1693,yes
+017041,Johann Christoph Haus,1652,exact,1652,agree,1725,exact,1725,agree,1652,1652,1725,1725,1,3,1679,1685,yes
+021496,Johann Eberlin von Günzburg,1465,circa,1465,agree,1533,exact,1533,agree,1460,1470,1533,1533,1,11,1476,1504,yes
+048977,Johann Friedrich Ryhiner,1574,exact,1574,agree,1634,exact,1634,agree,1574,1574,1634,1634,1,4,1578,1621,yes
+019178,Johann Heinrich Beck,1687,exact,1687,agree,1735,exact,1735,agree,1687,1687,1735,1735,1,1,1699,1699,yes
+014381,Johann Heinrich Glaser,1629,exact,1629,agree,1675,exact,1675,agree,1629,1629,1675,1675,2,14,1643,1696,yes
+049089,Johann Heinrich Keller,1627,exact,1627,agree,1708,exact,1708,agree,1627,1627,1708,1708,2,18,1642,1699,yes
+026177,Johann Heinrich Stähelin,1668,exact,1668,agree,1721,exact,1721,agree,1668,1668,1721,1721,2,9,1676,1698,yes
+017031,Johann Jakob Blarer von Wartensee,1575,circa,1575,agree,1654,exact,1654,agree,1570,1580,1654,1654,1,1,1610,1610,yes
+019322,Johann Jakob Burckhardt,1614,exact,1614,agree,1690,exact,1690,agree,1614,1614,1690,1690,2,27,1631,1694,yes
+043613,Johann Jakob Buxtorf,1645,exact,1645,agree,1704,exact,1704|1705,agree,1645,1645,1704,1704,2,5,1670,1693,yes
+014398,Johann Jakob Harder,1656,exact,1656,agree,1711,exact,1711,agree,1656,1656,1711,1711,1,3,1663,1665,yes
+025991,Johann Jakob Hofmann,1635,exact,1635,agree,1706,exact,1706,agree,1635,1635,1706,1706,2,7,1651,1690,yes
+019130,Johann Jakob Keller,1665,exact,1665,agree,1747,exact,1747,agree,1665,1665,1747,1747,1,3,1676,1692,yes
+019249,Johann Jakob Merian,1648,exact,1648,agree,1724,exact,1724,agree,1648,1648,1724,1724,4,32,1662,1700,yes
+019161,Johann Jakob Thurneysen,1636,exact,1636,agree,1711,exact,1711|1718,agree,1636,1636,1711,1711,1,11,1681,1700,yes
+010913,Johann Jakob Wettstein,1693,exact,1693,agree,1754,exact,1754,agree,1693,1693,1754,1754,1,1,1696,1696,yes
+015864,Johann Konrad von Reinach-Hirzbach,1657,exact,1657,agree,1737,exact,1737,agree,1657,1657,1737,1737,1,2,1677,1684,yes
+017058,Johann Konrad von Roggenbach,1618,exact,1618,agree,1693,exact,1693,agree,1618,1618,1693,1693,1,1,1650,1650,yes
+010609,Johann Ludwig Frey,1682,exact,1682,agree,1759,exact,1759,agree,1682,1682,1759,1759,2,4,1692,1699,yes
+021502,Johann Mathias Gengenbach,1465,first_mention,1465,same_year,1486,exact,,no_wikidata,1395,1451,1486,1486,2,11,1458,1493,yes
+028624,Johann Plattner,1471,first_mention,,no_wikidata,1495,after,,no_wikidata,1401,1457,1495,1535,1,15,1457,1480,yes
+019204,Johann Puliant von Eptingen,1356,first_mention,,no_wikidata,1399,exact,1402,disagree,1286,1342,1399,1402,1,2,1401,1401,yes
+021548,Johann Roman Wonecker,1486,first_mention,,no_wikidata,1523,last_mention,,no_wikidata,1416,1472,1523,1563,2,13,1498,1528,yes
+019197,Johann Rudolf Burckhardt,1620,exact,1620,agree,1683,exact,1683,agree,1620,1620,1683,1683,1,87,1641,1698,yes
+019208,Johann Rudolf Faesch,1572,exact,1572,agree,1659,exact,1659,agree,1572,1572,1659,1659,3,84,1598,1676,yes
+019209,Johann Rudolf Faesch,1644,exact,1644,agree,1709,exact,1709,agree,1644,1644,1709,1709,3,27,1660,1693,yes
+019123,Johann Rudolf Huber,1668,exact,1668,agree,1748,exact,1748,agree,1668,1668,1748,1748,1,2,1696,1700,yes
+019086,Johann Rudolf Wettstein,1594,exact,1594,agree,1666,exact,1666,agree,1594,1594,1666,1666,1,1,1594,1594,yes
+026296,Johann Rudolf Zwinger,1660,exact,1660,agree,1708,exact,1708,agree,1660,1660,1708,1708,1,1,1679,1679,yes
+013026,Johann Ulrich Surgant,1450,circa,1450,agree,1503,exact,1503,agree,1445,1455,1503,1503,2,8,1470,1501,yes
+019268,Johann Wernhard Ringler,1570,exact,1570,agree,1630,exact,1630,agree,1570,1570,1630,1630,2,11,1589,1641,yes
+019283,Johann von Sennheim,1354,first_mention,,no_wikidata,1404,after,,no_wikidata,1284,1340,1404,1435,1,9,1401,1454,yes
+015300,Johannes Amerbach,1440,range,1440|1441,agree,1513,exact,1514,agree,1435,1445,1513,1513,2,3,1491,1496,yes
+025285,Johannes Basilius Herold,1514,exact,1514,agree,1567,exact,1567,agree,1514,1514,1567,1567,1,3,1556,1568,yes
+014279,Johannes Bauhin,1541,circa,1541,agree,1613,exact,1612|1613,agree,1536,1546,1613,1613,1,2,1606,1610,yes
+011592,Johannes Brandmüller,1593,exact,1593,agree,1664,exact,1664,agree,1593,1593,1664,1664,1,50,1613,1678,yes
+012543,Johannes Burkardi,1401,before,,no_wikidata,1471,exact,,no_wikidata,1371,1401,1471,1471,1,1,1419,1419,yes
+014353,Johannes Fatio,1649,exact,1649,agree,1691,exact,1691,agree,1649,1649,1691,1691,1,1,1679,1679,yes
+010611,Johannes Froben,1460,circa,1460,agree,1527,exact,1527,agree,1455,1465,1527,1527,1,21,1506,1531,yes
+021500,Johannes Gebwiler,1450,circa,,no_wikidata,1530,after,,no_wikidata,1445,1455,1530,1550,1,14,1496,1531,yes
+014743,Johannes Gerster,1531,range,,no_wikidata,1531,,1531,agree,1526,1536,1531,1531,1,1,1542,1542,yes
+012658,Johannes Grütsch,1420,circa,,no_wikidata,1470,circa,,no_wikidata,1415,1425,1465,1475,1,1,1455,1455,yes
+014416,Johannes Huber,1507,exact,1507,agree,1571,exact,1571,agree,1507,1507,1571,1571,1,12,1511,1562,yes
+014750,Johannes Knebel,1413,range,1413|1414,agree,1481,range,1481,agree,1408,1418,1476,1486,2,20,1450,1480,yes
+012035,Johannes Kolross,1487,circa,1487,agree,1558,exact,1560,disagree,1482,1492,1558,1560,1,1,1492,1492,yes
+021567,Johannes Kreutzer,1424,range,1424,agree,1468,exact,1468,agree,1419,1429,1468,1468,1,1,1435,1435,yes
+012790,Johannes Murer,1470,first_mention,,no_wikidata,1530,before,1530,wikidata_used,1400,1456,1529,1531,2,51,1437,1579,yes
+019315,Johannes Müller,1669,first_mention,1669,same_year,1691,exact,,no_wikidata,1599,1655,1691,1691,2,97,1606,1695,yes
+021523,Johannes Oporinus,1507,exact,1507,agree,1568,exact,1568,agree,1507,1507,1568,1568,1,14,1550,1568,yes
+029166,Johannes Petri,1441,exact,1441,agree,1511,exact,1511,agree,1441,1441,1511,1511,1,2,1514,1515,yes
+029167,Johannes Pistorius,1664,exact,1664,agree,1730,exact,1730,agree,1664,1664,1730,1730,1,1,1693,1693,yes
+014756,Johannes Reuchlin,1455,exact,1455,agree,1522,exact,1522,agree,1455,1455,1522,1522,1,1,1479,1479,yes
+014760,Johannes Salzmann,1452,first_mention,,no_wikidata,1502,exact,,no_wikidata,1382,1438,1502,1502,1,23,1425,1501,yes
+012948,Johannes Scherrer,1405,first_mention,,no_wikidata,1421,last_mention,,no_wikidata,1335,1391,1421,1461,1,4,1400,1484,yes
+049546,Johannes Tschudy,1672,exact,1672,agree,1736,exact,1736,agree,1672,1672,1736,1736,1,2,1680,1681,yes
+010925,Johannes Wolleb,1586,exact,1586|1589,agree,1629,exact,1629,agree,1586,1586,1629,1629,1,4,1612,1626,yes
+010943,Johannes Zwinger,1634,exact,1634,agree,1696,exact,1696,agree,1634,1634,1696,1696,1,1,1646,1646,yes
+014724,Johannes von Bärenfels,1451,exact,,no_wikidata,1495,before,1495,wikidata_used,1451,1451,1494,1496,1,24,1461,1496,yes
+012854,Konrad Münch von Landskron,1360,first_mention,,no_wikidata,1402,exact,1402,agree,1290,1346,1402,1402,1,1,1400,1400,yes
+049655,Konrad von Waldkirch,1549,exact,1549,agree,1615,circa,1616,agree,1549,1549,1610,1620,1,2,1586,1598,yes
+019185,Lienhard Pfirter,1384,before,,no_wikidata,1430,exact,,no_wikidata,1354,1384,1430,1430,2,2,1417,1417,yes
+018526,Ludwig Bottschuch,1478,first_mention,,no_wikidata,1518,range,,no_wikidata,1408,1464,1513,1523,1,5,1501,1517,yes
+019324,Ludwig Bär,1479,exact,1479,agree,1554,exact,1554,agree,1479,1479,1554,1554,1,10,1515,1537,yes
+046267,Ludwig Iselin,1559,exact,1559,agree,1612,exact,1612,agree,1559,1559,1612,1612,1,3,1573,1604,yes
+019244,Ludwig Kilchmann,1450,exact,1450,agree,1518,exact,1518,agree,1450,1450,1518,1518,1,27,1469,1525,yes
+012843,Ludwig Moser,1442,exact,1442,agree,1510,exact,1510,agree,1442,1442,1510,1510,1,1,1486,1486,yes
+019217,Lukas Gebhart,1523,exact,1523,agree,1593,exact,1593,agree,1523,1523,1593,1593,1,2,1557,1587,yes
+010631,Lukas Gernler,1625,exact,1625,agree,1675,exact,1675,agree,1625,1625,1675,1675,1,2,1674,1686,yes
+019302,Lux Zeigler,1473,before,,no_wikidata,1540,before,,no_wikidata,1443,1473,1530,1540,2,12,1496,1536,yes
+044573,Martin Flach,1445,circa,1440,agree,1511,range,1514,agree,1440,1450,1506,1516,1,32,1463,1510,yes
+018369,Martin Lebzelter,1492,first_mention,,no_wikidata,1520,exact,1520,agree,1422,1478,1520,1520,1,8,1463,1522,yes
+012987,Martin Ströwlin,1429,exact,1429,agree,1500,circa,,no_wikidata,1429,1429,1495,1505,1,5,1461,1488,yes
+019310,Martin Stähelin,1631,exact,1631,agree,1697,exact,1697,agree,1631,1631,1697,1697,1,21,1648,1697,yes
+019228,Marx Heydelin,1490,before,,no_wikidata,1553,exact,,no_wikidata,1460,1490,1553,1553,1,4,1463,1589,yes
+018399,Matthäus Han,1513,circa,1513,agree,1594,before,1578,wikidata_used,1508,1518,1577,1579,1,1,1541,1541,yes
+019139,Matthäus Merian,1621,exact,1621,agree,1687,exact,1687,agree,1621,1621,1687,1687,1,1,1692,1692,yes
+028617,Matthäus Vischer,1623,exact,1623,agree,1695,exact,1695,agree,1623,1623,1695,1695,1,3,1663,1688,yes
+019232,Melchior Hornlocher,1539,exact,1539,agree,1619,exact,1619,agree,1539,1539,1619,1619,1,41,1567,1609,yes
+029159,Michael Furter,1483,before,,no_wikidata,1517,circa,1517,agree,1453,1483,1512,1522,1,10,1483,1512,yes
+041531,Michael Wenssler,1462,first_mention,1472,wikidata_ignored,1499,last_mention,1497,wikidata_ignored,1392,1448,1499,1539,1,7,1479,1497,yes
+018397,Michel Glaser,1435,first_mention,,no_wikidata,1474,last_mention,,no_wikidata,1365,1421,1474,1514,1,8,1456,1521,yes
+028613,Nicolas Passavant,1559,exact,1559,agree,1633,exact,1633,agree,1559,1559,1633,1633,1,14,1608,1644,yes
+012642,Nicolaus Gerung,1410,before,1410,wikidata_used,1478,exact,1478,agree,1405,1415,1478,1478,1,1,1460,1460,yes
+019227,Niklaus Harder,1651,exact,1651,agree,1730,exact,1730,agree,1651,1651,1730,1730,1,7,1654,1692,yes
+019260,Niklaus Murer,1404,first_mention,,no_wikidata,1433,exact,,no_wikidata,1334,1390,1433,1433,2,24,1400,1449,yes
+017034,Niklaus von Diesbach,1478,exact,1478,agree,1550,exact,1550,agree,1478,1478,1550,1550,1,1,1514,1514,yes
+012621,Nikolaus Fries,1420,circa,1420,agree,1498,exact,1498,agree,1415,1425,1498,1498,2,4,1460,1482,yes
+045919,Nikolaus Gürtler,1654,exact,1654,agree,1711,exact,1711,agree,1654,1654,1711,1711,1,9,1669,1684,yes
+025968,Nikolaus Harscher,1683,exact,1683,agree,1742,exact,1742,agree,1683,1683,1742,1742,1,1,1700,1700,yes
+019269,Nikolaus Rippel,1594,exact,1594,agree,1666,exact,1666,agree,1594,1594,1666,1666,1,9,1608,1644,yes
+014757,Nikolaus Rüsch,1430,circa,,no_wikidata,1506,exact,1506,agree,1425,1435,1506,1506,2,21,1461,1521,yes
+011823,Pamphilus Gengenbach,1480,circa,1480,agree,1524,range,1525,agree,1475,1485,1519,1529,1,5,1520,1522,yes
+019180,Peter Bischoff,1470,first_mention,,no_wikidata,1510,exact,,no_wikidata,1400,1456,1510,1510,1,33,1416,1524,yes
+012736,Peter Kistler,1470,first_mention,,no_wikidata,1492,exact,1492,agree,1400,1456,1492,1492,1,1,1436,1436,yes
+026060,Peter Megerlin,1623,exact,1623,agree,1686,exact,1686,agree,1623,1623,1686,1686,1,1,1658,1658,yes
+019263,Peter Offenburg,1458,exact,1458,agree,1514,exact,1514,agree,1458,1458,1514,1514,2,19,1459,1515,yes
+018622,Peter Pfister,1505,first_mention,,no_wikidata,1520,before,1520,wikidata_used,1435,1491,1519,1521,1,15,1485,1508,yes
+019272,Peter Rot,1452,first_mention,,no_wikidata,1487,exact,1487,agree,1382,1438,1487,1487,1,34,1455,1510,yes
+026133,Peter Ryff,1552,exact,1552,agree,1629,exact,1629,agree,1552,1552,1629,1629,1,8,1567,1640,yes
+010909,Peter Werenfels,1627,exact,1627,agree,1703,exact,1703,agree,1627,1627,1703,1703,1,4,1661,1686,yes
+019211,Remigius Faesch,1541,exact,1541,agree,1610,exact,1610,agree,1541,1541,1610,1610,1,10,1548,1604,yes
+015831,Remigius Faesch,1595,exact,1595,agree,1667,exact,1667,agree,1595,1595,1667,1667,1,1,1659,1659,yes
+028648,Rudolf Wülflinger,1407,first_mention,,no_wikidata,1445,exact,1445,agree,1337,1393,1445,1445,1,6,1422,1433,yes
+044893,Salome Schönauer,1640,exact,1640,agree,1691,exact,1691,agree,1640,1640,1691,1691,1,5,1666,1675,yes
+025860,Samuel Braun,1590,exact,1590,agree,1668,exact,1668,agree,1590,1590,1668,1668,1,12,1610,1684,yes
+027702,Samuel Burckhardt,1692,exact,1692,agree,1766,exact,1766,agree,1692,1692,1766,1766,1,1,1692,1692,yes
+015829,Samuel Grynaeus,1539,exact,1539,agree,1599,exact,1599,agree,1539,1539,1599,1599,1,6,1575,1595,yes
+020701,Samuel Mareschall,1554,exact,1554,agree,1640,circa,1640,agree,1554,1554,1635,1645,1,20,1582,1653,yes
+019250,Samuel Merian,1685,exact,1685,agree,1760,exact,1760,agree,1685,1685,1760,1760,1,1,1695,1695,yes
+010529,Sebastian Beck,1583,exact,1583,agree,1654,exact,1654,agree,1583,1583,1654,1654,1,31,1599,1658,yes
+019202,Sebastian Doppenstein,1497,exact,1497,agree,1570,exact,1570,agree,1497,1497,1570,1570,1,3,1554,1561,yes
+015832,Sebastian Faesch,1647,exact,1647,agree,1712,exact,1712,agree,1647,1647,1712,1712,1,1,1694,1694,yes
+041532,Sebastian Petri,1546,exact,1546,agree,1627,exact,1626|1627,agree,1546,1546,1627,1627,1,6,1574,1603,yes
+046253,Sebastian Spörlin,1560,exact,1560,agree,1644,exact,1644,agree,1560,1560,1644,1644,1,28,1581,1645,yes
+025838,Simon Battier,1629,exact,1629,agree,1681,exact,1681,agree,1629,1629,1681,1681,1,17,1631,1694,yes
+010872,Simon Sulzer,1508,exact,1508,agree,1585,exact,1585,agree,1508,1508,1585,1585,1,7,1573,1586,yes
+010944,Theodor Zwinger,1597,exact,1597,agree,1654,exact,1654,agree,1597,1597,1654,1654,1,9,1625,1668,yes
+014707,Theodor Zwinger,1533,exact,1533,agree,1588,exact,1588,agree,1533,1533,1588,1588,1,4,1582,1628,yes
+014708,Theodor Zwinger,1658,exact,1658,agree,1724,exact,1724,agree,1658,1658,1724,1724,1,4,1670,1697,yes
+010647,Thomas Grynaeus,1512,exact,1512,agree,1564,exact,1564,agree,1512,1512,1564,1564,1,3,1555,1563,yes
+010627,Thomas Gyrfalk,1523,first_mention,,no_wikidata,1560,exact,,no_wikidata,1453,1509,1560,1560,1,6,1550,1566,yes
+010787,Thomas Platter,1499,exact,1499,agree,1582,exact,1582,agree,1499,1499,1582,1582,1,8,1541,1571,yes
+012204,Thomas Platter,1574,exact,1574,agree,1628,exact,1628,agree,1574,1574,1628,1628,1,7,1614,1628,yes
+019213,Ulrich Falkner,1466,exact,1466,agree,1551,exact,1551,agree,1466,1466,1551,1551,1,14,1506,1537,yes
+038471,Ulrich Hugwald,1496,exact,1496,agree,1571,exact,1571,agree,1496,1496,1571,1571,1,21,1526,1571,yes
+019282,Ulrich Schultheiss,1533,exact,1533,agree,1599,exact,1599,agree,1533,1533,1599,1599,1,27,1534,1617,yes
+018294,Urs Graf der Ältere,1485,circa,1485,agree,1528,before,1528,wikidata_used,1480,1490,1527,1529,1,1,1520,1520,yes
+019261,Werner Murnhart,1405,,,no_wikidata,1427,exact,,no_wikidata,1405,1405,1427,1427,1,12,1407,1424,yes
+021547,Werner Wölfflin,1444,first_mention,1444,same_year,1499,range,,no_wikidata,1374,1430,1494,1504,2,10,1463,1502,yes
+019205,Wernher Ereman,1414,before,,no_wikidata,1472,after,,no_wikidata,1384,1414,1472,1509,1,4,1432,1462,yes
+014485,Wernli Schilling,1396,first_mention,,no_wikidata,1400,after,,no_wikidata,1326,1382,1400,1440,1,2,1413,1428,yes
+019303,Wilhelm Zeigler,1472,before,,no_wikidata,1521,exact,,no_wikidata,1442,1472,1521,1521,1,4,1501,1518,yes
+010757,Wolfgang Meyer,1577,exact,1577,agree,1653,exact,1653,agree,1577,1577,1653,1653,1,40,1613,1669,yes
+010921,Wolfgang Wissenburg,1494,range,1496,agree,1575,exact,1575,agree,1489,1499,1575,1575,1,7,1534,1563,yes

@@ -25,6 +25,7 @@ import collections
 from difflib import SequenceMatcher
 
 from link_hls import life_envelope, fits_life
+from lifedates import extra, extra_merge
 
 PERSONS = "persons_resolved.json"
 MAXLIFE = 85          # max span (yr) of one merged identity
@@ -130,6 +131,16 @@ def merge_cluster(members, hls_title):
     m["d"] = len({e[0] if isinstance(e, list) else e for e in dos})
     m["y"] = [min(ys0), max(ys1)] if ys0 else base.get("y")
     m["dead_year"] = min(deads) if deads else None
+    # years as a party to a transaction, last year named as living (lifedates.extra)
+    ex = None
+    for p in members:
+        ex = extra_merge(ex, extra(p))
+    m.pop("a", None)
+    m.pop("ly", None)
+    if ex and ex[0]:
+        m["a"] = ex[0]
+    if ex and m.get("y") and (ex[1] or 0) != m["y"][1]:
+        m["ly"] = ex[1] or 0
     for k, v in (("occ", occ), ("tit", tit), ("fam", fam),
                  ("org", org), ("loc", loc), ("dos", dos)):
         if v:
@@ -176,7 +187,8 @@ def cluster_group(members):
             # envelope also holds mentions of a namesake, and merging on overlap
             # chained such entries into persons of 150 years and more
             inside = [p for p in items if p.get("y")
-                      and fits_life(env, p["y"][0], p["y"][1], p.get("dead_year"))]
+                      and fits_life(env, p["y"][0], p["y"][1], p.get("dead_year"),
+                                    extra(p))]
             outside = [p for p in items if p not in inside]
             if inside:
                 clusters.append(inside)

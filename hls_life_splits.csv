@@ -1,0 +1,142 @@
+person,years,mentions,hls_id,hls_title,hls_birth,birth_kind,hls_death,death_kind,life,conflicts,kept,earlier,later
+Claus Mürer,1408–1483,27,019260,Niklaus Murer,1404,first_mention,1433,exact,1334|1390|1433|1433,after_death:10|late_naming:5,1408–1434 ×12,,1449–1483 ×15
+Sebastian Spörlin,1581–1654,23,046253,Sebastian Spörlin,1560,exact,1644,exact,1560|1560|1644|1644,after_death:2,1581–1645 ×20,,1646–1654 ×3
+Hanns von Berenfels,1456–1496,22,014724,Johannes von Bärenfels,1451,exact,1495,before,1451|1451|1494|1496,child:2,1466–1496 ×18,1456–1463 ×4,
+Hanns Zschekaburlin,1455–1485,19,019307,Hans Zscheckenbürlin,1408,first_mention,1477,exact,1338|1394|1477|1477,after_death:6,1455–1474 ×12,,1479–1485 ×7
+Hanns Gilgenberg,1451–1481,17,019220,Hans Imer von Gilgenberg,1469,before,1533,exact,1439|1469|1533|1533,child:5,1463–1481 ×12,1451–1451 ×5,
+Heinrich Meltingers,1510–1529,16,019248,Heinrich Meltinger,1471,before,1531,exact,1441|1471|1531|1531,dead_early:1,1510–1528 ×15,1529–1529 ×1,
+Frantz Brunschweiler,1605–1659,16,019189,Franz Robert Brunschweiler,1635,exact,1690,exact,1635|1635|1690|1690,before_birth:10,1651–1659 ×5,1605–1638 ×11,
+Hanns Rudolff Burckhardt,1606–1686,16,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,after_death:2|before_birth:1,1652–1683 ×12,1606–1606 ×1,1686–1686 ×3
+Benedict Socin,1632–1673,16,019285,Benedikt Socin,1594,exact,1664,exact,1594|1594|1664|1664,dead_early:1,1632–1673 ×15,1659–1659 ×1,
+"Peter , Offenburg",1405–1479,15,019263,Peter Offenburg,1458,exact,1514,exact,1458|1458|1514|1514,before_birth:3|child:8,1474–1479 ×3,1405–1471 ×12,
+Johann Brandmüller,1568–1647,15,011592,Johannes Brandmüller,1593,exact,1664,exact,1593|1593|1664|1664,before_birth:1,1613–1647 ×14,1568–1568 ×1,
+Johann Rudolff Burckhardt,1632–1693,15,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,after_death:1|child:2,1657–1680 ×10,1632–1632 ×3,1691–1693 ×2
+Niclaus Harscher,1647–1700,15,025968,Nikolaus Harscher,1683,exact,1742,exact,1683|1683|1742|1742,before_birth:5|child:3,1700–1700 ×1,1647–1692 ×14,
+Hanns Sperrer,1457–1517,14,018746,Hans Sperrer,1429,exact,1456,range,1429|1429|1451|1461,after_death:7|late_naming:2,1457–1457 ×1,,1463–1517 ×13
+Niclaus Rippel,1590–1644,14,019269,Nikolaus Rippel,1594,exact,1666,exact,1594|1594|1666|1666,before_birth:1|child:8,1608–1644 ×5,1590–1605 ×9,
+Heinrich Meltinger,1500–1526,13,019248,Heinrich Meltinger,1471,before,1531,exact,1441|1471|1531|1531,dead_early:1,1500–1526 ×12,1526–1526 ×1,
+Hanns Sürlin,1434–1491,12,019294,Hans Sürlin,1394,first_mention,1455,exact,1324|1380|1455|1455,after_death:5|late_naming:1,1434–1454 ×4,,1482–1491 ×8
+Emanuel Ryhiner,1574–1630,12,048978,Emanuel Ryhiner,1543,exact,1582,exact,1543|1543|1582|1582,after_death:4|late_naming:2,1574–1580 ×5,,1587–1630 ×7
+Adalberg Meyer,1521–1601,11,019316,Adelberg Meyer zum Pfeil,1482,after,1548,exact,1482|1502|1548|1548,after_death:1|late_naming:3,1521–1526 ×7,,1591–1601 ×4
+Emanuel Socin,1602–1680,11,019311,Emanuel Socin,1628,exact,1717,exact,1628|1628|1717|1717,before_birth:2,1662–1680 ×8,1602–1633 ×3,
+Hanns Rudolf Faesch,1610–1690,11,019209,Johann Rudolf Faesch,1644,exact,1709,exact,1644|1644|1709|1709,before_birth:2,1676–1690 ×9,1610–1628 ×2,
+Samuel Braun,1627–1695,11,025860,Samuel Braun,1590,exact,1668,exact,1590|1590|1668|1668,late_naming:5,1627–1667 ×4,,1680–1695 ×7
+Claus Murer,1407–1469,10,019260,Niklaus Murer,1404,first_mention,1433,exact,1334|1390|1433|1433,after_death:4|late_naming:2,1407–1426 ×4,,1456–1469 ×6
+Andres Ryff,1574–1638,10,018704,Andreas Ryff,1550,exact,1603,exact,1550|1550|1603|1603,late_naming:4,1574–1590 ×6,,1621–1638 ×4
+Johannes Brandmüller,1623–1691,10,011592,Johannes Brandmüller,1593,exact,1664,exact,1593|1593|1664|1664,after_death:2|late_naming:1,1623–1664 ×6,,1680–1691 ×4
+Hanns Jacob Burckhardt,1627–1691,10,019322,Johann Jakob Burckhardt,1614,exact,1690,exact,1614|1614|1690|1690,child:1,1649–1691 ×9,1627–1627 ×1,
+Hanns Rudolph Burckhardt,1649–1692,10,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,after_death:1,1649–1672 ×8,,1692–1692 ×2
+Johannes Gysin,1664–1699,10,019325,Hans Gysin,1611,exact,1669,range,1611|1611|1664|1674,after_death:2|late_naming:1,1664–1668 ×3,,1678–1699 ×7
+Hans Sürlin,1421–1491,9,019294,Hans Sürlin,1394,first_mention,1455,exact,1324|1380|1455|1455,after_death:2|late_naming:1,1421–1439 ×6,,1485–1491 ×3
+Hanns Gengenbach,1458–1499,9,021502,Johann Mathias Gengenbach,1465,first_mention,1486,exact,1395|1451|1486|1486,after_death:1,1458–1477 ×4,,1489–1499 ×5
+Hanns Franck,1468–1537,9,018571,Hans Franck,1505,first_mention,1522,exact,1480|1490|1522|1522,before_birth:1,1510–1537 ×8,1468–1468 ×1,
+Christian Wurstysen,1582–1614,9,018694,Christian Wurstisen,1544,exact,1588,exact,1544|1544|1588|1588,dead_early:3,1582–1614 ×6,1582–1582 ×3,
+Jacob Bertsche,1631–1696,9,044572,Jacob Bertsche,1635,exact,1707,exact,1635|1635|1707|1707,before_birth:1,1679–1696 ×8,1631–1631 ×1,
+Hans Muntzinger,1462–1521,8,018604,Hans Mentzinger,1492,exact,1550,before,1492|1492|1540|1550,before_birth:5,1507–1521 ×2,1462–1500 ×6,
+Jacob Rüedin,1549–1628,8,019275,Jakob Rüdin,1501,circa,1573,exact,1496|1506|1573|1573,after_death:2|late_naming:5,1549–1549 ×1,,1597–1628 ×7
+Caspar Bauhin,1614–1664,8,014280,Caspar Bauhin,1560,exact,1624,exact,1560|1560|1624|1624,after_death:1|late_naming:5,1614–1614 ×1,,1629–1664 ×7
+Johann Müllers,1623–1691,8,019315,Johannes Müller,1669,first_mention,1691,exact,1599|1655|1691|1691,dead_early:5,1623–1691 ×3,1669–1672 ×5,
+Hanns Heinrich Glaser,1629–1675,8,014381,Johann Heinrich Glaser,1629,exact,1675,exact,1629|1629|1675|1675,child:1,1643–1675 ×7,1629–1629 ×1,
+Hans Scherer,1459–1526,7,012948,Johannes Scherrer,1405,first_mention,1421,last_mention,1335|1391|1421|1461,after_death:1|beyond:1|late_naming:4,1459–1459 ×1,,1478–1526 ×6
+Peter Offenburgs,1463–1474,7,019263,Peter Offenburg,1458,exact,1514,exact,1458|1458|1514|1514,child:3|dead_early:1,1474–1474 ×1,1463–1474 ×6,
+Andres Bischoff,1468–1542,7,019183,Andreas Bischoff,1481,exact,1558,exact,1481|1481|1558|1558,before_birth:1,1497–1542 ×6,1468–1468 ×1,
+Eucharins Holtzach,1501–1538,7,019231,Eucharius Holzach,1480,before,1521,exact,1475|1485|1521|1521,after_death:2,1501–1519 ×5,,1538–1538 ×2
+Ulrich Schultheiss,1556–1633,7,019282,Ulrich Schultheiss,1533,exact,1599,exact,1533|1533|1599|1599,late_naming:1,1556–1573 ×6,,1633–1633 ×1
+Sebastian Beckh,1579–1624,7,010529,Sebastian Beck,1583,exact,1654,exact,1583|1583|1654|1654,before_birth:2|dead_early:1,1605–1610 ×2,1579–1624 ×5,
+Hanns Müller,1581–1653,7,019315,Johannes Müller,1669,first_mention,1691,exact,1599|1655|1691|1691,before_birth:5,1647–1653 ×2,1581–1594 ×5,
+Johann Rudolph Burckhardt,1621–1675,7,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,child:2,1656–1675 ×4,1621–1625 ×3,
+Gedeon Sarasin,1628–1686,7,028615,Gédéon Sarasin,1573,exact,1636,exact,1573|1573|1636|1636,after_death:4|late_naming:1,1628–1630 ×2,,1685–1686 ×5
+Andreas Burckhardts,1653–1681,7,019190,Andreas Burckhardt,1604,exact,1667,exact,1604|1604|1667|1667,dead_early:1,1667–1681 ×6,1653–1653 ×1,
+Johannes Müllers,1661–1700,7,019315,Johannes Müller,1669,first_mention,1691,exact,1599|1655|1691|1691,after_death:1,1661–1692 ×2,,1693–1700 ×5
+Hans von Berenfels,1428–1482,6,014724,Johannes von Bärenfels,1451,exact,1495,before,1451|1451|1494|1496,before_birth:2,1470–1482 ×2,1428–1463 ×4,
+Ulrich Schulthess,1539–1587,6,019282,Ulrich Schultheiss,1533,exact,1599,exact,1533|1533|1599|1599,child:4,1577–1587 ×2,1539–1540 ×4,
+Hanns Miller,1581–1661,6,019315,Johannes Müller,1669,first_mention,1691,exact,1599|1655|1691|1691,before_birth:2,1649–1661 ×2,1581–1601 ×4,
+Sebastean Spörlin,1587–1662,6,046253,Sebastian Spörlin,1560,exact,1644,exact,1560|1560|1644|1644,late_naming:2,1587–1592 ×4,,1662–1662 ×2
+Hannss Merian,1600–1669,6,019249,Johann Jakob Merian,1648,exact,1724,exact,1648|1648|1724|1724,before_birth:4,1669–1669 ×1,1600–1650 ×5,
+Christoff Burckhardt,1617–1693,6,019192,Christoph Burckhardt,1631,exact,1705,exact,1631|1631|1705|1705,before_birth:3,1680–1693 ×3,1617–1625 ×3,
+Hieronymo Burckhardt,1643–1695,6,025870,Hieronymus Burckhardt,1680,exact,1737,exact,1680|1680|1737|1737,before_birth:5,1695–1695 ×1,1643–1674 ×5,
+Salome Burckhardtin,1650–1696,6,044893,Salome Schönauer,1640,exact,1691,exact,1640|1640|1691|1691,after_death:1|child:1,1666–1675 ×4,1650–1650 ×1,1696–1696 ×1
+Gregorio Brandmüllern,1669–1676,6,043586,Gregor Brandmüller,1661,exact,1691,exact,1661|1661|1691|1691,child:1,1676–1676 ×1,1669–1672 ×5,
+Hanns Mentzinger,1457–1525,5,018604,Hans Mentzinger,1492,exact,1550,before,1492|1492|1540|1550,before_birth:2,1519–1525 ×3,1457–1477 ×2,
+Hanns Gallician,1480–1531,5,019216,Hans Gallizian,1472,exact,1524,exact,1472|1472|1524|1524,child:1,1501–1531 ×4,1480–1480 ×1,
+Martin Letzelter,1493–1558,5,018369,Martin Lebzelter,1492,first_mention,1520,exact,1422|1478|1520|1520,late_naming:1,1493–1493 ×4,,1558–1558 ×1
+Hans Froben,1506–1522,5,010611,Johannes Froben,1460,circa,1527,exact,1455|1465|1527|1527,dead_early:1,1506–1522 ×4,1522–1522 ×1,
+Jacob Meyger,1540–1549,5,019317,Jakob Meyer zum Hirzen,1473,exact,1541,exact,1473|1473|1541|1541,after_death:2,1540–1540 ×3,,1546–1549 ×2
+"Blasin , Schöllin",1559–1577,5,019279,Bläsi Schölli,1518,first_mention,1569,exact,1448|1504|1569|1569,after_death:1,1559–1566 ×2,,1571–1577 ×3
+Hans Müllers,1640–1653,5,019315,Johannes Müller,1669,first_mention,1691,exact,1599|1655|1691|1691,dead_early:3,1640–1644 ×2,1645–1653 ×3,
+Johannes Müller,1640–1690,5,019315,Johannes Müller,1669,first_mention,1691,exact,1599|1655|1691|1691,dead_early:1,1640–1690 ×4,1668–1668 ×1,
+Johann Jacob Burckhardt,1667–1697,5,019322,Johann Jakob Burckhardt,1614,exact,1690,exact,1614|1614|1690|1690,after_death:1,1667–1667 ×1,,1696–1697 ×4
+Hans von Friesen,1440–1500,4,018291,Hans Fries,1465,circa,1523,last_mention,1460|1470|1523|1563,before_birth:3,1500–1500 ×1,1440–1440 ×3,
+Heinrich Halbysen,1448–1472,4,028582,Heinrich Halbisen,1390,circa,1451,before,1385|1395|1450|1452,after_death:1,1448–1448 ×2,,1455–1472 ×2
+Hansen von Flachslanden,1449–1498,4,019214,Hans von Flachslanden,1412,exact,1476,exact,1412|1412|1476|1476,late_naming:1,1449–1469 ×3,,1498–1498 ×1
+Michel Glasers,1456–1464,4,018397,Michel Glaser,1435,first_mention,1474,last_mention,1365|1421|1474|1514,dead_early:1,1456–1457 ×3,1464–1464 ×1,
+Hans Herbst,1457–1510,4,018309,Hans Herbst,1470,exact,1552,exact,1470|1470|1552|1552,before_birth:1,1509–1510 ×3,1457–1457 ×1,
+Heinrich Zeiglers,1460–1490,4,019301,Heinrich Zeigler,1410,circa,1481,circa,1405|1415|1476|1486,dead_early:1,1489–1490 ×3,1460–1460 ×1,
+Peter Roth,1461–1535,4,019272,Peter Rot,1452,first_mention,1487,exact,1382|1438|1487|1487,late_naming:2,1461–1465 ×2,,1535–1535 ×2
+Wernher Wolfflin,1463–1509,4,021547,Werner Wölfflin,1444,first_mention,1499,range,1374|1430|1494|1504,after_death:1,1463–1490 ×3,,1509–1509 ×1
+Jacob Rudin,1508–1569,4,019275,Jakob Rüdin,1501,circa,1573,exact,1496|1506|1573|1573,child:1|dead_early:1,1529–1569 ×2,1508–1569 ×2,
+"Fridlin , Ryff",1531–1587,4,025293,Fridolin Ryff,1488,circa,1554,exact,1483|1493|1554|1554,after_death:1,1531–1535 ×3,,1587–1587 ×1
+anthoni Glasers,1538–1575,4,018344,Antoni Glaser,1505,first_mention,1551,before,1477|1495|1550|1552,late_naming:1,1538–1543 ×2,,1559–1575 ×2
+Hanns Ringler,1567–1600,4,019268,Johann Wernhard Ringler,1570,exact,1630,exact,1570|1570|1630|1630,before_birth:2,1600–1600 ×1,1567–1576 ×3,
+Samuel Braunen,1587–1610,4,025860,Samuel Braun,1590,exact,1668,exact,1590|1590|1668|1668,before_birth:1,1610–1610 ×3,1587–1587 ×1,
+Felix Platters,1599–1675,4,012203,Felix Platter,1536,exact,1614,exact,1536|1536|1614|1614,beyond:1,1599–1610 ×3,,1675–1675 ×1
+Emanuel Socins,1603–1680,4,019311,Emanuel Socin,1628,exact,1717,exact,1628|1628|1717|1717,before_birth:2|child:1,1680–1680 ×1,1603–1637 ×3,
+Caspar Bauhinus,1608–1672,4,014280,Caspar Bauhin,1560,exact,1624,exact,1560|1560|1624|1624,after_death:1|late_naming:1,1608–1617 ×2,,1631–1672 ×2
+Christoph Burckhardt,1616–1650,4,019192,Christoph Burckhardt,1631,exact,1705,exact,1631|1631|1705|1705,before_birth:2,1650–1650 ×2,1616–1630 ×2,
+Johann Brandtmüller,1618–1662,4,011592,Johannes Brandmüller,1593,exact,1664,exact,1593|1593|1664|1664,dead_early:2,1618–1631 ×2,1652–1662 ×2,
+Hanns Keller,1621–1659,4,049089,Johann Heinrich Keller,1627,exact,1708,exact,1627|1627|1708|1708,before_birth:2,1642–1659 ×2,1621–1624 ×2,
+Simon Battieren,1631–1663,4,025838,Simon Battier,1629,exact,1681,exact,1629|1629|1681|1681,dead_early:1,1631–1652 ×3,1663–1663 ×1,
+Hans Rudolph Burckhardt,1643–1692,4,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,after_death:1,1643–1645 ×2,,1692–1692 ×2
+Gregorius Brandmüller,1646–1680,4,043586,Gregor Brandmüller,1661,exact,1691,exact,1661|1661|1691|1691,before_birth:1|child:1,1678–1680 ×2,1646–1672 ×2,
+Jacob Meyer,1415–1492,3,019317,Jakob Meyer zum Hirzen,1473,exact,1541,exact,1473|1473|1541|1541,before_birth:2,1492–1492 ×1,1415–1447 ×2,
+Hansen von Sennhein,1423–1441,3,019283,Johann von Sennheim,1354,first_mention,1404,after,1284|1340|1404|1435,after_death:1,1423–1424 ×2,,1441–1441 ×1
+Peter Offenburg,1442–1500,3,019263,Peter Offenburg,1458,exact,1514,exact,1458|1458|1514|1514,before_birth:1,1500–1500 ×1,1442–1463 ×2,
+Joh . de Bary,1449–1512,3,019170,Hans Bär,1484,before,1515,exact,1454|1484|1515|1515,before_birth:1,1486–1512 ×2,1449–1449 ×1,
+Hansen Muntzinger,1462–1528,3,018604,Hans Mentzinger,1492,exact,1550,before,1492|1492|1540|1550,before_birth:1,1528–1528 ×2,1462–1462 ×1,
+Hansen Muntzingers,1474–1509,3,018604,Hans Mentzinger,1492,exact,1550,before,1492|1492|1540|1550,before_birth:2,1509–1509 ×1,1474–1483 ×2,
+Hans Mürern,1523–1544,3,012790,Johannes Murer,1470,first_mention,1530,before,1400|1456|1529|1531,after_death:2,1523–1523 ×1,,1533–1544 ×2
+"Caspar , Krug",1559–1630,3,019245,Caspar Krug,1518,exact,1579,exact,1518|1518|1579|1579,late_naming:1,1559–1559 ×2,,1630–1630 ×1
+Sebastian Beck,1610–1680,3,010529,Sebastian Beck,1583,exact,1654,exact,1583|1583|1654|1654,late_naming:1,1610–1626 ×2,,1680–1680 ×1
+Hanns Rudolph Burckhart,1610–1663,3,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,before_birth:2,1663–1663 ×1,1610–1619 ×2,
+Nicolai Passavant,1623–1679,3,028613,Nicolas Passavant,1559,exact,1633,exact,1559|1559|1633|1633,after_death:2,1623–1623 ×1,,1679–1679 ×2
+Johann Müllern,1625–1655,3,019315,Johannes Müller,1669,first_mention,1691,exact,1599|1655|1691|1691,dead_early:1,1625–1655 ×2,1655–1655 ×1,
+Johann Wolleben,1626–1671,3,010925,Johannes Wolleb,1586,exact,1629,exact,1586|1586|1629|1629,after_death:1,1626–1626 ×2,,1671–1671 ×1
+Johann Mülleren,1629–1661,3,019315,Johannes Müller,1669,first_mention,1691,exact,1599|1655|1691|1691,dead_early:1,1629–1634 ×2,1661–1661 ×1,
+Frantz Brunschweilern,1633–1664,3,019189,Franz Robert Brunschweiler,1635,exact,1690,exact,1635|1635|1690|1690,before_birth:1,1664–1664 ×1,1633–1636 ×2,
+Johann Brandmüller,1646–1695,3,011592,Johannes Brandmüller,1593,exact,1664,exact,1593|1593|1664|1664,late_naming:1,1646–1646 ×1,,1678–1695 ×2
+Niclaus Gürtlern,1657–1669,3,045919,Nikolaus Gürtler,1654,exact,1711,exact,1654|1654|1711|1711,child:2,1669–1669 ×1,1657–1658 ×2,
+Johannes Stähelin,1663–1697,3,026177,Johann Heinrich Stähelin,1668,exact,1721,exact,1668|1668|1721|1721,before_birth:1,1697–1697 ×2,1663–1663 ×1,
+Hanns Rudolf Burckhard,1668–1698,3,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,after_death:1,1668–1668 ×1,,1693–1698 ×2
+Christof Burckhardts,1679–1697,3,019192,Christoph Burckhardt,1631,exact,1705,exact,1631|1631|1705|1705,dead_early:2,1679–1679 ×1,1697–1697 ×2,
+Johann Rudolf Burckhardts,1680–1693,3,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,dead_early:1,1685–1693 ×2,1680–1680 ×1,
+Johannes Kutzer,1400–1435,2,021567,Johannes Kreutzer,1424,range,1468,exact,1419|1429|1468|1468,before_birth:1,1435–1435 ×1,1400–1400 ×1,
+Henman v . Offenburg,1405–1405,2,019314,Henman Offenburg,1379,exact,1459,exact,1379|1379|1454|1459,dead_early:1,1405–1405 ×1,1405–1405 ×1,
+Hanns von Flachslanden,1414–1451,2,019214,Hans von Flachslanden,1412,exact,1476,exact,1412|1412|1476|1476,child:1,1451–1451 ×1,1414–1414 ×1,
+Heman Offenburg,1429–1502,2,019314,Henman Offenburg,1379,exact,1459,exact,1379|1379|1454|1459,late_naming:1,1429–1429 ×1,,1502–1502 ×1
+Hans von Flachsland,1437–1507,2,019214,Hans von Flachslanden,1412,exact,1476,exact,1412|1412|1476|1476,after_death:1,1437–1437 ×1,,1507–1507 ×1
+Henman Offenbergs,1448–1525,2,019314,Henman Offenburg,1379,exact,1459,exact,1379|1379|1454|1459,beyond:1,1448–1448 ×1,,1525–1525 ×1
+Hansen Bart,1449–1505,2,019170,Hans Bär,1484,before,1515,exact,1454|1484|1515|1515,before_birth:1,1505–1505 ×1,1449–1449 ×1,
+Heinrich Halbysen,1451–1470,2,028582,Heinrich Halbisen,1390,circa,1451,before,1385|1395|1450|1452,late_naming:1,1451–1451 ×1,,1470–1470 ×1
+Hans Scherrer,1459–1479,2,012948,Johannes Scherrer,1405,first_mention,1421,last_mention,1335|1391|1421|1461,after_death:1,1459–1459 ×1,,1479–1479 ×1
+Andreas Bischoff,1473–1508,2,019183,Andreas Bischoff,1481,exact,1558,exact,1481|1481|1558|1558,before_birth:1,1508–1508 ×1,1473–1473 ×1,
+Hans von Gengenbach,1482–1498,2,021502,Johann Mathias Gengenbach,1465,first_mention,1486,exact,1395|1451|1486|1486,after_death:1,1482–1482 ×1,,1498–1498 ×1
+Andress Bischoffs,1486–1488,2,019183,Andreas Bischoff,1481,exact,1558,exact,1481|1481|1558|1558,dead_early:1,1486–1486 ×1,1488–1488 ×1,
+Wernher Wölfflin,1501–1572,2,021547,Werner Wölfflin,1444,first_mention,1499,range,1374|1430|1494|1504,beyond:1,1501–1501 ×1,,1572–1572 ×1
+Werner Wölfflin,1501–1510,2,021547,Werner Wölfflin,1444,first_mention,1499,range,1374|1430|1494|1504,after_death:1,1501–1501 ×1,,1510–1510 ×1
+Hanns Frank,1503–1541,2,018571,Hans Franck,1505,first_mention,1522,exact,1480|1490|1522|1522,late_naming:1,1503–1503 ×1,,1541–1541 ×1
+Martin Lebzelter,1512–1565,2,018369,Martin Lebzelter,1492,first_mention,1520,exact,1422|1478|1520|1520,late_naming:1,1512–1512 ×1,,1565–1565 ×1
+Ulrich Schulthes,1526–1574,2,019282,Ulrich Schultheiss,1533,exact,1599,exact,1533|1533|1599|1599,before_birth:1,1574–1574 ×1,1526–1526 ×1,
+Hans Muntzinger,1540–1590,2,018604,Hans Mentzinger,1492,exact,1550,before,1492|1492|1540|1550,late_naming:1,1540–1540 ×1,,1590–1590 ×1
+Bernhardt Brandt,1557–1628,2,019186,Bernhard Brand,1525,exact,1594,exact,1525|1525|1594|1594,late_naming:1,1557–1557 ×1,,1628–1628 ×1
+Ullrich Hugwaldt,1558–1590,2,038471,Ulrich Hugwald,1496,exact,1571,exact,1496|1496|1571|1571,late_naming:1,1558–1558 ×1,,1590–1590 ×1
+Christian Wurstisen,1582–1604,2,018694,Christian Wurstisen,1544,exact,1588,exact,1544|1544|1588|1588,dead_early:1,1604–1604 ×1,1582–1582 ×1,
+Hans Rudolph Burckhart,1585–1663,2,019197,Johann Rudolf Burckhardt,1620,exact,1683,exact,1620|1620|1683|1683,before_birth:1,1663–1663 ×1,1585–1585 ×1,
+Sebastian Faeschen,1640–1694,2,015832,Sebastian Faesch,1647,exact,1712,exact,1647|1647|1712|1712,before_birth:1,1694–1694 ×1,1640–1640 ×1,
+Christoph Burckhardts,1642–1650,2,019192,Christoph Burckhardt,1631,exact,1705,exact,1631|1631|1705|1705,dead_early:1,1642–1642 ×1,1650–1650 ×1,
+Christoph Burckhardts,1647–1647,2,019192,Christoph Burckhardt,1631,exact,1705,exact,1631|1631|1705|1705,dead_early:1,1647–1647 ×1,1647–1647 ×1,
+Johann Jacob Zörnlin,1657–1662,2,019306,Hans Jakob Zörnlin,1588,exact,1659,exact,1588|1588|1659|1659,dead_early:1,1662–1662 ×1,1657–1657 ×1,
+Emanuel König,1657–1683,2,026025,Emanuel König,1658,exact,1731,exact,1658|1658|1731|1731,before_birth:1,1683–1683 ×1,1657–1657 ×1,
+Renigins Faesch,1659–1692,2,015831,Remigius Faesch,1595,exact,1667,exact,1595|1595|1667|1667,late_naming:1,1659–1659 ×1,,1692–1692 ×1
+Emanuel König,1673–1684,2,026025,Emanuel König,1658,exact,1731,exact,1658|1658|1731|1731,dead_early:1,1673–1673 ×1,1684–1684 ×1,
+Hieronymus Burckhardt,1676–1699,2,025870,Hieronymus Burckhardt,1680,exact,1737,exact,1680|1680|1737|1737,before_birth:1,1699–1699 ×1,1676–1676 ×1,
+Johannes Tschudz,1680–1692,2,049546,Johannes Tschudy,1672,exact,1736,exact,1672|1672|1736|1736,dead_early:1,1680–1680 ×1,1692–1692 ×1,

@@ -59,7 +59,7 @@ module, but is no longer the reference.
 | 1 | `extract_persons.py` | `persons.csv` (one row per named person reference: name, year, dossier, occupation text/norm/OhdAB, title, family relation, location, affiliation, deceased marker, event roles, page image URL — gitignored, regenerable), `documents.csv` (one row per register card with its page images, gitignored) and `dossiers.csv` (one row per property: coordinates, address, type, street, history, doc count, years, sources) |
 | 2 | `build_data.py` | `persons_resolved.json` (dossier-scoped identity resolution → person index for `index.html`), `guild_data.json` |
 | 3 | `build_families.py` | `families_graph.json`, `families_index.json` (kinship edges from the `family` / inheritance event groups) |
-| 4 | `link_hls.py` → `apply_hls_links.py` | `link_candidates_hls.csv` → `hls` field on persons and tree nodes; only biographies tied to Basel are candidates (see "HLS data") |
+| 4 | `link_hls.py` ⇄ `apply_hls_links.py`, repeated until nothing splits | `link_candidates_hls.csv` → `hls` field on persons and tree nodes; only biographies tied to Basel are candidates (see "HLS data"); the life is checked mention by mention and a person reaching outside it is split (see "Life dates") |
 | 5 | `enrich_wikidata.py`, `link_wikidata_kin.py` | `wd` (QID, dates, GND, kin) and `kin` cross-references |
 | 6 | `dedupe_persons.py`, `dedupe_corpus.py --apply`, `dedupe_offices.py --apply`, `dedupe_rare_surnames.py --apply` | deduplicated `persons_resolved.json` |
 | 6b | `link_bli_hgb.py` → `dedupe_spelling.py --apply`, repeated until the dry run merges nothing | spelling variants merged on the evidence of BLI owners, the street-level index and shared name variants (see below) |
@@ -68,15 +68,17 @@ module, but is no longer the reference.
 | 9 | `link_hls.py` (on the deduplicated index), `link_hbls_hls.py` (private inputs only), `link_hbls_hgb.py --all`, `build_identity_clusters.py`, `build_merged_persons.py`, `make_persons_web.py` | cross-corpus identities (`merged_persons.json`, `persons_web.json`; see `hbls-extraction/DEDUP_PLAN.md`) |
 
 Figures of the current build (street corpus 0.3.0): 238,957 person mentions in
-75,447 documents → 152,250 resolved names → 137,612 persons after the name-based
-dedupe passes → **127,132 persons** after `dedupe_spelling.py`;
-309 carry an HLS link, to 253 biographies (1,025 confident links before dedupe,
-from 1,709 candidates), 208 of them with parents or spouses read from the article
-text; 3,694 geolocated dossiers; 14,917 persons with movement between
-≥2 properties; 3,488 cross-corpus identities (326 attested in the register).
+75,447 documents → 152,250 resolved names (152,394 once 141 of them are split
+at the bounds of a known life) → 137,640 persons after the name-based dedupe
+passes → **127,175 persons** after `dedupe_spelling.py`;
+309 carry an HLS link, to 250 biographies (1,163 confident links before dedupe,
+from 1,773 candidates), 205 of them with parents or spouses read from the article
+text; 3,694 geolocated dossiers; 14,898 persons with movement between
+≥2 properties; 3,502 cross-corpus identities (338 attested in the register).
 The HLS and identity figures are those of the run with the private HLS export
 (2026-11); they are lower than before because namesakes from other cantons are
-no longer linked, see "HLS data".
+no longer linked, see "HLS data", and every linked person is checked against
+the life of its biography mention by mention, see "Life dates".
 
 ### Cross-check against *Basler Liegenschaften 1400–1700 Interaktiv*
 
@@ -98,7 +100,7 @@ python3 link_bli_hgb.py               # BLI from a sibling checkout, $BLI_DIR or
 |---|---|
 | `link_bli_hgb.csv` | one row per named BLI person actor (124,890): dossier, owner documents, the eos persons and street persons it resolves to |
 | `bli_doc_crosswalk.csv` | 1,864 register cards that the corpus re-issued under a new id (page order corrected), matched by their page images |
-| `bli_hgb_findings.csv` | the discrepancies, typed, with the side the error most likely sits on (18,911 at the first comparison, 9,760 now) |
+| `bli_hgb_findings.csv` | the discrepancies, typed, with the side the error most likely sits on (18,911 at the first comparison, 9,820 now) |
 | `dedupe_spelling_candidates.csv` | pairs of city-wide persons whose names differ only in spelling and that a BLI owner or a street-level person holds as one, or that carry the same name variant in one dossier at the same time (gitignored: tied to one state of the index) |
 | `bli_hgb_report.md` | counts, a description and examples per finding type |
 
@@ -119,14 +121,14 @@ brackets are those of the first comparison, on the index of 136,470 persons.
   of the index — one lifespan of 80 years, nobody joins more than 15 years
   after the group's earliest death, different HLS/Wikidata identities never
   merge, nothing joins an HLS-linked person from outside that person's known
-  life. On the current build: 137,612 → **127,132 persons**; 598 pairs stay
+  life. On the current build: 137,640 → **127,175 persons**; 655 pairs stay
   apart because a guard refuses them.
 - **Same name, same dossier, same years, two persons** [1,107 groups]. *Fixed
   where the evidence is clean:* the pair is a third source for
   `dedupe_spelling.py` when the shared variant is a full name, the canonical
   names are spelling variants and neither person is first mentioned after the
-  other is called deceased. 650 groups remain: bare names, differing given
-  names, death splits, and 200 pairs a guard refuses.
+  other is called deceased. 663 groups remain: bare names, differing given
+  names, death splits, and 210 pairs a guard refuses.
 - **Persons spanning more than a lifespan** [62, all HLS-linked, up to 187
   years]. *Fixed:* `link_hls.date_relation` only links a cluster whose whole
   mention span fits the life (not before birth − 5, not beyond death + 60, not
@@ -134,12 +136,13 @@ brackets are those of the first comparison, on the index of 136,470 persons.
   than 5 years before it), `dedupe_persons.py` takes what lies inside the life
   envelope instead of everything overlapping it, and every later pass asks
   `link_hls.fits_life` before merging into an HLS-linked person. No person
-  exceeds 80 years outside a known life any more; 5 do inside one, through
+  exceeds 80 years outside a known life any more; 10 do inside one, through
   post-mortem mentions. The life is that of the HLS article the link was
   judged against (`link_hls.life_dates`; the link carries its dates), not a
   mix with Wikidata, which rounds an unknown birth to the century. The
   stricter rule cost links: 1,651 confident ones instead of 2,193 on that
-  build.
+  build. Since then the life is checked mention by mention and persons are
+  split at its bounds instead of being refused as a whole, see "Life dates".
 - **Bare given names merged across generations inside a dossier** [34 pure
   bare names, 30 attached to a fuller name]. *Fixed:* `build_data.person_runs`
   replaces the fixed 80-year bins. A bare name starts a new person after 15
@@ -198,7 +201,7 @@ Three things the first run with the article texts brought up, and what
   Müller* collect Hans Georg, Hans Jakob and Hans Rudolf Müller. A register
   person who carries more given names than the article is no longer a
   candidate (`link_hls.article_given_ratio`). Biographies that collect
-  conflicting given names: 3 of 253, all spelling noise (it was 105 of 472).
+  conflicting given names: 2 of 250, both spelling noise (it was 105 of 472).
 - **Life dates of the export.** 1,009 rows carry birth and death in reverse
   order (Adam Petri: "born 1527, died 1454") and never fitted anybody — among
   them Thomas and Felix Platter and Johannes Froben; where the birth is
@@ -208,8 +211,8 @@ Three things the first run with the article texts brought up, and what
   export's two dates lie less than 15 years apart.
 
 With the texts at hand `extract_genealogy.py` and `extract_spouses.py` read
-parents and spouses from the articles (203 fathers, 98 mothers, 174 spouses for
-208 persons) and `link_hls_families.py` links the family articles afresh (403
+parents and spouses from the articles (200 fathers, 98 mothers, 169 spouses for
+205 persons) and `link_hls_families.py` links the family articles afresh (403
 surname families).
 
 **Without the export** the link stage runs from public data:
@@ -218,12 +221,13 @@ HLS biography carries the HLS id as property P902) into `hls_bios_wikidata.csv`
 (tracked: 25,157 biographies, 23,877 with life dates, 22,846 with a GND id), and
 `link_hls.default_hls()` falls back to it. What the texts decided is kept in two
 small tracked tables written on the run with the export: `hls_basel.csv` (HLS id
-→ strong / weak / none, no article text) and `hls_family_links.csv` (surname →
-family article). The text-mining passes skip themselves. A run from the public
+→ strong / weak / none, and the qualifiers of the two life dates — exact,
+circa, before, after, first mention …; no article text) and
+`hls_family_links.csv` (surname → family article). The text-mining passes skip themselves. A run from the public
 tables differs in detail — Wikidata's dates and name forms are not the
 export's, and 296 biographies of the period that the export does not hold have
 no Basel class and stay candidates — but arrives at nearly the same identities
-(3,461 against 3,488; 3,395 groups identical).
+(3,458 against 3,502; 3,398 groups identical).
 
 Likewise `hbls-extraction/rebuild_hbls_persons.py` recovers the link-ready HBLS
 person records from the tracked `hbls_web.json` when the PDF-derived
@@ -235,6 +239,80 @@ the private inputs in place — the PDF-derived `hbls_persons.json` /
 `hbls_articles.json` and the GND tables `link_hbls_gnd*.csv` — `rebuild.sh`
 runs Stage 1 (`link_hbls_hls.py`) and builds the identities from the real
 candidate tables instead of the frozen groups.
+
+### Life dates: HLS and Wikidata against the register
+
+A register person linked to a biography has to live inside that biography's
+life. Up to the build of 2026-11 this was judged per person, by the first and
+last year of its mentions and with wide tolerances (five years before a birth,
+fifteen as living after a death). Checked mention by mention, a third of the
+linked persons held mentions the life excludes: a buyer of 1678 for a man born
+in 1687, a seller of 1650 for one who died in 1629 — the same-named father, son
+or grandson, whom the name-based resolution had put into one person.
+`lifedates.py` is the stricter test, and such persons are now split.
+
+**The life.** Two sources, neither of which always gives a birth and a death:
+
+- the HLS header qualifies its dates — *um 1485*, *vor 1546*, *nach 1535*,
+  *erstmals erwähnt 1505*, *letztmals 1499*. `lifedates.date_kinds` reads the
+  qualifier and `bounds` turns it into an earliest and a latest year (a person
+  first mentioned in 1505 was an adult then, so born 1435–1491);
+- Wikidata's dates with their precision (`fetch_wikidata_dates.py` →
+  `hls_wikidata_dates.csv`). A date given to the year is a second opinion: it
+  replaces a vague HLS date it is compatible with, and where it contradicts a
+  firm one the life is widened to hold both — a mention is only impossible
+  when both sources exclude it.
+
+**The mentions.** For every mention — its year, whether the person is called
+deceased, whether the person acts in the document (seller, buyer, claimant …;
+`lifedates.STRONG_ROLES`) — the life excludes: any mention before the birth; a
+party to a transaction younger than 14; "deceased" before the death; a party
+to a transaction after the death; a name carried on as living for more than 15
+years after the death (a neighbour's house and a rent roll keep the name of the
+late owner for a while, not for a generation); anything more than 60 years
+after the death.
+
+**The split.** `build_data.py` keeps the mentions of every raw person
+(`persons_rows.json`, working data). `link_hls.py` then checks each candidate
+biography mention by mention, and `apply_hls_links.py` takes a linked person
+apart where the life ends (`lifedates.partition`): the mentions of the life
+keep the link, those of an earlier and of a later bearer of the name become
+persons of their own. The two scripts run in turn until nothing splits, since
+a part split off may fit another biography. Every person carries `a`, the
+first and last year as a party to a transaction, and — where it is not the
+last mention — `ly`, the last year named as living; the link keeps the bounds
+of the life (`hls.life`: born between the first two years, died between the
+last two). With these the dedupe passes ask the same question of whole persons
+(`link_hls.fits_life`) and do not merge the halves again. `build_identity_clusters.py` applies the test to the
+identities: register records that the life of the cluster's HLS article cannot
+hold, and HBLS records of another generation, are detached.
+
+Result on the current build: 141 persons of the raw index were taken apart, for
+80 of the 250 linked biographies — an earlier bearer of the name was split off
+83 times, a later one 61 times (mentioned before the birth 44, a party after
+the death 39, named as living long after it 33, called deceased before the
+death 28, a party as a child 19, beyond 60 years 4). Splitting instead of
+refusing keeps more of the register with the biographies: 1,163 confident links
+instead of 1,025. The 309 linked persons (3,126 mentions) all fit the life of
+their biography, and a re-check that maps every mention back onto the final
+index finds none that lies unambiguously outside (before: about 350 of 3,200).
+The identity clusters lose 4 register records and 15 HBLS records of another
+generation. Of the 500 life dates of the linked biographies, 365 agree between
+HLS and Wikidata, 103 have no year-precise date on Wikidata, 17 are vague in
+the HLS and taken from Wikidata, 4 are an HLS first or last mention that
+Wikidata repeats as the date, 7 are Wikidata years that contradict an HLS
+fence and are ignored, and 4 are firm contradictions — the deaths of Henman
+Offenburg (1459 / 1454), Diebold Ryff (1586 / 1547), Johann Puliant von
+Eptingen (1399 / 1402) and Johannes Kolross (1558 / 1560), where the life
+holds both years. `check_life_dates.py` writes the
+cross-check up — `life_dates_check.csv` (per biography: HLS date and qualifier,
+Wikidata's years, how they were reconciled, the life used),
+`hls_life_splits.csv` (every person taken apart, with what was kept and what
+went to the earlier or later bearer) and `life_dates_report.md`.
+
+Known limits: where father and son both have a biography and the register
+names both alike (the four Johannes Buxtorf), a person fits two lives and stays
+unlinked; and the event roles the test relies on are machine annotations.
 
 ### Correlation analysis pipeline
 
@@ -261,7 +339,7 @@ periphery (Spearman ρ = −0.155 / +0.107, both p < 1e-9).
 
 ## Zunftmeister der Basler Zünfte
 
-`zunftmeister/zunftmeister.csv` sammelt die veröffentlichten Meisterlisten von acht Basler Zünften (Weinleuten, Hausgenossen, Gartnern, Gerbern, Safran, Goldener Stern, Schmieden, Schiffleuten; 722 Einträge). `link_zunftmeister.py` gleicht die Meister bis 1710 mit `merged_persons.json` und, in einem zweiten Durchlauf, mit allen 127 132 HGB-Personen aus `persons_resolved.json` ab und schreibt `link_zunftmeister_candidates.csv` (Kandidatenliste zur Durchsicht, mit Stufen `stark` / `wahrscheinlich` / `möglich`, Spalte `pool`). Quellen, Eigenheiten und Methode: [`zunftmeister/README.md`](zunftmeister/README.md); Tests: `tests/test_link_zunftmeister.py`.
+`zunftmeister/zunftmeister.csv` sammelt die veröffentlichten Meisterlisten von acht Basler Zünften (Weinleuten, Hausgenossen, Gartnern, Gerbern, Safran, Goldener Stern, Schmieden, Schiffleuten; 722 Einträge). `link_zunftmeister.py` gleicht die Meister bis 1710 mit `merged_persons.json` und, in einem zweiten Durchlauf, mit allen 127 175 HGB-Personen aus `persons_resolved.json` ab und schreibt `link_zunftmeister_candidates.csv` (Kandidatenliste zur Durchsicht, mit Stufen `stark` / `wahrscheinlich` / `möglich`, Spalte `pool`). Quellen, Eigenheiten und Methode: [`zunftmeister/README.md`](zunftmeister/README.md); Tests: `tests/test_link_zunftmeister.py`.
 
 ## SPARQL endpoint
 

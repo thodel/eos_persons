@@ -37,6 +37,8 @@ import os
 from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+import lifedates  # noqa: E402
+
 csv.field_size_limit(10_000_000)
 
 
@@ -147,7 +149,10 @@ for r in rd("link_hbls_hls_candidates.csv"):
         union(a, h); stats["hbls_hls"] += 1
 
 # 2) HGB ↔ HLS
+hls_life = {}        # HLS id -> life (lifedates.bounds: article dates + Wikidata)
 for r in rd("link_candidates_hls.csv"):
+    if r.get("life"):
+        hls_life[r["hls_id"]] = lifedates.Life(*map(int, r["life"].split("|")))
     if (r["n_candidates_for_person"] == "1" and r["date_relation"] == "overlap"
             and float(r["score"]) >= 0.85):
         g = node(hgb_key(r["hgb_name"], r["hgb_year_min"]), "hgb", r["hgb_name"],
@@ -187,8 +192,13 @@ for r in rd("link_hbls_gnd_lobid_candidates.csv"):
 
 # 6) HGB ↔ GND / Wikidata  (from the existing enrich_wikidata `wd` field)
 pr = os.path.join(HERE, "persons_resolved.json")
+hgb_person = {}      # hgb node -> (first year, last year, first "deceased", *lifedates.extra)
 if os.path.exists(pr):
     for p in json.load(open(pr, encoding="utf-8")):
+        if p.get("y"):
+            hgb_person.setdefault(hgb_key(p["n"], p["y"][0]),
+                                  (p["y"][0], p["y"][-1], p.get("dead_year"),
+                                   *lifedates.extra(p)))
         wd = p.get("wd")
         if not wd or not p.get("y"):
             continue
@@ -235,6 +245,46 @@ def out_of_span(span, lo, hi):
     return m0 < lo or m0 > hi
 
 
+def contradicts_life(n, lives):
+    """An HGB record that none of the cluster's HLS lives can hold — checked
+    like every HGB↔HLS link (lifedates.fits): not before the birth, no party
+    to a transaction as a child or after the death, not called deceased before
+    the death. Such a record came in over an HBLS link, whose dates are looser,
+    and is a namesake."""
+    rec = hgb_person.get(n)
+    if rec is None:
+        sp = meta[n].get("span")
+        if not sp or sp[0] is None:
+            return False
+        last = sp[1] if sp[1] is not None else sp[0]
+        rec = (sp[0], last, None, None, last)
+    return not any(lifedates.fits(life, *rec) for life in lives)
+
+
+HBLS_DATE_TOL = 5
+
+
+def other_family_member(n, nodes, lives):
+    """An HBLS record born at another time than the cluster's HLS person, in a
+    cluster that also holds an HBLS record agreeing with the HLS — a father, a
+    son or a cousin of the same name pulled in over a shared authority id.
+    (A lone HBLS record is left alone: its first year is often a year of
+    office, not a birth.)"""
+    def off(m):
+        return m["b"] and not any(life.blo - HBLS_DATE_TOL <= m["b"] <= life.bhi + HBLS_DATE_TOL
+                                  for life in lives)
+
+    def agrees(m):
+        return ((m["b"] and any(life.blo - HBLS_DATE_TOL <= m["b"] <= life.bhi + HBLS_DATE_TOL
+                                for life in lives))
+                or (m["d"] and any(life.dlo - HBLS_DATE_TOL <= m["d"] <= life.dhi + HBLS_DATE_TOL
+                                   for life in lives)))
+    if not off(meta[n]):
+        return False
+    return any(agrees(meta[o]) and not off(meta[o])
+               for o in nodes if o != n and meta[o]["corpus"] == "hbls")
+
+
 # ── assemble components ──────────────────────────────────────────────────────
 comp = defaultdict(list)
 for n in parent:
@@ -244,14 +294,33 @@ SRC = {"hbls", "hgb", "hls"}
 clusters = []
 n_trimmed_hgb = 0
 n_trimmed_clusters = 0
+trimmed_hbls = []
 for root, nodes in comp.items():
     if len(nodes) < 2:
         continue
 
-    # trim out-of-span HGB homonyms first, using the HLS/HBLS life span
+    # Cross-check against the life the cluster's HLS article and Wikidata give:
+    # HGB records the life cannot hold and HBLS records of another generation
+    # are detached, so that what remains is one person.
+    lives = []
+    for n in nodes:
+        if meta[n]["corpus"] == "hls":
+            life = hls_life.get(n[4:]) or lifedates.bounds(meta[n]["b"], None, meta[n]["d"], None)
+            if life:
+                lives.append(life)
     lo, hi = life_span(nodes)
     trimmed = []
-    if lo is not None:
+    if lives:
+        kept = []
+        for n in nodes:
+            if meta[n]["corpus"] == "hgb" and contradicts_life(n, lives):
+                trimmed.append(n)
+            elif meta[n]["corpus"] == "hbls" and other_family_member(n, nodes, lives):
+                trimmed_hbls.append(n)
+            else:
+                kept.append(n)
+        nodes = kept
+    elif lo is not None:
         kept = []
         for n in nodes:
             if meta[n]["corpus"] == "hgb" and out_of_span(meta[n].get("span"), lo, hi):
@@ -327,6 +396,7 @@ multi = [c for c in clusters if len(c["corpora"]) >= 2]
 flagged = [c for c in clusters if c["conflicts"]]
 withgnd = [c for c in clusters if c["gnd"]]
 print("edges unioned:", dict(stats))
+print(f"detached HBLS relatives      : {len(trimmed_hbls)} (born at another time than the HLS person)")
 print(f"trimmed HGB homonyms         : {n_trimmed_hgb} "
       f"from {n_trimmed_clusters} clusters (out-of-span, detached)")
 print(f"\nclusters (size≥2)            : {len(clusters)}")
