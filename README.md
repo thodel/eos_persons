@@ -259,6 +259,10 @@ transaction value falls and in-kind obligations rise from the urban core to the
 periphery (Spearman ρ = −0.155 / +0.107, both p < 1e-9).
 - `build_sparql_index.py` — **run on demand** to pre-build `persons_sparql_index.json`, a cached index for `persons_sparql.html`. The page works without it by querying the SPARQL endpoint live, but the cache makes searching instant. Depends on endpoint availability; re-run when the graph is updated.
 
+## Zunftmeister der Basler Zünfte
+
+`zunftmeister/zunftmeister.csv` sammelt die veröffentlichten Meisterlisten von acht Basler Zünften (Weinleuten, Hausgenossen, Gartnern, Gerbern, Safran, Goldener Stern, Schmieden, Schiffleuten; 722 Einträge). `link_zunftmeister.py` gleicht die Meister bis 1710 mit `merged_persons.json` ab und schreibt `link_zunftmeister_candidates.csv` (Kandidatenliste zur Durchsicht, mit Stufen `stark` / `wahrscheinlich` / `möglich`). Quellen, Eigenheiten und Methode: [`zunftmeister/README.md`](zunftmeister/README.md); Tests: `tests/test_link_zunftmeister.py`.
+
 ## SPARQL endpoint
 
 `persons_sparql.html` and `build_sparql_index.py` query the Economies of Space LOD endpoint at `https://sparql-gdb.lod4hss.org/eos` ([graph docs](https://github.com/history-unibas/economies-of-space-lod)). When no cached index is present the page falls back to live queries, with a 20 s client-side timeout so an unreachable endpoint surfaces a clear error rather than hanging.

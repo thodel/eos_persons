@@ -1,0 +1,30 @@
+zunft,master,year_from,year_to,person_id,person,birth,death,mention_span,basis,name_surname,name_given,recorded_master,trade_match,status,wikidata,gnd,tier
+Gartnern,Johannes Friedrich Ryhiner,1620,1621,person:00025,Johann Friedrich Ryhiner,1574,1634,1573-1621,life,1.0,1.0,,,merged,Q57338195,122119657,wahrscheinlich
+Gartnern,Michel Freyburger,1641,1642,person:02414,Michael Freiburger,1587,1649,,life,0.9,0.92,,,merged,,1274001846,wahrscheinlich
+Gartnern,Benedikt Socin,1651,1656,person:00094,Benedikt Socin,1594,1664,1601-1682,life,1.0,1.0,ja,,merged,Q55874494,130680826,stark
+Gartnern,Niklaus Rippel,1656,,person:00024,Nikolaus Rippel,1594,1666,1590-1673,life,1.0,1.0,,,merged,Q1991655,130682020,wahrscheinlich
+Gartnern,Niklaus Rippel,1656,,person:01880,Nikolaus Rippel,1633,1707,1690-1690,life,1.0,1.0,,,merged,,1159671583,wahrscheinlich
+Gartnern,Hironimus Menzinger,1661,1668,person:02674,Hieronymus Menzinger,1631,1672,,life,1.0,0.84,,,merged,,1209235439,möglich
+Gartnern,Franz Robert Brunschwyler,1675,1681,person:00118,Franz Robert Brunschweiler,1635,1690,1633-1698,life,0.88,1.0,,,merged,Q78059433,121932826,wahrscheinlich
+Gartnern,Hans Jakob Socin,1688,1691,person:03122,Joh.Jakob Socin,1658,1699,,life,1.0,1.0,,,merged,,1135990557,wahrscheinlich
+Gerbern,Andreas Burckhardt,1691,,person:01464,Andreas Burckhardt,1652,1731,1669-1700,life,1.0,1.0,,ja,merged,Q107000464,1089843224,stark
+Goldener Stern,Samuel Brun (Braun),1659,,person:01563,Samuel Braun,1590,1668,1587-1684,life,0.89,1.0,,ja,merged,Q3471061,119411105,wahrscheinlich
+Hausgenossen,Hans Peyer,1455,1474,person:00893,Hans Peyer,1450,1532,,life,1.0,1.0,,,merged,Q96368219,1327729997,wahrscheinlich
+Hausgenossen,Balthasar Hütschi,1463,1477,person:01863,Balthasar Hützschin,1430,1481,1440-1483,life,1.0,1.0,,ja,merged,Q96317816,,stark
+Hausgenossen,Eucharius Holzach,1517,1521,person:01476,Eucharius Holzach,1480,1521,1497-1530,life,1.0,1.0,,,merged,Q15455574,1016279167,wahrscheinlich
+Hausgenossen,Jakob Rüdin,1534,1542,person:01498,Jakob Rüdin,1501,1573,1508-1618,life,1.0,1.0,ja,ja,merged,Q94927173,1075259614,stark
+Hausgenossen,Heinrich Petri,1554,1579,person:01493,Heinrich Petri,1508,1579,1527-1606,life,1.0,1.0,,,merged,Q55842868,124875130,wahrscheinlich
+Hausgenossen,Remigius Fäsch,1573,1593,person:00132,Remigius Faesch,1541,1610,1548-1604,life,0.91,1.0,,,merged,Q94792648,135925738,wahrscheinlich
+Hausgenossen,Hans Rudolf Fäsch,1619,1629,person:00042,Johann Rudolf Faesch,1572,1659,1573-1696,life,0.91,1.0,,,merged,Q21567780,122119673,wahrscheinlich
+Hausgenossen,Hans Heinrich Brandmüller,1646,1662,person:01501,Johannes Brandmüller,1593,1664,1613-1691,life,1.0,0.85,,,merged,Q107000168,124304702,möglich
+Hausgenossen,Felix Platter,1664,1670,person:01538,Felix Platter,1605,1671,1638-1682,life,1.0,1.0,,,merged,Q18624068,100397581,wahrscheinlich
+Hausgenossen,Martin Stähelin,1671,1689,person:00005,Martin Stähelin,1631,1697,1648-1697,life,1.0,1.0,ja,,merged,Q55891658,1075553679,stark
+Hausgenossen,Niklaus Rippel,1691,1694,person:01880,Nikolaus Rippel,1633,1707,1690-1690,life,1.0,1.0,,,merged,,1159671583,wahrscheinlich
+Safran,Henman Offenburg,1412,,person:00038,Henman Offenburg,1379,1459,1416-1460,life,1.0,1.0,ja,,merged,Q19840804,11858961X,stark
+Safran,Hans Zscheckenpürlin,1442,,person:02021,Hans Zscheckenbürlin,1408,1477,1480-1480,life,0.93,1.0,,,merged,,,wahrscheinlich
+Schmieden,Krug Caspar,1557,,person:01469,Caspar Krug,1518,1579,1527-1578,life,1.0,1.0,,,merged,Q96322267,1052511856,wahrscheinlich
+Schmieden,Hornlocher Melchior,1579,,person:00002,Melchior Hornlocher,1539,1619,1565-1609,life,1.0,1.0,ja,ja,merged,Q96322036,1074217136,stark
+Weinleuten,Beat Falkner (Batt Valckner),1549,1563,person:02039,Beat Falkner,1520,1564,1562-1562,life,1.0,1.0,,,merged,,,wahrscheinlich
+Weinleuten,Marx Russinger,1570,1577,person:02978,Marx Russinger,1540,1583,,life,1.0,1.0,,,merged,,1037562089,wahrscheinlich
+Weinleuten,Theodor Hertenstein,1574,1584,person:02052,Theodor Hertenstein,1543,1586,1571-1571,life,1.0,1.0,,ja,merged,,,stark
+Weinleuten,Sebastian Beck,1637,1659,person:00114,Sebastian Beck,1583,1654,1594-1680,life,1.0,1.0,,,merged,Q55122745,115791620,wahrscheinlich
