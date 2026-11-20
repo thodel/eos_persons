@@ -66,30 +66,46 @@ def entry(n, y, c=1, **kw):
 
 
 def test_envelope_merges_entries_inside_it_only():
-    inside = [entry("Hans Müller", [1470, 1500]), entry("Hanns Müller", [1505, 1560])]
-    reaching_out = entry("Hans Müller", [1417, 1500])          # starts before birth − 10
-    late = entry("Hans Müller", [1560, 1604])                  # ends after death + 60
-    clusters = DP.cluster_group(inside + [reaching_out, late])
+    # the life is 1448–1521; an entry is "inside" when lifedates.fits says so
+    inside = [entry("Hans Müller", [1470, 1500]), entry("Hanns Müller", [1505, 1530]),
+              entry("Hans Müller", [1525, 1560], dead_year=1525, ly=0)]   # post-mortem references
+    before_birth = entry("Hans Müller", [1417, 1500])
+    late_living = entry("Hans Müller", [1560, 1604])            # never called deceased
+    child = entry("Hans Müller", [1455, 1458], a=[1455, 1458])   # a party at seven
+    clusters = DP.cluster_group(inside + [before_birth, late_living, child])
     spans = sorted((min(p["y"][0] for p in c), max(p["y"][1] for p in c)) for c in clusters)
-    assert (1470, 1560) in spans
-    assert all(hi - lo <= 90 for lo, hi in spans)
-    assert len(clusters) == 3
+    # the three inside are one person; the two around the birth are left to
+    # the lifespan rule (one older namesake), the late one stays alone
+    assert spans == [(1417, 1500), (1470, 1560), (1560, 1604)]
+    merged = DP.merge_cluster(inside + [entry("Hans Müller", [1490, 1510], a=[1492, 1509])],
+                              "Johann Müller")
+    assert merged["a"] == [1492, 1509]
 
 
 # ── the guard every later dedupe pass asks ───────────────────────────────────
 
 def test_life_envelope_and_fit():
     env = life_envelope({"wd": {"b": 1680, "d": 1762}})
-    assert env == (1670, 1822, 1762)
-    assert fits_life(env, 1700, 1760)
+    assert tuple(env) == (1680, 1680, 1762, 1762)
+    assert fits_life(env, 1700, 1760, None, (None, 1760))
     assert not fits_life(env, 1624, 1699)            # first mention 56 years before birth
-    assert not fits_life(env, 1700, 1830)            # beyond the post-mortem window
+    assert not fits_life(env, 1679, 1760)            # … or one year before it
+    # `extra` = (years as a party, last year named as living), lifedates.extra
+    assert not fits_life(env, 1700, 1830, 1765)      # beyond the post-mortem window
     assert not fits_life(env, 1700, 1760, 1740)      # called deceased 22 years too early
-    assert fits_life(env, 1700, 1780, 1765)
+    assert fits_life(env, 1700, 1780, 1765, (None, 1760))    # named after the death, as deceased
+    assert fits_life(env, 1700, 1775, None, (None, 1775))    # … or for a while without the word
+    assert not fits_life(env, 1700, 1780, None, (None, 1780))    # but not for a generation
+    # the years as a party to a transaction
+    assert fits_life(env, 1685, 1760, None, ([1700, 1760], 1760))
+    assert not fits_life(env, 1685, 1760, None, ([1690, 1760], 1760))     # a seller at ten
+    assert not fits_life(env, 1700, 1770, 1770, ([1700, 1768], 1768))     # a buyer six years dead
     assert life_envelope({"n": "nobody"}) is None
     assert fits_life(None, 1400, 1700)               # no known life: nothing to check
-    assert life_envelope({"wd": {"d": 1530}}) == (1435, 1590, 1530)
-    assert life_envelope({"wd": {"b": 1492}}) == (1482, 1642, None)
+    # the bounds apply_hls_links.py keeps on the link take precedence
+    assert tuple(life_envelope({"hls": {"id": "1", "b": 1505, "bk": "first_mention",
+                                        "life": [1435, 1491, 1551, 1551]}})) \
+        == (1435, 1491, 1551, 1551)
 
 
 def test_no_dedupe_pass_adds_namesakes_from_outside_a_known_life():

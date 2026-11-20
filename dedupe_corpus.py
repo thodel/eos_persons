@@ -31,6 +31,7 @@ import collections
 from difflib import SequenceMatcher
 
 from link_hls import life_envelope, fits_life
+from lifedates import extra, extra_merge
 
 PERSONS = "persons_resolved.json"
 MAXLIFE = 80
@@ -201,6 +202,16 @@ def merge_cluster(members):
     m["y"] = [min(ys0), max(ys1)] if ys0 else base.get("y")
     deads = [p["dead_year"] for p in members if p.get("dead_year")]
     m["dead_year"] = min(deads) if deads else None
+    # years as a party to a transaction, last year named as living (lifedates.extra)
+    ex = None
+    for p in members:
+        ex = extra_merge(ex, extra(p))
+    m.pop("a", None)
+    m.pop("ly", None)
+    if ex and ex[0]:
+        m["a"] = ex[0]
+    if ex and m.get("y") and (ex[1] or 0) != m["y"][1]:
+        m["ly"] = ex[1] or 0
     for k in ("occ", "tit", "fam", "org", "loc", "dos"):
         v = dedup_list(*[p.get(k) for p in members])
         if v:
@@ -235,7 +246,7 @@ def main():
             "occ": set(o.lower() for o in p.get("occ", [])),
             "loc": set(l.lower() for l in p.get("loc", [])),
             "y0": (p.get("y") or [None])[0], "y1": (p.get("y") or [None, None])[1],
-            "dead": p.get("dead_year"), "lk": link_key(p),
+            "dead": p.get("dead_year"), "lk": link_key(p), "x": extra(p),
         })
 
     # block by (Kölner-Phonetik surname code, given-sequence) so phonetically
@@ -252,6 +263,7 @@ def main():
     gdead = [m["dead"] for m in meta]
     glk = [m["lk"] for m in meta]
     genv = [life_envelope(p) for p in persons]    # known life of an HLS-linked person
+    gx = [m["x"] for m in meta]                   # lifedates.extra of the group
 
     def find(x):
         while parent[x] != x:
@@ -281,10 +293,12 @@ def main():
             if dead is not None and lo > dead + DEAD_GRACE:
                 return
             # nothing joins an HLS-linked person from outside that person's life
-            if not fits_life(genv[ra] or genv[rb], lo, hi, dead):
+            if not fits_life(genv[ra] or genv[rb], lo, hi, dead,
+                             extra_merge(gx[ra], gx[rb])):
                 return
         parent[ra] = rb
         genv[rb] = genv[ra] or genv[rb]
+        gx[rb] = extra_merge(gx[ra], gx[rb])
         gy0[rb] = min(y0s) if y0s else gy1[rb]
         gy1[rb] = max(y1s) if y1s else gy1[rb]
         gdead[rb] = min([d for d in (gdead[ra], gdead[rb]) if d is not None], default=None)

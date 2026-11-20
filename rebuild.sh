@@ -9,13 +9,13 @@
 # Stages, in order:
 #   extract     corpus → persons.csv, documents.csv, dossiers.csv; street-level index
 #   data        persons.csv → persons_resolved.json (raw), guild_data.json
-#   links       HLS candidates → links → Wikidata → kinship
+#   links       HLS candidates → links, persons split at the life's bounds → Wikidata → kinship
 #   dedupe      the four name-based passes
 #   spelling    link_bli_hgb.py ⇄ dedupe_spelling.py until nothing merges
 #   families    family graph, roles, movements, flow field, dossier map
 #   identities  HBLS / HLS / GND / Wikidata identities (Stage 1–4)
 #   srbas       Jahrrechnungen candidates
-#   report      BLI report on the final index, tests
+#   report      life-date check, BLI report on the final index, tests
 #
 # Inputs it expects next to this repository: the DHBern street corpus and
 # basler-liegenschaften-interaktiv (or .bli_cache/, see link_bli_hgb.py --fetch).
@@ -31,6 +31,7 @@ cd "$(dirname "$0")"
 STAGES=(extract data links dedupe spelling families identities srbas report)
 
 step() { echo; echo "### $*"; "$@"; }
+lines() { if [ -f "$1" ]; then wc -l < "$1"; else echo 0; fi; }
 
 stage_extract() {
   step python3 extract_persons.py
@@ -42,8 +43,21 @@ stage_data() {
 }
 
 stage_links() {
-  step python3 link_hls.py
-  step python3 apply_hls_links.py
+  # On the raw index the life is checked mention by mention: a person whose
+  # mentions reach outside the life of the biography is split there
+  # (apply_hls_links.py), and a part split off may fit another biography —
+  # hence in turn, until nothing splits.
+  local before after round
+  rm -f hls_life_splits.csv
+  for round in 1 2 3 4 5 6; do
+    before=$(lines hls_life_splits.csv)
+    step python3 link_hls.py
+    step python3 apply_hls_links.py
+    after=$(lines hls_life_splits.csv)
+    echo "round $round: $((after - before)) lines added to hls_life_splits.csv"
+    [ "$after" = "$before" ] && break
+    [ "$round" = "6" ] && { echo "the life splits did not settle in 6 rounds" >&2; return 1; }
+  done
   step python3 enrich_wikidata.py
   rm -f /tmp/wd_kin.json                      # link_wikidata_kin's cache is per QID set
   step python3 link_wikidata_kin.py
@@ -112,6 +126,7 @@ stage_srbas() {
 }
 
 stage_report() {
+  step python3 check_life_dates.py
   step python3 link_bli_hgb.py
   step python3 -m pytest tests mcp_server/tests -q
 }

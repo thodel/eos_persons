@@ -291,3 +291,6 @@ dedupe_spelling_clusters.csv
 # private inputs (HLS export etc.) — never commit
 private_inputs/
 hls_articles.csv
+
+# mention lists of the raw index (build_data.py), working data
+persons_rows.json

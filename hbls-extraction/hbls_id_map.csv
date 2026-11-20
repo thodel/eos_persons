@@ -153,7 +153,7 @@ hbls:2:1436,hbls:2:384:BROSI:2
 hbls:2:1437,hbls:2:385:BROSI:0
 hbls:2:1440,hbls:2:386:BROYE:1
 hbls:2:1452,hbls:2:389:BRÜCKER:4
-hbls:2:1467,hbls:2:391:BRÜHLMANN:2
+hbls:2:1468,hbls:2:391:BRÜHLMANN:2
 hbls:2:147,hbls:2:78:BECK:2:1
 hbls:2:1485,hbls:2:391:BRÜSTLEIN:2
 hbls:2:1487,hbls:2:391:BRÜSTLEIN:7
@@ -456,7 +456,7 @@ hbls:3:1064,hbls:3:199:FOLLETÊTE:1
 hbls:3:1065,hbls:3:199:FOLLETÊTE:2
 hbls:3:1072,hbls:3:200:FONJALLAZ:2
 hbls:3:1075,hbls:3:200:FONJALLAZ:6
-hbls:3:1107,hbls:3:206:FORCART:2
+hbls:3:1108,hbls:3:206:FORCART:2
 hbls:3:1109,hbls:3:206:FORCART:3
 hbls:3:1111,hbls:3:206:FORCHHAMMER:2
 hbls:3:1114,hbls:3:207:FOREL:4
@@ -1094,6 +1094,7 @@ hbls:5:3200,hbls:5:424:PETTAVEL:4
 hbls:5:3303,hbls:5:431:PFAFF:0
 hbls:5:3309,hbls:5:433:PFEFFEL:0
 hbls:5:3324,hbls:5:436:PFIRSTIINGER:0
+hbls:5:3327,hbls:5:436:PFISTER:4
 hbls:5:3348,hbls:5:439:PFLÜGER:5
 hbls:5:3355,hbls:5:440:PFYFFER:7
 hbls:5:3401,hbls:5:443:PFYL:7
@@ -1569,6 +1570,7 @@ hbls:6:2318,hbls:6:400:SIRVEN:0
 hbls:6:2320,hbls:6:402:SISSACH:1
 hbls:6:2332,hbls:6:411:SOAVE:2
 hbls:6:2337,hbls:6:412:SOCIN:4
+hbls:6:2339,hbls:6:412:SOCIN:6
 hbls:6:2342,hbls:6:412:SOCIN:12
 hbls:6:2344,hbls:6:412:SOCIN:16
 hbls:6:2346,hbls:6:412:SOCIN:19
@@ -1924,7 +1926,6 @@ hbls:7:2931,hbls:7:632:WUNDERLI:5
 hbls:7:2944,hbls:7:634:WURSTEMBERGER:14
 hbls:7:2950,hbls:7:634:WURSTEMBERGER:21
 hbls:7:2975,hbls:7:636:WYDLER:2
-hbls:7:299,hbls:7:60:TREMBLEY:1
 hbls:7:2996,hbls:7:638:WYRSCH:7
 hbls:7:3120,hbls:7:646:WYTTENBACH:1
 hbls:7:3134,hbls:7:649:YERSIN:2

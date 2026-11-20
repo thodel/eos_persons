@@ -245,8 +245,8 @@ docker run --rm -v /data/hgb:/data hgb-mcp python -c \
   "import db; db.set_db_path('/data/hgb.db'); print(db.identity_stats())"
 ```
 
-Expected right now (rebuild of 2026-11 with the HLS export): 3,488 identities,
-3,220 with a GND id, 34 in all three corpora. `build_identities.py` drops and rebuilds only `identities` and
+Expected right now (rebuild of 2026-11 with the HLS export): 3,502 identities,
+3,233 with a GND id, 33 in all three corpora. `build_identities.py` drops and rebuilds only `identities` and
 `fts_identities`, so re-running it is safe and never touches the HGB tables.
 
 ## Available tools
@@ -300,9 +300,9 @@ Three levels of granularity, easily confused — pick by the question asked:
 | Who appears in the land register? | `search_hgb_persons` (register persons) |
 | Who was this person, across all our sources? | `search_identities` (resolved people) |
 
-Current contents: **3,488** resolved people — 3,220 with a GND id, 1,685 with a
-Wikidata QID, 2,484 with occupations, 622 with recorded works, 326 attested in
-the HGB land register, 34 in all three corpora (146 flagged for review). The
+Current contents: **3,502** resolved people — 3,233 with a GND id, 1,700 with a
+Wikidata QID, 2,505 with occupations, 622 with recorded works, 338 attested in
+the HGB land register, 33 in all three corpora (145 flagged for review). The
 register figures fell with the 2026-11 rebuild: lexicon persons are only linked
 to the Basel register when their article ties them to Basel, which removed the
 namesakes from other cantons (see the top-level README, "HLS data").

@@ -26,6 +26,7 @@ from difflib import SequenceMatcher
 from dedupe_corpus import (koelner, given_seq, surname_raw, link_key, merge_cluster)
 
 from link_hls import life_envelope, fits_life
+from lifedates import extra, extra_merge
 
 PERSONS = "persons_resolved.json"
 MAXLIFE = 80
@@ -61,7 +62,7 @@ def main():
     grp = {i: {"y0": (persons[i].get("y") or [None])[0],
                "y1": (persons[i].get("y") or [None, None])[1],
                "lk": link_key(persons[i]), "env": life_envelope(persons[i]),
-               "dead": persons[i].get("dead_year")} for i in kp_of}
+               "dead": persons[i].get("dead_year"), "x": extra(persons[i])} for i in kp_of}
 
     def find(x):
         while parent[x] != x:
@@ -86,11 +87,12 @@ def main():
         # nothing joins an HLS-linked person from outside that person's life
         env = grp[ra]["env"] or grp[rb]["env"]
         dead = min((d for d in (grp[ra]["dead"], grp[rb]["dead"]) if d), default=None)
-        if not fits_life(env, lo, hi, dead):
+        x = extra_merge(grp[ra]["x"], grp[rb]["x"])
+        if not fits_life(env, lo, hi, dead, x):
             return
         parent[ra] = rb
         grp[rb] = {"y0": lo, "y1": hi, "lk": grp[ra]["lk"] or grp[rb]["lk"],
-                   "env": env, "dead": dead}
+                   "env": env, "dead": dead, "x": x}
 
     n_pairs = 0
     for (kp, gs), idxs in blocks.items():

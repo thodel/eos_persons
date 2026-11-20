@@ -57,6 +57,7 @@ import tempfile
 
 from dedupe_corpus import link_key, merge_cluster
 from link_hls import life_envelope, fits_life
+from lifedates import extra, extra_merge
 
 csv.field_size_limit(10 ** 8)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -109,6 +110,7 @@ def cluster(persons, pairs):
     dead = [p.get("dead_year") for p in persons]
     lk = [link_key(p) for p in persons]
     env = [life_envelope(p) for p in persons]
+    ex = [extra(p) for p in persons]           # lifedates.extra of each group
     refused = collections.Counter()
 
     def find(x):
@@ -136,11 +138,12 @@ def cluster(persons, pairs):
         if d and latest > d + DEAD_GRACE:
             refused["first mentioned long after a death"] += 1
             continue
-        if not fits_life(env[ra] or env[rb], lo, hi, d):
+        if not fits_life(env[ra] or env[rb], lo, hi, d, extra_merge(ex[ra], ex[rb])):
             refused["outside the known life of an HLS-linked person"] += 1
             continue
         parent[ra] = rb
         env[rb] = env[ra] or env[rb]
+        ex[rb] = extra_merge(ex[ra], ex[rb])
         y0[rb], y1[rb] = lo, hi
         start_max[rb] = latest
         dead[rb] = d
