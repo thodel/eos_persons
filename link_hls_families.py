@@ -24,7 +24,9 @@ import collections
 
 csv.field_size_limit(10_000_000)
 
-HLS = "/Users/TH_1/Documents/HLS/hls_articles.csv"
+from link_hls import private_hls
+
+HLS = private_hls() or ""       # family articles are in the private export only
 # Surname → HLS family article links accepted on an earlier run (written from
 # families_index.json). Used when the HLS export itself is not available: the
 # link is keyed by surname only, so it does not depend on the person base.
@@ -78,7 +80,7 @@ def load_frozen_links():
 
 def main():
     # ── load HLS family articles ──
-    if not os.path.exists(HLS) and os.path.exists(LINKS):
+    if not HLS and os.path.exists(LINKS):
         fam_articles = load_frozen_links()
         print(f"HLS export not present — using {LINKS}")
     else:
@@ -133,6 +135,16 @@ def main():
               separators=(",", ":"), ensure_ascii=False)
     print(f"Linked {linked} HGB families to HLS family articles "
           f"→ {FAM_INDEX}")
+    if HLS:
+        # keep what was accepted for runs without the export (load_frozen_links)
+        rows = {norm(f["key"]): f["hls"] for f in fams if f.get("hls")}
+        with open(LINKS, "w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(["surname_key", "hls_id", "url", "title", "conf"])
+            for key in sorted(rows):
+                h = rows[key]
+                w.writerow([key, h["id"], h["url"], h["t"], h["conf"]])
+        print(f"  wrote {LINKS} ({len(rows)} surnames)")
 
     # ── also tag family-tree components so the Stammbaum can show the link ──
     by_surname = {norm(f["key"]): f["hls"] for f in fams if f.get("hls")}

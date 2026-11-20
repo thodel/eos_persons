@@ -27,11 +27,17 @@ from difflib import SequenceMatcher
 
 csv.field_size_limit(10_000_000)
 
-HLS = "/Users/TH_1/Documents/HLS/hls_articles.csv"
+from link_hls import private_hls
+
+HLS = private_hls()      # needs the article texts: the private export only
 PERSONS = "persons_resolved.json"
 GRAPH = "families_graph.json"
 
-NM = r"[A-ZÄÖÜ][a-zäöüé]+(?:[-\s][A-ZÄÖÜ][a-zäöüé]+){0,2}"
+# a name: capitalised tokens, with the particles that sit inside one —
+# "Barbara von Andlau", "Helena Meyer zum Pfeil" (without them the name broke
+# off at the particle and the spouse was called "Andlau", "Pfeil" or "Basel")
+_CAP = r"[A-ZÄÖÜ][a-zäöüé]+"
+NM = _CAP + r"(?:(?:-|\s(?:(?:von der|von|vom|zum|zur|zu|de|im|am)\s)?)" + _CAP + r"){0,3}"
 
 RE_FATHER = re.compile(r"\b(?:Sohn|Tochter|Sön|fils|fille)\s+des?\s+(" + NM + r")")
 RE_MOTHER = re.compile(r"\bund\s+der\s+(" + NM + r")")
@@ -92,6 +98,11 @@ def extract(text, subj_surname):
             yr = int(sm.group(2)) if sm.group(2) else None
             if nm in parents or nm == father:
                 continue
+            # one word is no name to look anybody up by: a given name whose
+            # surname the article does not know, or the trade of the bride's
+            # father ("Tochter des Matthias, Wirts, Witwe des …")
+            if len(nm.split()) < 2:
+                continue
             key = nm.lower()
             if key in seen:
                 continue
@@ -110,6 +121,10 @@ def similar(a, b):
 
 
 def main():
+    if HLS is None:
+        print("private HLS export not found ($HLS_ARTICLES / private_inputs/) — "
+              "nothing to mine, skipping")
+        return
     persons = json.load(open(PERSONS, encoding="utf-8"))
     linked = {p["hls"]["id"]: p for p in persons if p.get("hls")}
     print(f"{len(linked)} linked persons")
@@ -123,6 +138,7 @@ def main():
     for hid, p in linked.items():
         surn = subject_surname(p["hls"]["t"]) or subject_surname(p["n"])
         father, mother, spouses = extract(content.get(hid, ""), surn)
+        p.pop("kin", None)               # this script owns the field: no stale kin
         kin = {}
         if father:
             kin["f"] = father; n_father += 1

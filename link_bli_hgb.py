@@ -73,6 +73,7 @@ import urllib.request
 from difflib import SequenceMatcher
 
 from dedupe_corpus import canon, koelner, name_tokens
+from link_hls import life_dates, life_envelope
 
 csv.field_size_limit(10 ** 8)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -570,7 +571,7 @@ def main(argv=None):
             continue
         ms = L["used"]
         years = [m["year"] for m in ms if m["year"]]
-        idx = sorted(L["pc"], key=lambda i: -L["pc"][i])
+        idx = sorted(L["pc"], key=lambda i: (-L["pc"][i], pkey(P[i]), i))
         who = " | ".join(f"{pkey(P[i])} ×{L['pc'][i]}" for i in idx)
         both = "both" if len(idx) == 1 else "bli"
         dead_at = min((m["year"] for m in ms if m["dead"] and m["year"]), default=None)
@@ -608,11 +609,14 @@ def main(argv=None):
         }[rel]
         n_act[kind] += 1
         if rel == "spelling":
-            for i in idx[1:]:
-                pr = tuple(sorted((idx[0], i)))
-                merge_pairs[pr] += 1
-                pair_src[pr]["bli"].add(aid)
-                pair_src[pr]["where"].update(m["dossier"] for m in ms)
+            # every pair, not a star around the most frequent person: which
+            # pairs a guard lets through must not depend on who is the hub
+            for x, i in enumerate(idx):
+                for j in idx[x + 1:]:
+                    pr = tuple(sorted((i, j)))
+                    merge_pairs[pr] += 1
+                    pair_src[pr]["bli"].add(aid)
+                    pair_src[pr]["where"].update(m["dossier"] for m in ms)
         finding(kind, side, sev, where(L), f"{aid} {L['a']['n']}", who,
                 f"owner documents {min(years)}–{max(years)}; BLI variants: "
                 + "; ".join(L["names"][:8]))
@@ -741,11 +745,12 @@ def main(argv=None):
             fits = max(ys) - min(ys) <= LIFESPAN
             if rel == "spelling" and fits:
                 kind, sev = "eos_city_index_splits_a_street_person", 3
-                for x in idx[1:]:
-                    pr = tuple(sorted((idx[0], x)))
-                    street_pairs.add(pr)
-                    pair_src[pr]["street"].add(r["id"])
-                    pair_src[pr]["where"].add(r["street_id"])
+                for x, i in enumerate(idx):
+                    for j in idx[x + 1:]:
+                        pr = tuple(sorted((i, j)))
+                        street_pairs.add(pr)
+                        pair_src[pr]["street"].add(r["id"])
+                        pair_src[pr]["where"].add(r["street_id"])
             else:
                 kind, sev = "eos_street_and_city_index_disagree", 1
             n_n[kind] += 1
@@ -790,12 +795,11 @@ def main(argv=None):
             continue
         acts = {x for dd in per_person.get(i, {}).values() for x in dd}
         hls = p.get("hls") or {}
-        wd = p.get("wd") or {}
         # a known life plus the post-mortem window may exceed 80 years
         # (dedupe_persons: birth − 10 … death + 60); anything beyond is an error
-        b_, d_ = wd.get("b"), wd.get("d")
-        inside = bool(b_ or d_) and y[0] >= ((b_ - 10) if b_ else (d_ - 95)) \
-            and y[1] <= (d_ if d_ else b_ + 90) + 60
+        env_ = life_envelope(p)
+        b_, d_ = life_dates(p)
+        inside = env_ is not None and y[0] >= env_[0] and y[1] <= env_[1]
         if inside:
             n_long_ok += 1
         else:
@@ -805,7 +809,7 @@ def main(argv=None):
                 f"{len(acts)} BLI owner actors in {len(per_person.get(i, {}))} dossiers",
                 pkey(p),
                 f"{y[1] - y[0]} years, {p.get('c')} mentions; HLS: {hls.get('t', '–')} "
-                f"({wd.get('b', '?')}–{wd.get('d', '?')})")
+                f"({b_ or '?'}–{d_ or '?'})")
     S["eos: persons whose mentions span more than 80 years"] = n_long
     S["  besides those inside a known life incl. post-mortem window"] = n_long_ok
     for dd, keys_ in by_dossier.items():         # look every mention up once
@@ -907,14 +911,16 @@ def main(argv=None):
                 "n_owner_docs": len(L["odocs"]), "link_level": L["level"],
                 "n_mentions": len(L["used"]), "shared_name_in_dossier": int(L["shared"]),
                 "n_persons": len(L["pc"]),
-                "persons": " | ".join(pkey(P[i]) for i in sorted(L["pc"], key=lambda i: -L["pc"][i])),
+                "persons": " | ".join(pkey(P[i]) for i in sorted(L["pc"], key=lambda i: (-L["pc"][i], pkey(P[i]), i))),
                 "n_street_persons": len(L["sc"]),
-                "street_persons": "|".join(SI.R[s]["id"] for s in sorted(L["sc"], key=lambda s: -L["sc"][s])) if SI else "",
+                "street_persons": "|".join(SI.R[s]["id"] for s in sorted(L["sc"], key=lambda s: (-L["sc"][s], SI.R[s]["id"]))) if SI else "",
                 "bli_death_year": a.get("d_yr") or "",
                 "bli_occ": "|".join(a.get("occ") or []),
             })
 
-    F.sort(key=lambda r: (-r["severity"], r["type"], r["dossier"]))
+    # a total order, so that two runs on the same data write the same files
+    F.sort(key=lambda r: (-r["severity"], r["type"], r["dossier"], r["bli"], r["eos"],
+                          r["evidence"]))
     with open(args.findings, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["type", "likely_side", "severity", "dossier",
                                           "bli", "eos", "evidence"])

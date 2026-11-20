@@ -114,3 +114,49 @@ def test_merged_person_counts_dossiers_not_name_pairs():
     b["dos"] = [["D1", "Hanns Müller"], ["D2", "Hanns Müller"]]
     m = DP.merge_cluster([a, b], "Johann Müller")
     assert len(m["dos"]) == 3 and m["d"] == 2 and m["c"] == 4
+
+
+def test_life_dates_are_those_of_the_article_the_link_was_judged_against():
+    from link_hls import life_dates
+    only_hls = {"n": "Hans Muster", "hls": {"id": "1", "b": 1500, "d": 1560}}
+    assert life_dates(only_hls) == (1500, 1560)
+    assert life_envelope(only_hls) == life_envelope({"wd": {"b": 1500, "d": 1560}})
+    # one source for both dates: Wikidata's century-rounded birth must not be
+    # paired with the article's death (Peter Rot: "born 1500", died 1487)
+    mixed = {"hls": {"id": "1", "d": 1487}, "wd": {"b": 1500, "d": 1487}}
+    assert life_dates(mixed) == (None, 1487)
+    # an older index without dates on the link falls back to Wikidata
+    assert life_dates({"hls": {"id": "1"}, "wd": {"b": 1492}}) == (1492, None)
+    assert life_envelope({"hls": {"id": "1"}}) is None
+    assert life_envelope({"n": "x"}) is None
+
+
+def test_an_article_of_one_given_name_does_not_take_double_names():
+    from link_hls import article_given_ratio, given_key
+    art = given_key("Johannes")
+    assert article_given_ratio(given_key("Hans"), art) == 1.0
+    assert article_given_ratio(given_key("Hans Georg"), art) == 0.0
+    assert article_given_ratio(given_key("Hans Jakob"), art) == 0.0
+    # the register may shorten, and a matching double name still fits
+    art2 = given_key("Johann Rudolf")
+    assert article_given_ratio(given_key("Hans"), art2) == 1.0
+    assert article_given_ratio(given_key("Hans Rudolff"), art2) == 1.0
+    assert article_given_ratio(given_key("Hans Jakob"), art2) < 0.74
+
+
+def test_bio_years_puts_the_tables_dates_right():
+    from link_hls import bio_years
+    row = lambda i, b, d: {"id": i, "bio.birth_date": b, "bio.death_date": d}
+    # the export's reverse order (Adam Petri)
+    assert bio_years(row("1", "1527-11-15", "1454")) == (1454, 1527)
+    assert bio_years(row("1", "1454", "1527-11-15")) == (1454, 1527)
+    # Wikidata's century-rounded birth is no birth year (Peter Rot)
+    assert bio_years(row("2", "1500-01-01", "1487-01-01")) == (None, 1487)
+    # two alternatives for the birth are not a life: Wikidata's whole life wins
+    alt = {"3": (1557, 1595), "4": (None, 1482), "5": (1497, 1543)}
+    assert bio_years(row("3", "1557", "1560"), alt) == (1557, 1595)
+    assert bio_years(row("5", "1547", "1548"), alt) == (1497, 1543)     # Holbein d. J.
+    # … but only a whole life: first and last mention stay what they are
+    assert bio_years(row("4", "1472", "1482"), alt) == (1472, 1482)
+    assert bio_years(row("6", "1438", "1449"), alt) == (1438, 1449)
+    assert bio_years(row("7", "", "1530-06-03")) == (None, 1530)

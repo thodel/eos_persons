@@ -75,6 +75,11 @@ def main():
             "t": top["hls_title"],
             "rel": top["date_relation"],
         }
+        # the article's own life dates: the dedupe passes keep a linked person
+        # inside them (link_hls.fits_life), also where Wikidata has no item
+        for fld, col in (("b", "hls_birth"), ("d", "hls_death")):
+            if (top.get(col) or "").strip().lstrip("-").isdigit():
+                accepted[key][fld] = int(top[col])
 
     print(f"  {len(accepted)} confident links "
           f"(from {len(groups)} candidate persons)")

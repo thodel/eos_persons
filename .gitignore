@@ -287,3 +287,7 @@ documents.csv
 # regenerable via link_bli_hgb.py / dedupe_spelling.py)
 dedupe_spelling_candidates.csv
 dedupe_spelling_clusters.csv
+
+# private inputs (HLS export etc.) — never commit
+private_inputs/
+hls_articles.csv

@@ -39,7 +39,7 @@ from link_hls import year_of, hls_url, canon_given, norm_token, ratio, PARTICLES
 HERE = os.path.dirname(os.path.abspath(__file__))
 csv.field_size_limit(10_000_000)
 
-from link_hls import default_hls
+from link_hls import default_hls, bio_years, load_alt_dates
 HLS_DEFAULT = default_hls()
 HBLS_URL = "https://biblio.unibe.ch/digibern/hist_bibliog_lexikon_schweiz"
 
@@ -155,6 +155,7 @@ def load_hls(path, wanted):
     if not os.path.exists(path):
         return {}
     keep = {}
+    alt = load_alt_dates()
     with open(path, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row["id"] in wanted:
@@ -164,8 +165,8 @@ def load_hls(path, wanted):
                     "title": (row.get("title") or "").strip(),
                     "family": (row.get("bio.family_name") or "").strip(),
                     "first": (row.get("bio.first_name") or "").strip(),
-                    "birth": year_of(row.get("bio.birth_date")),
-                    "death": year_of(row.get("bio.death_date")),
+                    "birth": bio_years(row, alt)[0],
+                    "death": bio_years(row, alt)[1],
                     "gender": (row.get("bio.gender") or "").strip(),
                 }
     return keep

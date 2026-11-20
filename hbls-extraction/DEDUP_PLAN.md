@@ -125,6 +125,41 @@ HGB, 70 spanning all three corpora; every HGB member resolves to a record.
 `date_relation` is shared with `link_hbls_hgb.py`, so the HBLS↔HGB pass obeys
 the same rule (342 HBLS persons matched, 137 unambiguous).
 
+*With the private inputs (2026-11, third rebuild, thodel/eos_persons#5):* the
+HLS export, the PDF-derived `hbls_persons.json` / `hbls_articles.json` and the
+GND tier tables were available again, so Stage 1 was recomputed and Stage 3
+built from the real candidate tables instead of `authority_edges.csv`
+(`../rebuild.sh` does this whenever the inputs are in place). Three findings
+changed the links more than the inputs did:
+
+- *Namesakes from other cantons.* Both lexica cover all of Switzerland. Of the
+  458 HLS biographies linked to the register, 224 did not mention Basel; of the
+  303 HBLS persons linked directly, 191 had no Basel in their own entry or in
+  their family article. `link_hls.py` now only takes biographies whose text
+  ties the person to Basel (`basel_relation`), and Stage 3 accepts a direct
+  HBLS↔HGB edge only for persons connected to Basel (`hbls_basel`, the
+  definition of `basel_subset.py`: 4,932 of 27,838 persons). The article-level
+  mention is still a weak test — a family article with a Basel branch covers
+  its Appenzell branch too; reading the canton section a person stands in would
+  be the next step.
+- *One given name.* A register person with more given names than the HLS
+  article is no candidate (`article_given_ratio`); 3 of 253 linked biographies
+  collect conflicting given names, down from 105 of 472.
+- *Dates of the export.* 1,009 biographies carry birth and death in reverse
+  order, a few carry two birth alternatives instead of a life;
+  `link_hls.bio_years` repairs both, here and in `link_hbls_hls.py` (2,452 HBLS
+  persons matched, 2,650 rows, against 2,339 / 2,530 before).
+
+`link_hbls_hgb.py --all` checks the dates before the names and compares each
+pair of surnames once: 2.7 minutes instead of 35 for the 27,838 persons, same
+rows. Edges unioned — 1,708 HBLS↔HLS, 357 HGB↔HLS, 113 HBLS↔HGB, 1,518 + 1,618
+HBLS↔GND (Tier 0 / 1), 242 HGB↔GND; TRIM_HGB detached 10 HGB records. 3,488
+identities (3,342 merged / 146 review), 3,220 with a GND id, 326 attested in the
+HGB, 34 spanning all three corpora; all 451 HGB members resolve to a record.
+`authority_edges.csv` and `hbls_id_map.csv` were frozen again from this result;
+a run without the private inputs arrives at 3,461 identities, 3,395 of them
+with the same authority members.
+
 ### Stage 3 — Build identity clusters  *(done — `../build_identity_clusters.py`)*
 Model every accepted link as an edge in a graph whose nodes are
 `(corpus, local_id)` **plus the shared authority ids** (`gnd:<id>`, `wd:<qid>`),

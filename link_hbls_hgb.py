@@ -24,6 +24,7 @@ the whole HBLS corpus.
 import argparse
 import collections
 import csv
+import re
 import json
 import os
 
@@ -51,6 +52,36 @@ def load_hgb(path):
     return by_initial
 
 
+BASEL = re.compile(r"\bBasel\b|\bbasler\b|\bbaslerisch", re.I)
+
+
+def basel_connection(hbls):
+    """{HBLS person id: 'bio' | 'article'} for the persons connected to Basel.
+
+    The HBLS covers all of Switzerland, the register one town: by name and
+    dates a Landammann of Urnäsch fits a Basel namesake as well as a Basler
+    does (191 of the 303 links the full corpus yielded were of that kind). A
+    person counts as connected when the own entry mentions Basel ('bio') or
+    the family article does ('article') — the definition of basel_subset.py.
+    The article texts (hbls_articles.json) come from the PDF extraction; where
+    they are missing only 'bio' can be told.
+    """
+    art = set()
+    f = os.path.join(HERE, "hbls-extraction", "hbls_articles.json")
+    if os.path.exists(f):
+        for a in json.load(open(f, encoding="utf-8")):
+            m = re.search(r"band_(\d+)", a.get("source_file") or "")
+            if BASEL.search(a.get("content") or ""):
+                art.add((int(m.group(1)) if m else None, a["page"], a["keyword"]))
+    out = {}
+    for p in hbls:
+        if BASEL.search(p.get("bio") or ""):
+            out[p["id"]] = "bio"
+        elif (p.get("volume"), p.get("page"), p.get("keyword")) in art:
+            out[p["id"]] = "article"
+    return out
+
+
 def hbls_lifespan(p):
     b, d = p.get("birth_year"), p.get("death_year")
     fl = p.get("floruit_years")
@@ -60,6 +91,23 @@ def hbls_lifespan(p):
 
 
 def direct_pass(hbls, by_initial, surname_min, given_min, grace):
+    """Every HBLS person against every register person of a similar name whose
+    mentions fit the life.
+
+    27,838 HBLS persons against 95,000 register persons is 2.6 thousand million
+    pairs, most of them centuries apart: the dates are checked before the
+    names, and each pair of distinct surnames is compared once.
+    """
+    # register persons by surname, in index order (i keeps ties stable)
+    by_surname = {}
+    i = 0
+    for ini, plist in by_initial.items():
+        grp = by_surname.setdefault(ini, {})
+        for h in plist:
+            grp.setdefault(h["surname"], []).append((i, h))
+            i += 1
+    sratio, gratio = {}, {}
+    basel = basel_connection(hbls)
     rows = []
     matched = 0
     for p in hbls:
@@ -71,38 +119,44 @@ def direct_pass(hbls, by_initial, surname_min, given_min, grace):
         if b is None and d is None:
             continue
         cands = []
-        for h in by_initial.get(surname[0], []):
-            sr = ratio(surname, h["surname"])
+        for hs, plist in by_surname.get(surname[0], {}).items():
+            sr = sratio.get((surname, hs))
+            if sr is None:
+                sr = sratio[(surname, hs)] = ratio(surname, hs)
             if sr < surname_min:
                 continue
-            gr = given_ratio(given, h["given"])
-            if gr < given_min:
-                continue
-            rel, gap = date_relation(h["m0"], h["m1"], h["dead"], b, d, grace=grace)
-            if rel is None:
-                continue
-            score = round(0.4 * sr + 0.3 * gr +
-                          0.3 * (1.0 if rel == "overlap" else 0.7), 3)
-            cands.append({
-                "hbls_id": p["id"], "hbls_name": p["name"],
-                "hbls_surname": p["surname"], "hbls_given": p["given"],
-                "hbls_birth": p.get("birth_year") or "",
-                "hbls_death": p.get("death_year") or "",
-                "hbls_volume": p["volume"], "hbls_page": p["page"],
-                "hbls_url": p["backlink"],
-                "hgb_name": h["name"], "hgb_year_min": h["m0"],
-                "hgb_year_max": h["m1"], "hgb_mentions": h["ment"],
-                "hgb_dossiers": h["dos"],
-                "surname_score": round(sr, 3), "given_score": round(gr, 3),
-                "date_relation": rel, "date_gap": gap, "score": score,
-            })
+            for i, h in plist:
+                rel, gap = date_relation(h["m0"], h["m1"], h["dead"], b, d, grace=grace)
+                if rel is None:
+                    continue
+                gr = gratio.get((given, h["given"]))
+                if gr is None:
+                    gr = gratio[(given, h["given"])] = given_ratio(given, h["given"])
+                if gr < given_min:
+                    continue
+                score = round(0.4 * sr + 0.3 * gr +
+                              0.3 * (1.0 if rel == "overlap" else 0.7), 3)
+                cands.append((i, {
+                    "hbls_id": p["id"], "hbls_name": p["name"],
+                    "hbls_surname": p["surname"], "hbls_given": p["given"],
+                    "hbls_birth": p.get("birth_year") or "",
+                    "hbls_death": p.get("death_year") or "",
+                    "hbls_volume": p["volume"], "hbls_page": p["page"],
+                    "hbls_url": p["backlink"],
+                    "hbls_basel": basel.get(p["id"], ""),
+                    "hgb_name": h["name"], "hgb_year_min": h["m0"],
+                    "hgb_year_max": h["m1"], "hgb_mentions": h["ment"],
+                    "hgb_dossiers": h["dos"],
+                    "surname_score": round(sr, 3), "given_score": round(gr, 3),
+                    "date_relation": rel, "date_gap": gap, "score": score,
+                }))
         if not cands:
             continue
         matched += 1
-        cands.sort(key=lambda r: -r["score"])
-        for c in cands:
+        cands.sort(key=lambda t: (-t[1]["score"], t[0]))
+        for _, c in cands:
             c["n_candidates"] = len(cands)
-        rows.extend(cands)
+        rows.extend(c for _, c in cands)
     return rows, matched
 
 
@@ -180,12 +234,14 @@ def main():
     write_csv(out_direct, direct,
               ["hbls_id", "hbls_name", "hbls_surname", "hbls_given",
                "hbls_birth", "hbls_death", "hbls_volume", "hbls_page",
-               "hbls_url", "hgb_name", "hgb_year_min", "hgb_year_max",
+               "hbls_url", "hbls_basel", "hgb_name", "hgb_year_min", "hgb_year_max",
                "hgb_mentions", "hgb_dossiers", "surname_score", "given_score",
                "date_relation", "date_gap", "score", "n_candidates"])
     uniq = len({r["hbls_id"] for r in direct if r["n_candidates"] == 1})
+    n_basel = len({r["hbls_id"] for r in direct
+                   if r["n_candidates"] == 1 and r["hbls_basel"]})
     print(f"  {matched} HBLS persons matched ≥1 HGB person; {len(direct)} rows "
-          f"({uniq} unambiguous) -> {out_direct}")
+          f"({uniq} unambiguous, {n_basel} of them connected to Basel) -> {out_direct}")
 
     print("Transitive pass (via shared HLS bio) …")
     hbls_ids = None if args.all else {p["id"] for p in hbls}
