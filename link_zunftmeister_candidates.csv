@@ -1,37 +1,40 @@
 zunft,master,year_from,year_to,pool,person_id,person,birth,death,mention_span,basis,name_surname,name_given,recorded_master,guild_org,trade_match,namesakes,n_dossiers,occupations,status,wikidata,gnd,tier
-Gartnern,Johannes Friedrich Ryhiner,1620,1621,merged,person:00025,Johann Friedrich Ryhiner,1574,1634,1573-1621,life,1.0,1.0,,,,,,,merged,Q57338195,122119657,wahrscheinlich
-Gartnern,Michel Freyburger,1641,1642,merged,person:02414,Michael Freiburger,1587,1649,,life,0.9,0.92,,,,,,,merged,,1274001846,wahrscheinlich
-Gartnern,Benedikt Socin,1651,1656,merged,person:00094,Benedikt Socin,1594,1664,1601-1682,life,1.0,1.0,ja,,,,,,merged,Q55874494,130680826,stark
-Gartnern,Niklaus Rippel,1656,,merged,person:00024,Nikolaus Rippel,1594,1666,1590-1673,life,1.0,1.0,,,,,,,merged,Q1991655,130682020,wahrscheinlich
-Gartnern,Niklaus Rippel,1656,,merged,person:01880,Nikolaus Rippel,1633,1707,1690-1690,life,1.0,1.0,,,,,,,merged,,1159671583,wahrscheinlich
-Gartnern,Hironimus Menzinger,1661,1668,merged,person:02674,Hieronymus Menzinger,1631,1672,,life,1.0,0.84,,,,,,,merged,,1209235439,möglich
-Gartnern,Franz Robert Brunschwyler,1675,1681,merged,person:00118,Franz Robert Brunschweiler,1635,1690,1633-1698,life,0.88,1.0,,,,,,,merged,Q78059433,121932826,wahrscheinlich
-Gartnern,Hans Jakob Socin,1688,1691,merged,person:03122,Joh.Jakob Socin,1658,1699,,life,1.0,1.0,,,,,,,merged,,1135990557,wahrscheinlich
-Gerbern,Andreas Burckhardt,1691,,merged,person:01464,Andreas Burckhardt,1652,1731,1669-1700,life,1.0,1.0,,,ja,,,,merged,Q107000464,1089843224,stark
-Goldener Stern,Samuel Brun (Braun),1659,,merged,person:01563,Samuel Braun,1590,1668,1587-1684,life,0.89,1.0,,,ja,,,,merged,Q3471061,119411105,wahrscheinlich
+Gartnern,Johannes Friedrich Ryhiner,1620,1621,merged,person:00024,Johann Friedrich Ryhiner,1574,1634,1578-1621,life,1.0,1.0,,,,,,,merged,Q57338195,122119657,wahrscheinlich
+Gartnern,Michel Freyburger,1641,1642,merged,person:02428,Michael Freiburger,1587,1649,,life,0.9,0.92,,,,,,,merged,,1274001846,wahrscheinlich
+Gartnern,Benedikt Socin,1651,1656,merged,person:01471,Benedikt Socin,1594,1664,1601-1673,life,1.0,1.0,ja,,,,,,merged,Q55874494,130680826,stark
+Gartnern,Niklaus Rippel,1656,,merged,person:00023,Nikolaus Rippel,1594,1666,1608-1644,life,1.0,1.0,,,,,,,merged,Q1991655,130682020,wahrscheinlich
+Gartnern,Niklaus Rippel,1656,,merged,person:02933,Nikolaus Rippel,1633,1707,,life,1.0,1.0,,,,,,,merged,,1159671583,wahrscheinlich
+Gartnern,Hironimus Menzinger,1661,1668,merged,person:02688,Hieronymus Menzinger,1631,1672,,life,1.0,0.84,,,,,,,merged,,1209235439,möglich
+Gartnern,Franz Robert Brunschwyler,1675,1681,merged,person:00110,Franz Robert Brunschweiler,1635,1690,1637-1698,life,0.88,1.0,,,,,,,merged,Q78059433,121932826,wahrscheinlich
+Gartnern,Hans Jakob Socin,1688,1691,merged,person:03136,Joh.Jakob Socin,1658,1699,,life,1.0,1.0,,,,,,,merged,,1135990557,wahrscheinlich
+Gerbern,Andreas Burckhardt,1691,,merged,person:01469,Andreas Burckhardt,1652,1731,1669-1700,life,1.0,1.0,,,ja,,,,merged,Q107000464,1089843224,stark
+Goldener Stern,Samuel Brun (Braun),1659,,merged,person:01533,Samuel Braun,1590,1668,1610-1684,life,0.89,1.0,,,ja,,,,merged,Q3471061,119411105,wahrscheinlich
 Hausgenossen,Hans Peyer,1455,1474,merged,person:00893,Hans Peyer,1450,1532,,life,1.0,1.0,,,,,,,merged,Q96368219,1327729997,wahrscheinlich
-Hausgenossen,Balthasar Hütschi,1463,1477,merged,person:01863,Balthasar Hützschin,1430,1481,1440-1483,life,1.0,1.0,,,ja,,,,merged,Q96317816,,stark
-Hausgenossen,Eucharius Holzach,1517,1521,merged,person:01476,Eucharius Holzach,1480,1521,1497-1530,life,1.0,1.0,,,,,,,merged,Q15455574,1016279167,wahrscheinlich
-Hausgenossen,Jakob Rüdin,1534,1542,merged,person:01498,Jakob Rüdin,1501,1573,1508-1618,life,1.0,1.0,ja,,ja,,,,merged,Q94927173,1075259614,stark
-Hausgenossen,Heinrich Petri,1554,1579,merged,person:01493,Heinrich Petri,1508,1579,1527-1606,life,1.0,1.0,,,,,,,merged,Q55842868,124875130,wahrscheinlich
-Hausgenossen,Remigius Fäsch,1573,1593,merged,person:00132,Remigius Faesch,1541,1610,1548-1604,life,0.91,1.0,,,,,,,merged,Q94792648,135925738,wahrscheinlich
-Hausgenossen,Hans Rudolf Fäsch,1619,1629,merged,person:00042,Johann Rudolf Faesch,1572,1659,1573-1696,life,0.91,1.0,,,,,,,merged,Q21567780,122119673,wahrscheinlich
-Hausgenossen,Hans Heinrich Brandmüller,1646,1662,merged,person:01501,Johannes Brandmüller,1593,1664,1613-1691,life,1.0,0.85,,,,,,,merged,Q107000168,124304702,möglich
-Hausgenossen,Felix Platter,1664,1670,merged,person:01538,Felix Platter,1605,1671,1638-1682,life,1.0,1.0,,,,,,,merged,Q18624068,100397581,wahrscheinlich
-Hausgenossen,Martin Stähelin,1671,1689,merged,person:00005,Martin Stähelin,1631,1697,1648-1697,life,1.0,1.0,ja,,,,,,merged,Q55891658,1075553679,stark
-Hausgenossen,Niklaus Rippel,1691,1694,merged,person:01880,Nikolaus Rippel,1633,1707,1690-1690,life,1.0,1.0,,,,,,,merged,,1159671583,wahrscheinlich
-Safran,Henman Offenburg,1412,,merged,person:00038,Henman Offenburg,1379,1459,1416-1460,life,1.0,1.0,ja,,,,,,merged,Q19840804,11858961X,stark
-Safran,Hans Zscheckenpürlin,1442,,merged,person:02021,Hans Zscheckenbürlin,1408,1477,1480-1480,life,0.93,1.0,,,,,,,merged,,,wahrscheinlich
-Schmieden,Krug Caspar,1557,,merged,person:01469,Caspar Krug,1518,1579,1527-1578,life,1.0,1.0,,,,,,,merged,Q96322267,1052511856,wahrscheinlich
+Hausgenossen,Balthasar Hütschi,1463,1477,merged,person:01878,Balthasar Hützschin,1430,1481,1440-1483,life,1.0,1.0,,,ja,,,,merged,Q96317816,,stark
+Hausgenossen,Hans Murer,1501,1518,merged,person:00087,Johannes Murer,1470,1530,1437-1579,life,1.0,1.0,,,,,,,review,Q95324703,143957767,wahrscheinlich
+Hausgenossen,Eucharius Holzach,1517,1521,merged,person:01485,Eucharius Holzach,1480,1521,1497-1519,life,1.0,1.0,,,,,,,merged,Q15455574,1016279167,wahrscheinlich
+Hausgenossen,Jakob Rüdin,1534,1542,merged,person:01513,Jakob Rüdin,1501,1573,1521-1580,life,1.0,1.0,ja,,ja,,,,merged,Q94927173,1075259614,stark
+Hausgenossen,Heinrich Petri,1554,1579,merged,person:01507,Heinrich Petri,1508,1579,1527-1588,life,1.0,1.0,,,,,,,merged,Q55842868,124875130,wahrscheinlich
+Hausgenossen,Remigius Fäsch,1573,1593,merged,person:00123,Remigius Faesch,1541,1610,1548-1604,life,0.91,1.0,,,,,,,merged,Q94792648,135925738,wahrscheinlich
+Hausgenossen,Hans Rudolf Fäsch,1619,1629,merged,person:00041,Johann Rudolf Faesch,1572,1659,1573-1676,life,0.91,1.0,,,,,,,merged,Q21567780,122119673,wahrscheinlich
+Hausgenossen,Hans Heinrich Brandmüller,1646,1662,merged,person:01515,Johannes Brandmüller,1593,1664,1613-1678,life,1.0,0.85,,,,,,,merged,Q107000168,124304702,möglich
+Hausgenossen,Felix Platter,1664,1670,merged,person:01554,Felix Platter,1605,1671,1638-1682,life,1.0,1.0,,,,,,,merged,Q18624068,100397581,wahrscheinlich
+Hausgenossen,Martin Stähelin,1671,1689,merged,person:00003,Martin Stähelin,1631,1697,1648-1697,life,1.0,1.0,ja,,,,,,merged,Q55891658,1075553679,stark
+Hausgenossen,Hans Rudolf Fäsch,1684,1704,merged,person:00038,Johann Rudolf Faesch,1644,1709,1645-1696,life,0.91,1.0,,,,,,,merged,Q107044238,1074070968,wahrscheinlich
+Hausgenossen,Niklaus Rippel,1691,1694,merged,person:02933,Nikolaus Rippel,1633,1707,,life,1.0,1.0,,,,,,,merged,,1159671583,wahrscheinlich
+Safran,Henman Offenburg,1412,,merged,person:00036,Henman Offenburg,1379,1459,1405-1460,life,1.0,1.0,ja,,,,,,merged,Q19840804,11858961X,stark
+Safran,Hans Zscheckenpürlin,1442,,merged,person:01876,Hans Zscheckenbürlin,1408,1477,1449-1485,life,0.93,1.0,ja,,,,,,merged,Q18683328,,wahrscheinlich
+Schmieden,Krug Caspar,1557,,merged,person:01474,Caspar Krug,1518,1579,1534-1578,life,1.0,1.0,,,,,,,merged,Q96322267,1052511856,wahrscheinlich
 Schmieden,Hornlocher Melchior,1579,,merged,person:00002,Melchior Hornlocher,1539,1619,1565-1609,life,1.0,1.0,ja,,ja,,,,merged,Q96322036,1074217136,stark
-Weinleuten,Beat Falkner (Batt Valckner),1549,1563,merged,person:02039,Beat Falkner,1520,1564,1562-1562,life,1.0,1.0,,,,,,,merged,,,wahrscheinlich
-Weinleuten,Marx Russinger,1570,1577,merged,person:02978,Marx Russinger,1540,1583,,life,1.0,1.0,,,,,,,merged,,1037562089,wahrscheinlich
-Weinleuten,Theodor Hertenstein,1574,1584,merged,person:02052,Theodor Hertenstein,1543,1586,1571-1571,life,1.0,1.0,,,ja,,,,merged,,,stark
-Weinleuten,Sebastian Beck,1637,1659,merged,person:00114,Sebastian Beck,1583,1654,1594-1680,life,1.0,1.0,,,,,,,merged,Q55122745,115791620,wahrscheinlich
+Weinleuten,Beat Falkner (Batt Valckner),1549,1563,merged,person:02052,Beat Falkner,1520,1564,1562-1562,life,1.0,1.0,,,,,,,merged,,,wahrscheinlich
+Weinleuten,Marx Russinger,1570,1577,merged,person:02993,Marx Russinger,1540,1583,,life,1.0,1.0,,,,,,,merged,,1037562089,wahrscheinlich
+Weinleuten,Theodor Hertenstein,1574,1584,merged,person:02065,Theodor Hertenstein,1543,1586,1571-1571,life,1.0,1.0,,,ja,,,,merged,,,stark
+Weinleuten,Sebastian Beck,1637,1659,merged,person:01535,Sebastian Beck,1583,1654,1599-1658,life,1.0,1.0,ja,,,,,,merged,Q55122745,115791620,stark
+Weinleuten,Hanns Rudolf Faesch,1692,1708,merged,person:00038,Johann Rudolf Faesch,1644,1709,1645-1696,life,1.0,1.0,,,,,,,merged,Q107044238,1074070968,wahrscheinlich
+Weinleuten,Dr. Niclaus Harder,1709,1722,merged,person:01526,Niklaus Harder,1651,1730,1654-1692,life,1.0,1.0,,,,,,,merged,Q94925751,128512725,wahrscheinlich
 Gartnern,Niklaus Gernler,1397,1406,hgb,Claus Gernlers#1407,Claus Gernlers,,,1407-1414,mentions,0.93,1.0,,,,1,1,schäfer,,,,möglich
 Gartnern,Peter Löschdorff,1405,1416,hgb,Peter Loschdorff#1411,Peter Loschdorff,,,1411-1411,mentions,1.0,1.0,,,,1,1,,,,,möglich
 Gartnern,Conorat Houpt,1410,1419,hgb,Conrt zem Houpt#1415,Conrt zem Houpt,,,1415-1415,mentions,1.0,0.83,,,,1,1,,,,,möglich
-Gartnern,Peter Bischof,1417,1426,hgb,Peter Bischof#1416,Peter Bischof,,,1416-1416,mentions,1.0,1.0,,,,1,1,,,,,möglich
 Gartnern,Heinrich Hanfstengel,1420,1422,hgb,Heinrich Hanfstengel#1420,Heinrich Hanfstengel,,,1420-1420,mentions,1.0,1.0,,,,2,1,,,,,möglich
 Gartnern,Heinrich Hanfstengel,1420,1422,hgb,Heinrich Hafstengel#1420,Heinrich Hafstengel,,,1420-1420,mentions,0.95,1.0,,,,2,1,,,,,möglich
 Gartnern,Hans Gernler,1431,1432,hgb,Hans Gerler#1444,Hans Gerler,,,1444-1444,mentions,0.92,1.0,,,,1,1,,,,,möglich
@@ -67,10 +70,11 @@ Gartnern,Timothius Schauber,1578,1579,hgb,Timothei Schaubers#1585,Timothei Schau
 Gartnern,Hans Burckhardt Rippel,1579,1581,hgb,Hanns Burckharten Rippel#1569,Hanns Burckharten Rippel,,,1569-1574,mentions,1.0,0.9,,,,2,1,gerichtsbote,,,,möglich
 Gartnern,Hans Burckhardt Rippel,1579,1581,hgb,Hans Burckarten Rippel#1575,Hans Burckarten Rippel,,,1575-1575,mentions,1.0,0.87,,,,2,1,,,,,möglich
 Gartnern,Job. Ritter,1581,1584,hgb,Job Ritter#1576,Job Ritter,,,1576-1577,mentions,1.0,1.0,,,,1,1,gremper,,,,möglich
-Gartnern,Hans Friedrich Ryhiner,1584,1587,hgb,person:00025,Johann Friedrich Ryhiner,,,1573-1621,mentions,1.0,1.0,,,,1,6,stadtschreiber,,,,möglich
+Gartnern,Hans Friedrich Ryhiner,1584,1587,hgb,person:01893,Hans Friderich Ryhiner,,,1573-1576,mentions,1.0,0.93,,,,2,3,,,,,möglich
+Gartnern,Hans Friedrich Ryhiner,1584,1587,hgb,person:00024,Johann Friedrich Ryhiner,,,1578-1621,mentions,1.0,1.0,,,,2,3,stadtschreiber,,,,möglich
 Gartnern,Martin Jb. Stöcklin,1615,1620,hgb,Martin Stöcklin#1610,Martin Stöcklin,,,1610-1610,mentions,1.0,0.85,,,,2,3,notar,,,,möglich
 Gartnern,Martin Jb. Stöcklin,1615,1620,hgb,Martin Jacob Stöckhlin#1595,Martin Jacob Stöckhlin,,,1595-1620,mentions,0.94,0.86,,,,2,9,augustinerschaffner;notar;schaffner,,,,möglich
-Gartnern,Johannes Friedrich Ryhiner,1620,1621,hgb,person:00025,Johann Friedrich Ryhiner,,,1573-1621,mentions,1.0,1.0,,,,1,6,stadtschreiber,,,,möglich
+Gartnern,Johannes Friedrich Ryhiner,1620,1621,hgb,person:00024,Johann Friedrich Ryhiner,,,1578-1621,mentions,1.0,1.0,,,,1,3,stadtschreiber,,,,möglich
 Gartnern,Hans Jakob Schlosser,1621,1625,hgb,Hanns Schlosser#1608,Hanns Schlosser,,,1608-1611,mentions,1.0,0.85,,,,2,1,fischer,,,,möglich
 Gartnern,Hans Jakob Schlosser,1621,1625,hgb,Hanss Schlosser#1610,Hanss Schlosser,,,1610-1610,mentions,1.0,0.85,,,,2,3,,,,,möglich
 Gartnern,Philipp Hoffmann,1630,1635,hgb,Philip . Hoffmann#1646,Philip . Hoffmann,,,1646-1693,mentions,1.0,0.92,,,,3,2,,,,,möglich
@@ -81,10 +85,11 @@ Gartnern,Johann Neuenstein,1635,1656,hgb,Johann Neuwensteins#1626,Johann Neuwens
 Gartnern,Michel Freyburger,1641,1642,hgb,Michael Freyburger#1625,Michael Freyburger,,1674,1625-1692,mentions,1.0,0.92,,,,3,11,gremper;kaufhausknecht,,,,möglich
 Gartnern,Michel Freyburger,1641,1642,hgb,Michel Freyburgers#1634,Michel Freyburgers,,1646,1634-1696,mentions,0.95,1.0,,,,3,3,kaufhausknecht,,,,möglich
 Gartnern,Michel Freyburger,1641,1642,hgb,Michel Freyburgers#1648,Michel Freyburgers,,,1648-1648,mentions,0.95,1.0,,,,3,1,,,,,möglich
-Gartnern,Benedikt Socin,1651,1656,hgb,person:00094,Benedikt Socin,,1659,1601-1673,mentions,1.0,1.0,ja,,,2,17,oberster zunftmeister;wirt;stadtgerichts-beisitzer,,,,wahrscheinlich
-Gartnern,Benedikt Socin,1651,1656,hgb,person:00094,Benedict Socins,,1667,1659-1682,mentions,0.91,0.88,,,,2,4,oberster zunftmeister,,,,möglich
+Gartnern,Benedikt Socin,1651,1656,hgb,person:01471,Benedikt Socin,,1663,1601-1673,mentions,1.0,1.0,ja,,,2,17,oberster zunftmeister;wirt;stadtgerichts-beisitzer,,,,wahrscheinlich
+Gartnern,Benedikt Socin,1651,1656,hgb,Benedict Socins#1659,Benedict Socins,,1659,1659-1682,mentions,0.91,0.88,ja,,,2,4,oberster zunftmeister,,,,möglich
 Gartnern,Jakob Falkeisen,1656,1661,hgb,Jacob Falckeisen#1663,Jacob Falckeisen,,1680,1663-1680,mentions,0.95,1.0,,,,2,1,,,,,möglich
 Gartnern,Jakob Falkeisen,1656,1661,hgb,Jacob Falckheisen#1624,Jacob Falckheisen,,,1624-1665,mentions,0.9,1.0,,,,2,3,wagner;hosenstricker;gremper,,,,möglich
+Gartnern,Niklaus Rippel,1656,,hgb,person:00023,Niclaus Rippel,,,1608-1644,mentions,1.0,1.0,,,,1,6,ratsschreiber;rat,,,,möglich
 Gartnern,Hironimus Menzinger,1661,1668,hgb,Hieronymus Mentzinger#1659,Hieronymus Mentzinger,,,1659-1661,mentions,0.95,0.84,,,,1,2,,,,,möglich
 Gartnern,Niklaus Socin,1668,1672,hgb,Niclaus Socin#1624,Niclaus Socin,,,1624-1694,mentions,1.0,1.0,,,,2,11,postmeister,,,,möglich
 Gartnern,Niklaus Socin,1668,1672,hgb,Niclaus Unt Heuberg Socin#1661,Niclaus Unt Heuberg Socin,,,1661-1661,mentions,1.0,0.85,,,,2,1,,,,,möglich
@@ -99,7 +104,7 @@ Gerbern,Jacob Lampenberg,1421,,hgb,Jacob Lampenberg#1416,Jacob Lampenberg,,,1416
 Gerbern,Heinrich Valkenstein,1440,,hgb,Heinrich Valkenstein#1410,Heinrich Valkenstein,,1464,1410-1484,mentions,1.0,1.0,,,,1,8,schuhmacher;schuster,,,,möglich
 Gerbern,Heinrich Rumer,1450,,hgb,Heinrich Rumer#1439,Heinrich Rumer,,1453,1439-1453,mentions,1.0,1.0,,,,1,2,schuhmacher,,,,möglich
 Gerbern,Richart v. Frankfurt,1458,,hgb,Richarz von Frankfurts#1470,Richarz von Frankfurts,,,1470-1470,mentions,0.95,0.86,,,,1,1,,,,,möglich
-Gerbern,Jacob Joner,1467,,hgb,Jacob Joners#1458,Jacob Joners,,,1458-1512,mentions,0.91,1.0,,,ja,1,5,gerber;schuhmacher,,,,möglich
+Gerbern,Jacob Joner,1467,,hgb,Jacob Joners#1462,Jacob Joners,,,1462-1489,mentions,0.91,1.0,,,ja,1,3,gerber,,,,möglich
 Gerbern,Hans Steinsultz,1488,,hgb,Hanns Steinsulz#1453,Hanns Steinsulz,,,1453-1498,mentions,0.95,1.0,,,,1,5,schuhmacher;rat,,,,möglich
 Gerbern,Mathis Suracher,1498,,hgb,Mathis Suracher#1463,Mathis Suracher,,,1463-1536,mentions,1.0,1.0,,,,1,3,schuhmacher,,,,möglich
 Gerbern,Hans Tschudi,1513,,hgb,Hansen Tschudin#1522,Hansen Tschudin,,,1522-1534,mentions,0.93,1.0,,,ja,1,3,gerber,,,,möglich
@@ -116,7 +121,7 @@ Gerbern,Hans Erzberger,1631,,hgb,Hans Ertzberger#1604,Hans Ertzberger,,,1604-163
 Gerbern,Augustin Schnell,1655,,hgb,Augustin Schnell#1634,Augustin Schnell,,,1634-1694,mentions,1.0,1.0,,,,1,1,,,,,möglich
 Gerbern,Johannes Brenner,1689,,hgb,Johannes Brenner#1651,Johannes Brenner,,,1651-1694,mentions,1.0,1.0,,,,2,2,schuhmacher,,,,möglich
 Gerbern,Johannes Brenner,1689,,hgb,Johannes Brenner#1693,Johannes Brenner,,,1693-1696,mentions,1.0,1.0,,,,2,1,,,,,möglich
-Gerbern,Andreas Burckhardt,1691,,hgb,person:01464,Andreas Burckhardt,,,1669-1700,mentions,1.0,1.0,ja,,ja,2,14,rotgerber,,,,wahrscheinlich
+Gerbern,Andreas Burckhardt,1691,,hgb,person:01469,Andreas Burckhardt,,,1669-1700,mentions,1.0,1.0,ja,,ja,2,15,rotgerber,,,,wahrscheinlich
 Gerbern,Andreas Burckhardt,1691,,hgb,Anderes Burckhardt#1672,Anderes Burckhardt,,,1672-1681,mentions,1.0,0.86,,,,2,1,,,,,möglich
 Goldener Stern,Hans Biderman,1427,,hgb,Han - Biderbman#1427,Han - Biderbman,,,1427-1427,mentions,0.94,0.86,,,ja,2,1,scherer,,,,möglich
 Goldener Stern,Hans Biderman,1427,,hgb,Hans Biderbman#1425,Hans Biderbman,,,1425-1433,mentions,0.94,1.0,,,ja,2,1,no_occ;scherer,,,,möglich
@@ -154,35 +159,39 @@ Hausgenossen,Ludwig Peyer,1475,1485,hgb,Ludwig Peyers#1482,Ludwig Peyers,,1492,1
 Hausgenossen,Ludwig Peyer,1475,1485,hgb,Ludwig Peyger#1463,Ludwig Peyger,,,1463-1495,mentions,0.91,1.0,,,ja,3,6,glockengiesser,,,,möglich
 Hausgenossen,Hans Jungermann,1479,1481,hgb,Hanns Jungermann#1463,Hanns Jungermann,,,1463-1501,mentions,1.0,1.0,,,ja,2,21,oberster zunftmeister;rat;zunftmeister;krämer;watmann;wechsler,,,,wahrscheinlich
 Hausgenossen,Hans Jungermann,1479,1481,hgb,Hanns Jungermanns#1492,Hanns Jungermanns,,1492,1492-1521,mentions,0.95,1.0,,,,2,5,,,,,möglich
-Hausgenossen,Hans Murer,1501,1518,hgb,Hanns Murer#1487,Hanns Murer,,,1487-1556,mentions,1.0,1.0,,,,1,8,messerschmied,,,,möglich
-Hausgenossen,Eucharius Holzach,1517,1521,hgb,person:01476,Eucharius Holzach,,1523,1497-1530,mentions,1.0,1.0,,,,3,3,,,,,möglich
-Hausgenossen,Eucharius Holzach,1517,1521,hgb,Holtzach Eucharius#1487,Holtzach Eucharius,,,1487-1561,mentions,1.0,0.93,,,,3,10,arznei-doktor,,,,möglich
-Hausgenossen,Eucharius Holzach,1517,1521,hgb,Eucharins Holtzach#1501,Eucharins Holtzach,,,1501-1538,mentions,0.93,0.89,,,,3,5,arznei-doktor;schultheiss,,,,möglich
+Hausgenossen,Eucharius Holzach,1517,1521,hgb,person:01485,Eucharius Holzach,,,1497-1519,mentions,1.0,1.0,,,,2,4,schultheiss,,,,möglich
+Hausgenossen,Eucharius Holzach,1517,1521,hgb,Holtzach Eucharius#1487,Holtzach Eucharius,,,1487-1561,mentions,1.0,0.93,,,,2,10,arznei-doktor,,,,möglich
 Hausgenossen,Heinrich David,1530,1532,hgb,Heinrich Davidt#1459,Heinrich Davidt,,,1459-1528,mentions,0.91,1.0,,,,3,5,kaufmann,,,,möglich
 Hausgenossen,Heinrich David,1530,1532,hgb,Heinrichen Davids#1509,Heinrichen Davids,,,1509-1526,mentions,0.91,1.0,,,ja,3,1,wechsler,,,,möglich
 Hausgenossen,Heinrich David,1530,1532,hgb,Heinrichen Davidt#1508,Heinrichen Davidt,,,1508-1571,mentions,0.91,1.0,,,ja,3,3,wechsler;metzger,,,,möglich
 Hausgenossen,Hans Scholer,1531,1559,hgb,Hanns Scholer#1558,Hanns Scholer,,,1558-1590,mentions,1.0,1.0,,,,2,2,,,,,möglich
 Hausgenossen,Hans Scholer,1531,1559,hgb,Hansen Scholer#1523,Hansen Scholer,,,1523-1523,mentions,1.0,1.0,,,,2,1,schuhmacher,,,,möglich
-Hausgenossen,Heinrich Petri,1554,1579,hgb,Heinrich Heinrie Pettri#1582,Heinrich Heinrie Pettri,,1582,1582-1582,mentions,0.91,0.85,,,,1,1,,,,,möglich
+Hausgenossen,Jakob Rüdin,1534,1542,hgb,person:01513,Jacob Rudin,,1574,1521-1580,mentions,1.0,1.0,ja,,ja,2,18,drechsler;stadtwechsler;wechsler;zunftmeister;oberster zunftmeister,,,,wahrscheinlich
+Hausgenossen,Jakob Rüdin,1534,1542,hgb,Jacob Rudin#1508,Jacob Rudin,,1569,1508-1569,mentions,1.0,1.0,,,,2,2,zunftmeister,,,,möglich
+Hausgenossen,Heinrich Petri,1554,1579,hgb,person:01507,Heinrich Petri,,1581,1527-1588,mentions,1.0,1.0,,,,2,21,no_occ;schneider;truckerherr;drucker,,,,möglich
+Hausgenossen,Heinrich Petri,1554,1579,hgb,Heinrich Heinrie Pettri#1582,Heinrich Heinrie Pettri,,1582,1582-1582,mentions,0.91,0.85,,,,2,1,,,,,möglich
 Hausgenossen,Theodor Merian,1561,1565,hgb,Theodern Merian#1564,Theodern Merian,,,1564-1564,mentions,1.0,0.8,,,,3,1,,,,,möglich
 Hausgenossen,Theodor Merian,1561,1565,hgb,Theodor Merian#1547,Theodor Merian,,,1547-1566,mentions,1.0,1.0,,,,3,2,goldschmied,,,,möglich
 Hausgenossen,Theodor Merian,1561,1565,hgb,Theodor Merians#1571,Theodor Merians,,,1571-1571,mentions,0.92,1.0,,,,3,1,,,,,möglich
 Hausgenossen,Jakob Hoffmann,1567,1572,hgb,Jacob Hoffmann#1563,Jacob Hoffmann,,,1563-1563,mentions,1.0,1.0,,,,1,1,goldschmied,,,,möglich
-Hausgenossen,Remigius Fäsch,1573,1593,hgb,person:00132,Remigig Fäsch,,,1582-1582,mentions,1.0,0.8,,,,1,1,,,,,möglich
+Hausgenossen,Remigius Fäsch,1573,1593,hgb,person:00123,Remigig Fäsch,,,1582-1582,mentions,1.0,0.8,,,,1,1,,,,,möglich
 Hausgenossen,Hieronymus Wix,1584,1586,hgb,Hieronimus Wix#1590,Hieronimus Wix,,,1590-1590,mentions,1.0,0.9,,,,2,1,,,,,möglich
 Hausgenossen,Hieronymus Wix,1584,1586,hgb,Jeronimus Wix#1590,Jeronimus Wix,,,1590-1590,mentions,1.0,1.0,,,,2,1,vogt,,,,möglich
 Hausgenossen,Beat Hagenbach,1588,1630,hgb,Beat Hagenbach#1565,Beat Hagenbach,,,1565-1627,mentions,1.0,1.0,,,,3,7,rat,,,,möglich
 Hausgenossen,Beat Hagenbach,1588,1630,hgb,Beath Hagenbach#1601,Beath Hagenbach,,,1601-1652,mentions,1.0,0.89,,,,3,1,obervogt,,,,möglich
 Hausgenossen,Beat Hagenbach,1588,1630,hgb,Beath Hagenbachs#1603,Beath Hagenbachs,,1650,1603-1650,mentions,0.95,0.89,,,,3,1,,,,,möglich
 Hausgenossen,Hans Jakob Friedrich,1601,1611,hgb,Johann Friedrich#1618,Johann Friedrich,,,1618-1618,mentions,1.0,0.85,,,,1,1,,,,,möglich
+Hausgenossen,Hans Rudolf Fäsch,1619,1629,hgb,person:00041,Joh . fäsch,,,1610-1656,mentions,1.0,0.85,,,,3,2,beisitzer;goldschmied,,,,möglich
+Hausgenossen,Hans Rudolf Fäsch,1619,1629,hgb,Johann Rudolf Fäsch#1638,Johann Rudolf Fäsch,,,1638-1700,mentions,1.0,1.0,,,,3,4,bürgermeister,,,,möglich
+Hausgenossen,Hans Rudolf Fäsch,1619,1629,hgb,Hans Rudolph Faesch#1607,Hans Rudolph Faesch,,,1607-1680,mentions,0.91,1.0,,,,3,2,,,,,möglich
 Hausgenossen,Konrad Hagenbach,1632,1634,hgb,Conrad Hagenbachs#1635,Conrad Hagenbachs,,1635,1635-1639,mentions,0.95,1.0,,,,1,2,,,,,möglich
-Hausgenossen,Hans Heinrich Brandmüller,1646,1662,hgb,Johann Brandmüller#1646,Johann Brandmüller,,,1646-1695,mentions,1.0,0.85,,,,2,1,,,,,möglich
-Hausgenossen,Hans Heinrich Brandmüller,1646,1662,hgb,Johann Brandtmüller#1618,Johann Brandtmüller,,1652,1618-1662,mentions,0.96,0.85,,,,2,3,handelsmann;schneider;stadtkäufer,,,,möglich
+Hausgenossen,Hans Heinrich Brandmüller,1646,1662,hgb,person:01515,Johann Brandmüller,,1669,1613-1678,mentions,1.0,0.85,,,,2,17,apotheker;handelsmann;schneider;stadtkäufer;hutmacher,,,,möglich
+Hausgenossen,Hans Heinrich Brandmüller,1646,1662,hgb,Johann Brandtmüller#1652,Johann Brandtmüller,,1652,1652-1662,mentions,0.96,0.85,,,,2,2,handelsmann,,,,möglich
 Hausgenossen,Felix Platter,1664,1670,hgb,Felix Plattern#1579,Felix Plattern,,,1579-1653,mentions,0.93,1.0,,,,2,5,arznei-doktor,,,,möglich
-Hausgenossen,Felix Platter,1664,1670,hgb,person:01538,Felix Platters,,1673,1638-1682,mentions,0.93,1.0,,,,2,1,,,,,möglich
-Hausgenossen,Martin Stähelin,1671,1689,hgb,person:00005,Martin Stähelin,,1697,1648-1697,mentions,1.0,1.0,ja,,,1,8,goldschmied;goldarbeiter,,,,wahrscheinlich
+Hausgenossen,Felix Platter,1664,1670,hgb,person:01554,Felix Platters,,1673,1638-1682,mentions,0.93,1.0,,,,2,2,,,,,möglich
+Hausgenossen,Martin Stähelin,1671,1689,hgb,person:00003,Martin Stähelin,,1697,1648-1697,mentions,1.0,1.0,ja,,,1,8,goldschmied;goldarbeiter,,,,wahrscheinlich
 Hausgenossen,Isaak Bürgin,1672,1682,hgb,Isaac Bürgi#1681,Isaac Bürgi,,,1681-1681,mentions,0.91,0.8,,,,1,1,,,,,möglich
-Hausgenossen,Niklaus Rippel,1691,1694,hgb,person:01880,Niclaus Rippel,,,1690-1690,mentions,1.0,1.0,,,,1,1,,,,,möglich
+Hausgenossen,Niklaus Rippel,1691,1694,hgb,Niclaus Rippel#1690,Niclaus Rippel,,,1690-1690,mentions,1.0,1.0,,,,1,1,,,,,möglich
 Hausgenossen,Joseph Socin,1706,1734,hgb,Joseph Socin#1670,Joseph Socin,,,1670-1700,mentions,1.0,1.0,,,,2,8,schaffner,,,,möglich
 Hausgenossen,Joseph Socin,1706,1734,hgb,Joseph Socins#1700,Joseph Socins,,,1700-1700,mentions,0.91,1.0,,,,2,1,,,,,möglich
 Safran,Johann Wiler,1406,,hgb,Johann Wiler#1413,Johann Wiler,,,1413-1425,mentions,1.0,1.0,,,,1,3,,,,,möglich
@@ -192,9 +201,8 @@ Safran,Cunrat zem Houpt,1407,,hgb,Conrat zem Houpt#1409,Conrat zem Houpt,,1409,1
 Safran,Claus Hüller,1408,,hgb,Claus Hüllers#1402,Claus Hüllers,,1420,1402-1428,mentions,0.92,1.0,,,,3,4,,,,,möglich
 Safran,Claus Hüller,1408,,hgb,Claus Hüllers#1420,Claus Hüllers,,1420,1420-1420,mentions,0.92,1.0,,,,3,1,,,,,möglich
 Safran,Claus Hüller,1408,,hgb,Clausen hüllers#1419,Clausen hüllers,,1419,1419-1419,mentions,0.92,1.0,,,,3,1,,,,,möglich
-Safran,Henman Offenburg,1412,,hgb,person:00038,Henman Offenburg,,,1416-1460,mentions,1.0,1.0,,,,3,15,zunftmeister;no_occ,,,,möglich
-Safran,Henman Offenburg,1412,,hgb,person:00038,Henman Offenburg,,,1422-1422,mentions,1.0,1.0,,,,3,1,,,,,möglich
-Safran,Henman Offenburg,1412,,hgb,person:00038,Henman von Offenburg,,,1419-1448,mentions,1.0,1.0,,,,3,3,zunftmeister,,,,möglich
+Safran,Henman Offenburg,1412,,hgb,person:00036,Henman Offenburg,,,1405-1460,mentions,1.0,1.0,,,,2,19,zunftmeister;no_occ,,,,möglich
+Safran,Henman Offenburg,1412,,hgb,person:00036,Henman von Offenburg,,,1419-1448,mentions,1.0,1.0,,,,2,3,zunftmeister,,,,möglich
 Safran,Peter von Hegenhein,1427,,hgb,Peter von Hegenhein#1400,Peter von Hegenhein,,,1400-1446,mentions,1.0,1.0,,,,2,7,meister,,,,möglich
 Safran,Peter von Hegenhein,1427,,hgb,Peter von Hegenhen#1429,Peter von Hegenhen,,,1429-1429,mentions,0.94,1.0,,,,2,1,,,,,möglich
 Safran,Oswald Brand,1441,,hgb,Oswalds Brand#1430,Oswalds Brand,,,1430-1470,mentions,1.0,0.92,,,ja,3,1,karrer;krämer,,,,wahrscheinlich
@@ -218,6 +226,7 @@ Safran,Hans Breitswert,1495,,hgb,Hansen Breitschwert#1493,Hansen Breitschwert,,,
 Safran,Hans Breitswert,1495,,hgb,Hansen Breittwert#1496,Hansen Breittwert,,,1496-1496,mentions,0.9,1.0,,,,3,1,rat,,,,möglich
 Safran,Conrad David,1509,,hgb,Conrad David#1477,Conrad David,,,1477-1535,mentions,1.0,1.0,,,ja,2,17,metzger;kaufmann,,,,wahrscheinlich
 Safran,Conrad David,1509,,hgb,Conrat Davids#1516,Conrat Davids,,1532,1516-1541,mentions,0.91,1.0,,,,2,4,metzger,,,,möglich
+Safran,Hans Gallicion,1512,,hgb,Hans Galicion#1480,Hans Galicion,,,1480-1523,mentions,0.94,1.0,,,ja,1,4,gewürzkrämer,,,,möglich
 Safran,Chrysostomus Gengenbach,1522,,hgb,Chrisostomus Gengenbach#1509,Chrisostomus Gengenbach,,,1509-1567,mentions,1.0,0.92,,,ja,3,3,apotheker,,,,wahrscheinlich
 Safran,Chrysostomus Gengenbach,1522,,hgb,Chrysostimus Gengenbach#1500,Chrysostimus Gengenbach,,,1500-1531,mentions,1.0,0.92,,,ja,3,2,apotheker,,,,wahrscheinlich
 Safran,Chrysostomus Gengenbach,1522,,hgb,Cisostomus Gengenbach#1517,Cisostomus Gengenbach,,,1517-1517,mentions,1.0,0.82,,,ja,3,1,apotheker,,,,möglich
@@ -232,6 +241,7 @@ Safran,Theodor Burckhardt,1608,,hgb,Theodor Burckhards#1610,Theodor Burckhards,,
 Safran,Lienhart Lützelmann,1615,,hgb,Lienhart Lützelmann#1553,Lienhart Lützelmann,,,1553-1603,mentions,1.0,1.0,,,ja,2,6,gewürzkrämer,,,,möglich
 Safran,Lienhart Lützelmann,1615,,hgb,Leonhart Lützelman#1585,Leonhart Lützelman,,,1585-1630,mentions,0.95,0.88,,,,2,4,,,,,möglich
 Safran,Hans Ulrich Frey,1631,,hgb,Hanns Ulrich Frey#1603,Hanns Ulrich Frey,,,1603-1676,mentions,1.0,1.0,,,ja,5,7,handelsmann;stadtwechsler;seidenkrämer,,,,wahrscheinlich
+Safran,Christoph Burckhardt,1635,,hgb,person:00039,Christoph Burckhardt,,,1638-1699,mentions,1.0,1.0,ja,,,9,25,pfarrer;schaffner;oberster zunftmeister;drechsler,,,,wahrscheinlich
 Safran,Andres Bletz,1636,,hgb,Andres Bletz#1603,Andres Bletz,,,1603-1654,mentions,1.0,1.0,,,ja,2,1,apotheker,,,,wahrscheinlich
 Safran,Andres Bletz,1636,,hgb,Andred Bletz#1636,Andred Bletz,,,1636-1636,mentions,1.0,0.83,,,,2,1,rat,,,,möglich
 Safran,Hans Burkard Rippel,1654,,hgb,Hanns Burckhardt Rippel#1632,Hanns Burckhardt Rippel,,,1632-1672,mentions,1.0,0.89,,,,2,2,seidenhändler;obervogt,,,,möglich
@@ -242,7 +252,7 @@ Safran,Niclaus Heussler,1658,,hgb,Niclaus Heussler#1633,Niclaus Heussler,,1669,1
 Safran,Theodor Burckhardt,1661,,hgb,Theodor Burckhardt#1671,Theodor Burckhardt,,,1671-1671,mentions,1.0,1.0,,,,3,1,,,,,möglich
 Safran,Theodor Burckhardt,1661,,hgb,Theodor Burckhardt#1673,Theodor Burckhardt,,,1673-1673,mentions,1.0,1.0,,,,3,1,,,,,möglich
 Safran,Theodor Burckhardt,1661,,hgb,Theodor Burckhardts#1657,Theodor Burckhardts,,,1657-1657,mentions,0.95,1.0,,,,3,1,,,,,möglich
-Safran,Niclaus Harscher,1664,,hgb,Niclaus Harscher#1647,Niclaus Harscher,,,1647-1700,mentions,1.0,1.0,,,ja,1,9,handelsmann;schreiner;spezierer;schultheiss,,,,wahrscheinlich
+Safran,Niclaus Harscher,1664,,hgb,Niclaus Harscher#1647,Niclaus Harscher,,,1647-1692,mentions,1.0,1.0,,,ja,1,5,handelsmann;schreiner;spezierer,,,,wahrscheinlich
 Safran,Wernhard Huber,1678,,hgb,Wernhart huber#1689,Wernhart huber,,,1689-1689,mentions,1.0,0.88,,,,2,1,,,,,möglich
 Safran,Wernhard Huber,1678,,hgb,Wernhardt Hubers#1681,Wernhardt Hubers,,,1681-1681,mentions,0.91,0.94,,,,2,1,,,,,möglich
 Safran,Leonhard Respinger,1691,,hgb,Leonhard Respinger#1695,Leonhard Respinger,,,1695-1695,mentions,1.0,1.0,,,ja,17,1,spezierer,,,,wahrscheinlich
@@ -306,8 +316,7 @@ Schmieden,Oltinger Hans,1538,,hgb,Hanns Oltinger#1538,Hanns Oltinger,,,1538-1567
 Schmieden,Sommerysen Steffan,1545,,hgb,Sumerysen Steffan#1531,Sumerysen Steffan,,1567,1531-1580,mentions,1.0,0.84,,,ja,1,10,hufschmied;schmied,,,,möglich
 Schmieden,Jeuchtenhammer Hans,1546,,hgb,Hans Jechtennhammer#1545,Hans Jechtennhammer,,,1545-1545,mentions,0.93,1.0,,,,1,1,schultheiss,,,,möglich
 Schmieden,Syff Oswald,1550,,hgb,Osswaldt Syff#1556,Osswaldt Syff,,,1556-1583,mentions,1.0,0.86,,,,1,2,müller;schultheiss,,,,möglich
-Schmieden,Krug Caspar,1557,,hgb,"Caspar , Krug#1559","Caspar , Krug",,,1559-1630,mentions,1.0,1.0,,,,2,1,,,,,möglich
-Schmieden,Krug Caspar,1557,,hgb,person:01469,Caspar Krug,,,1527-1578,mentions,1.0,1.0,,,,2,7,bürgermeister,,,,möglich
+Schmieden,Krug Caspar,1557,,hgb,person:01474,Caspar Krug,,,1534-1578,mentions,1.0,1.0,,,,1,7,bürgermeister,,,,möglich
 Schmieden,Wild Hans,1560,,hgb,Hanns Jacob Wild#1531,Hanns Jacob Wild,,1574,1531-1579,mentions,1.0,0.85,,,,1,16,gerichtsschreiber;schaffner,,,,möglich
 Schmieden,Sonnenbüchel Marx,1575,,hgb,Marx Sonnenbüchell#1583,Marx Sonnenbüchell,,,1583-1586,mentions,0.96,1.0,,,,1,1,,,,,möglich
 Schmieden,Krug Melchior,1576,,hgb,Melcher Krug#1534,Melcher Krug,,,1534-1589,mentions,1.0,0.8,,,,2,2,,,,,möglich
@@ -349,9 +358,9 @@ Weinleuten,Lienhart Eberler,1463,1471,hgb,Lienhart eberlers#1452,Lienhart eberle
 Weinleuten,"Hans Eberler, genannt Grünenzweig",1473,1477,hgb,Hans Eberlers#1448,Hans Eberlers,,,1448-1485,mentions,0.93,1.0,,,,1,1,,,,,möglich
 Weinleuten,Conrad Held,1475,,hgb,Conrat Held#1477,Conrat Held,,,1477-1479,mentions,1.0,1.0,,,,1,1,,,,,möglich
 Weinleuten,Hans Alt,1476,,hgb,Hanns Alt#1449,Hanns Alt,,1478,1449-1499,mentions,1.0,1.0,,,ja,1,8,bartscherer;kirchherr;scherer;weinmann,,,,wahrscheinlich
-Weinleuten,"Hans Kröss, genannt von Thunsel",1479,1481,hgb,person:01557,Hanns Kröss,,,1492-1492,mentions,1.0,1.0,,,,2,1,,,,,möglich
+Weinleuten,"Hans Kröss, genannt von Thunsel",1479,1481,hgb,person:01574,Hanns Kröss,,,1492-1492,mentions,1.0,1.0,,,,2,1,,,,,möglich
 Weinleuten,"Hans Kröss, genannt von Thunsel",1479,1481,hgb,Hans Kross#1463,Hans Kross,,,1463-1470,mentions,1.0,1.0,,,,2,4,,,,,möglich
-Weinleuten,Peter Brieffer,1483,1503,hgb,petter brieffer#1450,petter brieffer,,,1450-1510,mentions,1.0,1.0,,,,1,3,,,,,möglich
+Weinleuten,Peter Brieffer,1483,1503,hgb,Peter Brieffer#1450,Peter Brieffer,,,1450-1521,mentions,1.0,1.0,,,,1,9,rat;spitalmeister,,,,möglich
 Weinleuten,"Hans Groff, genannt zum Stroken",1505,1513,hgb,Graff Hans#1437,Graff Hans,,,1437-1509,mentions,1.0,0.8,,,ja,1,8,schuhmacher;weber;wirt,,,,möglich
 Weinleuten,"Bernhard zum Gleyen, genannt von Bysanz",1506,,hgb,Bernhart zum Gleyen#1495,Bernhart zum Gleyen,,,1495-1501,mentions,1.0,0.88,,,ja,2,2,weinmann,,,,möglich
 Weinleuten,"Bernhard zum Gleyen, genannt von Bysanz",1506,,hgb,Bernhardt zur Gleygen#1496,Bernhardt zur Gleygen,,,1496-1496,mentions,0.92,0.94,,,,2,1,,,,,möglich
@@ -373,13 +382,13 @@ Weinleuten,Sebastian Hesser,1538,,hgb,Sebastian Hessers#1541,Sebastian Hessers,,
 Weinleuten,Sebastian Gasser,1540,1548,hgb,Sebastian Gasser#1536,Sebastian Gasser,,,1536-1550,mentions,1.0,1.0,,,ja,1,2,weinmann,,,,wahrscheinlich
 Weinleuten,Hans Jacob Wild,1547,,hgb,Hanns Jacob Wild#1531,Hanns Jacob Wild,,1574,1531-1579,mentions,1.0,1.0,,,,2,16,gerichtsschreiber;schaffner,,,,möglich
 Weinleuten,Hans Jacob Wild,1547,,hgb,Haus Jacob Wild#1549,Haus Jacob Wild,,1573,1549-1573,mentions,1.0,0.9,,,,2,1,,,,,möglich
-Weinleuten,Beat Falkner (Batt Valckner),1549,1563,hgb,person:02039,Beat Falckner,,,1562-1562,mentions,0.93,1.0,,,,1,1,,,,,möglich
+Weinleuten,Beat Falkner (Batt Valckner),1549,1563,hgb,person:02052,Beat Falckner,,,1562-1562,mentions,0.93,1.0,,,,1,1,,,,,möglich
 Weinleuten,Urban Schwartz,1558,1568,hgb,Urban . Schwartz#1515,Urban . Schwartz,,,1515-1573,mentions,1.0,1.0,,,ja,1,16,weinmann;weinschenk,,,,wahrscheinlich
 Weinleuten,Hans Brand,1561,,hgb,Hanns Brand#1540,Hanns Brand,,,1540-1559,mentions,1.0,1.0,,,ja,3,2,weinmann;schaffner,,,,wahrscheinlich
 Weinleuten,Hans Brand,1561,,hgb,Hans Brand#1560,Hans Brand,,,1560-1560,mentions,1.0,1.0,,,,3,1,,,,,möglich
 Weinleuten,Hans Brand,1561,,hgb,Hanns Brandt#1550,Hanns Brandt,,,1550-1550,mentions,0.91,1.0,,,,3,1,,,,,möglich
 Weinleuten,Theodor Hertenstein,1574,1584,hgb,Theodor Hertenstein#1566,Theodor Hertenstein,,,1566-1602,mentions,1.0,1.0,,,ja,2,7,schaffner;träger;weinmann,,,,wahrscheinlich
-Weinleuten,Theodor Hertenstein,1574,1584,hgb,person:02052,Theoder Hertenstein,,,1571-1571,mentions,1.0,0.86,,,ja,2,1,weinmann,,,,möglich
+Weinleuten,Theodor Hertenstein,1574,1584,hgb,person:02065,Theoder Hertenstein,,,1571-1571,mentions,1.0,0.86,,,ja,2,1,weinmann,,,,möglich
 Weinleuten,Carol Gläser,1575,1590,hgb,Casol Glasers#1601,Casol Glasers,,1601,1601-1621,mentions,0.92,0.8,,,,1,1,,,,,möglich
 Weinleuten,Blasius Schencklin,1579,1591,hgb,Bläsi Schenckli#1576,Bläsi Schenckli,,,1576-1576,mentions,0.95,0.83,,,,1,1,schaffner,,,,möglich
 Weinleuten,Hanns Schwartz,1581,,hgb,Hans Heinrich Schwartz#1590,Hans Heinrich Schwartz,,,1590-1590,mentions,1.0,0.85,,,,2,1,schlosser,,,,möglich
@@ -393,10 +402,12 @@ Weinleuten,Melchior Hertenstein,1611,1619,hgb,Melchior Hertenstein#1589,Melchior
 Weinleuten,Melchior Hertenstein,1611,1619,hgb,Melcher Hertenstein#1590,Melcher Hertenstein,,,1590-1665,mentions,1.0,0.8,,,,3,2,,,,,möglich
 Weinleuten,Melchior Hertenstein,1611,1619,hgb,Melchiorn Hertensteins#1631,Melchiorn Hertensteins,,,1631-1639,mentions,0.96,0.94,,,,3,1,helfer;verkünder des göttlichen worts,,,,möglich
 Weinleuten,Hans Jacob Bidinger (Büdinger),1612,1618,hgb,Hanns Jacob Bidinger#1597,Hanns Jacob Bidinger,,,1597-1597,mentions,1.0,1.0,,,,1,1,,,,,möglich
+Weinleuten,Hans Jacob Müller,1620,1624,hgb,Hanns Jacoben Müller#1592,Hanns Jacoben Müller,,,1592-1605,mentions,1.0,0.82,,,,2,1,,,,,möglich
+Weinleuten,Hans Jacob Müller,1620,1624,hgb,Hansen Müllers#1636,Hansen Müllers,,1636,1636-1636,mentions,0.92,0.85,,,,2,1,schneider,,,,möglich
 Weinleuten,Hanns Ulrich Scherb,1631,1635,hgb,Johannes Scherb#1635,Johannes Scherb,,,1635-1700,mentions,1.0,0.85,,,,3,10,spezierer;handelsmann,,,,möglich
 Weinleuten,Hanns Ulrich Scherb,1631,1635,hgb,Hans Scher#1640,Hans Scher,,,1640-1657,mentions,0.91,0.85,,,,3,1,,,,,möglich
 Weinleuten,Hanns Ulrich Scherb,1631,1635,hgb,Joh . Scher#1644,Joh . Scher,,,1644-1644,mentions,0.91,0.85,,,,3,1,,,,,möglich
-Weinleuten,Sebastian Beck,1637,1659,hgb,person:00114,Sebastian Beck,,1680,1610-1680,mentions,1.0,1.0,,,,1,3,,,,,möglich
+Weinleuten,Sebastian Beck,1637,1659,hgb,person:01535,Sebastian Beck,,,1599-1658,mentions,1.0,1.0,,,,1,17,professor;oberster zunftmeister;schultheiss;schneider,,,,möglich
 Weinleuten,Hans Heinrich Falckhner,1640,1655,hgb,Hannß Heinrich Falckhners#1657,Hannß Heinrich Falckhners,,1657,1657-1662,mentions,0.95,1.0,ja,,,3,1,,,,,möglich
 Weinleuten,Hans Heinrich Falckhner,1640,1655,hgb,Hauss Heinrich Falckhnern#1652,Hauss Heinrich Falckhnern,,,1652-1652,mentions,0.95,0.89,,,,3,1,,,,,möglich
 Weinleuten,Hans Heinrich Falckhner,1640,1655,hgb,Hans Heinrich Falckner#1667,Hans Heinrich Falckner,,1667,1667-1667,mentions,0.94,1.0,,,,3,1,,,,,möglich

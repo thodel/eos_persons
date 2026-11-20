@@ -36,7 +36,7 @@ python3 link_zunftmeister.py --hgb ''   # nur die zusammengeführten Personen
 
 Die Ausgabe ist eine Kandidatenliste zur Durchsicht, keine automatische Verknüpfung. Die Spalte `pool` sagt, gegen welche Personenmenge verglichen wurde.
 
-**`pool = merged`** – die 3 488 zusammengeführten Personen (`merged_persons.json`, mit HBLS-, HLS- oder GND-Bezug). Ein Meister wird verknüpft, wenn Nachname und Vorname übereinstimmen (Schreibvarianten wie Fäsch/Faesch erlaubt) und die Lebensdaten zum Wahljahr passen (mindestens 22 Jahre alt, nicht tot).
+**`pool = merged`** – die 3 502 zusammengeführten Personen (`merged_persons.json`, mit HBLS-, HLS- oder GND-Bezug). Ein Meister wird verknüpft, wenn Nachname und Vorname übereinstimmen (Schreibvarianten wie Fäsch/Faesch erlaubt) und die Lebensdaten zum Wahljahr passen (mindestens 22 Jahre alt, nicht tot).
 
 | Stufe | Bedeutung |
 |---|---|
@@ -44,7 +44,7 @@ Die Ausgabe ist eine Kandidatenliste zur Durchsicht, keine automatische Verknüp
 | `wahrscheinlich` | genauer Name oder Schreibvariante mit gleichem Vornamen, Lebensdaten passen |
 | `möglich` | nur Erwähnungsspanne passt, oder die Vornamen unterscheiden sich in der Zahl (z. B. «Hans Heinrich» / «Johannes») |
 
-**`pool = hgb`** – alle 127 132 Personen des HGB-Index (`persons_resolved.json`), also auch ohne HBLS-, HLS- oder GND-Bezug. Diese Personen haben keine Lebensdaten, nur die Spanne ihrer Erwähnungen (`mention_span`); sie muss das Wahljahr einschliessen (±12–15 Jahre; Personen mit mehr als 75 Jahren Spanne sind verkettete Namensvettern und fallen weg; wer vor der Wahl starb, auch).
+**`pool = hgb`** – alle 127 175 Personen des HGB-Index (`persons_resolved.json`), also auch ohne HBLS-, HLS- oder GND-Bezug. Diese Personen haben keine Lebensdaten, nur die Spanne ihrer Erwähnungen (`mention_span`); sie muss das Wahljahr einschliessen (±12–15 Jahre; Personen mit mehr als 75 Jahren Spanne sind verkettete Namensvettern und fallen weg; wer vor der Wahl starb, auch).
 
 | Stufe | Bedeutung |
 |---|---|
@@ -57,8 +57,8 @@ Stand 20.11.2026, 476 Meister bis 1710:
 
 | Pool | Meister mit Kandidaten | Zeilen | davon |
 |---|---|---|---|
-| merged | 28 | 29 | 8 stark, 19 wahrscheinlich, 2 möglich |
-| hgb | 221 | 378 | 51 wahrscheinlich, 327 möglich |
-| zusammen | 229 | | |
+| merged | 32 | 33 | 9 stark, 22 wahrscheinlich, 2 möglich |
+| hgb | 225 | 385 | 53 wahrscheinlich, 332 möglich |
+| zusammen | 234 | | |
 
 Tests: `tests/test_link_zunftmeister.py`.

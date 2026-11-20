@@ -25,7 +25,7 @@ Tiers (column `tier`):
   möglich         name agrees, but only the HGB mention span fits (or the name
                   is a near match)
 
-A second pass (`link_hgb`) extends the match to all 127,132 persons of the HGB
+A second pass (`link_hgb`) extends the match to all 127,175 persons of the HGB
 index `persons_resolved.json`, including those without HBLS, HLS or GND link.
 Those persons have no life dates, only the span of their mentions, so the
 evidence is weaker and the tiers are defined differently (see `hgb_tier`):
