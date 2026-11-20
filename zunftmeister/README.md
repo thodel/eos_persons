@@ -1,7 +1,7 @@
 # Zunftmeister der Basler Zünfte
 
 `zunftmeister.csv` sammelt die veröffentlichten Meisterlisten von acht Basler Zünften (722 Einträge, 1255–2025).
-`../link_zunftmeister.py` gleicht die Meister bis 1710 mit den zusammengeführten eos-Personen (`merged_persons.json`) ab und schreibt `../link_zunftmeister_candidates.csv`.
+`../link_zunftmeister.py` gleicht die Meister bis 1710 mit den zusammengeführten eos-Personen (`merged_persons.json`) und in einem zweiten Durchlauf mit allen HGB-Personen (`persons_resolved.json`) ab und schreibt `../link_zunftmeister_candidates.csv`.
 
 | Zunft | Einträge | Zeitraum | Quelle (abgerufen 20.11.2026) |
 |---|---|---|---|
@@ -31,9 +31,12 @@ Eigenheiten der Quellen:
 
 ```bash
 python3 link_zunftmeister.py            # -> link_zunftmeister_candidates.csv
+python3 link_zunftmeister.py --hgb ''   # nur die zusammengeführten Personen
 ```
 
-Ein Meister wird mit einer Person verknüpft, wenn Nachname und Vorname übereinstimmen (Schreibvarianten wie Fäsch/Faesch erlaubt) und die Lebensdaten – oder, ohne Lebensdaten, die Spanne der HGB-Erwähnungen – zum Wahljahr passen (mindestens 22 Jahre alt, nicht tot). Stufen:
+Die Ausgabe ist eine Kandidatenliste zur Durchsicht, keine automatische Verknüpfung. Die Spalte `pool` sagt, gegen welche Personenmenge verglichen wurde.
+
+**`pool = merged`** – die 3 488 zusammengeführten Personen (`merged_persons.json`, mit HBLS-, HLS- oder GND-Bezug). Ein Meister wird verknüpft, wenn Nachname und Vorname übereinstimmen (Schreibvarianten wie Fäsch/Faesch erlaubt) und die Lebensdaten zum Wahljahr passen (mindestens 22 Jahre alt, nicht tot).
 
 | Stufe | Bedeutung |
 |---|---|
@@ -41,7 +44,21 @@ Ein Meister wird mit einer Person verknüpft, wenn Nachname und Vorname überein
 | `wahrscheinlich` | genauer Name oder Schreibvariante mit gleichem Vornamen, Lebensdaten passen |
 | `möglich` | nur Erwähnungsspanne passt, oder die Vornamen unterscheiden sich in der Zahl (z. B. «Hans Heinrich» / «Johannes») |
 
-Stand 20.11.2026: 476 Meister bis 1710, davon 28 mit Kandidaten (29 Zeilen: 8 stark, 19 wahrscheinlich, 2 möglich).
-Die geringe Trefferquote hat einen einfachen Grund: `merged_persons.json` enthält nur Personen mit HBLS-, HLS- oder GND-Bezug, nicht alle HGB-Namen. Die Ausgabe ist eine Kandidatenliste zur Durchsicht, keine automatische Verknüpfung; Namensvettern mit gleichem Lebensfenster (Socin, Burckhardt, Fäsch) lassen sich nur von Hand trennen.
+**`pool = hgb`** – alle 127 132 Personen des HGB-Index (`persons_resolved.json`), also auch ohne HBLS-, HLS- oder GND-Bezug. Diese Personen haben keine Lebensdaten, nur die Spanne ihrer Erwähnungen (`mention_span`); sie muss das Wahljahr einschliessen (±12–15 Jahre; Personen mit mehr als 75 Jahren Spanne sind verkettete Namensvettern und fallen weg; wer vor der Wahl starb, auch).
+
+| Stufe | Bedeutung |
+|---|---|
+| `wahrscheinlich` | genauer Name, Erwähnung innerhalb von 5 Jahren um die Amtszeit, und ein Beleg: Titel «Zunftmeister», die Zunft in der Organisation (`guild_org`) oder ein Gewerbe der Zunft (`trade_match`) |
+| `möglich` | Name passt und die Erwähnungen liegen in den richtigen Jahrzehnten; nur gelistet, wenn es höchstens 3 solche Kandidaten für den Meister gibt (`namesakes`) oder ein Zunftmeister-Titel / die Zunft vorliegt |
+
+`person_id` ist bei bereits zusammengeführten Personen die Id aus `merged_persons.json`, sonst der HGB-Schlüssel `Name#erstes Jahr`; die Spalten `occupations` und `n_dossiers` helfen beim Prüfen. Maximal sechs Kandidaten je Meister und Pool. Das Gewerbe-Kriterium ist grosszügig («Kaufmann» zählt bei Safran und Weinleuten), `namesakes` zeigt, wie viele Namensvettern in Frage kommen: bei Socin, Burckhardt oder Fäsch lässt sich nur von Hand trennen.
+
+Stand 20.11.2026, 476 Meister bis 1710:
+
+| Pool | Meister mit Kandidaten | Zeilen | davon |
+|---|---|---|---|
+| merged | 28 | 29 | 8 stark, 19 wahrscheinlich, 2 möglich |
+| hgb | 221 | 378 | 51 wahrscheinlich, 327 möglich |
+| zusammen | 229 | | |
 
 Tests: `tests/test_link_zunftmeister.py`.

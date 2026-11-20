@@ -261,7 +261,7 @@ periphery (Spearman ρ = −0.155 / +0.107, both p < 1e-9).
 
 ## Zunftmeister der Basler Zünfte
 
-`zunftmeister/zunftmeister.csv` sammelt die veröffentlichten Meisterlisten von acht Basler Zünften (Weinleuten, Hausgenossen, Gartnern, Gerbern, Safran, Goldener Stern, Schmieden, Schiffleuten; 722 Einträge). `link_zunftmeister.py` gleicht die Meister bis 1710 mit `merged_persons.json` ab und schreibt `link_zunftmeister_candidates.csv` (Kandidatenliste zur Durchsicht, mit Stufen `stark` / `wahrscheinlich` / `möglich`). Quellen, Eigenheiten und Methode: [`zunftmeister/README.md`](zunftmeister/README.md); Tests: `tests/test_link_zunftmeister.py`.
+`zunftmeister/zunftmeister.csv` sammelt die veröffentlichten Meisterlisten von acht Basler Zünften (Weinleuten, Hausgenossen, Gartnern, Gerbern, Safran, Goldener Stern, Schmieden, Schiffleuten; 722 Einträge). `link_zunftmeister.py` gleicht die Meister bis 1710 mit `merged_persons.json` und, in einem zweiten Durchlauf, mit allen 127 132 HGB-Personen aus `persons_resolved.json` ab und schreibt `link_zunftmeister_candidates.csv` (Kandidatenliste zur Durchsicht, mit Stufen `stark` / `wahrscheinlich` / `möglich`, Spalte `pool`). Quellen, Eigenheiten und Methode: [`zunftmeister/README.md`](zunftmeister/README.md); Tests: `tests/test_link_zunftmeister.py`.
 
 ## SPARQL endpoint
 

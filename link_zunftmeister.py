@@ -25,6 +25,13 @@ Tiers (column `tier`):
   möglich         name agrees, but only the HGB mention span fits (or the name
                   is a near match)
 
+A second pass (`link_hgb`) extends the match to all 127,132 persons of the HGB
+index `persons_resolved.json`, including those without HBLS, HLS or GND link.
+Those persons have no life dates, only the span of their mentions, so the
+evidence is weaker and the tiers are defined differently (see `hgb_tier`):
+the namesake count (`namesakes`) is part of the output because for common
+names a match is only a candidate.
+
 The year of election is the first year of the entry in the published list.
 """
 import argparse
@@ -168,6 +175,57 @@ def tier_of(sr, gr, window, yf, yt, master, trade):
     return "möglich"
 
 
+GUILD_NAMES = {
+    "Hausgenossen": ("hausgenoss",), "Safran": ("safran",), "Schmieden": ("schmied",),
+    "Gerbern": ("gerber",), "Gartnern": ("gartner", "gärtner"), "Schiffleuten": ("schiffleut",),
+    "Weinleuten": ("weinleut",), "Goldener Stern": ("stern", "himmel"),
+}
+HGB_MAX_NAMESAKES = 3      # beyond this a name-only match is not listed
+
+
+def hgb_hints(p, zunft):
+    """(zunftmeister title, guild named in the organisation, trade of the guild)."""
+    titles = " ".join(p.get("tit") or []).lower()
+    orgs = " ".join(p.get("org") or []).lower()
+    occ = " ".join(p.get("occ") or []).lower()
+    master = "zunftmeister" in titles or "zunfftmeister" in titles or "zunftenstr" in titles
+    guild = any(g in orgs for g in GUILD_NAMES.get(zunft, ()))
+    trade = any(t in occ for t in GUILD_TRADES.get(zunft, ()))
+    return master, guild, trade
+
+
+def hgb_span_fits(p, yf, yt, tight):
+    """Mentions around the election: tight = a mention within 5 years of the term."""
+    y0, y1 = p["y"]
+    if p.get("dead_year") and p["dead_year"] < yf - 2:
+        return False
+    if y1 - y0 > 75:                       # a merged namesake chain, not one man
+        return False
+    if tight:
+        return y0 <= (yt or yf) + 5 and y1 >= yf - 5
+    return y0 <= (yt or yf) + 12 and y1 >= yf - 15
+
+
+def hgb_tier(exact, tight, master, guild, trade, namesakes):
+    """Tiers for persons without life dates.
+
+    wahrscheinlich  exact name, mentions around the election, and either a
+                    Zunftmeister title / the guild in the organisation or a
+                    trade of the guild
+    möglich         name agrees and the mentions are in the right decades,
+                    with at most HGB_MAX_NAMESAKES candidates for the master
+    """
+    if exact and tight and (master or guild or trade):
+        return "wahrscheinlich"
+    if namesakes <= HGB_MAX_NAMESAKES or master or guild:
+        return "möglich"
+    return None
+
+
+def hgb_key(p):
+    return f"{p['n']}#{p['y'][0]}"
+
+
 def load_masters(path):
     with open(path, encoding="utf-8") as f:
         for r in csv.DictReader(f):
@@ -184,7 +242,7 @@ def link(masters_path, persons):
     for r, yf, yt in load_masters(masters_path):
         cands = name_candidates(r["name"])
         keys = {surname_key(s)[:2] for _, s in cands if surname_key(s)}
-        pool = [p for k in keys for p in by_surname.get(k, [])]
+        pool = [p for k in sorted(keys) for p in by_surname.get(k, [])]
         found = []
         for p in pool:
             sr, gr = score_pair(cands, p)
@@ -198,7 +256,7 @@ def link(masters_path, persons):
             auth = p.get("authority") or {}
             found.append({
                 "zunft": r["zunft"], "master": r["name"], "year_from": yf,
-                "year_to": yt or "", "person_id": p["id"], "person": p["name"],
+                "year_to": yt or "", "pool": "merged", "person_id": p["id"], "person": p["name"],
                 "birth": p.get("birth_year") or "", "death": p.get("death_year") or "",
                 "mention_span": "-".join(str(x) for x in (p.get("mention_span") or [])),
                 "basis": window[2], "name_surname": round(sr, 2), "name_given": round(gr, 2),
@@ -214,29 +272,97 @@ def link(masters_path, persons):
     return out
 
 
-FIELDS = ["zunft", "master", "year_from", "year_to", "person_id", "person", "birth", "death",
-          "mention_span", "basis", "name_surname", "name_given", "recorded_master", "trade_match",
-          "status", "wikidata", "gnd", "tier"]
+def link_hgb(masters_path, resolved, merged_ids=None):
+    """Second pass over persons_resolved.json (all HGB persons).
+
+    `merged_ids` maps an HGB key (`name#first year`) to the merged person id, so
+    that a candidate already in `merged_persons.json` is marked as such.
+    """
+    merged_ids = merged_ids or {}
+    by_surname = {}
+    for p in resolved:
+        toks = p["n"].split()
+        if toks:
+            by_surname.setdefault(surname_key(toks[-1])[:2], []).append(p)
+    rank = {"wahrscheinlich": 0, "möglich": 1}
+    out = []
+    for r, yf, yt in load_masters(masters_path):
+        cands = name_candidates(r["name"])
+        keys = {surname_key(s)[:2] for _, s in cands if surname_key(s)}
+        found = []
+        for p in (q for k in sorted(keys) for q in by_surname.get(k, [])):
+            toks = p["n"].split()
+            probe = {"surname": toks[-1], "given": " ".join(toks[:-1])}
+            sr, gr = score_pair(cands, probe)
+            if sr < 0.9 or gr < 0.8:
+                continue
+            if not hgb_span_fits(p, yf, yt, tight=False):
+                continue
+            tight = hgb_span_fits(p, yf, yt, tight=True)
+            found.append((p, sr, gr, tight))
+        for p, sr, gr, tight in found:
+            master, guild, trade = hgb_hints(p, r["zunft"])
+            t = hgb_tier(sr == 1.0 and gr >= 0.9, tight, master, guild, trade, len(found))
+            if not t:
+                continue
+            key = hgb_key(p)
+            out.append({
+                "zunft": r["zunft"], "master": r["name"], "year_from": yf,
+                "year_to": yt or "", "pool": "hgb", "person_id": merged_ids.get(key, key),
+                "person": p["n"], "birth": "", "death": p.get("dead_year") or "",
+                "mention_span": f"{p['y'][0]}-{p['y'][1]}", "basis": "mentions",
+                "name_surname": round(sr, 2), "name_given": round(gr, 2),
+                "recorded_master": "ja" if master else "", "guild_org": "ja" if guild else "",
+                "trade_match": "ja" if trade else "", "namesakes": len(found),
+                "n_dossiers": p.get("d", ""), "occupations": ";".join(p.get("occ") or []),
+                "status": "", "wikidata": "", "gnd": "", "tier": t,
+            })
+    out.sort(key=lambda x: (x["zunft"], x["year_from"], x["master"], rank[x["tier"]],
+                            -x["name_surname"], x["person"], x["mention_span"]))
+    # at most six per master
+    kept, seen = [], {}
+    for x in out:
+        k = (x["zunft"], x["master"], x["year_from"])
+        seen[k] = seen.get(k, 0) + 1
+        if seen[k] <= 6:
+            kept.append(x)
+    return kept
+
+
+FIELDS = ["zunft", "master", "year_from", "year_to", "pool", "person_id", "person", "birth", "death",
+          "mention_span", "basis", "name_surname", "name_given", "recorded_master", "guild_org",
+          "trade_match", "namesakes", "n_dossiers", "occupations", "status", "wikidata", "gnd", "tier"]
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--zunftmeister", default=str(HERE / "zunftmeister" / "zunftmeister.csv"))
     ap.add_argument("--persons", default=str(HERE / "merged_persons.json"))
+    ap.add_argument("--hgb", default=str(HERE / "persons_resolved.json"),
+                    help="all HGB persons (second pass); '' skips it")
     ap.add_argument("--out", default=str(HERE / "link_zunftmeister_candidates.csv"))
     a = ap.parse_args(argv)
     persons = json.load(open(a.persons, encoding="utf-8"))
     rows = link(a.zunftmeister, persons)
+    if a.hgb:
+        merged_ids = {s["id"]: p["id"] for p in persons for s in p.get("sources", [])
+                      if s.get("corpus") == "hgb"}
+        rows += link_hgb(a.zunftmeister, json.load(open(a.hgb, encoding="utf-8")), merged_ids)
     with open(a.out, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=FIELDS)
+        w = csv.DictWriter(f, fieldnames=FIELDS, restval="")
         w.writeheader()
         w.writerows(rows)
     n_masters = sum(1 for _ in load_masters(a.zunftmeister))
-    linked = {(r["zunft"], r["master"], r["year_from"]) for r in rows}
-    by_tier = {}
-    for r in rows:
-        by_tier[r["tier"]] = by_tier.get(r["tier"], 0) + 1
-    print(f"{n_masters} masters up to {LAST_YEAR}; {len(linked)} with candidates; {len(rows)} rows {by_tier}")
+    for pool in ("merged", "hgb"):
+        sub = [r for r in rows if r["pool"] == pool]
+        linked = {(r["zunft"], r["master"], r["year_from"]) for r in sub}
+        by_tier = {}
+        for r in sub:
+            by_tier[r["tier"]] = by_tier.get(r["tier"], 0) + 1
+        print(f"{pool}: {len(linked)} of {n_masters} masters up to {LAST_YEAR} with candidates; "
+              f"{len(sub)} rows {by_tier}")
+    anyl = {(r["zunft"], r["master"], r["year_from"]) for r in rows}
+    print(f"together: {len(anyl)} masters with at least one candidate")
 
 
 if __name__ == "__main__":

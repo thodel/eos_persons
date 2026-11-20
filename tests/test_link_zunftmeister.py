@@ -99,3 +99,51 @@ def test_join_on_a_miniature(tmp_path):
     got = {(r["master"], r["person_id"]): r["tier"] for r in rows}
     assert got == {("Jakob Rüdin", "person:1"): "stark", ("Krug Caspar", "person:2"): "wahrscheinlich"}
     assert rows[0]["wikidata"] == "Q1"
+
+
+# --- second pass: all HGB persons, without life dates -----------------------
+
+def test_hgb_span_needs_mentions_around_the_election():
+    p = {"n": "Hans Alt", "y": [1449, 1499]}
+    assert L.hgb_span_fits(p, 1476, None, tight=True)
+    assert not L.hgb_span_fits({"n": "X", "y": [1560, 1580]}, 1476, None, tight=False)
+    # a person who died before the election cannot have been elected
+    assert not L.hgb_span_fits({"n": "X", "y": [1440, 1470], "dead_year": 1470}, 1476, None, tight=False)
+    # a 120-year span is a merged namesake chain, not one man
+    assert not L.hgb_span_fits({"n": "X", "y": [1400, 1520]}, 1476, None, tight=False)
+
+
+def test_hgb_hints_read_title_organisation_and_trade():
+    p = {"tit": ["Obrist Zunftmeister"], "org": ["Burger , Zunft zu Safran"], "occ": ["apotheker"]}
+    assert L.hgb_hints(p, "Safran") == (True, True, True)
+    # a plain "Meister" is a craft title, not a guild master
+    assert L.hgb_hints({"tit": ["Meister"]}, "Safran") == (False, False, False)
+
+
+def test_hgb_tier_is_probable_only_with_evidence_and_never_for_a_crowd():
+    assert L.hgb_tier(True, True, False, False, True, 2) == "wahrscheinlich"
+    assert L.hgb_tier(True, True, False, False, False, 2) == "möglich"   # no evidence, few namesakes
+    assert L.hgb_tier(True, True, False, False, False, 9) is None        # no evidence, a crowd
+    assert L.hgb_tier(False, True, False, False, True, 2) == "möglich"   # near name only
+    assert L.hgb_tier(False, True, True, False, False, 9) == "möglich"   # recorded master survives a crowd
+
+
+def test_hgb_pass_on_a_miniature(tmp_path):
+    masters = tmp_path / "z.csv"
+    masters.write_text(
+        "zunft,year_from,year_to,name,note,source\n"
+        "Safran,1636,,Andres Bletz,Apotheker,x\n"
+        "Schmieden,1522,,Thurneysen Caspar,,x\n"
+        "Safran,1636,,Hans Meyer,Krämer,x\n", encoding="utf-8")
+    resolved = [
+        {"n": "Andres Bletz", "v": [], "c": 5, "d": 4, "y": [1603, 1654], "occ": ["apotheker"]},
+        {"n": "Andres Bletz", "v": [], "c": 1, "d": 1, "y": [1700, 1700]},               # wrong decade
+        {"n": "Caspar Thurneysen", "v": [], "c": 3, "d": 2, "y": [1523, 1541], "occ": ["schmied"]},
+        {"n": "Hans Meyer", "v": [], "c": 1, "d": 1, "y": [1630, 1640], "occ": []},      # a crowd of Meyers
+    ] + [{"n": "Hans Meyer", "v": [], "c": 1, "d": 1, "y": [1630, 1640], "occ": []} for _ in range(8)]
+    rows = L.link_hgb(str(masters), resolved, {"Andres Bletz#1603": "person:9"})
+    got = {(r["master"], r["person"]): (r["tier"], r["person_id"]) for r in rows}
+    assert got[("Andres Bletz", "Andres Bletz")] == ("wahrscheinlich", "person:9")   # marked as merged
+    assert got[("Thurneysen Caspar", "Caspar Thurneysen")][0] == "wahrscheinlich"
+    assert not any(r["master"] == "Hans Meyer" for r in rows)                         # crowd, no evidence
+    assert all(r["pool"] == "hgb" for r in rows)
